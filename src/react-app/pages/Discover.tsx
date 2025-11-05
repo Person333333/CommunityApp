@@ -34,12 +34,21 @@ export default function Discover() {
     const data = await response.json();
     let list: ResourceType[] = data;
     // Optionally filter by favorites
+    if (showFavoritesOnly && !user) {
+      // If favorites filter is on but user not signed in, show nothing
+      setResources([]);
+      setLoading(false);
+      return;
+    }
     if (showFavoritesOnly && user) {
-      const ids = await (async () => {
+      try {
         const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
-        return (await res.json()) as number[];
-      })();
-      list = list.filter(r => ids.includes(r.id));
+        if (!res.ok) throw new Error('Failed to load favorites');
+        const ids = (await res.json()) as number[];
+        list = list.filter(r => ids.includes(r.id));
+      } catch (_) {
+        // ignore filtering if favorites API fails
+      }
     }
     setResources(list);
     setLoading(false);
@@ -47,9 +56,14 @@ export default function Discover() {
 
   const fetchFavorites = async () => {
     if (!user) return setFavoriteIds([]);
-    const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
-    const ids = await res.json();
-    setFavoriteIds(ids);
+    try {
+      const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
+      if (!res.ok) throw new Error('Failed');
+      const ids = await res.json();
+      setFavoriteIds(ids);
+    } catch (_) {
+      setFavoriteIds([]);
+    }
   };
 
   useEffect(() => {
@@ -251,30 +265,46 @@ export default function Discover() {
                       className="relative h-full flex flex-col cursor-pointer"
                       onClick={() => setSelectedResource(resource)}
                     >
-                      {/* Favorite toggle */}
-                      {user && (
-                        <button
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            const isFav = favoriteIds.includes(resource.id);
+                      {/* Featured badge */}
+                      {resource.is_featured && (
+                        <span className="absolute top-3 left-3 z-10 text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">Featured</span>
+                      )}
+                      {/* Favorite toggle - visible always; prompts sign-in if needed */}
+                      <button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (!user) {
+                            if (window.confirm('Please sign in to save favorites. Go to Sign In now?')) {
+                              window.location.href = '/sign-in';
+                            }
+                            return;
+                          }
+                          const isFav = favoriteIds.includes(resource.id);
+                          try {
                             if (isFav) {
                               await fetch(`/api/favorites/${resource.id}?userId=${encodeURIComponent(user.id)}`, { method: 'DELETE' });
                             } else {
                               await fetch('/api/favorites', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, resourceId: resource.id }) });
                             }
+                          } finally {
                             fetchFavorites();
-                          }}
-                          className={`absolute top-3 right-3 z-10 p-2 rounded-full ${favoriteIds.includes(resource.id) ? 'bg-amber-500/30' : 'glass'}`}
-                          aria-label="Toggle favorite"
-                        >
-                          <Heart className={`w-5 h-5 ${favoriteIds.includes(resource.id) ? 'text-amber-400' : 'text-slate-300'}`} />
-                        </button>
-                      )}
+                          }
+                        }}
+                        className={`absolute top-3 right-3 z-10 p-2 rounded-full pointer-events-auto ${user && favoriteIds.includes(resource.id) ? 'bg-amber-500/30' : 'glass'}`}
+                        aria-label="Toggle favorite"
+                      >
+                        <Heart className={`w-5 h-5 ${user && favoriteIds.includes(resource.id) ? 'text-amber-400' : 'text-slate-300'}`} />
+                      </button>
                       {resource.image_url && (
                         <div className="aspect-video rounded-lg overflow-hidden mb-4 -mx-6 -mt-6">
                           <img
                             src={resource.image_url}
                             alt={resource.title}
+                            onError={(e) => {
+                              const el = e.currentTarget as HTMLImageElement;
+                              if (el.src.includes('picsum.photos')) return;
+                              el.src = `https://picsum.photos/seed/${resource.id}/800/450`;
+                            }}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -309,6 +339,14 @@ export default function Discover() {
                               </a>
                             </div>
                           )}
+                          {resource.email && (
+                            <div className="flex items-center gap-2 text-sm text-slate-400">
+                              <span className="w-4 h-4" />
+                              <a href={`mailto:${resource.email}`} className="hover:text-teal-300 truncate">
+                                {resource.email}
+                              </a>
+                            </div>
+                          )}
                           {resource.website && (
                             <div className="flex items-center gap-2 text-sm text-slate-400">
                               <Globe className="w-4 h-4 flex-shrink-0 text-teal-400" />
@@ -328,19 +366,74 @@ export default function Discover() {
                               <span>{resource.hours}</span>
                             </div>
                           )}
+                          {resource.audience && (
+                            <div className="flex items-start gap-2 text-sm text-slate-400">
+                              <span className="w-4 h-4" />
+                              <span>{resource.audience}</span>
+                            </div>
+                          )}
                         </div>
 
                         {resource.services && (
-                          <div className="flex flex-wrap gap-1 pt-2">
-                            {resource.services.split(',').slice(0, 3).map((service, i) => (
-                              <span
-                                key={i}
-                                className="text-xs px-2 py-1 glass-ochre rounded-full text-slate-300"
-                              >
-                                {service.trim()}
-                              </span>
-                            ))}
+                          <div className="pt-2">
+                            <div className="text-slate-200 text-sm font-semibold mb-1">Services Offered</div>
+                            <div className="flex flex-wrap gap-1">
+                              {resource.services.split(',').map((service, i) => (
+                                <span
+                                  key={i}
+                                  className="text-xs px-2 py-1 glass-ochre rounded-full text-slate-300"
+                                >
+                                  {service.trim()}
+                                </span>
+                              ))}
+                            </div>
                           </div>
+                        )}
+
+                        {resource.tags && (
+                          <div className="pt-1">
+                            <div className="text-slate-200 text-sm font-semibold mb-1">Tags</div>
+                            <div className="flex flex-wrap gap-1">
+                              {resource.tags.split(',').map((tag, i) => (
+                                <span key={i} className="text-xs px-2 py-1 glass rounded-full text-slate-300">
+                                  {tag.trim()}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="mt-4 flex gap-2">
+                        {resource.website && (
+                          <a
+                            href={resource.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="glass-teal px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Visit Website
+                          </a>
+                        )}
+                        {resource.phone && (
+                          <a
+                            href={`tel:${resource.phone}`}
+                            className="glass px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Call Now
+                          </a>
+                        )}
+                        {resource.email && (
+                          <a
+                            href={`mailto:${resource.email}`}
+                            className="glass px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Send Email
+                          </a>
                         )}
                       </div>
                     </GlassCard>

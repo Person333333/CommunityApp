@@ -2,10 +2,13 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router';
 import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const { scrollY } = useScroll();
   
   const backgroundColor = useTransform(
@@ -51,7 +54,7 @@ export default function Navbar() {
             <NavLink to="/references">References</NavLink>
             
             {/* Authentication */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 relative">
               <SignedOut>
                 <Link
                   to="/sign-in"
@@ -67,15 +70,35 @@ export default function Navbar() {
                 </Link>
               </SignedOut>
               <SignedIn>
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-9 h-9",
-                      userButtonPopoverCard: "glass border border-white/10",
-                      userButtonPopoverActions: "text-slate-300"
-                    }
-                  }}
-                />
+                <button
+                  onClick={() => setShowAccountMenu(!showAccountMenu)}
+                  className="w-9 h-9 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center shadow hover:opacity-90"
+                  aria-label="Account menu"
+                >
+                  {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                </button>
+                {showAccountMenu && (
+                  <div className="absolute right-0 top-12 w-64 glass p-4 rounded-xl border border-white/10 shadow-xl backdrop-blur">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center">
+                        {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                      </div>
+                      <div>
+                        <div className="text-slate-100 font-semibold leading-tight">{user?.fullName || 'Your Account'}</div>
+                        <div className="text-slate-400 text-sm truncate">{user?.primaryEmailAddress?.emailAddress}</div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">Account</Link>
+                      <button
+                        onClick={() => signOut()}
+                        className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-rose-300"
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  </div>
+                )}
               </SignedIn>
             </div>
           </div>
@@ -135,14 +158,15 @@ export default function Navbar() {
                 </SignedOut>
                 <SignedIn>
                   <div className="px-4 py-3 glass rounded-lg">
-                    <UserButton 
-                      appearance={{
-                        elements: {
-                          avatarBox: "w-8 h-8",
-                          userButtonPopoverCard: "glass border border-white/10"
-                        }
-                      }}
-                    />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center">
+                          {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                        </div>
+                        <div className="text-slate-100 font-medium">{user?.firstName || 'Account'}</div>
+                      </div>
+                      <button onClick={() => signOut()} className="text-rose-300 hover:text-rose-200 text-sm">Sign out</button>
+                    </div>
                   </div>
                 </SignedIn>
               </div>

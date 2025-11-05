@@ -7,6 +7,7 @@ import ReferencesPage from "@/react-app/pages/References";
 import AboutPage from "@/react-app/pages/About";
 import SignInPage from "@/react-app/pages/auth/SignIn";
 import SignUpPage from "@/react-app/pages/auth/SignUp";
+import AccountPage from "@/react-app/pages/auth/Account";
 import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
 
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
       <Footer />
     </Router>
