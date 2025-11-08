@@ -1,0 +1,248 @@
+HOW EVERYTHING WORKS - Community Compass
+==========================================
+
+ARCHITECTURE OVERVIEW
+---------------------
+
+This is a full-stack web application that runs:
+- Frontend: React app (Vite) with Clerk authentication
+- Backend: Hono API server (Cloudflare Workers or local Node.js)
+- Database: Neon PostgreSQL (serverless)
+
+The app can run in two modes:
+1. Local development: Vite dev server + Node.js server (src/server.ts)
+2. Production: Cloudflare Workers (via wrangler.json)
+
+
+HOW VITE IS USED
+----------------
+
+Vite is the build tool and dev server for the React frontend.
+
+Development:
+- `npm run dev` runs `vite` which:
+  - Starts a dev server (usually port 5173)
+  - Hot Module Replacement (HMR) for instant updates
+  - Proxies API requests to the backend
+  - Uses the Cloudflare Vite plugin to bundle the Worker code
+  - Serves the React app from src/react-app/
+
+Production:
+- `npm run build` runs `tsc -b && vite build` which:
+  - Type checks TypeScript
+  - Bundles React app into optimized static files
+  - Bundles Worker code for Cloudflare
+  - Outputs to dist/ folder
+
+Key Vite features used:
+- React plugin for JSX/TSX compilation
+- Cloudflare plugin for Worker bundling
+- Path aliases (@/ for src/)
+- Environment variable injection (import.meta.env)
+
+
+HOW WRANGLER IS USED
+--------------------
+
+Wrangler is Cloudflare's CLI tool for deploying Workers.
+
+Configuration (wrangler.json):
+- Points to worker entry: ./src/worker/index.ts
+- Defines compatibility settings (nodejs_compat flag)
+- Sets up bindings for D1/R2 (legacy, not actively used)
+- Configures SPA routing (all routes serve index.html)
+
+Deployment:
+- `wrangler deploy` would deploy the Worker to Cloudflare
+- The Worker code is bundled by Vite's Cloudflare plugin
+- Worker runs on Cloudflare's edge network
+- Handles all API requests (/api/*)
+
+Local Development:
+- Vite's Cloudflare plugin uses wrangler under the hood
+- During dev, the Worker runs locally via the plugin
+- API routes are accessible at the same port as frontend
+
+
+THE API SERVER (src/worker/index.ts)
+------------------------------------
+
+Built with Hono framework (lightweight, fast, similar to Express).
+
+Endpoints:
+- GET  /api/resources          - List all approved resources (with filters)
+- GET  /api/resources/:id       - Get single resource
+- POST /api/submissions         - Submit new resource for review
+- GET  /api/stats               - Get resource counts and categories
+- GET  /api/favorites           - Get user's favorite resource IDs
+- POST /api/favorites           - Add resource to favorites
+- DELETE /api/favorites/:id     - Remove resource from favorites
+- POST /api/migrate             - Run database migrations
+- POST /api/seed-100            - Seed 100 sample resources
+- POST /api/normalize-resources - Fill missing fields in resources
+- POST /api/cleanup-seed-titles - Remove timestamp suffixes from titles
+
+Database Connection:
+- Uses @neondatabase/serverless for PostgreSQL
+- Connection string from env.NEON_DATABASE_URL
+- Auto-creates favorites table if missing
+
+Error Handling:
+- Try-catch blocks around all database operations
+- Returns JSON error responses with status codes
+- Logs errors for debugging
+
+
+DATABASE (Neon PostgreSQL)
+--------------------------
+
+Tables:
+1. resources
+   - Stores all community resources
+   - Fields: id, title, description, category, address, phone, email, website, hours, audience, services, tags, image_url, latitude, longitude, is_featured, is_approved
+   - Primary key: id (SERIAL)
+
+2. resource_submissions
+   - Stores user-submitted resources awaiting approval
+   - Fields: id, title, description, category, contact_name, contact_email, phone, website, address, city, state, status, notes
+   - Status: 'pending' by default
+
+3. favorites
+   - Stores user favorites (user_id + resource_id pairs)
+   - Fields: id, user_id (Clerk account ID), resource_id, created_at
+   - Unique constraint on (user_id, resource_id)
+   - Foreign key to resources.id with CASCADE delete
+
+Connection:
+- Serverless PostgreSQL via Neon
+- Connection pooling handled by Neon
+- No connection management needed in code
+
+
+AUTHENTICATION (Clerk)
+-----------------------
+
+Clerk provides authentication and user management.
+
+Setup:
+- ClerkProvider wraps the app in App.tsx
+- Publishable key from environment or hardcoded (dev)
+- Routes protected with SignedIn/SignedOut components
+
+User Identification:
+- User ID from Clerk: user.id (e.g., "user_123abc...")
+- Stored in favorites table as user_id
+- Used to filter favorites per user
+
+Pages:
+- /sign-in - Clerk sign-in page
+- /sign-up - Clerk sign-up page
+- /account - User account page
+
+
+FRONTEND FLOW
+-------------
+
+1. User visits site
+   - index.html loads
+   - main.tsx renders App.tsx
+   - App.tsx sets up React Router
+
+2. Navigation
+   - Navbar component shows links
+   - React Router handles client-side routing
+   - Pages render based on route
+
+3. Data Fetching
+   - Pages fetch data from /api/* endpoints
+   - Uses native fetch() API
+   - Updates React state with results
+
+4. User Interactions
+   - Click favorite button → POST to /api/favorites
+   - Search resources → GET /api/resources?q=...
+   - Submit resource → POST /api/submissions
+
+5. State Management
+   - React useState for local state
+   - useEffect for data fetching
+   - No global state library (Redux, etc.)
+
+
+BUILD PROCESS
+-------------
+
+1. TypeScript compilation
+   - tsc -b checks all TypeScript files
+   - Multiple tsconfig files for different contexts
+
+2. Vite bundling
+   - React app bundled into static JS/CSS
+   - Worker code bundled separately
+   - Assets optimized and hashed
+
+3. Cloudflare deployment (if using)
+   - wrangler deploy uploads Worker
+   - Static assets served from Cloudflare
+   - Worker handles API routes
+
+4. Local production build
+   - npm run build creates dist/ folder
+   - Can serve with any static file server
+   - API runs via src/server.ts or deployed Worker
+
+
+DEVELOPMENT WORKFLOW
+--------------------
+
+1. Start dev server: `npm run dev`
+   - Vite starts on port 5173 (or next available)
+   - Worker runs locally via Vite plugin
+   - Hot reload enabled
+
+2. Make changes
+   - Edit React components → auto-reload
+   - Edit API endpoints → auto-reload
+   - Edit database → manually trigger migration
+
+3. Test locally
+   - Frontend: http://localhost:5173
+   - API: http://localhost:5173/api/*
+   - Database: Neon dashboard or direct connection
+
+4. Deploy
+   - Build: npm run build
+   - Deploy Worker: wrangler deploy (if using Cloudflare)
+   - Or run locally: node dist/server.js
+
+
+KEY TECHNOLOGIES
+----------------
+
+- React 19: UI framework
+- Vite: Build tool and dev server
+- TypeScript: Type safety
+- Hono: API framework (lightweight, fast)
+- Neon PostgreSQL: Serverless database
+- Clerk: Authentication
+- Tailwind CSS: Styling
+- Framer Motion: Animations
+- React Router: Client-side routing
+- Leaflet: Map component
+
+
+ENVIRONMENT VARIABLES
+---------------------
+
+Required:
+- NEON_DATABASE_URL: PostgreSQL connection string
+- VITE_CLERK_PUBLISHABLE_KEY: Clerk publishable key (frontend)
+
+Optional:
+- PORT: Server port (default: 3000 for server.ts)
+
+Stored in:
+- .dev.vars (local development)
+- Cloudflare Workers secrets (production)
+- Vite uses import.meta.env for frontend vars
+

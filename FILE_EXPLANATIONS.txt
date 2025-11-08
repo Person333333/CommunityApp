@@ -1,0 +1,185 @@
+FILE EXPLANATIONS - Community Compass
+======================================
+
+ROOT FILES
+----------
+
+package.json
+  - Project metadata and dependencies
+  - Scripts: dev (vite), build (tsc + vite), check (type check + dry-run deploy)
+  - Contains all npm dependencies for React, Clerk auth, Neon DB, Hono API, etc.
+
+vite.config.ts
+  - Vite bundler configuration
+  - Configures React plugin, Cloudflare plugin for Workers
+  - Sets up path aliases (@/ for src/)
+  - Build settings for chunk size warnings
+
+wrangler.json
+  - Cloudflare Workers deployment configuration
+  - Points to worker entry: ./src/worker/index.ts
+  - Defines D1/R2 bindings (legacy, but kept for compatibility)
+  - SPA routing fallback configuration
+
+tsconfig.json, tsconfig.app.json, tsconfig.node.json, tsconfig.worker.json
+  - TypeScript configuration files
+  - Separate configs for app code, Node server, and Worker code
+  - Type checking and path alias resolution
+
+eslint.config.js
+  - ESLint rules for code quality
+  - React hooks and refresh plugin configuration
+
+tailwind.config.js
+  - Tailwind CSS configuration
+  - Custom theme colors (teal, amber, glass effects)
+  - Custom animations and utilities
+
+postcss.config.js
+  - PostCSS configuration for Tailwind CSS processing
+
+index.html
+  - Main HTML entry point
+  - Meta tags for SEO and social sharing
+  - Favicon and icon links
+  - Root div for React app
+
+README.md
+  - Project documentation (if exists)
+
+.dev.vars (not in repo, local only)
+  - Local environment variables
+  - NEON_DATABASE_URL, CLERK keys, etc.
+
+
+SRC FOLDER
+----------
+
+src/server.ts
+  - Standalone Node.js server for local development
+  - Uses @hono/node-server to run the Hono API locally
+  - Loads .dev.vars and mocks Cloudflare Worker environment
+  - Only used during local dev (npm run dev)
+
+src/shared/types.ts
+  - Shared TypeScript types across frontend and backend
+  - ResourceType, ResourceSubmissionSchema (Zod validation)
+  - Category definitions
+
+src/worker/
+  - Cloudflare Worker code (runs on Cloudflare edge)
+
+  index.ts
+    - Main API server using Hono framework
+    - All /api/* endpoints (resources, favorites, submissions, stats)
+    - Connects to Neon PostgreSQL database
+    - Handles CORS, error handling, data normalization
+
+  migrate.ts
+    - Database migration function
+    - Creates tables: resources, resource_submissions, favorites
+    - Auto-seeds sample data if table is empty
+    - Called via POST /api/migrate
+
+  types.ts
+    - TypeScript definitions for Worker environment
+    - Defines Env interface with NEON_DATABASE_URL
+
+src/react-app/
+  - React frontend application
+
+  main.tsx
+    - React app entry point
+    - Sets up ClerkProvider for authentication
+    - Renders App component into DOM
+
+  App.tsx
+    - Main React app component
+    - Sets up React Router with routes
+    - Wraps pages with Clerk auth components
+
+  index.css
+    - Global CSS styles
+    - Tailwind directives
+    - Custom CSS variables and animations
+
+  vite-env.d.ts
+    - TypeScript definitions for Vite environment variables
+
+  components/
+    - Reusable React components
+
+    AnimatedCompass.tsx
+      - Animated compass logo component
+      - Uses Framer Motion for rotation animation
+
+    Footer.tsx
+      - Site footer with links and copyright
+
+    GlassButton.tsx
+      - Glassmorphism-styled button component
+      - Multiple variants (primary, secondary, teal, etc.)
+
+    GlassCard.tsx
+      - Glassmorphism-styled card component
+      - Hover effects, variants
+
+    MapComponent.tsx
+      - Leaflet map component for displaying resources
+      - Interactive markers with popups
+
+    Navbar.tsx
+      - Top navigation bar
+      - Responsive mobile menu
+      - Account menu with sign out
+      - Links to all pages
+
+    ResourceDetailModal.tsx
+      - Modal popup for resource details
+      - Shows full resource information
+
+  hooks/
+    useScrollAnimation.ts
+      - Custom React hook for scroll-based animations
+      - Returns scroll progress for animations
+
+  pages/
+    - Page components for each route
+
+    Home.tsx
+      - Landing page with hero section
+      - Featured resources display
+      - Stats and categories
+
+    Discover.tsx
+      - Resource discovery page
+      - Search and filter functionality
+      - Resource cards with favorites toggle
+      - Category filtering
+
+    Map.tsx
+      - Map view of resources
+      - Interactive map with markers
+      - Click markers for details
+
+    Submit.tsx
+      - Form to submit new resources
+      - Validation and submission handling
+
+    About.tsx
+      - About page content
+
+    References.tsx
+      - References/credits page
+
+    auth/
+      Account.tsx
+        - User account page
+        - Profile information
+
+      SignIn.tsx
+        - Clerk sign-in page wrapper
+
+      SignUp.tsx
+        - Clerk sign-up page wrapper
+
