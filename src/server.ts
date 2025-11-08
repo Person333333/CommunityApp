@@ -8,9 +8,7 @@ config({ path: '.dev.vars' })
 
 // Mock the Cloudflare Worker environment for standalone Node.js
 const mockEnv = {
-  NEON_DATABASE_URL: process.env.NEON_DATABASE_URL || '',
-  MOCHA_USERS_SERVICE_API_KEY: process.env.MOCHA_USERS_SERVICE_API_KEY || '',
-  MOCHA_USERS_SERVICE_API_URL: process.env.MOCHA_USERS_SERVICE_API_URL || ''
+  NEON_DATABASE_URL: process.env.NEON_DATABASE_URL || ''
 }
 
 // Create a wrapper that provides the environment to the Hono app
