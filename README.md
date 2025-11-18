@@ -1,6 +1,6 @@
 ## Community Compass
-To run the devserver:
-```
-npm install
+To run:
+
+npm install --legacy-peer-deps
 npm run dev
-```
+
