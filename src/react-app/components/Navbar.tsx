@@ -47,8 +47,8 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink to="/discover">Discover</NavLink>
-            <NavLink to="/map">Map View</NavLink>
+            <NavLink to="/discover" data-tour="discover">Discover</NavLink>
+            <NavLink to="/map" data-tour="map">Map View</NavLink>
             <NavLink to="/submit">Add Resource</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/references">References</NavLink>
@@ -178,11 +178,12 @@ export default function Navbar() {
   );
 }
 
-function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
+function NavLink({ to, children, ...props }: { to: string; children: React.ReactNode; [key: string]: any }) {
   return (
     <Link
       to={to}
       className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium"
+      {...props}
     >
       {children}
     </Link>

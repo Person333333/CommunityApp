@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Search, Filter, X, MapPin, Phone, Globe, Clock, Heart, MapPinned } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Filter, X, MapPin, Phone, Globe, Clock, Heart, MapPinned, Sparkles } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -9,6 +9,7 @@ import LocationRequest from '@/react-app/components/LocationRequest';
 import { ResourceType, categories } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
+import { aiSearchService } from '@/react-app/services/aiSearch';
 
 export default function Discover() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
@@ -16,13 +17,16 @@ export default function Discover() {
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(searchParams.get('category')?.split(',') || []);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const { user } = useUser();
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
+  const [aiRecommendations, setAiRecommendations] = useState<any>(null);
+  const [aiActive, setAiActive] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Only fetch resources when we have user location
   useEffect(() => {
@@ -31,35 +35,35 @@ export default function Discover() {
       return;
     }
 
-    const fetchResources = async () => {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (searchParams.get('q')) params.append('q', searchParams.get('q')!);
-      if (searchParams.get('category')) params.append('category', searchParams.get('category')!);
+  const fetchResources = async () => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (searchParams.get('q')) params.append('q', searchParams.get('q')!);
+    if (searchParams.get('category')) params.append('category', searchParams.get('category')!);
 
-      const response = await fetch(`/api/resources?${params}`);
-      const data = await response.json();
+    const response = await fetch(`/api/resources?${params}`);
+    const data = await response.json();
       let list: ResourceType[] = data.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
       
-      // Optionally filter by favorites
-      if (showFavoritesOnly && !user) {
+    // Optionally filter by favorites
+    if (showFavoritesOnly && !user) {
         setAllResources([]);
-        setLoading(false);
-        return;
-      }
-      if (showFavoritesOnly && user) {
-        try {
-          const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
-          if (!res.ok) throw new Error('Failed to load favorites');
-          const ids = (await res.json()) as number[];
-          list = list.filter(r => ids.includes(r.id));
-        } catch (_) {
-          // ignore filtering if favorites API fails
-        }
-      }
-      setAllResources(list);
       setLoading(false);
-    };
+      return;
+    }
+    if (showFavoritesOnly && user) {
+      try {
+        const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
+        if (!res.ok) throw new Error('Failed to load favorites');
+        const ids = (await res.json()) as number[];
+        list = list.filter(r => ids.includes(r.id));
+      } catch (_) {
+        // ignore filtering if favorites API fails
+      }
+    }
+      setAllResources(list);
+    setLoading(false);
+  };
 
     fetchResources();
   }, [userLocation, searchParams, showFavoritesOnly, user]);
@@ -105,19 +109,54 @@ export default function Discover() {
   }, [user]);
 
   const handleSearch = () => {
+    // Hide AI recommendations when using regular search
+    setAiActive(false);
+    
     const params = new URLSearchParams();
     if (searchTerm) params.append('q', searchTerm);
-    if (selectedCategory) params.append('category', selectedCategory);
+    if (selectedCategories.length > 0) params.append('category', selectedCategories.join(','));
     setSearchParams(params);
   };
 
+  const handleAISearch = async () => {
+    if (!aiSearchService.isAvailable()) return;
+
+    setAiLoading(true);
+    setAiActive(true);
+
+    try {
+      const result = await aiSearchService.generateSearchRecommendations(
+        searchTerm || "help me find resources",
+        allResources.slice(0, 20)
+      );
+      setAiRecommendations(result);
+
+      // Only apply AI suggested categories, don't search with the term
+      if (result.categories.length > 0) {
+        setSelectedCategories(result.categories);
+        // Clear search term to show it's AI-driven
+        setSearchTerm('');
+        const params = new URLSearchParams();
+        params.append('category', result.categories.join(','));
+        setSearchParams(params);
+      }
+    } catch (error) {
+      console.error('AI Search failed:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const clearFilters = () => {
+    // Hide AI recommendations when clearing filters
+    setAiActive(false);
+    
     setSearchTerm('');
-    setSelectedCategory('');
+    setSelectedCategories([]);
     setSearchParams(new URLSearchParams());
   };
 
-  const hasActiveFilters = searchTerm || selectedCategory;
+  const hasActiveFilters = searchTerm || selectedCategories.length > 0;
 
   // Don't render discover page until we have location
   if (locationLoading || !userLocation) {
@@ -186,6 +225,7 @@ export default function Discover() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="mb-8"
+          data-tour="search"
         >
           <GlassCard variant="strong">
             <div className="space-y-4">
@@ -197,7 +237,11 @@ export default function Discover() {
                     type="text"
                     placeholder="Search resources..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      // Hide AI recommendations when user types manually
+                      setAiActive(false);
+                    }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-400"
                   />
@@ -210,9 +254,28 @@ export default function Discover() {
                     </button>
                   )}
                 </div>
-                <GlassButton variant="primary" onClick={handleSearch}>
+                <GlassButton variant="primary" onClick={handleSearch} className={`transition-all ${aiActive ? 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-500/25' : ''}`}>
                   Search
                 </GlassButton>
+                {aiSearchService.isAvailable() && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleAISearch}
+                    disabled={aiLoading}
+                    className={`relative px-4 py-2 rounded-full font-medium transition-all bg-gradient-to-r from-teal-600 to-amber-600 text-white shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40`}
+                  >
+                    <Sparkles className="w-5 h-5 inline mr-2" />
+                    AI
+                    {aiLoading && (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="absolute -top-1 -right-1 w-3 h-3 border-2 border-purple-400 border-t-transparent rounded-full"
+                      />
+                    )}
+                  </motion.button>
+                )}
                 <GlassButton
                   variant="secondary"
                   onClick={() => setShowFilters(!showFilters)}
@@ -222,6 +285,7 @@ export default function Discover() {
                 <GlassButton
                   variant={showFavoritesOnly ? 'primary' : 'secondary'}
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  data-tour="favorites"
                 >
                   <Heart className="w-5 h-5" />
                 </GlassButton>
@@ -254,10 +318,16 @@ export default function Discover() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => {
-                            setSelectedCategory(selectedCategory === category ? '' : category);
+                            setSelectedCategories(prev => 
+                              prev.includes(category) 
+                                ? prev.filter(c => c !== category)
+                                : [...prev, category]
+                            );
+                            // Hide AI recommendations when manually selecting categories
+                            setAiActive(false);
                           }}
                           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            selectedCategory === category
+                            selectedCategories.includes(category)
                               ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
                               : 'glass-teal text-slate-200 hover:glass-strong'
                           }`}
@@ -286,18 +356,23 @@ export default function Discover() {
                       </button>
                     </motion.span>
                   )}
-                  {selectedCategory && (
+                  {selectedCategories.map((category) => (
                     <motion.span
+                      key={category}
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="glass-teal px-3 py-1 rounded-full text-sm flex items-center gap-2"
                     >
-                      {selectedCategory}
-                      <button onClick={() => { setSelectedCategory(''); handleSearch(); }}>
+                      {category}
+                      <button onClick={() => { 
+                        setSelectedCategories(prev => prev.filter(c => c !== category)); 
+                        setAiActive(false); // Hide AI recommendations when removing categories
+                        handleSearch(); 
+                      }}>
                         <X className="w-4 h-4" />
                       </button>
                     </motion.span>
-                  )}
+                  ))}
                   <button
                     onClick={clearFilters}
                     className="text-sm text-teal-300 hover:text-teal-200 underline"
@@ -309,6 +384,66 @@ export default function Discover() {
             </div>
           </GlassCard>
         </motion.div>
+
+        {/* AI Recommendations */}
+        <AnimatePresence>
+          {aiActive && aiRecommendations && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mb-8"
+            >
+              <GlassCard variant="teal" className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-slate-100 mb-2">
+                      AI Recommendations
+                    </h3>
+                    <p className="text-slate-300 mb-3">
+                      {aiRecommendations.explanation}
+                    </p>
+                    
+                    {aiRecommendations.recommendations.length > 0 && (
+                      <div className="space-y-2 mb-3">
+                        {aiRecommendations.recommendations.map((rec: string, index: number) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="w-2 h-2 bg-amber-400 rounded-full mt-2 flex-shrink-0" />
+                            <p className="text-sm text-slate-300">{rec}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {aiRecommendations.categories.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        <span className="text-xs text-slate-400">AI suggested categories:</span>
+                        {aiRecommendations.categories.map((cat: string, index: number) => (
+                          <span
+                            key={index}
+                            className="text-xs px-2 py-1 bg-amber-500/20 text-amber-300 rounded-full"
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => setAiActive(false)}
+                      className="mt-3 text-xs text-teal-300 hover:text-teal-200 transition-colors"
+                    >
+                      Hide recommendations
+                    </button>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Results */}
         <div>
@@ -322,9 +457,34 @@ export default function Discover() {
             </div>
           ) : resources.length === 0 ? (
             <GlassCard variant="teal" className="text-center py-12">
-              <p className="text-xl text-slate-300">
-                No resources found. Try adjusting your search or filters.
-              </p>
+              <div className="space-y-4">
+                <p className="text-xl text-slate-300">
+                  {aiActive && aiRecommendations ? 
+                    `No resources found for "${aiRecommendations.query}". The AI couldn't find matching resources in our database.` :
+                    "No resources found. Try adjusting your search or filters."
+                  }
+                </p>
+                <div className="text-sm text-slate-400 space-y-2">
+                  <p>💡 Try these tips:</p>
+                  <ul className="text-left max-w-md mx-auto space-y-1">
+                    {aiActive && aiRecommendations ? (
+                      <>
+                        <li>• Try different keywords like "food", "health", "housing", or "jobs"</li>
+                        <li>• Clear filters to see all available resources</li>
+                        <li>• Use the map view to see resources in your area</li>
+                        <li>• The AI found categories: {aiRecommendations.categories.join(', ')}</li>
+                      </>
+                    ) : (
+                      <>
+                        <li>• Use the AI button to find matching categories</li>
+                        <li>• Clear filters to see all resources</li>
+                        <li>• Try different search terms like "food", "health", or "housing"</li>
+                        <li>• Use the map view to see resources in your area</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </div>
             </GlassCard>
           ) : (
             <>

@@ -65,8 +65,8 @@ export default function Map() {
         loading={locationLoading}
         error={locationError}
       />
-    );
-  }
+      );
+    }
 
   const mapCenter = userLocation;
 
@@ -190,13 +190,13 @@ export default function Map() {
                   />
                 </div>
               ) : (
-                <MapComponent
-                  resources={resources}
-                  onResourceClick={handleResourceClick}
-                  center={mapCenter}
-                  zoom={13}
-                  showHeatmap={showHeatmap}
-                />
+              <MapComponent
+                resources={resources}
+                onResourceClick={handleResourceClick}
+                center={mapCenter}
+                zoom={13}
+                showHeatmap={showHeatmap}
+              />
               )}
             </GlassCard>
           </motion.div>

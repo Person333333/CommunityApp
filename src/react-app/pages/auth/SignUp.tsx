@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSignUp } from '@clerk/clerk-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Compass, Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -17,6 +18,17 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState('');
+
+  // Check if user should see tour after signup
+  useEffect(() => {
+    const tourCompleted = localStorage.getItem('community-tour-completed');
+    const shouldShowTour = new URLSearchParams(window.location.search).get('tour');
+    
+    if (!tourCompleted && shouldShowTour === 'true') {
+      // Redirect to home with tour trigger
+      navigate('/?tour=true');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +68,8 @@ export default function SignUpPage() {
 
       if (completeSignUp.status === 'complete') {
         await setActive({ session: completeSignUp.createdSessionId });
-        window.location.href = '/';
+        // Redirect to home with tour trigger for new users
+        window.location.href = '/?tour=true';
       } else {
         setError('Verification incomplete. Please try again.');
       }

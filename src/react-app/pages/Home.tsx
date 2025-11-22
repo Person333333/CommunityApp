@@ -208,8 +208,8 @@ export default function Home() {
               </p>
             </GlassCard>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featuredResources.map((resource, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredResources.map((resource, index) => (
               <motion.div
                 key={resource.id}
                 initial={{ opacity: 0, y: 30, rotateY: -15 }}
@@ -260,8 +260,8 @@ export default function Home() {
                   </div>
                 </GlassCard>
               </motion.div>
-              ))}
-            </div>
+            ))}
+          </div>
           )}
 
           <motion.div
