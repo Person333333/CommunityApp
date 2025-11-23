@@ -10,7 +10,7 @@ import { ResourceType, categories } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { aiSearchService } from '@/react-app/services/aiSearch';
-import { fetchResourcesFromDB, fetchFavoritesFromDB, addFavoriteToDB, removeFavoriteToDB } from '@/react-app/services/database';
+import { fetchResourcesFromDB, fetchFavoritesFromDB, addFavoriteToDB, removeFavoriteFromDB } from '@/react-app/services/database';
 
 export default function Discover() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
@@ -63,7 +63,12 @@ export default function Discover() {
         }
       }
       setAllResources(list);
-    setLoading(false);
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+      setAllResources([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
     fetchResources();

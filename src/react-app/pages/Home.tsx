@@ -34,7 +34,7 @@ export default function Home() {
         
         const filtered = featuredData.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
         setAllFeaturedResources(filtered);
-        setStats(statsData);
+        setStats(statsData as { totalResources: number; categories: string[] });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
