@@ -14,7 +14,7 @@ import { fetchResourcesFromDB, fetchStatsFromDB } from '@/react-app/services/dat
 export default function Home() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
-  const [stats, setStats] = useState({ totalResources: 0, categories: [] });
+  const [stats, setStats] = useState({ totalResources: 0, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
 
   // Only fetch featured resources when we have user location
@@ -32,7 +32,7 @@ export default function Home() {
           fetchStatsFromDB()
         ]);
         
-        const filtered = featuredData.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+        const filtered = (featuredData as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
         setAllFeaturedResources(filtered);
         setStats(statsData as { totalResources: number; categories: string[] });
       } catch (error) {
