@@ -25,15 +25,19 @@ export default function Map() {
 
     setResourcesLoading(true);
     
-    try {
-      const data = await fetchResourcesFromDB();
-      const filtered = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
-      setAllResources(filtered);
-      setResourcesLoading(false);
-    } catch (error) {
-      console.error('Error fetching resources for map:', error);
-      setResourcesLoading(false);
-    }
+    const fetchResources = async () => {
+      try {
+        const data = await fetchResourcesFromDB();
+        const filtered = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+        setAllResources(filtered);
+        setResourcesLoading(false);
+      } catch (error) {
+        console.error('Error fetching resources for map:', error);
+        setResourcesLoading(false);
+      }
+    };
+    
+    fetchResources();
   }, [userLocation]);
 
   // Filter resources based on local filter toggle
