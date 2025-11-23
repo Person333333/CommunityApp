@@ -9,29 +9,27 @@ export async function fetchResourcesFromDB(options: {
   search?: string;
 }) {
   try {
-    let query = `
-      SELECT * FROM resources 
-      WHERE is_approved = true
-    `;
-    const params = [];
+    let conditions = ['is_approved = true'];
+    let params = [];
 
     if (options.featured) {
-      query += ` AND is_featured = true`;
+      conditions.push('is_featured = true');
     }
 
     if (options.category) {
-      query += ` AND category = $${params.length + 1}`;
+      conditions.push('category = $' + (params.length + 1));
       params.push(options.category);
     }
 
     if (options.search) {
-      query += ` AND (title ILIKE $${params.length + 1} OR description ILIKE $${params.length + 1})`;
-      params.push(`%${options.search}%`);
+      conditions.push('(title ILIKE $' + (params.length + 1) + ' OR description ILIKE $' + (params.length + 2) + ')');
+      params.push('%' + options.search + '%', '%' + options.search + '%');
     }
 
-    query += ` ORDER BY is_featured DESC, title ASC`;
+    const whereClause = conditions.join(' AND ');
+    const query = `SELECT * FROM resources WHERE ${whereClause} ORDER BY is_featured DESC, title ASC`;
 
-    const resources = await sql(query, params);
+    const resources = await sql.query(query, params);
     return resources;
   } catch (error) {
     console.error('Database Error:', error);
