@@ -10,6 +10,7 @@ import { ResourceType, categories } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { aiSearchService } from '@/react-app/services/aiSearch';
+import { fetchResourcesFromDB, fetchFavoritesFromDB, addFavoriteToDB, removeFavoriteToDB } from '@/react-app/services/database';
 
 export default function Discover() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
@@ -37,30 +38,30 @@ export default function Discover() {
 
   const fetchResources = async () => {
     setLoading(true);
-    const params = new URLSearchParams();
-    if (searchParams.get('q')) params.append('q', searchParams.get('q')!);
-    if (searchParams.get('category')) params.append('category', searchParams.get('category')!);
-
-    const response = await fetch(`/api/resources?${params}`);
-    const data = await response.json();
+    
+    try {
+      // Fetch resources directly from database
+      const data = await fetchResourcesFromDB({
+        search: searchParams.get('q') || undefined,
+        category: searchParams.get('category') || undefined,
+      });
+      
       let list: ResourceType[] = data.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
       
-    // Optionally filter by favorites
-    if (showFavoritesOnly && !user) {
+      // Optionally filter by favorites
+      if (showFavoritesOnly && !user) {
         setAllResources([]);
-      setLoading(false);
-      return;
-    }
-    if (showFavoritesOnly && user) {
-      try {
-        const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
-        if (!res.ok) throw new Error('Failed to load favorites');
-        const ids = (await res.json()) as number[];
-        list = list.filter(r => ids.includes(r.id));
-      } catch (_) {
-        // ignore filtering if favorites API fails
+        setLoading(false);
+        return;
       }
-    }
+      if (showFavoritesOnly && user) {
+        try {
+          const ids = await fetchFavoritesFromDB(user.id);
+          list = list.filter(r => ids.includes(r.id));
+        } catch (_) {
+          // ignore filtering if favorites API fails
+        }
+      }
       setAllResources(list);
     setLoading(false);
   };
@@ -94,9 +95,7 @@ export default function Discover() {
   const fetchFavorites = async () => {
     if (!user) return setFavoriteIds([]);
     try {
-      const res = await fetch(`/api/favorites?userId=${encodeURIComponent(user.id)}`);
-      if (!res.ok) throw new Error('Failed');
-      const ids = await res.json();
+      const ids = await fetchFavoritesFromDB(user.id);
       setFavoriteIds(ids);
     } catch (_) {
       setFavoriteIds([]);
@@ -527,9 +526,9 @@ export default function Discover() {
                           const isFav = favoriteIds.includes(resource.id);
                           try {
                             if (isFav) {
-                              await fetch(`/api/favorites/${resource.id}?userId=${encodeURIComponent(user.id)}`, { method: 'DELETE' });
+                              await removeFavoriteFromDB(user.id, resource.id);
                             } else {
-                              await fetch('/api/favorites', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, resourceId: resource.id }) });
+                              await addFavoriteToDB(user.id, resource.id);
                             }
                           } finally {
                             fetchFavorites();

@@ -9,6 +9,7 @@ import LocationRequest from '@/react-app/components/LocationRequest';
 import { useEffect, useState, useMemo } from 'react';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
+import { fetchResourcesFromDB, fetchStatsFromDB } from '@/react-app/services/database';
 
 export default function Home() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
@@ -23,18 +24,23 @@ export default function Home() {
       return;
     }
 
-    // Fetch featured resources
-    fetch('/api/resources?featured=true')
-      .then(res => res.json())
-      .then(data => {
-        const filtered = data.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+    // Fetch featured resources and stats
+    const fetchData = async () => {
+      try {
+        const [featuredData, statsData] = await Promise.all([
+          fetchResourcesFromDB({ featured: true }),
+          fetchStatsFromDB()
+        ]);
+        
+        const filtered = featuredData.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
         setAllFeaturedResources(filtered);
-      });
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
     
-    // Fetch stats
-    fetch('/api/stats')
-      .then(res => res.json())
-      .then(data => setStats(data));
+    fetchData();
   }, [userLocation]);
 
   // Filter featured resources by distance - only show local featured resources
