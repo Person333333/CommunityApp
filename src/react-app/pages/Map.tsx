@@ -6,6 +6,7 @@ import MapComponent from '@/react-app/components/MapComponent';
 import LocationRequest from '@/react-app/components/LocationRequest';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
+import { fetchResourcesFromDB } from '@/react-app/services/database';
 
 export default function Map() {
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
@@ -23,16 +24,16 @@ export default function Map() {
     }
 
     setResourcesLoading(true);
-    fetch('/api/resources')
-      .then(res => res.json())
-      .then(data => {
-        const filtered = data.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
-        setAllResources(filtered);
-        setResourcesLoading(false);
-      })
-      .catch(() => {
-        setResourcesLoading(false);
-      });
+    
+    try {
+      const data = await fetchResourcesFromDB();
+      const filtered = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+      setAllResources(filtered);
+      setResourcesLoading(false);
+    } catch (error) {
+      console.error('Error fetching resources for map:', error);
+      setResourcesLoading(false);
+    }
   }, [userLocation]);
 
   // Filter resources based on local filter toggle
