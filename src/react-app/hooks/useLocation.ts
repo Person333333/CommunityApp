@@ -42,7 +42,7 @@ export function useLocation(): LocationState {
         setLoading(false);
         setError(null);
       },
-      (err) => {
+      () => {
         setError('Location access denied. Please enable location services to see local resources.');
         setLoading(false);
         setLocation(null);

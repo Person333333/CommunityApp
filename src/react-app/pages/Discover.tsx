@@ -46,7 +46,7 @@ export default function Discover() {
         category: searchParams.get('category') || undefined,
       });
       
-      let list: ResourceType[] = data.filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+      let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
       
       // Optionally filter by favorites
       if (showFavoritesOnly && !user) {

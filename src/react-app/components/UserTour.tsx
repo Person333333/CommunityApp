@@ -236,7 +236,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       </AnimatePresence>
 
       {/* Tour Styles */}
-      <style jsx>{`
+      <style>{`
         [data-tour-highlighted="true"] {
           position: relative;
           z-index: 45;
