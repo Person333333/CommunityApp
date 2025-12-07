@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
+import LanguageSelector from '@/react-app/components/LanguageSelector';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,6 +101,9 @@ export default function Navbar() {
                   </div>
                 )}
               </SignedIn>
+              
+              {/* Language Selector */}
+              <LanguageSelector />
             </div>
           </div>
 

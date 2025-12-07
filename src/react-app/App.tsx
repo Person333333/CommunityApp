@@ -13,6 +13,7 @@ import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
+import { LanguageProvider } from "@/react-app/contexts/LanguageProvider";
 
 export default function App() {
   const [showTour, setShowTour] = useState(false);
@@ -31,26 +32,28 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/discover" element={<DiscoverPage />} />
-        <Route path="/submit" element={<SubmitPage />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/references" element={<ReferencesPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/account" element={<AccountPage />} />
-      </Routes>
-      <Footer />
-      <UserTour 
-        isOpen={showTour} 
-        onClose={() => setShowTour(false)} 
-        onComplete={() => setShowTour(false)}
-      />
-      <HelperButton onShowTour={() => setShowTour(true)} />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/submit" element={<SubmitPage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/references" element={<ReferencesPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/account" element={<AccountPage />} />
+        </Routes>
+        <Footer />
+        <UserTour 
+          isOpen={showTour} 
+          onClose={() => setShowTour(false)} 
+          onComplete={() => setShowTour(false)}
+        />
+        <HelperButton onShowTour={() => setShowTour(true)} />
+      </Router>
+    </LanguageProvider>
   );
 }
