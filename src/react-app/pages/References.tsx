@@ -75,10 +75,10 @@ export default function References() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
+          <h1 className="text-4xl sm:text-5xl font-normal text-slate-300 mb-4">
             {t('references.title')}
           </h1>
-          <p className="text-xl text-slate-300">
+          <p className="text-xl text-slate-400">
             {t('references.subtitle')}
           </p>
         </motion.div>
@@ -92,7 +92,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.workLog')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.workLog')}</h2>
               </div>
 
               <div className="space-y-4">
@@ -102,13 +102,13 @@ export default function References() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 + index * 0.1 }}
-                    className="border-l-2 border-teal-400/30 pl-4 pb-4"
+                    className="border-l-2 border-slate-600 pl-4 pb-4"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm text-teal-300">{entry.date}</span>
-                      <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
+                      <span className="text-sm text-slate-400">{entry.date}</span>
+                      <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
                     </div>
-                    <h3 className="font-semibold text-slate-100 mb-1">{entry.task}</h3>
+                    <h3 className="font-normal text-slate-300 mb-1">{entry.task}</h3>
                     <p className="text-sm text-slate-400">{entry.details}</p>
                   </motion.div>
                 ))}
@@ -124,7 +124,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.copyright')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.copyright')}</h2>
               </div>
 
               <div className="grid gap-3">
@@ -137,13 +137,13 @@ export default function References() {
                     className="flex items-start gap-3 p-3 glass rounded-lg"
                   >
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-medium text-slate-100">{item.item}</h3>
+                      <h3 className="font-normal text-slate-300">{item.item}</h3>
                       <p className="text-sm text-slate-400 mt-1">{item.note}</p>
                     </div>
-                    <span className="text-xs text-green-300 px-2 py-1 bg-green-400/20 rounded-full">
+                    <span className="text-xs text-slate-400 px-2 py-1 bg-slate-700 rounded-full">
                       {item.status}
                     </span>
                   </motion.div>
@@ -160,7 +160,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.techStack')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.techStack')}</h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
@@ -172,9 +172,9 @@ export default function References() {
                     transition={{ delay: 0.3 + index * 0.03 }}
                     className="glass p-4 rounded-lg"
                   >
-                    <h3 className="font-medium text-slate-100 mb-1">{item.category}</h3>
-                    <p className="text-teal-300">{item.tech}</p>
-                    <span className="text-xs text-slate-400">{item.version}</span>
+                    <span className="text-sm text-slate-400">{item.category}</span>
+                    <h3 className="font-normal text-slate-300 mt-1">{item.tech}</h3>
+                    <p className="text-xs text-slate-500 mt-1">{item.version}</p>
                   </motion.div>
                 ))}
               </div>
@@ -189,7 +189,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.libraries')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.libraries')}</h2>
               </div>
 
               <div className="space-y-3">
@@ -202,7 +202,7 @@ export default function References() {
                     className="flex items-center justify-between p-3 glass rounded-lg"
                   >
                     <div>
-                      <h3 className="font-mono text-teal-300 text-sm">{lib.name}</h3>
+                      <h3 className="font-normal text-slate-300">{lib.name}</h3>
                       <p className="text-slate-400 text-sm">{lib.purpose}</p>
                     </div>
                     <span className="text-xs text-slate-300 px-2 py-1 glass-ochre rounded-full">
@@ -222,7 +222,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.images')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.images')}</h2>
               </div>
 
               <div className="grid gap-3">
@@ -262,7 +262,7 @@ export default function References() {
           >
             <GlassCard>
               <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-slate-100">{t('references.research')}</h2>
+                <h2 className="text-xl font-normal text-slate-300">{t('references.research')}</h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
@@ -278,10 +278,10 @@ export default function References() {
                     className="block p-4 glass rounded-lg hover:glass-strong transition-all group"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-slate-100 group-hover:text-teal-300 transition-colors">
+                      <h3 className="font-normal text-slate-300 group-hover:text-slate-200 transition-colors">
                         {link.title}
                       </h3>
-                      <ExternalLink className="w-4 h-4 text-teal-400 group-hover:text-teal-300 transition-colors" />
+                      <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-slate-400 transition-colors" />
                     </div>
                     <p className="text-sm text-slate-400">{link.topic}</p>
                   </motion.a>
