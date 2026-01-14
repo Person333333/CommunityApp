@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, Users, ArrowRight } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -9,9 +9,11 @@ import LocationRequest from '@/react-app/components/LocationRequest';
 import { useEffect, useState, useMemo } from 'react';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
-import { fetchResourcesFromDB, fetchStatsFromDB } from '@/react-app/services/database';
+import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 0, categories: [] as string[] });
@@ -28,20 +30,44 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [featuredData, statsData] = await Promise.all([
-          fetchResourcesFromDB({ featured: true }),
-          fetchStatsFromDB()
+          unifiedResourceService.fetchAllResources({ featured: true, includeUserSubmitted: true }),
+          unifiedResourceService.getResourceStats()
         ]);
-        
-        const filtered = (featuredData as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+
+        let filtered = (featuredData as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+
+        // Translate if needed
+        const currentLang = i18n.language;
+        if (currentLang !== 'en') {
+          const { TranslateService } = await import('@/react-app/services/translateService');
+          filtered = await TranslateService.translateResources(filtered, currentLang);
+        }
+
         setAllFeaturedResources(filtered);
-        setStats(statsData as { totalResources: number; categories: string[] });
+        setStats({
+          totalResources: (statsData as any).total || 0,
+          categories: [] // Categories not currently returned by stats API
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    
+
     fetchData();
-  }, [userLocation]);
+  }, [userLocation, i18n.language]);
+
+  // Handle translation when language changes (re-translate existing)
+  useEffect(() => {
+    const translateExisting = async () => {
+      if (i18n.language === 'en' || allFeaturedResources.length === 0) return;
+      try {
+        const { TranslateService } = await import('@/react-app/services/translateService');
+        const translated = await TranslateService.translateResources(allFeaturedResources, i18n.language);
+        setAllFeaturedResources(translated);
+      } catch (e) { console.error(e); }
+    };
+    translateExisting();
+  }, [i18n.language]);
 
   // Filter featured resources by distance - only show local featured resources
   const LOCAL_RADIUS_KM = 300;
@@ -49,7 +75,7 @@ export default function Home() {
     if (!userLocation || allFeaturedResources.length === 0) {
       return [];
     }
-    
+
     // Only show local featured resources
     return allFeaturedResources.filter(resource => {
       if (!resource.latitude || !resource.longitude) return false;
@@ -111,12 +137,12 @@ export default function Home() {
               className="text-center space-y-6"
             >
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-                <span className="block text-amber-400 mb-2">Find Your Path</span>
-                <span className="block gradient-text">to Community Support</span>
+                <span className="block text-amber-400 mb-2">{t('home.hero.title1')}</span>
+                <span className="block gradient-text">{t('home.hero.title2')}</span>
               </h1>
-              
+
               <p className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto">
-                Discover local resources, connect with support services, and find the help you need—all in one place
+                {t('home.hero.subtitle')}
               </p>
 
               {/* Search bar */}
@@ -130,7 +156,7 @@ export default function Home() {
                   <Search className="w-6 h-6 text-teal-300 ml-4" />
                   <input
                     type="text"
-                    placeholder="Search for food banks, housing, healthcare, and more..."
+                    placeholder={t('home.hero.searchPlaceholder')}
                     className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-400 px-4 py-3"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -143,7 +169,7 @@ export default function Home() {
                   />
                   <Link to="/discover">
                     <GlassButton variant="primary" size="md">
-                      Explore
+                      {t('home.hero.explore')}
                     </GlassButton>
                   </Link>
                 </div>
@@ -158,35 +184,21 @@ export default function Home() {
               >
                 <div className="flex items-center gap-2">
                   <Heart className="w-5 h-5 text-teal-400" />
-                  <span>{stats.totalResources}+ Resources</span>
+                  <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-amber-400" />
-                  <span>12+ Categories</span>
+                  <span>12+ {t('home.stats.categories')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-teal-400" />
-                  <span>Local Support</span>
+                  <span>{t('home.stats.localSupport')}</span>
                 </div>
               </motion.div>
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border-2 border-teal-400/50 rounded-full flex justify-center pt-2">
-            <motion.div
-              className="w-1.5 h-1.5 bg-teal-400 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
+        {/* Scroll indicator removed */}
       </section>
 
       {/* Featured Resources Spotlight */}
@@ -200,74 +212,75 @@ export default function Home() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
-              Spotlight Resources
+              {t('home.spotlight.title')}
             </h2>
             <p className="text-xl text-slate-300">
-              Making an impact in our community
+              {t('home.spotlight.subtitle')}
             </p>
           </motion.div>
 
           {featuredResources.length === 0 ? (
             <GlassCard variant="teal" className="text-center py-12">
               <p className="text-xl text-slate-300">
-                No local featured resources found in your area. Check back soon!
+                {t('home.spotlight.noResources')}
               </p>
             </GlassCard>
           ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredResources.map((resource, index) => (
-              <motion.div
-                key={resource.id}
-                initial={{ opacity: 0, y: 30, rotateY: -15 }}
-                whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <GlassCard 
-                  hover 
-                  variant="teal" 
-                  className="h-full cursor-pointer"
-                  onClick={() => setSelectedResource(resource)}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredResources.map((resource, index) => (
+                <motion.div
+                  key={resource.id}
+                  initial={{ opacity: 0, y: 30, rotateY: -15 }}
+                  whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
-                  <div className="space-y-4">
-                    {resource.image_url && (
-                      <div className="aspect-video rounded-lg overflow-hidden">
-                        <img
-                          src={resource.image_url}
-                          alt={resource.title}
-                          className="w-full h-full object-cover"
-                        />
+                  <GlassCard
+                    hover
+                    variant="teal"
+                    className="h-full cursor-pointer"
+                    onClick={() => setSelectedResource(resource)}
+                  >
+                    <div className="space-y-4">
+                      {/* Image removed - leaving space blank for now */}
+                      {/* {resource.image_url && (
+                        <div className="aspect-video rounded-lg overflow-hidden">
+                          <img
+                            src={resource.image_url}
+                            alt={resource.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )} */}
+                      <div>
+                        <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
+                          {resource.category}
+                        </span>
+                        <h3 className="text-2xl font-bold text-slate-100 mt-2">
+                          {resource.title}
+                        </h3>
                       </div>
-                    )}
-                    <div>
-                      <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
-                        {resource.category}
-                      </span>
-                      <h3 className="text-2xl font-bold text-slate-100 mt-2">
-                        {resource.title}
-                      </h3>
+                      <p className="text-slate-300 line-clamp-3">
+                        {resource.description}
+                      </p>
+                      <div className="flex items-center justify-between pt-4">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedResource(resource);
+                          }}
+                          className="text-teal-300 hover:text-teal-200 flex items-center gap-2 group"
+                        >
+                          {t('home.spotlight.learnMore')}
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-slate-300 line-clamp-3">
-                      {resource.description}
-                    </p>
-                    <div className="flex items-center justify-between pt-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedResource(resource);
-                        }}
-                        className="text-teal-300 hover:text-teal-200 flex items-center gap-2 group"
-                      >
-                        Learn More
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </div>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
           )}
 
           <motion.div
@@ -279,7 +292,7 @@ export default function Home() {
           >
             <Link to="/discover">
               <GlassButton variant="primary" size="lg">
-                View All Resources
+                {t('home.spotlight.viewAll')}
               </GlassButton>
             </Link>
           </motion.div>
@@ -297,14 +310,14 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">
-                Know a Resource That Should Be Listed?
+                {t('home.cta.title')}
               </h2>
               <p className="text-lg text-slate-300 mb-8">
-                Help us build a comprehensive directory by submitting community resources
+                {t('home.cta.subtitle')}
               </p>
               <Link to="/submit">
                 <GlassButton variant="primary" size="lg">
-                  Submit a Resource
+                  {t('home.cta.button')}
                 </GlassButton>
               </Link>
             </motion.div>

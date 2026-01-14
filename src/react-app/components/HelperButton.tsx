@@ -3,26 +3,28 @@ import { MessageCircleQuestion, X, Send, Bot, BookOpen, Compass, Search } from '
 import { useState } from 'react';
 import GlassCard from './GlassCard';
 import { aiSearchService } from '@/react-app/services/aiSearch';
+import { useTranslation } from 'react-i18next';
 
 interface HelperButtonProps {
   onShowTour?: () => void;
 }
 
 export default function HelperButton({ onShowTour }: HelperButtonProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string}>>([
+  const [chatHistory, setChatHistory] = useState<Array<{ role: 'user' | 'assistant', content: string }>>([
     {
       role: 'assistant',
-      content: 'Hi! I\'m your Community Compass helper. How can I assist you today? You can ask me about finding resources, using the map, or getting help with any feature!'
+      content: t('helper.greeting')
     }
   ]);
 
   const quickActions = [
     {
       icon: <Compass className="w-4 h-4" />,
-      label: 'Start Tour',
+      label: t('helper.startTour'),
       action: () => {
         onShowTour?.();
         setIsOpen(false);
@@ -30,16 +32,16 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
     },
     {
       icon: <Search className="w-4 h-4" />,
-      label: 'How to Search',
+      label: t('helper.howToSearch'),
       action: () => {
-        handleHelperResponse('How do I search for resources effectively?');
+        handleHelperResponse(t('helper.searchQuestion'));
       }
     },
     {
       icon: <BookOpen className="w-4 h-4" />,
-      label: 'Categories Guide',
+      label: t('helper.categoriesGuide'),
       action: () => {
-        handleHelperResponse('What types of resources can I find?');
+        handleHelperResponse(t('helper.categoriesQuestion'));
       }
     }
   ];
@@ -96,26 +98,26 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
     const lowerQuestion = question.toLowerCase();
 
     if (lowerQuestion.includes('search') || lowerQuestion.includes('find')) {
-      return `You can search for resources in several ways:\n\n• **Keyword Search**: Use the search bar to find specific resources by name, description, or tags\n• **Category Filters**: Select multiple categories to filter results (you can choose more than one!)\n• **Location Filter**: Toggle between local resources (within ~200 miles) or all resources\n• **Favorites**: Save frequently used resources for quick access\n\nPro tip: Try combining search terms with category filters for the best results!`;
+      return t('helper.searchResponse');
     }
 
     if (lowerQuestion.includes('category') || lowerQuestion.includes('type') || lowerQuestion.includes('what')) {
-      return `Community Compass includes these resource categories:\n\n• **Food Assistance** - Food banks, meal programs, nutrition help\n• **Healthcare** - Clinics, medical services, health programs\n• **Housing** - Shelter, rental assistance, housing support\n• **Employment** - Job training, career services, employment help\n• **Education** - Tutoring, GED programs, educational resources\n• **Senior Services** - Programs for older adults\n• **Mental Health** - Counseling, therapy, mental health support\n• **Legal Aid** - Legal assistance, court help\n• **Transportation** - Ride services, transit help\n• **Child Care** - Daycare, after-school programs\n• **Veterans Services** - Programs for veterans\n• **Financial Assistance** - Money help, financial aid\n\nSelect multiple categories in the filter to see all relevant resources!`;
+      return t('helper.categoriesResponse');
     }
 
     if (lowerQuestion.includes('map') || lowerQuestion.includes('location')) {
-      return `The interactive map helps you visualize resource locations:\n\n• **Map View**: See all resources plotted on an interactive map\n• **Density View**: Toggle heatmap to see resource concentration\n• **Local Filter**: Focus on resources within ~200 miles\n• **Click Resources**: Select any map pin to see detailed information\n• **Zoom & Pan**: Navigate the map to explore different areas\n\nThe map is especially helpful for planning visits to multiple resources!`;
+      return t('helper.mapResponse');
     }
 
     if (lowerQuestion.includes('favorite') || lowerQuestion.includes('save')) {
-      return `Favorites help you keep track of useful resources:\n\n• **Save Resources**: Click the heart icon on any resource to save it\n• **Quick Access**: Your favorites appear in a special filtered view\n• **Sync Across Devices**: Favorites are tied to your account\n• **Remove Favorites**: Click the heart again to remove from favorites\n\nPerfect for resources you use regularly or want to remember!`;
+      return t('helper.favoritesResponse');
     }
 
     if (lowerQuestion.includes('submit') || lowerQuestion.includes('add') || lowerQuestion.includes('suggest')) {
-      return `Know a resource that should be listed? Submit it!\n\n• **Add Resource**: Use the "Add Resource" page to submit new listings\n• **Review Process**: All submissions are reviewed before being published\n• **Required Info**: Include contact details, services offered, and location\n• **Help Community**: Your submissions help others find needed resources\n\nWe appreciate community contributions to keep our database comprehensive!`;
+      return t('helper.submitResponse');
     }
 
-    return `I can help you with:\n\n• 🔍 Finding and searching resources\n• 📍 Using the interactive map\n• ❤️ Managing favorites\n• 📝 Submitting new resources\n• 🎯 Understanding different categories\n• 🚀 Taking a guided tour\n\nTry asking me about any of these topics, or click one of the quick action buttons above!`;
+    return t('helper.defaultResponse');
   };
 
   return (
@@ -168,8 +170,8 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-slate-100">Community Helper</h3>
-                  <p className="text-xs text-slate-400">Ask me anything!</p>
+                  <h3 className="font-semibold text-slate-100">{t('helper.title')}</h3>
+                  <p className="text-xs text-slate-400">{t('helper.subtitle')}</p>
                 </div>
               </div>
 
@@ -202,11 +204,10 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                        msg.role === 'user'
+                      className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.role === 'user'
                           ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
                           : 'glass-teal text-slate-200'
-                      }`}
+                        }`}
                     >
                       {msg.content.split('\n').map((line, i) => (
                         <div key={i}>
@@ -250,7 +251,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    placeholder="Ask a question..."
+                    placeholder={t('helper.inputPlaceholder')}
                     className="flex-1 glass-teal border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                   />
                   <motion.button

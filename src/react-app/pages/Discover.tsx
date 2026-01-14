@@ -10,9 +10,18 @@ import { ResourceType, categories } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { aiSearchService } from '@/react-app/services/aiSearch';
-import { fetchResourcesFromDB, fetchFavoritesFromDB, addFavoriteToDB, removeFavoriteFromDB } from '@/react-app/services/database';
+import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
+import { useTranslation } from 'react-i18next';
+import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 
 export default function Discover() {
+  const { t, i18n } = useTranslation();
+  const { } = useDynamicTranslation();
+
+  // Get translated description or fallback
+  const getTranslatedDescription = (resource: ResourceType): string => {
+    return resource.description;
+  };
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
@@ -29,6 +38,35 @@ export default function Discover() {
   const [aiActive, setAiActive] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
 
+  // Handle translation when language changes
+  useEffect(() => {
+    const translateContent = async () => {
+      // If language matches source or we already translated to this lang, skip (unless complex cache logic needed)
+      if (i18n.language === 'en') {
+        // If we are back to English, restore originals if we have them, or just rely on re-fetch
+        // For simplicity, re-fetch or keep current if we store originals.
+        // Actually, we should store originals separately like in Map.tsx
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const { TranslateService } = await import('@/react-app/services/translateService');
+        // Translate currently displayed resources
+        const translated = await TranslateService.translateResources(allResources, i18n.language);
+        setAllResources(translated);
+      } catch (err) {
+        console.error("Failed to translate resources:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (allResources.length > 0 && i18n.language !== 'en') {
+      translateContent();
+    }
+  }, [i18n.language, allResources.length]); // dependency on length to trigger on fresh load
+
   // Only fetch resources when we have user location
   useEffect(() => {
     if (!userLocation) {
@@ -36,50 +74,60 @@ export default function Discover() {
       return;
     }
 
-  const fetchResources = async () => {
-    setLoading(true);
-    
-    try {
-      // Fetch resources directly from database
-      const data = await fetchResourcesFromDB({
-        search: searchParams.get('q') || undefined,
-        category: searchParams.get('category') || undefined,
-      });
-      
-      let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
-      
-      // Optionally filter by favorites
-      if (showFavoritesOnly && !user) {
-        setAllResources([]);
-        setLoading(false);
-        return;
-      }
-      if (showFavoritesOnly && user) {
-        try {
-          const ids = await fetchFavoritesFromDB(user.id);
-          list = list.filter(r => ids.includes(r.id));
-        } catch (_) {
-          // ignore filtering if favorites API fails
+    const fetchResources = async () => {
+      setLoading(true);
+
+      try {
+        // Fetch resources using unified service (211 API + user resources)
+        const data = await unifiedResourceService.fetchAllResources({
+          keyword: searchParams.get('q') || undefined,
+          category: searchParams.get('category') || undefined,
+          includeUserSubmitted: true,
+          userId: user?.id
+        });
+
+        let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+
+        // Optionally filter by favorites
+        if (showFavoritesOnly && !user) {
+          setAllResources([]);
+          setLoading(false);
+          return;
         }
+        if (showFavoritesOnly && user) {
+          try {
+            const ids = await unifiedResourceService.getUserSavedResources(user.id);
+            list = list.filter(r => ids.includes(r.id));
+          } catch (_) {
+            // ignore filtering if favorites API fails
+          }
+        }
+
+        // If language is not English, translate immediately
+        const currentLang = i18n.language;
+        if (currentLang !== 'en') {
+          const { TranslateService } = await import('@/react-app/services/translateService');
+          list = await TranslateService.translateResources(list, currentLang);
+        }
+
+        setAllResources(list);
+      } catch (error) {
+        console.error('Error fetching resources:', error);
+        setAllResources([]);
+      } finally {
+        setLoading(false);
       }
-      setAllResources(list);
-    } catch (error) {
-      console.error('Error fetching resources:', error);
-      setAllResources([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
     fetchResources();
-  }, [userLocation, searchParams, showFavoritesOnly, user]);
+  }, [userLocation, searchParams, showFavoritesOnly, user, i18n.language]);
 
 
   // Filter resources by distance
   const LOCAL_RADIUS_KM = 300;
   const resources = useMemo(() => {
     let filtered = allResources;
-    
+
     // Apply local filter if enabled
     if (showLocalOnly && userLocation) {
       filtered = filtered.filter(resource => {
@@ -93,14 +141,14 @@ export default function Discover() {
         return distance <= LOCAL_RADIUS_KM;
       });
     }
-    
+
     return filtered;
   }, [allResources, showLocalOnly, userLocation]);
 
   const fetchFavorites = async () => {
     if (!user) return setFavoriteIds([]);
     try {
-      const ids = await fetchFavoritesFromDB(user.id);
+      const ids = await unifiedResourceService.getUserSavedResources(user.id);
       setFavoriteIds(ids);
     } catch (_) {
       setFavoriteIds([]);
@@ -115,7 +163,7 @@ export default function Discover() {
   const handleSearch = () => {
     // Hide AI recommendations when using regular search
     setAiActive(false);
-    
+
     const params = new URLSearchParams();
     if (searchTerm) params.append('q', searchTerm);
     if (selectedCategories.length > 0) params.append('category', selectedCategories.join(','));
@@ -154,7 +202,7 @@ export default function Discover() {
   const clearFilters = () => {
     // Hide AI recommendations when clearing filters
     setAiActive(false);
-    
+
     setSearchTerm('');
     setSelectedCategories([]);
     setSearchParams(new URLSearchParams());
@@ -183,10 +231,10 @@ export default function Discover() {
           className="mb-8"
         >
           <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
-            Discover Resources
+            {t('discover.title')}
           </h1>
           <p className="text-xl text-slate-300">
-            Find the support services you need in your community
+            {t('discover.subtitle')}
           </p>
         </motion.div>
 
@@ -203,10 +251,10 @@ export default function Discover() {
                   <MapPinned className="w-5 h-5 text-teal-300 flex-shrink-0" />
                   <div>
                     <p className="text-slate-100 font-medium">
-                      Showing local resources only (within ~200 miles)
+                      {t('discover.showingLocal')}
                     </p>
                     <p className="text-sm text-slate-400">
-                      {resources.length} of {allResources.length} resources in your area
+                      {resources.length} {t('discover.ofResources')} {allResources.length} {t('discover.resourcesInArea')}
                     </p>
                   </div>
                 </div>
@@ -216,7 +264,7 @@ export default function Discover() {
                   onClick={() => setShowLocalOnly(false)}
                   className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-slate-100 text-sm font-medium transition-colors flex-shrink-0"
                 >
-                  Show All
+                  {t('discover.showAll')}
                 </motion.button>
               </div>
             </GlassCard>
@@ -239,7 +287,7 @@ export default function Discover() {
                   <Search className="w-5 h-5 text-teal-300 flex-shrink-0" />
                   <input
                     type="text"
-                    placeholder="Search resources..."
+                    placeholder={t('discover.searchResources')}
                     value={searchTerm}
                     onChange={(e) => {
                       setSearchTerm(e.target.value);
@@ -259,7 +307,7 @@ export default function Discover() {
                   )}
                 </div>
                 <GlassButton variant="primary" onClick={handleSearch} className={`transition-all ${aiActive ? 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-500/25' : ''}`}>
-                  Search
+                  {t('discover.search')}
                 </GlassButton>
                 {aiSearchService.isAvailable() && (
                   <motion.button
@@ -270,7 +318,7 @@ export default function Discover() {
                     className={`relative px-4 py-2 rounded-full font-medium transition-all bg-gradient-to-r from-teal-600 to-amber-600 text-white shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40`}
                   >
                     <Sparkles className="w-5 h-5 inline mr-2" />
-                    AI
+                    {t('discover.ai')}
                     {aiLoading && (
                       <motion.div
                         animate={{ rotate: 360 }}
@@ -280,6 +328,28 @@ export default function Discover() {
                     )}
                   </motion.button>
                 )}
+                {/* Translation button disabled - API issues */}
+                {/* {i18n.language !== 'en' && (
+                  <GlassButton
+                    variant="secondary"
+                    onClick={translateAllDescriptions}
+                    disabled={isTranslatingAll}
+                    className="relative"
+                  >
+                    {isTranslatingAll ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-4 h-4 border-2 border-teal-400 border-t-transparent rounded-full mr-2 inline-block"
+                        />
+                        Translating...
+                      </>
+                    ) : (
+                      t('discover.translateDescriptions')
+                    )}
+                  </GlassButton>
+                )} */}
                 <GlassButton
                   variant="secondary"
                   onClick={() => setShowFilters(!showFilters)}
@@ -313,7 +383,7 @@ export default function Discover() {
                 >
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
-                      Category
+                      {t('discover.categoryLabel')}
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                       {categories.map((category) => (
@@ -322,19 +392,18 @@ export default function Discover() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => {
-                            setSelectedCategories(prev => 
-                              prev.includes(category) 
+                            setSelectedCategories(prev =>
+                              prev.includes(category)
                                 ? prev.filter(c => c !== category)
                                 : [...prev, category]
                             );
                             // Hide AI recommendations when manually selecting categories
                             setAiActive(false);
                           }}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            selectedCategories.includes(category)
-                              ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
-                              : 'glass-teal text-slate-200 hover:glass-strong'
-                          }`}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategories.includes(category)
+                            ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
+                            : 'glass-teal text-slate-200 hover:glass-strong'
+                            }`}
                         >
                           {category}
                         </motion.button>
@@ -347,7 +416,7 @@ export default function Discover() {
               {/* Active filters */}
               {hasActiveFilters && (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm text-slate-400">Active filters:</span>
+                  <span className="text-sm text-slate-400">{t('discover.activeFilters')}</span>
                   {searchTerm && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -368,10 +437,10 @@ export default function Discover() {
                       className="glass-teal px-3 py-1 rounded-full text-sm flex items-center gap-2"
                     >
                       {category}
-                      <button onClick={() => { 
-                        setSelectedCategories(prev => prev.filter(c => c !== category)); 
+                      <button onClick={() => {
+                        setSelectedCategories(prev => prev.filter(c => c !== category));
                         setAiActive(false); // Hide AI recommendations when removing categories
-                        handleSearch(); 
+                        handleSearch();
                       }}>
                         <X className="w-4 h-4" />
                       </button>
@@ -381,7 +450,7 @@ export default function Discover() {
                     onClick={clearFilters}
                     className="text-sm text-teal-300 hover:text-teal-200 underline"
                   >
-                    Clear all
+                    {t('discover.clearAll')}
                   </button>
                 </div>
               )}
@@ -405,12 +474,12 @@ export default function Discover() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-slate-100 mb-2">
-                      AI Recommendations
+                      {t('discover.aiRecommendations')}
                     </h3>
                     <p className="text-slate-300 mb-3">
                       {aiRecommendations.explanation}
                     </p>
-                    
+
                     {aiRecommendations.recommendations.length > 0 && (
                       <div className="space-y-2 mb-3">
                         {aiRecommendations.recommendations.map((rec: string, index: number) => (
@@ -424,7 +493,7 @@ export default function Discover() {
 
                     {aiRecommendations.categories.length > 0 && (
                       <div className="flex flex-wrap gap-2">
-                        <span className="text-xs text-slate-400">AI suggested categories:</span>
+                        <span className="text-xs text-slate-400">{t('discover.aiSuggested')}</span>
                         {aiRecommendations.categories.map((cat: string, index: number) => (
                           <span
                             key={index}
@@ -440,7 +509,7 @@ export default function Discover() {
                       onClick={() => setAiActive(false)}
                       className="mt-3 text-xs text-teal-300 hover:text-teal-200 transition-colors"
                     >
-                      Hide recommendations
+                      {t('discover.hideRecs')}
                     </button>
                   </div>
                 </div>
@@ -463,27 +532,26 @@ export default function Discover() {
             <GlassCard variant="teal" className="text-center py-12">
               <div className="space-y-4">
                 <p className="text-xl text-slate-300">
-                  {aiActive && aiRecommendations ? 
-                    `No resources found for "${aiRecommendations.query}". The AI couldn't find matching resources in our database.` :
-                    "No resources found. Try adjusting your search or filters."
+                  {aiActive && aiRecommendations ?
+                    t('discover.noResourcesAI', { query: aiRecommendations.query }) :
+                    t('discover.noResources')
                   }
                 </p>
                 <div className="text-sm text-slate-400 space-y-2">
-                  <p>💡 Try these tips:</p>
+                  <p>💡 {t('discover.tips')}</p>
                   <ul className="text-left max-w-md mx-auto space-y-1">
                     {aiActive && aiRecommendations ? (
                       <>
-                        <li>• Try different keywords like "food", "health", "housing", or "jobs"</li>
-                        <li>• Clear filters to see all available resources</li>
-                        <li>• Use the map view to see resources in your area</li>
-                        <li>• The AI found categories: {aiRecommendations.categories.join(', ')}</li>
+                        <li>• {t('discover.tip1')}</li>
+                        <li>• {t('discover.tip2')}</li>
+                        <li>• {t('discover.tip3')}</li>
+                        <li>• {t('discover.tipAI')} {aiRecommendations.categories.join(', ')}</li>
                       </>
                     ) : (
                       <>
-                        <li>• Use the AI button to find matching categories</li>
-                        <li>• Clear filters to see all resources</li>
-                        <li>• Try different search terms like "food", "health", or "housing"</li>
-                        <li>• Use the map view to see resources in your area</li>
+                        <li>• {t('discover.tip1')}</li>
+                        <li>• {t('discover.tip2')}</li>
+                        <li>• {t('discover.tip3')}</li>
                       </>
                     )}
                   </ul>
@@ -497,7 +565,7 @@ export default function Discover() {
                 animate={{ opacity: 1 }}
                 className="text-sm text-slate-400 mb-4"
               >
-                Found {resources.length} resource{resources.length !== 1 ? 's' : ''}
+                {t('discover.findResources')} {resources.length} {t('home.stats.resources')}
               </motion.div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -508,22 +576,22 @@ export default function Discover() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <GlassCard 
-                      hover 
-                      variant="teal" 
+                    <GlassCard
+                      hover
+                      variant="teal"
                       className="relative h-full flex flex-col cursor-pointer"
                       onClick={() => setSelectedResource(resource)}
                     >
                       {/* Featured badge */}
                       {resource.is_featured && (
-                        <span className="absolute top-3 left-3 z-10 text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">Featured</span>
+                        <span className="absolute top-3 left-3 z-10 text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">{t('discover.featured')}</span>
                       )}
                       {/* Favorite toggle - visible always; prompts sign-in if needed */}
                       <button
                         onClick={async (e) => {
                           e.stopPropagation();
                           if (!user) {
-                            if (window.confirm('Please sign in to save favorites. Go to Sign In now?')) {
+                            if (window.confirm(t('discover.signInFav'))) {
                               window.location.href = '/sign-in';
                             }
                             return;
@@ -531,9 +599,9 @@ export default function Discover() {
                           const isFav = favoriteIds.includes(resource.id);
                           try {
                             if (isFav) {
-                              await removeFavoriteFromDB(user.id, resource.id);
+                              await unifiedResourceService.unsaveResource(user.id, resource.id);
                             } else {
-                              await addFavoriteToDB(user.id, resource.id);
+                              await unifiedResourceService.saveResource(user.id, resource.id);
                             }
                           } finally {
                             fetchFavorites();
@@ -544,7 +612,8 @@ export default function Discover() {
                       >
                         <Heart className={`w-5 h-5 ${user && favoriteIds.includes(resource.id) ? 'text-amber-400' : 'text-slate-300'}`} />
                       </button>
-                      {resource.image_url && (
+                      {/* Image removed - leaving space blank for now */}
+                      {/* {resource.image_url && (
                         <div className="aspect-video rounded-lg overflow-hidden mb-4 -mx-6 -mt-6">
                           <img
                             src={resource.image_url}
@@ -557,8 +626,8 @@ export default function Discover() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                      )}
-                      
+                      )} */}
+
                       <div className="flex-1 space-y-3">
                         <div>
                           <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
@@ -570,7 +639,7 @@ export default function Discover() {
                         </div>
 
                         <p className="text-slate-300 text-sm line-clamp-3">
-                          {resource.description}
+                          {getTranslatedDescription(resource)}
                         </p>
 
                         <div className="space-y-2 pt-2">
@@ -605,7 +674,7 @@ export default function Discover() {
                                 rel="noopener noreferrer"
                                 className="hover:text-teal-300 truncate"
                               >
-                                Visit Website
+                                {t('discover.visitWebsite')}
                               </a>
                             </div>
                           )}
@@ -625,7 +694,7 @@ export default function Discover() {
 
                         {resource.services && (
                           <div className="pt-2">
-                            <div className="text-slate-200 text-sm font-semibold mb-1">Services Offered</div>
+                            <div className="text-slate-200 text-sm font-semibold mb-1">{t('discover.services')}</div>
                             <div className="flex flex-wrap gap-1">
                               {resource.services.split(',').map((service, i) => (
                                 <span
@@ -641,7 +710,7 @@ export default function Discover() {
 
                         {resource.tags && (
                           <div className="pt-1">
-                            <div className="text-slate-200 text-sm font-semibold mb-1">Tags</div>
+                            <div className="text-slate-200 text-sm font-semibold mb-1">{t('discover.tags')}</div>
                             <div className="flex flex-wrap gap-1">
                               {resource.tags.split(',').map((tag, i) => (
                                 <span key={i} className="text-xs px-2 py-1 glass rounded-full text-slate-300">
@@ -663,7 +732,7 @@ export default function Discover() {
                             className="glass-teal px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            Visit Website
+                            {t('discover.visitWebsite')}
                           </a>
                         )}
                         {resource.phone && (
@@ -672,7 +741,7 @@ export default function Discover() {
                             className="glass px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            Call Now
+                            {t('discover.callNow')}
                           </a>
                         )}
                         {resource.email && (
@@ -681,7 +750,7 @@ export default function Discover() {
                             className="glass px-3 py-2 rounded-lg text-sm text-slate-100 hover:glass-strong"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            Send Email
+                            {t('discover.sendEmail')}
                           </a>
                         )}
                       </div>

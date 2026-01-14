@@ -1,21 +1,20 @@
 import { motion } from 'framer-motion';
-import { Book, Code, Copyright, Clock, ExternalLink, GitBranch } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
+import { useTranslation } from 'react-i18next';
 
 export default function References() {
+  const { t } = useTranslation();
   const workLog = [
-    { date: '2024-09-10', task: 'Project kickoff', details: 'Initial planning, IA, and visual direction for glassmorphism theme' },
-    { date: '2024-09-18', task: 'Scaffold React app', details: 'Vite + React + TS, Tailwind CSS configured with custom glass utilities' },
-    { date: '2024-09-27', task: 'Core UI components', details: 'Navbar, GlassCard, GlassButton, animated hero and compass' },
-    { date: '2024-10-05', task: 'Neon DB setup', details: 'Provision Neon Postgres and add resources/submissions tables + migration' },
-    { date: '2024-10-12', task: 'API with Hono', details: 'Resources list/detail and stats endpoints served via Workers' },
-    { date: '2024-10-19', task: 'Discover page', details: 'Search, category filters, and glassy layout for resource grid' },
-    { date: '2024-10-27', task: 'Map integration', details: 'Leaflet map with OSM tiles, custom markers, and selection' },
-    { date: '2024-11-05', task: 'Auth integration', details: 'Clerk auth with custom Sign In/Up forms (email code + password)' },
-    { date: '2024-11-06', task: 'Resource modal', details: 'Detailed modal with contact info, tags, and actions' },
-    { date: '2024-11-07', task: 'Favorites', details: 'Favorites table, API endpoints, and UI with filter' },
-    { date: '2024-11-08', task: 'Geocoding and density view', details: 'Lat/lng columns, real coordinates for map and zoom-aware density circles' },
-    { date: '2024-11-09', task: 'Footer & About', details: 'Company-style footer and About page with vision/mission/values' }
+    { date: '2026-01-05', task: 'Project kickoff', details: 'Initial planning, IA, and visual direction for glassmorphism theme' },
+    { date: '2026-01-06', task: 'Scaffold React app', details: 'Vite + React + TS, Tailwind CSS configured with custom glass utilities' },
+    { date: '2026-01-07', task: 'Core UI components', details: 'Navbar, GlassCard, GlassButton, animated hero and compass' },
+    { date: '2026-01-08', task: 'Neon DB setup', details: 'Provision Neon Postgres and add resources/submissions tables + migration' },
+    { date: '2026-01-09', task: 'Discover & Map pages', details: 'Search, category filters, Leaflet map with OSM tiles and custom markers' },
+    { date: '2026-01-10', task: 'Auth integration', details: 'Clerk auth with custom Sign In/Up forms (email code + password)' },
+    { date: '2026-01-11', task: 'Resource details & About', details: 'Detailed modal with contact info, About page with vision/mission/values' },
+    { date: '2026-01-12', task: 'Internationalization', details: 'Complete multi-language support with i18next and dynamic content translation' },
+    { date: '2026-01-13', task: 'Polish & optimization', details: 'User tour, helper button, translation fixes, and final UI refinements' }
   ];
 
   const copyrightChecklist = [
@@ -28,17 +27,17 @@ export default function References() {
   ];
 
   const techStack = [
-    { category: 'Frontend Framework', tech: 'React 18 with TypeScript', version: 'Latest' },
-    { category: 'Build Tool', tech: 'Vite', version: '5.x' },
-    { category: 'Styling', tech: 'Tailwind CSS', version: '3.x' },
-    { category: 'Animation', tech: 'Framer Motion', version: '11.x' },
+    { category: 'Frontend Framework', tech: 'React 19 with TypeScript', version: '19.0.0' },
+    { category: 'Build Tool', tech: 'Vite', version: '7.x' },
+    { category: 'Styling', tech: 'Tailwind CSS', version: '3.4.x' },
+    { category: 'Animation', tech: 'Framer Motion', version: '12.x' },
     { category: 'Routing', tech: 'React Router', version: '7.x' },
-    { category: 'Backend Runtime', tech: 'Cloudflare Workers', version: 'Latest' },
-    { category: 'Backend Framework', tech: 'Hono', version: '4.x' },
     { category: 'Database', tech: 'Neon (Postgres serverless)', version: 'Latest' },
-    { category: 'Authentication', tech: 'Clerk', version: 'Latest' },
-    { category: 'Maps', tech: 'Leaflet + React Leaflet', version: 'Latest' },
-    { category: 'Validation', tech: 'Zod', version: '3.x' }
+    { category: 'Authentication', tech: 'Clerk', version: '5.x' },
+    { category: 'Maps', tech: 'Leaflet + React Leaflet', version: '1.9.x / 5.0.x' },
+    { category: 'Validation', tech: 'Zod', version: '3.24.x' },
+    { category: 'I18n', tech: 'i18next + react-i18next', version: '25.x / 16.x' },
+    { category: 'Translation API', tech: 'Python Flask + deep-translator', version: 'Latest' }
   ];
 
   const additionalLibraries = [
@@ -46,7 +45,9 @@ export default function References() {
     { name: 'leaflet', purpose: 'Interactive mapping functionality', license: 'BSD 2-Clause' },
     { name: 'react-leaflet', purpose: 'React components for Leaflet maps', license: 'Hippocratic License' },
     { name: '@types/leaflet', purpose: 'TypeScript definitions for Leaflet', license: 'MIT' },
-    { name: 'lucide-react', purpose: 'Icon library for UI components', license: 'ISC' }
+    { name: 'lucide-react', purpose: 'Icon library for UI components', license: 'ISC' },
+    { name: 'i18next', purpose: 'Internationalization framework', license: 'MIT' },
+    { name: 'react-i18next', purpose: 'React bindings for i18next', license: 'MIT' }
   ];
 
   const imageLinks = [
@@ -62,7 +63,8 @@ export default function References() {
     { title: 'OpenStreetMap', url: 'https://wiki.openstreetmap.org/', topic: 'Map data and attribution' },
     { title: 'Cloudflare Workers Docs', url: 'https://developers.cloudflare.com/workers/', topic: 'Serverless backend' },
     { title: 'Hono Documentation', url: 'https://hono.dev/', topic: 'Web framework for Workers' },
-    { title: 'Tailwind CSS Docs', url: 'https://tailwindcss.com/docs', topic: 'Utility-first CSS framework' }
+    { title: 'Tailwind CSS Docs', url: 'https://tailwindcss.com/docs', topic: 'Utility-first CSS framework' },
+    { title: 'i18next Documentation', url: 'https://www.i18next.com/', topic: 'Internationalization' }
   ];
 
   return (
@@ -74,10 +76,10 @@ export default function References() {
           className="mb-8"
         >
           <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
-            References & Documentation
+            {t('references.title')}
           </h1>
           <p className="text-xl text-slate-300">
-            Complete development documentation and attribution
+            {t('references.subtitle')}
           </p>
         </motion.div>
 
@@ -89,11 +91,10 @@ export default function References() {
             transition={{ delay: 0.1 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <Clock className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Work Log</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.workLog')}</h2>
               </div>
-              
+
               <div className="space-y-4">
                 {workLog.map((entry, index) => (
                   <motion.div
@@ -104,7 +105,7 @@ export default function References() {
                     className="border-l-2 border-teal-400/30 pl-4 pb-4"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm text-teal-300 font-mono">{entry.date}</span>
+                      <span className="text-sm text-teal-300">{entry.date}</span>
                       <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
                     </div>
                     <h3 className="font-semibold text-slate-100 mb-1">{entry.task}</h3>
@@ -122,11 +123,10 @@ export default function References() {
             transition={{ delay: 0.2 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <Copyright className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Copyright Checklist</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.copyright')}</h2>
               </div>
-              
+
               <div className="grid gap-3">
                 {copyrightChecklist.map((item, index) => (
                   <motion.div
@@ -159,11 +159,10 @@ export default function References() {
             transition={{ delay: 0.3 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <Code className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Code Stack</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.techStack')}</h2>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-4">
                 {techStack.map((item, index) => (
                   <motion.div
@@ -189,11 +188,10 @@ export default function References() {
             transition={{ delay: 0.4 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <GitBranch className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Additional Libraries Utilized</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.libraries')}</h2>
               </div>
-              
+
               <div className="space-y-3">
                 {additionalLibraries.map((lib, index) => (
                   <motion.div
@@ -225,9 +223,9 @@ export default function References() {
             <GlassCard>
               <div className="flex items-center gap-3 mb-6">
                 <ExternalLink className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Image Links</h2>
+                <h2 className="text-2xl font-bold text-slate-100">{t('references.images')}</h2>
               </div>
-              
+
               <div className="grid gap-3">
                 {imageLinks.map((link, index) => (
                   <motion.div
@@ -264,11 +262,10 @@ export default function References() {
             transition={{ delay: 0.6 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <Book className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">Research Links</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.research')}</h2>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-4">
                 {researchLinks.map((link, index) => (
                   <motion.a

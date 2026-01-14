@@ -3,21 +3,23 @@ import { Link } from 'react-router';
 import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
-import LanguageSelector from '@/react-app/components/LanguageSelector';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { user } = useUser();
   const { signOut } = useClerk();
   const { scrollY } = useScroll();
-  
+
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
     ['rgba(248, 250, 252, 0.05)', 'rgba(248, 250, 252, 0.15)']
   );
-  
+
   const backdropBlur = useTransform(
     scrollY,
     [0, 100],
@@ -27,7 +29,7 @@ export default function Navbar() {
   return (
     <motion.nav
       className="fixed top-0 left-0 right-0 z-50 border-b border-white/10"
-      style={{ 
+      style={{
         backgroundColor,
         backdropFilter: backdropBlur,
         WebkitBackdropFilter: backdropBlur,
@@ -48,12 +50,13 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink to="/discover" data-tour="discover">Discover</NavLink>
-            <NavLink to="/map" data-tour="map">Map View</NavLink>
-            <NavLink to="/submit">Add Resource</NavLink>
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/references">References</NavLink>
-            
+            <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
+            <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
+
+            <NavLink to="/submit">{t('nav.addResource')}</NavLink>
+            <NavLink to="/about">{t('nav.about')}</NavLink>
+            <NavLink to="/references">{t('nav.references')}</NavLink>
+
             {/* Authentication */}
             <div className="flex items-center gap-4 relative">
               <SignedOut>
@@ -61,13 +64,13 @@ export default function Navbar() {
                   to="/sign-in"
                   className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium"
                 >
-                  Sign In
+                  {t('nav.signIn')}
                 </Link>
                 <Link
                   to="/sign-up"
                   className="glass-teal px-4 py-2 rounded-lg text-slate-100 hover:glass-strong transition-all font-medium"
                 >
-                  Sign Up
+                  {t('nav.signUp')}
                 </Link>
               </SignedOut>
               <SignedIn>
@@ -101,7 +104,7 @@ export default function Navbar() {
                   </div>
                 )}
               </SignedIn>
-              
+
               {/* Language Selector */}
               <LanguageSelector />
             </div>
@@ -127,21 +130,22 @@ export default function Navbar() {
           >
             <div className="flex flex-col space-y-2">
               <MobileNavLink to="/discover" onClick={() => setIsOpen(false)}>
-                Discover
+                {t('nav.discover')}
               </MobileNavLink>
               <MobileNavLink to="/map" onClick={() => setIsOpen(false)}>
-                Map View
+                {t('nav.map')}
               </MobileNavLink>
+
               <MobileNavLink to="/submit" onClick={() => setIsOpen(false)}>
-                Add Resource
+                {t('nav.addResource')}
               </MobileNavLink>
               <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>
-                About
+                {t('nav.about')}
               </MobileNavLink>
               <MobileNavLink to="/references" onClick={() => setIsOpen(false)}>
-                References
+                {t('nav.references')}
               </MobileNavLink>
-              
+
               {/* Mobile Authentication */}
               <div className="pt-2 border-t border-white/10 space-y-2">
                 <SignedOut>
@@ -182,7 +186,7 @@ export default function Navbar() {
   );
 }
 
-function NavLink({ to, children, ...props }: { to: string; children: React.ReactNode; [key: string]: any }) {
+function NavLink({ to, children, ...props }: { to: string; children: React.ReactNode;[key: string]: any }) {
   return (
     <Link
       to={to}
@@ -194,12 +198,12 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
   );
 }
 
-function MobileNavLink({ 
-  to, 
-  children, 
-  onClick 
-}: { 
-  to: string; 
+function MobileNavLink({
+  to,
+  children,
+  onClick
+}: {
+  to: string;
   children: React.ReactNode;
   onClick: () => void;
 }) {

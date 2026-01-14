@@ -5,8 +5,10 @@ import { Link, useNavigate } from 'react-router';
 import { Compass, Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
+import { useTranslation } from 'react-i18next';
 
 export default function SignUpPage() {
+  const { t } = useTranslation();
   const { isLoaded, signUp, setActive } = useSignUp();
   const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState('');
@@ -23,7 +25,7 @@ export default function SignUpPage() {
   useEffect(() => {
     const tourCompleted = localStorage.getItem('community-tour-completed');
     const shouldShowTour = new URLSearchParams(window.location.search).get('tour');
-    
+
     if (!tourCompleted && shouldShowTour === 'true') {
       // Redirect to home with tour trigger
       navigate('/?tour=true');
@@ -48,7 +50,7 @@ export default function SignUpPage() {
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
       setPendingVerification(true);
     } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during sign up');
+      setError(err.errors?.[0]?.message || t('auth.errorGeneric'));
     } finally {
       setLoading(false);
     }
@@ -71,7 +73,7 @@ export default function SignUpPage() {
         // Redirect to home with tour trigger for new users
         window.location.href = '/?tour=true';
       } else {
-        setError('Verification incomplete. Please try again.');
+        setError(t('auth.errorVerify'));
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || 'Invalid verification code');
@@ -96,13 +98,13 @@ export default function SignUpPage() {
             >
               <Compass className="w-10 h-10 text-teal-400" />
             </motion.div>
-            <span className="text-2xl font-bold gradient-text">Community Compass</span>
+            <span className="text-2xl font-bold gradient-text">{t('app.name')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-            Join Our Community
+            {t('auth.joinCommunity')}
           </h1>
           <p className="text-lg text-slate-300">
-            {pendingVerification ? 'Verify your email' : 'Create an account to start exploring resources'}
+            {pendingVerification ? t('auth.verifyEmailTitle') : t('auth.createAccount')}
           </p>
         </motion.div>
 
@@ -121,7 +123,7 @@ export default function SignUpPage() {
                 >
                   <CheckCircle className="w-16 h-16 text-teal-400 mx-auto mb-4" />
                   <p className="text-slate-300">
-                    We've sent a verification code to <span className="text-teal-300 font-medium">{emailAddress}</span>
+                    {t('auth.codeSentTo')} <span className="text-teal-300 font-medium">{emailAddress}</span>
                   </p>
                 </motion.div>
 
@@ -138,14 +140,14 @@ export default function SignUpPage() {
 
                 <div className="space-y-2">
                   <label htmlFor="code" className="block text-sm font-medium text-slate-300">
-                    Verification Code
+                    {t('auth.verificationCode')}
                   </label>
                   <input
                     id="code"
                     type="text"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    placeholder="Enter verification code"
+                    placeholder={t('auth.codePlaceholder')}
                     required
                     className="w-full glass-teal border border-white/10 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all text-center text-2xl tracking-widest"
                     maxLength={6}
@@ -159,7 +161,7 @@ export default function SignUpPage() {
                   className="w-full"
                   disabled={loading || !isLoaded}
                 >
-                  {loading ? 'Verifying...' : 'Verify Email'}
+                  {loading ? t('auth.verifying') : t('auth.verifyEmail')}
                 </GlassButton>
 
                 <button
@@ -171,7 +173,7 @@ export default function SignUpPage() {
                   }}
                   className="w-full text-sm text-teal-300 hover:text-teal-200 transition-colors"
                 >
-                  Change email address
+                  {t('auth.changeEmail')}
                 </button>
               </form>
             ) : (
@@ -191,7 +193,7 @@ export default function SignUpPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label htmlFor="firstName" className="block text-sm font-medium text-slate-300">
-                      First Name
+                      {t('auth.firstName')}
                     </label>
                     <div className="relative">
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-teal-400" />
@@ -200,7 +202,7 @@ export default function SignUpPage() {
                         type="text"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="First"
+                        placeholder={t('auth.firstPlaceholder')}
                         required
                         className="w-full glass-teal border border-white/10 rounded-lg px-12 py-3 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                       />
@@ -209,7 +211,7 @@ export default function SignUpPage() {
 
                   <div className="space-y-2">
                     <label htmlFor="lastName" className="block text-sm font-medium text-slate-300">
-                      Last Name
+                      {t('auth.lastName')}
                     </label>
                     <div className="relative">
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-teal-400" />
@@ -218,7 +220,7 @@ export default function SignUpPage() {
                         type="text"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        placeholder="Last"
+                        placeholder={t('auth.lastPlaceholder')}
                         required
                         className="w-full glass-teal border border-white/10 rounded-lg px-12 py-3 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                       />
@@ -229,7 +231,7 @@ export default function SignUpPage() {
                 {/* Email Input */}
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                    Email Address
+                    {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-teal-400" />
@@ -238,7 +240,7 @@ export default function SignUpPage() {
                       type="email"
                       value={emailAddress}
                       onChange={(e) => setEmailAddress(e.target.value)}
-                      placeholder="Enter your email"
+                      placeholder={t('auth.emailPlaceholder')}
                       required
                       className="w-full glass-teal border border-white/10 rounded-lg px-12 py-3 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                     />
@@ -248,7 +250,7 @@ export default function SignUpPage() {
                 {/* Password Input */}
                 <div className="space-y-2">
                   <label htmlFor="password" className="block text-sm font-medium text-slate-300">
-                    Password
+                    {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-teal-400" />
@@ -257,7 +259,7 @@ export default function SignUpPage() {
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Create a password"
+                      placeholder={t('auth.createPasswordPlaceholder')}
                       required
                       className="w-full glass-teal border border-white/10 rounded-lg px-12 py-3 pr-12 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                     />
@@ -270,7 +272,7 @@ export default function SignUpPage() {
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Must be at least 8 characters
+                    {t('auth.mustBe8Chars')}
                   </p>
                 </div>
 
@@ -282,7 +284,7 @@ export default function SignUpPage() {
                   className="w-full"
                   disabled={loading || !isLoaded}
                 >
-                  {loading ? 'Creating Account...' : 'Sign Up'}
+                  {loading ? t('auth.creatingAccount') : t('auth.signUpButton')}
                 </GlassButton>
               </form>
             )}
@@ -293,7 +295,7 @@ export default function SignUpPage() {
                   to="/sign-in"
                   className="text-sm text-teal-300 hover:text-teal-200 font-medium transition-colors"
                 >
-                  Already have an account? Sign in
+                  {t('auth.alreadyHaveAccount')}
                 </Link>
               </div>
             )}

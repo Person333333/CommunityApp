@@ -27,7 +27,8 @@ export async function fetchResourcesFromDB(options: {
     }
 
     const whereClause = conditions.join(' AND ');
-    const query = `SELECT * FROM resources WHERE ${whereClause} ORDER BY is_featured DESC, title ASC`;
+
+    const query = `SELECT * FROM curated_resources WHERE ${whereClause} ORDER BY is_featured DESC, title ASC`;
 
     const resources = await sql.query(query, params);
     return resources;
@@ -43,7 +44,7 @@ export async function fetchStatsFromDB() {
       SELECT 
         COUNT(*) as total,
         COUNT(CASE WHEN is_featured = true THEN 1 END) as featured
-      FROM resources 
+      FROM curated_resources 
       WHERE is_approved = true
     `;
     return result[0];
@@ -53,7 +54,7 @@ export async function fetchStatsFromDB() {
   }
 }
 
-export async function fetchFavoritesFromDB(userId: string) {
+export async function fetchSavesFromDB(userId: string) {
   try {
     const result = await sql`
       SELECT resource_id FROM favorites 
@@ -61,12 +62,12 @@ export async function fetchFavoritesFromDB(userId: string) {
     `;
     return result.map(row => row.resource_id);
   } catch (error) {
-    console.error('Favorites Error:', error);
+    console.error('Saves Error:', error);
     return [];
   }
 }
 
-export async function addFavoriteToDB(userId: string, resourceId: number) {
+export async function addSaveToDB(userId: string, resourceId: number) {
   try {
     await sql`
       INSERT INTO favorites (user_id, resource_id)
@@ -75,12 +76,12 @@ export async function addFavoriteToDB(userId: string, resourceId: number) {
     `;
     return true;
   } catch (error) {
-    console.error('Add Favorite Error:', error);
+    console.error('Add Save Error:', error);
     return false;
   }
 }
 
-export async function removeFavoriteFromDB(userId: string, resourceId: number) {
+export async function removeSaveFromDB(userId: string, resourceId: number) {
   try {
     await sql`
       DELETE FROM favorites 
@@ -88,7 +89,7 @@ export async function removeFavoriteFromDB(userId: string, resourceId: number) {
     `;
     return true;
   } catch (error) {
-    console.error('Remove Favorite Error:', error);
+    console.error('Remove Save Error:', error);
     return false;
   }
 }

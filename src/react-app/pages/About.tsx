@@ -3,8 +3,11 @@ import { Heart, Users, Target, Compass, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
+import { useTranslation } from 'react-i18next';
 
 export default function About() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-6xl">
@@ -16,10 +19,10 @@ export default function About() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold gradient-text mb-6">
-            About Community Compass
+            {t('about.title')}
           </h1>
           <p className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Empowering communities through accessible, comprehensive resource discovery
+            {t('about.subtitle')}
           </p>
         </motion.div>
 
@@ -37,17 +40,12 @@ export default function About() {
                 <Target className="w-8 h-8 text-teal-400" />
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-slate-100 mb-4">Our Vision</h2>
+                <h2 className="text-3xl font-bold text-slate-100 mb-4">{t('about.vision')}</h2>
                 <p className="text-lg text-slate-300 leading-relaxed mb-4">
-                  At Community Compass, we celebrate the power of connection and community support. 
-                  We believe that everyone deserves easy access to the resources and services that 
-                  can help them thrive. Our platform serves as a bridge between those in need and 
-                  the local organizations dedicated to making a difference.
+                  {t('about.visionText')}
                 </p>
                 <p className="text-lg text-slate-300 leading-relaxed">
-                  Through thoughtfully curated information and intuitive design, we're building a 
-                  comprehensive directory that empowers individuals, families, and communities to 
-                  discover and access the support they need—all in one place.
+                  {t('about.visionText2')}
                 </p>
               </div>
             </div>
@@ -68,27 +66,26 @@ export default function About() {
                 <Compass className="w-8 h-8 text-amber-400" />
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-slate-100 mb-4">Our Mission</h2>
+                <h2 className="text-3xl font-bold text-slate-100 mb-4">{t('about.mission')}</h2>
                 <p className="text-lg text-slate-300 leading-relaxed mb-4">
-                  Community Compass is dedicated to creating a centralized, accessible platform where 
-                  community resources are easily discoverable and navigable. We aim to:
+                  {t('about.missionText')}
                 </p>
                 <ul className="space-y-3 text-lg text-slate-300">
                   <li className="flex items-start gap-3">
                     <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
-                    <span>Connect individuals with local support services across all categories</span>
+                    <span>{t('about.missionItem1')}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
-                    <span>Provide comprehensive, up-to-date information about community resources</span>
+                    <span>{t('about.missionItem2')}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
-                    <span>Foster community engagement through resource sharing and discovery</span>
+                    <span>{t('about.missionItem3')}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
-                    <span>Make resource discovery intuitive, accessible, and user-friendly</span>
+                    <span>{t('about.missionItem4')}</span>
                   </li>
                 </ul>
               </div>
@@ -108,10 +105,9 @@ export default function About() {
               <div className="glass-ochre p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Heart className="w-8 h-8 text-amber-400" />
               </div>
-              <h3 className="text-xl font-bold text-slate-100 mb-3">Compassion</h3>
+              <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.compassion')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                We approach every interaction with empathy and understanding, recognizing that 
-                everyone's journey is unique.
+                {t('about.compassionText')}
               </p>
             </GlassCard>
           </motion.div>
@@ -126,10 +122,9 @@ export default function About() {
               <div className="glass-teal p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Users className="w-8 h-8 text-teal-400" />
               </div>
-              <h3 className="text-xl font-bold text-slate-100 mb-3">Community</h3>
+              <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.community')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                We believe in the strength of community and the power of coming together to 
-                support one another.
+                {t('about.communityText')}
               </p>
             </GlassCard>
           </motion.div>
@@ -144,10 +139,9 @@ export default function About() {
               <div className="glass-strong p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Target className="w-8 h-8 text-teal-400" />
               </div>
-              <h3 className="text-xl font-bold text-slate-100 mb-3">Accessibility</h3>
+              <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.accessibility')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                We're committed to making resources accessible to everyone, regardless of 
-                background or circumstance.
+                {t('about.accessibilityText')}
               </p>
             </GlassCard>
           </motion.div>
@@ -163,21 +157,20 @@ export default function About() {
         >
           <GlassCard variant="strong" className="p-8 md:p-12">
             <h2 className="text-3xl font-bold text-slate-100 mb-4">
-              Join Us in Building Community
+              {t('about.joinUs')}
             </h2>
             <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
-              Help us expand our directory by submitting resources, sharing feedback, or 
-              getting involved in your community.
+              {t('about.joinUsText')}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/submit">
                 <GlassButton variant="primary" size="lg">
-                  Submit a Resource
+                  {t('about.submitResource')}
                 </GlassButton>
               </Link>
               <Link to="/discover">
                 <GlassButton variant="secondary" size="lg">
-                  Explore Resources
+                  {t('about.exploreResources')}
                 </GlassButton>
               </Link>
             </div>

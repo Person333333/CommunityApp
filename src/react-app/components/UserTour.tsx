@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Compass, Search, MapPin, Heart } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Compass, Search, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import GlassCard from './GlassCard';
 
@@ -26,25 +26,11 @@ const tourSteps: TourStep[] = [
     position: 'bottom'
   },
   {
-    id: 'search',
-    title: 'Smart Search',
-    content: 'Use the search bar to find specific resources by name, description, or tags. We\'ll be adding AI-powered search soon!',
-    target: '[data-tour="search"]',
-    position: 'bottom'
-  },
-  {
     id: 'map',
     title: 'Interactive Map',
-    content: 'View resources on an interactive map with heatmap views to see resource density in your area.',
+    content: 'View resources on an interactive map to see what\'s available near you. Click on markers to see details!',
     target: '[data-tour="map"]',
-    position: 'left'
-  },
-  {
-    id: 'favorites',
-    title: 'Save Favorites',
-    content: 'Click the heart icon to save resources for quick access later. Your favorites sync across devices!',
-    target: '[data-tour="favorites"]',
-    position: 'left'
+    position: 'bottom'
   },
   {
     id: 'complete',
@@ -66,7 +52,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
 
   useEffect(() => {
     if (!isOpen) {
-      // Clean up highlight when tour is closed
       if (highlightedElement) {
         highlightedElement.removeAttribute('data-tour-highlighted');
         setHighlightedElement(null);
@@ -75,29 +60,54 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
     }
 
     const step = tourSteps[currentStep];
-    if (step.target) {
-      const element = document.querySelector(step.target);
-      if (element) {
-        // Remove previous highlight
+    let pollTimer: NodeJS.Timeout;
+    let attempts = 0;
+    const maxAttempts = 20; // Try for 5 seconds (20 * 250ms)
+
+    const findAndHighlight = () => {
+      if (step.target) {
+        const element = document.querySelector(step.target);
+
+        if (element) {
+          // Found it! Setup highlight
+          if (highlightedElement) {
+            highlightedElement.removeAttribute('data-tour-highlighted');
+          }
+
+          element.setAttribute('data-tour-highlighted', 'true');
+          setHighlightedElement(element);
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          // Not found yet
+          attempts++;
+          if (attempts < maxAttempts) {
+            pollTimer = setTimeout(findAndHighlight, 250);
+          } else {
+            console.warn(`Tour step ${step.id}: Target ${step.target} not found after timeout.`);
+            // Fallback: Just show the modal centered? 
+            // Or maybe the user is still loading. 
+            // For now, let's just clear highlight so at least the modal text shows if we handle position gracefully.
+            if (highlightedElement) {
+              highlightedElement.removeAttribute('data-tour-highlighted');
+              setHighlightedElement(null);
+            }
+          }
+        }
+      } else {
+        // No target needed (center step like 'welcome')
         if (highlightedElement) {
           highlightedElement.removeAttribute('data-tour-highlighted');
+          setHighlightedElement(null);
         }
-        
-        // Add highlight to new element
-        element.setAttribute('data-tour-highlighted', 'true');
-        setHighlightedElement(element);
-        
-        // Scroll element into view
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-    } else {
-      // Remove highlight if no target
-      if (highlightedElement) {
-        highlightedElement.removeAttribute('data-tour-highlighted');
-        setHighlightedElement(null);
-      }
-    }
-  }, [currentStep, isOpen, highlightedElement]);
+    };
+
+    findAndHighlight();
+
+    return () => {
+      clearTimeout(pollTimer);
+    };
+  }, [currentStep, isOpen]);
 
   const handleNext = () => {
     if (currentStep < tourSteps.length - 1) {
@@ -140,7 +150,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
         className="fixed inset-0 bg-black/50 z-40"
         onClick={onClose}
       />
-      
+
       {/* Tour Content */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -163,10 +173,8 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                 <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-amber-500 rounded-full flex items-center justify-center">
                   {currentStep === 0 && <Compass className="w-5 h-5 text-white" />}
                   {currentStep === 1 && <Search className="w-5 h-5 text-white" />}
-                  {currentStep === 2 && <Search className="w-5 h-5 text-white" />}
-                  {currentStep === 3 && <MapPin className="w-5 h-5 text-white" />}
-                  {currentStep === 4 && <Heart className="w-5 h-5 text-white" />}
-                  {currentStep === 5 && <Compass className="w-5 h-5 text-white" />}
+                  {currentStep === 2 && <MapPin className="w-5 h-5 text-white" />}
+                  {currentStep === 3 && <Compass className="w-5 h-5 text-white" />}
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-100">
@@ -195,9 +203,8 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
               {tourSteps.map((_, index) => (
                 <div
                   key={index}
-                  className={`flex-1 h-1 rounded-full transition-colors ${
-                    index <= currentStep ? 'bg-gradient-to-r from-teal-500 to-amber-500' : 'bg-slate-600'
-                  }`}
+                  className={`flex-1 h-1 rounded-full transition-colors ${index <= currentStep ? 'bg-gradient-to-r from-teal-500 to-amber-500' : 'bg-slate-600'
+                    }`}
                 />
               ))}
             </div>
@@ -210,7 +217,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
               >
                 Skip tour
               </button>
-              
+
               <div className="flex gap-2">
                 {!isFirstStep && (
                   <button
@@ -221,7 +228,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                     Previous
                   </button>
                 )}
-                
+
                 <button
                   onClick={handleNext}
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg hover:from-teal-700 hover:to-amber-700 transition-all"

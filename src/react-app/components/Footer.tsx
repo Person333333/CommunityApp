@@ -2,7 +2,11 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router';
 import { Compass, Mail, Phone, MapPin } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
+
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="relative mt-20 border-t border-white/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -22,10 +26,10 @@ export default function Footer() {
               >
                 <Compass className="w-8 h-8 text-teal-400" />
               </motion.div>
-              <span className="text-xl font-bold gradient-text">Community Compass</span>
+              <span className="text-xl font-bold gradient-text">{t('app.name')}</span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Connecting communities with the resources they need. Your guide to local support services.
+              {t('footer.tagline')}
             </p>
           </motion.div>
 
@@ -37,11 +41,9 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-slate-100">Our Vision</h3>
+            <h3 className="text-lg font-semibold text-slate-100">{t('about.vision')}</h3>
             <p className="text-slate-400 text-sm leading-relaxed">
-              At Community Compass, we believe everyone deserves access to the support services they need. 
-              We're building a comprehensive directory that empowers communities to discover, connect, and 
-              access local resources effortlessly.
+              {t('footer.visionText')}
             </p>
           </motion.div>
 
@@ -53,31 +55,31 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-slate-100">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-slate-100">{t('about.quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/discover" className="text-slate-400 hover:text-teal-300 transition-colors text-sm">
-                  Discover Resources
+                  {t('nav.discover')}
                 </Link>
               </li>
               <li>
                 <Link to="/map" className="text-slate-400 hover:text-teal-300 transition-colors text-sm">
-                  Map View
+                  {t('map.view')}
                 </Link>
               </li>
               <li>
                 <Link to="/submit" className="text-slate-400 hover:text-teal-300 transition-colors text-sm">
-                  Submit a Resource
+                  {t('nav.addResource')}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-slate-400 hover:text-teal-300 transition-colors text-sm">
-                  About Us
+                  {t('nav.about')}
                 </Link>
               </li>
               <li>
                 <Link to="/references" className="text-slate-400 hover:text-teal-300 transition-colors text-sm">
-                  References
+                  {t('nav.references')}
                 </Link>
               </li>
             </ul>
@@ -91,7 +93,7 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-slate-100">Connect With Us</h3>
+            <h3 className="text-lg font-semibold text-slate-100">{t('about.connectWithUs')}</h3>
             <div className="space-y-3">
               <a
                 href="mailto:hello@communitycompass.org"
@@ -124,14 +126,14 @@ export default function Footer() {
           className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-slate-400 text-sm">
-            © {new Date().getFullYear()} Community Compass. All rights reserved.
+            {t('footer.rights', { year: new Date().getFullYear() })}
           </p>
           <div className="flex gap-6 text-sm text-slate-400">
             <Link to="/about" className="hover:text-teal-300 transition-colors">
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
             <Link to="/about" className="hover:text-teal-300 transition-colors">
-              Terms of Service
+              {t('footer.terms')}
             </Link>
           </div>
         </motion.div>

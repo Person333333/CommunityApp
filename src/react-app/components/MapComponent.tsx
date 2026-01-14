@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ResourceType } from '@/shared/types';
 import { MapPin, Phone, Globe, Clock, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // Fix default markers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -113,6 +114,7 @@ export default function MapComponent({
   zoom = 13, 
   showHeatmap = false 
 }: MapComponentProps) {
+  const { t } = useTranslation();
   const heatmapData = showHeatmap ? calculateHeatmap(resources) : [];
 
   // Get coordinates for resources
@@ -306,21 +308,21 @@ export default function MapComponent({
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-lg border border-white/20 max-w-xs">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">
-          {showHeatmap ? 'Density View' : 'Categories'}
+          {showHeatmap ? t('map.densityView') : t('map.categories')}
         </h4>
         {showHeatmap ? (
           <div className="space-y-2 text-xs text-gray-700">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-teal-500/60" />
-              <span>High density (many resources)</span>
+              <span>{t('map.highDensity')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-teal-500/40" />
-              <span>Medium density</span>
+              <span>{t('map.mediumDensity')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-teal-500/30" />
-              <span>Low density</span>
+              <span>{t('map.lowDensity')}</span>
             </div>
           </div>
         ) : (

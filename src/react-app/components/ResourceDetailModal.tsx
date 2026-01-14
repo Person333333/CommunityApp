@@ -3,6 +3,7 @@ import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
+import { useTranslation } from 'react-i18next';
 
 interface ResourceDetailModalProps {
   resource: ResourceType | null;
@@ -11,6 +12,8 @@ interface ResourceDetailModalProps {
 }
 
 export default function ResourceDetailModal({ resource, isOpen, onClose }: ResourceDetailModalProps) {
+  const { t } = useTranslation();
+
   if (!resource) return null;
 
   return (
@@ -49,7 +52,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                   )}
-                  
+
                   <button
                     onClick={onClose}
                     className="absolute top-4 right-4 glass-strong p-2 rounded-full hover:glass-strong transition-all z-10"
@@ -64,7 +67,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       </span>
                       {resource.is_featured && (
                         <span className="inline-block text-xs font-semibold text-amber-300 uppercase tracking-wide px-3 py-1 bg-amber-500/20 rounded-full">
-                          Featured
+                          {t('resource.featured')}
                         </span>
                       )}
                     </div>
@@ -78,7 +81,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                 <div className="p-6 space-y-6">
                   {/* Description */}
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-200 mb-2">Description</h3>
+                    <h3 className="text-lg font-semibold text-slate-200 mb-2">{t('resource.description')}</h3>
                     <p className="text-slate-300 leading-relaxed">
                       {resource.description}
                     </p>
@@ -90,7 +93,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Address</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.address')}</p>
                           <p className="text-slate-100">
                             {resource.address}
                             {resource.city && `, ${resource.city}`}
@@ -105,7 +108,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <Phone className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Phone</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.phone')}</p>
                           <a
                             href={`tel:${resource.phone}`}
                             className="text-teal-300 hover:text-teal-200 transition-colors"
@@ -120,7 +123,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <Mail className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Email</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.email')}</p>
                           <a
                             href={`mailto:${resource.email}`}
                             className="text-teal-300 hover:text-teal-200 transition-colors break-all"
@@ -135,14 +138,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <Globe className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Website</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.website')}</p>
                           <a
                             href={resource.website}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-teal-300 hover:text-teal-200 transition-colors break-all"
                           >
-                            Visit Website
+                            {t('resource.visitWebsite')}
                           </a>
                         </div>
                       </div>
@@ -152,7 +155,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <Clock className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Hours</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.hours')}</p>
                           <p className="text-slate-100">{resource.hours}</p>
                         </div>
                       </div>
@@ -162,7 +165,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
                         <Users className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">Audience</p>
+                          <p className="text-sm text-slate-400 mb-1">{t('resource.audience')}</p>
                           <p className="text-slate-100">{resource.audience}</p>
                         </div>
                       </div>
@@ -174,7 +177,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     <div>
                       <h3 className="text-lg font-semibold text-slate-200 mb-3 flex items-center gap-2">
                         <Tag className="w-5 h-5 text-teal-400" />
-                        Services Offered
+                        {t('resource.services')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.services.split(',').map((service, i) => (
@@ -194,7 +197,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     <div>
                       <h3 className="text-lg font-semibold text-slate-200 mb-3 flex items-center gap-2">
                         <Tag className="w-5 h-5 text-teal-400" />
-                        Tags
+                        {t('resource.tags')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.tags.split(',').map((tag, i) => (
@@ -219,7 +222,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       >
                         <GlassButton variant="primary">
                           <Globe className="w-4 h-4 mr-2" />
-                          Visit Website
+                          {t('resource.visitWebsite')}
                         </GlassButton>
                       </a>
                     )}
@@ -227,7 +230,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <a href={`tel:${resource.phone}`}>
                         <GlassButton variant="secondary">
                           <Phone className="w-4 h-4 mr-2" />
-                          Call Now
+                          {t('resource.callNow')}
                         </GlassButton>
                       </a>
                     )}
@@ -235,7 +238,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <a href={`mailto:${resource.email}`}>
                         <GlassButton variant="secondary">
                           <Mail className="w-4 h-4 mr-2" />
-                          Send Email
+                          {t('resource.sendEmail')}
                         </GlassButton>
                       </a>
                     )}
@@ -249,4 +252,3 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     </AnimatePresence>
   );
 }
-
