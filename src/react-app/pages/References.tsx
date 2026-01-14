@@ -221,9 +221,8 @@ export default function References() {
             transition={{ delay: 0.5 }}
           >
             <GlassCard>
-              <div className="flex items-center gap-3 mb-6">
-                <ExternalLink className="w-6 h-6 text-teal-400" />
-                <h2 className="text-2xl font-bold text-slate-100">{t('references.images')}</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-slate-100">{t('references.images')}</h2>
               </div>
 
               <div className="grid gap-3">
