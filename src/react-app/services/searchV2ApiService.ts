@@ -26,13 +26,13 @@ const MOCK_RESOURCES: ResourceType[] = [
     image_url: null,
     latitude: 47.5975,
     longitude: -122.3247,
-    is_featured: 1,
-    is_approved: 1,
+    is_featured: true,
+    is_approved: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   },
   {
-    id: 2, 
+    id: 2,
     title: 'Seattle Food Bank',
     category: 'Food Assistance',
     description: 'Providing emergency food assistance and nutrition programs to Seattle residents.',
@@ -50,8 +50,8 @@ const MOCK_RESOURCES: ResourceType[] = [
     image_url: null,
     latitude: 47.6587,
     longitude: -122.3140,
-    is_featured: 1,
-    is_approved: 1,
+    is_featured: true,
+    is_approved: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
@@ -175,7 +175,7 @@ class SearchV2ApiService {
 
     try {
       const searchParams = new URLSearchParams();
-      
+
       if (params.keyword) searchParams.append('keyword', params.keyword);
       if (params.dataOwners) searchParams.append('dataOwners', params.dataOwners);
       if (params.taxonomyTerms) searchParams.append('taxonomyTerms', params.taxonomyTerms.join(','));
@@ -251,7 +251,7 @@ class SearchV2ApiService {
       const searchParams = new URLSearchParams();
       searchParams.append('type', params.type);
       searchParams.append('dataOwners', params.dataOwners);
-      
+
       if (params.typeFilter) searchParams.append('typeFilter', params.typeFilter);
       if (params.typeFilterValues) searchParams.append('typeFilterValues', params.typeFilterValues);
 
@@ -310,7 +310,7 @@ class SearchV2ApiService {
   /**
    * Get taxonomy terms
    */
-  async getTaxonomyTerms(params: TaxonomyParams = {}): Promise<Array<{term: string; code: string; level: number}>> {
+  async getTaxonomyTerms(params: TaxonomyParams = {}): Promise<Array<{ term: string; code: string; level: number }>> {
     if (!this.hasApiKey) {
       return this.getMockTaxonomyTerms();
     }
@@ -363,8 +363,8 @@ class SearchV2ApiService {
       image_url: null,
       latitude: result.location?.latitude || null,
       longitude: result.location?.longitude || null,
-      is_featured: 0,
-      is_approved: 1,
+      is_featured: false,
+      is_approved: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }));
@@ -373,9 +373,9 @@ class SearchV2ApiService {
   /**
    * Map taxonomy terms to our category format
    */
-  private mapTaxonomyToCategory(taxonomy: Array<{term: string; code: string; level: number}>): string {
+  private mapTaxonomyToCategory(taxonomy: Array<{ term: string; code: string; level: number }>): string {
     if (!taxonomy || taxonomy.length === 0) return 'General';
-    
+
     // Map common taxonomy terms to our categories
     const categoryMap: Record<string, string> = {
       'Health Care': 'Healthcare',
@@ -409,7 +409,7 @@ class SearchV2ApiService {
     // Apply keyword filter
     if (params.keyword) {
       const keyword = params.keyword.toLowerCase();
-      filtered = filtered.filter(resource => 
+      filtered = filtered.filter(resource =>
         resource.title?.toLowerCase().includes(keyword) ||
         resource.description?.toLowerCase().includes(keyword) ||
         (resource.services && resource.services.toLowerCase().includes(keyword))
@@ -447,7 +447,7 @@ class SearchV2ApiService {
   /**
    * Mock taxonomy terms
    */
-  private getMockTaxonomyTerms(): Array<{term: string; code: string; level: number}> {
+  private getMockTaxonomyTerms(): Array<{ term: string; code: string; level: number }> {
     return [
       { term: 'Health Care', code: 'HC', level: 1 },
       { term: 'Food', code: 'FO', level: 1 },

@@ -25,13 +25,13 @@ const MOCK_RESOURCES: ResourceType[] = [
     image_url: null,
     latitude: 47.5975,
     longitude: -122.3247,
-    is_featured: 1,
-    is_approved: 1,
+    is_featured: true,
+    is_approved: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   },
   {
-    id: 2, 
+    id: 2,
     title: 'Seattle Food Bank',
     category: 'Food Assistance',
     description: 'Providing emergency food assistance and nutrition programs to Seattle residents.',
@@ -49,8 +49,8 @@ const MOCK_RESOURCES: ResourceType[] = [
     image_url: null,
     latitude: 47.6587,
     longitude: -122.3140,
-    is_featured: 1,
-    is_approved: 1,
+    is_featured: true,
+    is_approved: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
@@ -118,7 +118,7 @@ class ResourceApiService {
    */
   private async fetchFrom211Api(params: SearchParams): Promise<ResourceApiResponse[]> {
     const searchParams = new URLSearchParams();
-    
+
     if (params.keyword) searchParams.append('Keyword', params.keyword);
     if (params.location) searchParams.append('Location', params.location);
     if (params.distance) searchParams.append('Distance', params.distance.toString());
@@ -166,8 +166,8 @@ class ResourceApiService {
       image_url: null,
       latitude: resource.location?.latitude || null,
       longitude: resource.location?.longitude || null,
-      is_featured: 0, // 211 resources are not featured by default
-      is_approved: 1, // 211 resources are approved
+      is_featured: false, // 211 resources are not featured by default
+      is_approved: true, // 211 resources are approved
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     }));
@@ -179,7 +179,7 @@ class ResourceApiService {
   private mapCategory(apiCategory: string): string {
     const categoryMap: Record<string, string> = {
       'Health': 'Healthcare',
-      'Food': 'Food Assistance', 
+      'Food': 'Food Assistance',
       'Housing': 'Housing',
       'Employment': 'Employment',
       'Education': 'Education',
@@ -200,7 +200,7 @@ class ResourceApiService {
     // Apply keyword filter
     if (params.keyword) {
       const keyword = params.keyword.toLowerCase();
-      filtered = filtered.filter(resource => 
+      filtered = filtered.filter(resource =>
         resource.title?.toLowerCase().includes(keyword) ||
         resource.description?.toLowerCase().includes(keyword) ||
         (resource.services && resource.services.toLowerCase().includes(keyword))
@@ -209,7 +209,7 @@ class ResourceApiService {
 
     // Apply category filter
     if (params.category) {
-      filtered = filtered.filter(resource => 
+      filtered = filtered.filter(resource =>
         resource.category?.toLowerCase().includes(params.category!.toLowerCase())
       );
     }
