@@ -48,11 +48,11 @@ const categoryIcons = {
 // Component to center map on location
 function MapCenter({ center, zoom }: { center: [number, number]; zoom: number }) {
   const map = useMap();
-  
+
   useEffect(() => {
     map.setView(center, zoom);
   }, [center, zoom, map]);
-  
+
   return null;
 }
 
@@ -64,17 +64,17 @@ function calculateHeatmap(resources: ResourceType[], gridSize: number = 0.02): A
   opacity: number;
 }> {
   const clusters: Map<string, { lat: number; lng: number; count: number }> = new Map();
-  
+
   resources.forEach(resource => {
     const lat = resource.latitude ?? null as any;
     const lng = resource.longitude ?? null as any;
     if (lat == null || lng == null) return;
-    
+
     // Round to grid cell
     const gridLat = Math.round(lat / gridSize) * gridSize;
     const gridLng = Math.round(lng / gridSize) * gridSize;
     const key = `${gridLat}_${gridLng}`;
-    
+
     if (clusters.has(key)) {
       const cluster = clusters.get(key)!;
       // Weighted average for better centering
@@ -85,9 +85,9 @@ function calculateHeatmap(resources: ResourceType[], gridSize: number = 0.02): A
       clusters.set(key, { lat, lng, count: 1 });
     }
   });
-  
+
   const maxCount = Math.max(...Array.from(clusters.values()).map(c => c.count));
-  
+
   return Array.from(clusters.values()).map(cluster => {
     const normalizedCount = cluster.count / maxCount;
     return {
@@ -107,12 +107,12 @@ interface MapComponentProps {
   showHeatmap?: boolean;
 }
 
-export default function MapComponent({ 
-  resources, 
-  onResourceClick, 
-  center, 
-  zoom = 13, 
-  showHeatmap = false 
+export default function MapComponent({
+  resources,
+  onResourceClick,
+  center,
+  zoom = 13,
+  showHeatmap = false
 }: MapComponentProps) {
   const { t } = useTranslation();
   const heatmapData = showHeatmap ? calculateHeatmap(resources) : [];
@@ -135,12 +135,12 @@ export default function MapComponent({
         scrollWheelZoom={true}
       >
         <MapCenter center={center} zoom={zoom} />
-        
+
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        
+
         {/* Heatmap circles - rendered first so they appear behind markers */}
         {showHeatmap && heatmapData.map((heat, index) => (
           <Circle
@@ -163,14 +163,14 @@ export default function MapComponent({
             </Popup>
           </Circle>
         ))}
-        
+
         {/* Resource markers */}
         {!showHeatmap && resources.map(resource => {
           const coords = getResourceCoordinates(resource);
           if (!coords) return null as any;
-          
+
           const icon = categoryIcons[resource.category as keyof typeof categoryIcons] || categoryIcons.Default;
-          
+
           return (
             <Marker
               key={resource.id}
@@ -192,30 +192,30 @@ export default function MapComponent({
                       {resource.description}
                     </p>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <MapPin className="w-4 h-4 text-blue-500" />
                     <span>{resource.address}, {resource.city}</span>
                   </div>
-                  
+
                   <span className="inline-block text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
                     {resource.category}
                   </span>
-                  
+
                   {resource.audience && (
                     <div className="flex items-center gap-2 text-sm text-gray-700">
                       <Users className="w-4 h-4 text-green-500" />
                       <span>{resource.audience}</span>
                     </div>
                   )}
-                  
+
                   {resource.hours && (
                     <div className="flex items-center gap-2 text-sm text-gray-700">
                       <Clock className="w-4 h-4 text-orange-500" />
                       <span>{resource.hours}</span>
                     </div>
                   )}
-                  
+
                   <div className="flex gap-2 pt-2">
                     {resource.phone && (
                       <a
@@ -226,7 +226,7 @@ export default function MapComponent({
                         Call
                       </a>
                     )}
-                    
+
                     {resource.website && (
                       <a
                         href={resource.website}
@@ -244,7 +244,7 @@ export default function MapComponent({
             </Marker>
           );
         })}
-        
+
         {/* Show clustered markers in heatmap mode */}
         {showHeatmap && heatmapData.map((heat, index) => {
           // Find resources in this cluster
@@ -252,18 +252,18 @@ export default function MapComponent({
             if (!resource.address) return false;
             const coords = getResourceCoordinates(resource);
             const dist = Math.sqrt(
-              Math.pow(coords[0] - heat.center[0], 2) + 
+              Math.pow(coords[0] - heat.center[0], 2) +
               Math.pow(coords[1] - heat.center[1], 2)
             );
             return dist < 0.01; // Within ~1km
           });
-          
+
           if (clusterResources.length === 0) return null;
-          
+
           // Show a single marker for the cluster
           const mainResource = clusterResources[0];
           const icon = categoryIcons[mainResource.category as keyof typeof categoryIcons] || categoryIcons.Default;
-          
+
           return (
             <Marker
               key={`cluster-${index}`}
@@ -285,7 +285,7 @@ export default function MapComponent({
                       {mainResource.title} and {heat.count - 1} other{heat.count - 1 !== 1 ? 's' : ''}
                     </p>
                   </div>
-                  
+
                   <div className="space-y-1">
                     {clusterResources.slice(0, 3).map(resource => (
                       <div key={resource.id} className="text-sm text-gray-700">
@@ -304,7 +304,7 @@ export default function MapComponent({
           );
         })}
       </MapContainer>
-      
+
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-lg border border-white/20 max-w-xs">
         <h4 className="text-sm font-semibold text-gray-800 mb-2">
@@ -329,17 +329,16 @@ export default function MapComponent({
           <div className="grid grid-cols-2 gap-2 text-xs">
             {Object.entries(categoryIcons).slice(0, -1).map(([category, _]) => (
               <div key={category} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${
-                  category === 'Housing' ? 'bg-blue-500' :
-                  category === 'Food' || category === 'Food Assistance' ? 'bg-green-500' :
-                  category === 'Healthcare' ? 'bg-red-500' :
-                  category === 'Employment' ? 'bg-purple-500' :
-                  category === 'Education' ? 'bg-yellow-500' :
-                  category === 'Transportation' ? 'bg-indigo-500' :
-                  category === 'Mental Health' ? 'bg-pink-500' :
-                  'bg-orange-500'
-                }`} />
-                <span className="text-gray-700 truncate">{category}</span>
+                <div className={`w-3 h-3 rounded-full ${category === 'Housing' ? 'bg-blue-500' :
+                    category === 'Food' || category === 'Food Assistance' ? 'bg-green-500' :
+                      category === 'Healthcare' ? 'bg-red-500' :
+                        category === 'Employment' ? 'bg-purple-500' :
+                          category === 'Education' ? 'bg-yellow-500' :
+                            category === 'Transportation' ? 'bg-indigo-500' :
+                              category === 'Mental Health' ? 'bg-pink-500' :
+                                'bg-orange-500'
+                  }`} />
+                <span className="text-gray-700 truncate">{t(`categories.${category}`, category)}</span>
               </div>
             ))}
           </div>
