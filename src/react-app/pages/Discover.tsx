@@ -118,7 +118,7 @@ export default function Discover() {
     };
 
     fetchResources();
-  }, [userLocation, searchParams, showFavoritesOnly, user, i18n.language]);
+  }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language]);
 
 
   // Filter resources by distance
