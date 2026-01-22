@@ -10,7 +10,7 @@ interface HelperButtonProps {
 }
 
 export default function HelperButton({ onShowTour }: HelperButtonProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -57,10 +57,22 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
     try {
       // Use AI service if available, otherwise fallback to rule-based responses
       if (aiSearchService.isAvailable()) {
-        const response = await aiSearchService.generateHelpMessage(userMessage);
+        let response = await aiSearchService.generateHelpMessage(userMessage);
+
+        // Translate response if not in English
+        if (i18n.language !== 'en') {
+          try {
+            const { TranslateService } = await import('@/react-app/services/translateService');
+            const translated = await TranslateService.translateText(response, i18n.language);
+            response = Array.isArray(translated) ? translated[0] : translated;
+          } catch (err) {
+            console.error('Translation failed:', err);
+          }
+        }
+
         setChatHistory(prev => [...prev, { role: 'assistant', content: response }]);
       } else {
-        // Fallback to rule-based responses
+        // Fallback to rule-based responses (already translated via t())
         const response = generateHelperResponse(userMessage);
         setChatHistory(prev => [...prev, { role: 'assistant', content: response }]);
       }
@@ -80,7 +92,19 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
 
     try {
       if (aiSearchService.isAvailable()) {
-        const response = await aiSearchService.generateHelpMessage(question);
+        let response = await aiSearchService.generateHelpMessage(question);
+
+        // Translate response if not in English
+        if (i18n.language !== 'en') {
+          try {
+            const { TranslateService } = await import('@/react-app/services/translateService');
+            const translated = await TranslateService.translateText(response, i18n.language);
+            response = Array.isArray(translated) ? translated[0] : translated;
+          } catch (err) {
+            console.error('Translation failed:', err);
+          }
+        }
+
         setChatHistory(prev => [...prev, { role: 'assistant', content: response }]);
       } else {
         const response = generateHelperResponse(question);
@@ -205,8 +229,8 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                   >
                     <div
                       className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.role === 'user'
-                          ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
-                          : 'glass-teal text-slate-200'
+                        ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
+                        : 'glass-teal text-slate-200'
                         }`}
                     >
                       {msg.content.split('\n').map((line, i) => (
