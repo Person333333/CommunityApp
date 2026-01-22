@@ -37,9 +37,9 @@ export default function Navbar() {
       }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group mr-8">
+          <Link to="/" className="flex items-center space-x-2 group">
             <motion.div
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
@@ -50,7 +50,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 ml-16">
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
             <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
