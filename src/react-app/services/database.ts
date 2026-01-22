@@ -22,55 +22,40 @@ export async function fetchResourcesFromDB(options: {
       params.push(options.category);
     }
 
-    // Split conditions for curated (zip_code) vs submissions (zip)
-    let curatedConditions = [...baseConditions];
-    let submissionConditions = [...baseConditions];
-
     if (options.search) {
       const searchParam = '%' + options.search + '%';
-
-      // Curated resources use zip_code
-      curatedConditions.push(`(
-        title ILIKE $${params.length + 1} OR 
-        description ILIKE $${params.length + 2} OR 
-        city ILIKE $${params.length + 3} OR 
-        state ILIKE $${params.length + 4} OR 
-        zip_code ILIKE $${params.length + 5}
-      )`);
-
-      // Submissions use zip
-      submissionConditions.push(`(
+      baseConditions.push(`(
         title ILIKE $${params.length + 1} OR 
         description ILIKE $${params.length + 2} OR 
         city ILIKE $${params.length + 3} OR 
         state ILIKE $${params.length + 4} OR 
         zip ILIKE $${params.length + 5}
       )`);
-
       params.push(searchParam, searchParam, searchParam, searchParam, searchParam);
     }
 
-    const whereCurated = curatedConditions.length > 0 ? `WHERE ${curatedConditions.join(' AND ')}` : '';
-    const whereSubmissions = submissionConditions.length > 0 ? `WHERE ${submissionConditions.join(' AND ')}` : '';
+    const whereClause = baseConditions.length > 0 ? `WHERE ${baseConditions.join(' AND ')}` : '';
 
-    // Query both tables with correct columns
+    // Query both curated_resources and resource_submissions tables
+    // Note: curated_resources uses 'email' and 'zip'
+    // resource_submissions uses 'contact_email' and 'zip'
     const query = `
       SELECT 
-        id, title, description, category, contact_email, phone, website,
-        address, city, state, zip_code as zip, image_url, latitude, longitude,
+        id, title, description, category, email as contact_email, phone, website,
+        address, city, state, zip, image_url, latitude, longitude,
         audience, hours, services, tags,
         is_approved, is_featured,
         created_at, updated_at, user_id 
-      FROM curated_resources ${whereCurated}
+      FROM curated_resources ${whereClause}
       UNION ALL
       SELECT 
-        id, title, description, category, contact_email as email, phone, website,
+        id, title, description, category, contact_email, phone, website,
         address, city, state, zip, image_url, latitude, longitude,
         audience, hours, services, tags,
         CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,
         false as is_featured,
         created_at, updated_at, user_id
-      FROM resource_submissions ${whereSubmissions}
+      FROM resource_submissions ${whereClause}
       ORDER BY is_featured DESC, created_at DESC, title ASC
       ${options.limit ? `LIMIT ${options.limit}` : ''}
     `;
