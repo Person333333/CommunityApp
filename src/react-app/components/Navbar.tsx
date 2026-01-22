@@ -4,6 +4,7 @@ import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
+import LocationSelector from './LocationSelector';
 import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
@@ -106,6 +107,8 @@ export default function Navbar() {
                 )}
               </SignedIn>
 
+              {/* Location Selector */}
+              <LocationSelector />
               {/* Language Selector */}
               <LanguageSelector />
             </div>

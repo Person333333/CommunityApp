@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ClerkProvider } from '@clerk/clerk-react'
 import App from './App.tsx'
+import { LocationProvider } from './context/LocationContext'
 import './index.css'
 
 // Hardcode the key temporarily to bypass the environment variable issue
@@ -15,9 +16,9 @@ if (!PUBLISHABLE_KEY) {
   console.error("Missing Publishable Key - VITE_CLERK_PUBLISHABLE_KEY not found");
   // Let's render a simple error message instead of throwing
   ReactDOM.createRoot(document.getElementById('root')!).render(
-    <div style={{ 
-      padding: '2rem', 
-      backgroundColor: '#fee2e2', 
+    <div style={{
+      padding: '2rem',
+      backgroundColor: '#fee2e2',
       border: '1px solid #ef4444',
       borderRadius: '8px',
       margin: '2rem',
@@ -35,12 +36,14 @@ if (!PUBLISHABLE_KEY) {
 } else {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-      <ClerkProvider 
+      <ClerkProvider
         publishableKey={PUBLISHABLE_KEY}
         signInFallbackRedirectUrl="/"
         signUpFallbackRedirectUrl="/"
       >
-        <App />
+        <LocationProvider>
+          <App />
+        </LocationProvider>
       </ClerkProvider>
     </React.StrictMode>,
   )
