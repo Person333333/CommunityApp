@@ -37,20 +37,20 @@ export default function Navbar() {
       }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-18">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center space-x-2 group mr-8">
             <motion.div
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
             >
-              <Compass className="w-9 h-9 text-teal-400" />
+              <Compass className="w-8 h-8 text-teal-400" />
             </motion.div>
-            <span className="text-2xl font-bold gradient-text">Community Compass</span>
+            <span className="text-xl font-bold gradient-text">Community Compass</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-12">
+          <div className="hidden md:flex items-center space-x-8">
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
             <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
@@ -59,7 +59,7 @@ export default function Navbar() {
             <NavLink to="/references">{t('nav.references')}</NavLink>
 
             {/* Authentication */}
-            <div className="flex items-center gap-6 relative">
+            <div className="flex items-center gap-4 relative">
               <SignedOut>
                 <Link
                   to="/sign-in"
