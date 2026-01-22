@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router';
-import { Compass, Menu, X } from 'lucide-react';
+import { Compass, Menu, X, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
@@ -105,6 +105,20 @@ export default function Navbar() {
                   </div>
                 )}
               </SignedIn>
+
+              {/* Location Reset */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem('community-location');
+                  localStorage.removeItem('community-location-source');
+                  window.location.reload();
+                }}
+                className="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-teal-300 transition-colors"
+                title={t('nav.changeLocation')}
+                aria-label={t('nav.changeLocation')}
+              >
+                <MapPin className="w-4 h-4" />
+              </button>
 
               {/* Language Selector */}
               <LanguageSelector />

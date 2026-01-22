@@ -23,7 +23,8 @@
     "references": "References",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "account": "Account"
+    "account": "Account",
+    "changeLocation": "Change Location"
   },
   "home": {
     "hero": {

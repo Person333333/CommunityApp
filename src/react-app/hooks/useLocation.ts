@@ -6,6 +6,7 @@ export type LocationState = {
   error: string | null;
   requestLocation: () => void;
   setZipCodeLocation: (zipCode: string) => void;
+  clearLocation: () => void;
   locationSource: 'gps' | 'zip' | null;
 };
 
@@ -143,6 +144,29 @@ export function useLocation(): LocationState {
     );
   }, []);
 
+  // Load from local storage on mount
+  useEffect(() => {
+    const savedLocation = localStorage.getItem('community-location');
+    const savedSource = localStorage.getItem('community-location-source');
+
+    if (savedLocation) {
+      try {
+        const parsed = JSON.parse(savedLocation);
+        if (Array.isArray(parsed) && parsed.length === 2) {
+          setLocation(parsed as [number, number]);
+          setSource((savedSource as 'gps' | 'zip') || 'zip');
+          setLoading(false);
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved location', e);
+      }
+    }
+
+    // Only request GPS if no saved location
+    requestLocation();
+  }, [requestLocation]);
+
   const setZipCodeLocation = useCallback(async (zipCode: string) => {
     console.log('setZipCodeLocation called with:', zipCode);
     setLoading(true);
@@ -155,6 +179,9 @@ export function useLocation(): LocationState {
       if (coords) {
         setLocation(coords);
         setSource('zip');
+        // Save to local storage
+        localStorage.setItem('community-location', JSON.stringify(coords));
+        localStorage.setItem('community-location-source', 'zip');
         console.log(`ZIP Code ${zipCode} set to location: ${coords}`);
       } else {
         console.log('No coordinates found for ZIP:', zipCode);
@@ -168,11 +195,14 @@ export function useLocation(): LocationState {
     }
   }, []);
 
-  // Request location immediately on mount
-  useEffect(() => {
-    requestLocation();
-  }, [requestLocation]);
+  const clearLocation = useCallback(() => {
+    localStorage.removeItem('community-location');
+    localStorage.removeItem('community-location-source');
+    setLocation(null);
+    setSource(null);
+    setLoading(true); // Trigger loading state to show LocationRequest
+  }, []);
 
-  return { location, loading, error, requestLocation, setZipCodeLocation, locationSource: source };
+  return { location, loading, error, requestLocation, setZipCodeLocation, clearLocation, locationSource: source };
 }
 
