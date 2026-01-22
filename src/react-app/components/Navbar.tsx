@@ -50,7 +50,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 ml-16">
+          <div className="hidden md:flex items-center space-x-10 ml-24 flex-nowrap min-w-max">
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
             <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
@@ -58,8 +58,8 @@ export default function Navbar() {
             <NavLink to="/about">{t('nav.about')}</NavLink>
             <NavLink to="/references">{t('nav.references')}</NavLink>
 
-            {/* Authentication */}
-            <div className="flex items-center gap-4 relative">
+            {/* Authentication & Selectors */}
+            <div className="flex items-center gap-6 relative whitespace-nowrap">
               <SignedOut>
                 <Link
                   to="/sign-in"
@@ -194,7 +194,7 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
   return (
     <Link
       to={to}
-      className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium"
+      className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium whitespace-nowrap"
       {...props}
     >
       {children}
