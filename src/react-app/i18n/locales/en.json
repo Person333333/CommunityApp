@@ -131,12 +131,13 @@
   },
   "footer": {
     "tagline": "Connecting communities with the resources they need. Your guide to local support services.",
-    "visionText": "At Community Compass, we believe everyone deserves access to the support services they need. We're building a comprehensive directory that empowers communities to discover, connect, and access local resources effortlessly.",
+    "visionText": "Community Compass aims to help people when things get tough. Help shows up in many forms. This space exists because getting assistance should not be as hard as it is. Communities grow stronger by knowing where to look.",
     "rights": "© {{year}} Community Compass. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
   "map": {
+    "view": "Map",
     "title": "Interactive Map",
     "subtitle": "Explore community resources with advanced mapping features",
     "showingLocalOnly": "Showing local resources only (within ~200 miles)",

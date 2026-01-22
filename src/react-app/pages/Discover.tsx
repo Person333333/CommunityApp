@@ -572,7 +572,7 @@ export default function Discover() {
                   }
                 </p>
                 <div className="text-sm text-slate-400 space-y-2">
-                  <p>💡 {t('discover.tips')}</p>
+                  <p>{t('discover.tips')}</p>
                   <ul className="text-left max-w-md mx-auto space-y-1">
                     {aiActive && aiRecommendations ? (
                       <>
