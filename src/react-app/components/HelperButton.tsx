@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircleQuestion, X, Send, Bot, BookOpen, Compass, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GlassCard from './GlassCard';
 import { aiSearchService } from '@/react-app/services/aiSearch';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,16 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
       content: t('helper.greeting')
     }
   ]);
+
+  // Update greeting when language changes
+  useEffect(() => {
+    setChatHistory(prev => {
+      if (prev.length === 1 && prev[0].role === 'assistant') {
+        return [{ role: 'assistant', content: t('helper.greeting') }];
+      }
+      return prev;
+    });
+  }, [i18n.language, t]);
 
   const quickActions = [
     {

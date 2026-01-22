@@ -2,8 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Navigation, Check, Loader2 } from 'lucide-react';
 import { useLocation } from '@/react-app/hooks/useLocation';
+import { useTranslation } from 'react-i18next';
 
 export default function LocationSelector() {
+    const { t } = useTranslation();
     const { loading, currentZip, setZipCodeLocation, requestLocation, locationSource } = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [zipInput, setZipInput] = useState('');
@@ -41,7 +43,7 @@ export default function LocationSelector() {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full glass hover:bg-white/10 transition-colors text-sm text-slate-200"
-                title="Change Location"
+                title={t('location.changeLocation')}
             >
                 {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin text-teal-400" />
@@ -53,7 +55,7 @@ export default function LocationSelector() {
                 ) : (
                     <>
                         <Navigation className="w-4 h-4 text-teal-400 fill-teal-400/20" />
-                        <span className="hidden sm:inline">Current Location</span>
+                        <span className="hidden sm:inline">{t('location.currentLocation')}</span>
                     </>
                 )}
             </button>
@@ -68,9 +70,9 @@ export default function LocationSelector() {
                     >
                         <div className="space-y-4">
                             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                                <span className="text-sm font-semibold text-slate-100">Location Settings</span>
+                                <span className="text-sm font-semibold text-slate-100">{t('location.settings')}</span>
                                 <span className="text-xs text-slate-400">
-                                    {locationSource === 'zip' ? 'Using ZIP Code' : 'Using GPS'}
+                                    {locationSource === 'zip' ? t('location.usingZip') : t('location.usingGps')}
                                 </span>
                             </div>
 
@@ -86,8 +88,8 @@ export default function LocationSelector() {
                                     <Navigation className={`w-4 h-4 ${locationSource === 'gps' ? 'text-teal-400' : 'text-slate-400'}`} />
                                 </div>
                                 <div className="flex-1">
-                                    <div className="text-sm font-medium">Use Current Location</div>
-                                    <div className="text-xs opacity-70">Detect automatically</div>
+                                    <div className="text-sm font-medium">{t('location.useCurrentLocation')}</div>
+                                    <div className="text-xs opacity-70">{t('location.detectAutomatically')}</div>
                                 </div>
                                 {locationSource === 'gps' && <Check className="w-4 h-4 text-teal-400" />}
                             </button>
@@ -95,14 +97,14 @@ export default function LocationSelector() {
                             {/* Manual Entry Option */}
                             <div className="space-y-2">
                                 <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">
-                                    Or Enter ZIP Code
+                                    {t('location.enterZipCode')}
                                 </label>
                                 <form onSubmit={handleZipSubmit} className="flex gap-2">
                                     <input
                                         type="text"
                                         value={zipInput}
                                         onChange={(e) => setZipInput(e.target.value)}
-                                        placeholder={currentZip || "ZIP Code"}
+                                        placeholder={currentZip || t('location.zipCode')}
                                         className="flex-1 bg-slate-900/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
                                         maxLength={10}
                                     />
