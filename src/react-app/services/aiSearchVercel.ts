@@ -25,10 +25,10 @@ export class AISearchService {
     // Initialize Gemini AI with environment variable for browser
     // For Vercel, use import.meta.env
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    
+
     console.log('AI Service - API Key found:', !!apiKey);
     console.log('AI Service - API Key length:', apiKey?.length || 0);
-    
+
     if (apiKey && apiKey !== '' && apiKey !== 'your_gemini_api_key_here') {
       try {
         const genAI = new GoogleGenerativeAI(apiKey);
@@ -51,38 +51,42 @@ export class AISearchService {
    * Generate AI-powered search recommendations based on user query
    */
   async generateSearchRecommendations(
-    query: string, 
+    query: string,
     _resourceContext?: ResourceContext[]
   ): Promise<AISearchResult> {
     try {
-      // Check if AI service is available
-      if (!this.model) {
-        return {
-          query,
-          recommendations: this.getFallbackRecommendations(query),
-          explanation: 'Using intelligent keyword matching to find resources that match your description.',
-          categories: this.extractCategoriesFromQuery(query),
-          confidence: 0.6
-        };
+      // Call backend AI service
+      const response = await fetch('http://localhost:3002/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend AI failed: ${response.status}`);
       }
 
-      // Skip AI calls for now since they're failing, use keyword matching
+      const result = await response.json();
+      console.log('Backend AI response:', result);
+
       return {
-        query,
-        recommendations: this.getFallbackRecommendations(query),
-        explanation: 'Using intelligent keyword matching to find resources that match your description.',
-        categories: this.extractCategoriesFromQuery(query),
-        confidence: 0.6
+        query: result.query,
+        recommendations: result.recommendations,
+        explanation: result.explanation,
+        categories: result.categories,
+        confidence: result.confidence || 0.7
       };
 
     } catch (error) {
       console.error('AI Search Error:', error);
-      
-      // Fallback to keyword matching
+
+      // Fallback to local keyword matching if backend fails
       return {
         query,
         recommendations: this.getFallbackRecommendations(query),
-        explanation: 'Using intelligent keyword matching to find resources that match your description.',
+        explanation: 'Using local keyword matching (backend unavailable).',
         categories: this.extractCategoriesFromQuery(query),
         confidence: 0.4
       };
@@ -277,7 +281,7 @@ export class AISearchService {
         'Check the map tab for geographic resource locations',
         'Click the AI button for personalized recommendations'
       ],
-      
+
       // Filters and categories
       'filter': [
         'Click the filter button to see category options like Food, Healthcare, Housing',
@@ -297,7 +301,7 @@ export class AISearchService {
         'Try combining categories if you need multiple types of assistance',
         'The AI button can help identify the right categories for your situation'
       ],
-      
+
       // Map and location
       'map': [
         'Click the map tab to see resources geographically displayed',
@@ -317,7 +321,7 @@ export class AISearchService {
         'Enable location services for the most accurate nearby results',
         'Contact resources directly to confirm their current availability'
       ],
-      
+
       // Favorites and saving
       'favorite': [
         'Click the heart icon on any resource to save it as a favorite',
@@ -337,7 +341,7 @@ export class AISearchService {
         'Sign in to keep your favorites saved permanently',
         'Favorites help you track resources you want to contact'
       ],
-      
+
       // Account and sign in
       'account': [
         'Sign in with Clerk to save favorites and get personalized features',
@@ -357,7 +361,7 @@ export class AISearchService {
         'Free sign-in with email or social accounts',
         'Sign in required for favorites and personalized features'
       ],
-      
+
       // Specific resource types - Food
       'food': [
         'Search "Food Assistance" to find food banks, pantries, and meal programs',
@@ -383,7 +387,7 @@ export class AISearchService {
         'Distribution schedules vary - call ahead for availability',
         'Some pantries require appointments, others are walk-in'
       ],
-      
+
       // Healthcare
       'health': [
         'Search "Healthcare" for free clinics, medical services, and health programs',
@@ -409,7 +413,7 @@ export class AISearchService {
         'Wait times can be long - call ahead or arrive early',
         'Some clinics require appointments, others accept walk-ins'
       ],
-      
+
       // Housing
       'housing': [
         'Search "Housing" for emergency shelters, transitional housing, and rent assistance',
@@ -435,7 +439,7 @@ export class AISearchService {
         'Many programs require case management and participation in services',
         'Apply to multiple programs as waiting lists are common'
       ],
-      
+
       // Employment
       'job': [
         'Search "Employment" for job centers, career services, and employment programs',
@@ -461,7 +465,7 @@ export class AISearchService {
         'Many offer training programs to improve job qualifications',
         'Career counselors can help with resume building and interview skills'
       ],
-      
+
       // Financial assistance
       'money': [
         'Search "Financial Assistance" for help with bills, expenses, and emergency costs',
@@ -487,7 +491,7 @@ export class AISearchService {
         'Apply early as programs often have limited funding and waiting lists',
         'Case managers can help identify and apply for appropriate assistance programs'
       ],
-      
+
       // Transportation
       'transport': [
         'Search "Transportation" for ride services, transit help, and transportation assistance',
@@ -513,7 +517,7 @@ export class AISearchService {
         'Check availability for your specific transportation needs',
         'Some services offer door-to-door transportation for mobility-impaired individuals'
       ],
-      
+
       // Mental health
       'mental': [
         'Search "Mental Health" for counseling, therapy, and support services',
@@ -539,7 +543,7 @@ export class AISearchService {
         'Crisis hotlines provide immediate support for urgent mental health needs',
         'Many providers offer specialized treatment for depression and related conditions'
       ],
-      
+
       // Education
       'education': [
         'Search "Education" for learning programs, GED classes, and educational resources',
@@ -565,7 +569,7 @@ export class AISearchService {
         'Check enrollment requirements and class schedules',
         'Some programs provide help with transportation and childcare'
       ],
-      
+
       // Child care
       'child': [
         'Search "Child Care" for daycare, babysitting services, and child care assistance',
@@ -591,7 +595,7 @@ export class AISearchService {
         'Many community organizations offer low-cost babysitting programs',
         'Some provide emergency babysitting for urgent situations'
       ],
-      
+
       // Senior services
       'senior': [
         'Search "Senior Services" for programs specifically for older adults',
@@ -617,7 +621,7 @@ export class AISearchService {
         'Many centers offer wellness programs and educational classes',
         'Check age requirements and available services in your area'
       ],
-      
+
       // Legal aid
       'legal': [
         'Search "Legal Aid" for free legal assistance and legal services',
@@ -643,7 +647,7 @@ export class AISearchService {
         'Check eligibility requirements and case types handled',
         'Some offer specialized legal clinics and workshops'
       ],
-      
+
       // Veterans services
       'veteran': [
         'Search "Veterans Services" for programs specifically for military veterans',
@@ -669,7 +673,7 @@ export class AISearchService {
         'Check VA benefits eligibility and application procedures',
         'Many organizations help veterans access earned benefits'
       ],
-      
+
       // How-to questions
       'how': [
         'Use the search bar and filters to find what you need',
@@ -683,7 +687,7 @@ export class AISearchService {
         'Use the map tab to see resources geographically near you',
         'Save favorites by clicking the heart icon on any resource'
       ],
-      
+
       // What questions
       'what': [
         'This app helps you find community resources like food, housing, healthcare, and more',
@@ -697,7 +701,7 @@ export class AISearchService {
         'Click resources to see details, contact information, and directions',
         'Save favorites and use the map to find resources near you'
       ],
-      
+
       // Emergency situations
       'emergency': [
         'For immediate life-threatening emergencies, call 911 or local emergency services',
@@ -717,7 +721,7 @@ export class AISearchService {
         'Emergency shelters may have immediate availability for housing crises',
         'Some organizations offer crisis intervention and immediate assistance'
       ],
-      
+
       // Contact and help
       'contact': [
         'Click on any resource to see phone numbers, addresses, and contact information',
@@ -737,7 +741,7 @@ export class AISearchService {
         'Some programs have specific intake times or appointment-only services',
         'Ask about documentation needed and eligibility requirements'
       ],
-      
+
       // Hours and availability
       'hour': [
         'Check resource details for specific hours of operation',
@@ -757,7 +761,7 @@ export class AISearchService {
         'Call ahead to confirm current schedules and requirements',
         'Some resources have different hours for different services'
       ],
-      
+
       // Requirements and eligibility
       'require': [
         'Check resource details for specific requirements and eligibility criteria',
@@ -777,7 +781,7 @@ export class AISearchService {
         'Some programs accept alternative documents if you don\'t have standard requirements',
         'Resource details often list required documentation and eligibility criteria'
       ],
-      
+
       // General help and support
       'help': [
         'I can help you find community resources for food, housing, healthcare, jobs, and more',

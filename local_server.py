@@ -3,6 +3,7 @@ from api.translate import handler as TranslateHandler
 from api.submissions import handler as SubmissionsHandler
 from api.delete_resource import handler as DeleteResourceHandler
 from api.my_submissions import handler as MySubmissionsHandler
+from api.ai import handler as AIHandler
 import sys
 import json
 
@@ -19,6 +20,8 @@ class RouterHandler(BaseHTTPRequestHandler):
                 return DeleteResourceHandler.do_POST(self)
             elif path == '/api/my_submissions':
                 return MySubmissionsHandler.do_POST(self)
+            elif path == '/api/ai':
+                return AIHandler.do_POST(self)
             else:
                 print(f"404 Not Found: {self.path}", file=sys.stderr)
                 self.send_response(404)
@@ -43,6 +46,8 @@ class RouterHandler(BaseHTTPRequestHandler):
             return DeleteResourceHandler.do_OPTIONS(self)
         elif path == '/api/my_submissions':
             return MySubmissionsHandler.do_OPTIONS(self)
+        elif path == '/api/ai':
+            return AIHandler.do_OPTIONS(self)
         else:
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')
