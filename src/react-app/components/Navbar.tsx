@@ -1,12 +1,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router';
-import { Compass, Menu, X, MapPin } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Compass, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from '@/react-app/hooks/useLocation';
-import LocationModal from '@/react-app/components/LocationModal';
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -15,17 +13,6 @@ export default function Navbar() {
   const { user } = useUser();
   const { signOut } = useClerk();
   const { scrollY } = useScroll();
-
-  // Location State
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const { requestLocation, setZipCodeLocation, loading: locLoading, error: locError, location } = useLocation();
-
-  // Handle GPS success and auto-reload
-  useEffect(() => {
-    if (isLocationModalOpen && location && !locLoading && !locError) {
-      window.location.reload();
-    }
-  }, [location, locLoading, locError, isLocationModalOpen]);
 
   const backgroundColor = useTransform(
     scrollY,
@@ -119,32 +106,10 @@ export default function Navbar() {
                 )}
               </SignedIn>
 
-              {/* Location Change Button */}
-              <button
-                onClick={() => setIsLocationModalOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full glass hover:bg-white/10 text-slate-300 hover:text-teal-300 transition-colors border border-white/10"
-                title={t('nav.changeLocation')}
-              >
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm font-medium hidden lg:inline">{t('nav.changeLocation')}</span>
-              </button>
-
               {/* Language Selector */}
               <LanguageSelector />
             </div>
           </div>
-
-          <LocationModal
-            isOpen={isLocationModalOpen}
-            onClose={() => setIsLocationModalOpen(false)}
-            onRequestLocation={requestLocation}
-            onZipCodeSearch={async (zip) => {
-              await setZipCodeLocation(zip);
-              window.location.reload();
-            }}
-            loading={locLoading}
-            error={locError}
-          />
 
           {/* Mobile Menu Button */}
           <button
@@ -218,7 +183,7 @@ export default function Navbar() {
           </motion.div>
         )}
       </div>
-    </motion.nav >
+    </motion.nav>
   );
 }
 

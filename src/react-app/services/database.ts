@@ -37,19 +37,11 @@ export async function fetchResourcesFromDB(options: {
     const whereClause = baseConditions.length > 0 ? `WHERE ${baseConditions.join(' AND ')}` : '';
 
     // Query both curated_resources and resource_submissions tables
-    // Note: curated_resources uses 'email' and 'zip'
-    // resource_submissions uses 'contact_email' and 'zip'
     const query = `
-      SELECT 
-        id, title, description, category, email as contact_email, phone, website,
-        address, city, state, zip, image_url, latitude, longitude,
-        audience, hours, services, tags,
-        is_approved, is_featured,
-        created_at, updated_at, user_id 
-      FROM curated_resources ${whereClause}
+      SELECT *, user_id FROM curated_resources ${whereClause}
       UNION ALL
       SELECT 
-        id, title, description, category, contact_email, phone, website,
+        id, title, description, category, contact_email as email, phone, website,
         address, city, state, zip, image_url, latitude, longitude,
         audience, hours, services, tags,
         CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,

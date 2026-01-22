@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router';
 import { Trash2, Loader2, MapPin, Phone, Globe, Clock, User as UserIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import GlassCard from '@/react-app/components/GlassCard';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import type { ResourceType } from '@/shared/types';
 
 export default function MySubmissions() {
+    const { t } = useTranslation();
     const { user, isLoaded } = useUser();
     const navigate = useNavigate();
     const [resources, setResources] = useState<ResourceType[]>([]);

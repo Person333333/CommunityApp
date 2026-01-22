@@ -2,6 +2,18 @@
   "app": {
     "name": "Community Compass"
   },
+  "categories": {
+    "Housing": "Housing",
+    "Food": "Food",
+    "Food Assistance": "Food Assistance",
+    "Healthcare": "Healthcare",
+    "Employment": "Employment",
+    "Education": "Education",
+    "Transportation": "Transportation",
+    "Mental Health": "Mental Health",
+    "Legal Aid": "Legal Aid",
+    "Default": "Other"
+  },
   "nav": {
     "home": "Home",
     "discover": "Discover",
@@ -11,8 +23,7 @@
     "references": "References",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "account": "Account",
-    "changeLocation": "Change Location"
+    "account": "Account"
   },
   "home": {
     "hero": {
@@ -95,7 +106,7 @@
     "title": "About Community Compass",
     "subtitle": "Empowering communities through accessible, comprehensive resource discovery",
     "vision": "Our Vision",
-    "visionText": "At Community Compass, we believe everyone deserves access to the support services they need. We're building a comprehensive directory that empowers communities to discover, connect, and access local resources effortlessly.",
+    "visionText": "Community Compass aims to help people when things get tough. Help shows up in many forms, often through groups working tirelessly nearby. This space exists because getting assistance should not be as hard as it is. Sometimes a bit of clarity makes all the difference. A fresh start can come from clear answers. Communities grow stronger by knowing where to look.",
     "visionText2": "",
     "mission": "Our Mission",
     "missionText": "A place takes shape when people find what they need without getting lost. This website builds a single hub that brings together all resources into one place for people in need. One goal drives it: making access straightforward for everyone. Support shows up through community resources linking to options close by. Find what help exists nearby through current details on local support services.",
@@ -127,7 +138,6 @@
   },
   "map": {
     "title": "Interactive Map",
-    "view": "Map",
     "subtitle": "Explore community resources with advanced mapping features",
     "showingLocalOnly": "Showing local resources only (within ~200 miles)",
     "showingLocal": "Showing {{count}} of {{total}} resources in your area",
