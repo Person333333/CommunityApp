@@ -3,11 +3,9 @@ import { useState } from 'react';
 import { Send, Sparkles, Lock, User, MapPin, Loader2 } from 'lucide-react';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { Link } from 'react-router';
-import confetti from 'canvas-confetti';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import { categories } from '@/shared/types';
-
 import { useTranslation } from 'react-i18next';
 
 export default function Submit() {
@@ -117,7 +115,6 @@ export default function Submit() {
 
       if (response.ok) {
         setSuccess(true);
-        triggerCelebration();
         setFormData({
           title: '', description: '', category: '', contact_name: '', contact_email: '',
           phone: '', website: '', address: '', city: '', state: '', zip: '',
