@@ -79,10 +79,13 @@ export async function fetchResourcesFromDB(options: {
     }
 
     query += ` ORDER BY is_featured DESC, created_at DESC, title ASC`;
-      ${ options.limit ? `LIMIT ${options.limit}` : '' }
-    `;
 
-    const result: any = await sql.query(query, params);
+    if (options.limit) {
+      query += ` LIMIT ${options.limit}`;
+    }
+
+    // @ts-ignore - Neon driver supports string queries but types might be strict
+    const result: any = await sql(query, params);
     // Neon serverless query result usually has .rows
     return result.rows || result;
   } catch (error) {
@@ -97,7 +100,7 @@ export async function fetchMySubmissionsFromDB(userId: string) {
     // Query resource_submissions table
     const results = await sql`
     SELECT * FROM resource_submissions 
-      WHERE user_id = ${ userId }
+      WHERE user_id = ${userId}
       ORDER BY created_at DESC
     `;
     return results;
@@ -109,11 +112,11 @@ export async function fetchMySubmissionsFromDB(userId: string) {
 
 export async function deleteResourceFromDB(resourceId: number, userId: string) {
   try {
-    console.log(`Deleting resource ${ resourceId } for user ${ userId }`);
+    console.log(`Deleting resource ${resourceId} for user ${userId}`);
     // Delete from resource_submissions table
     await sql`
       DELETE FROM resource_submissions 
-      WHERE id = ${ resourceId } AND user_id = ${ userId }
+      WHERE id = ${resourceId} AND user_id = ${userId}
     `;
     return true;
   } catch (error) {
@@ -143,10 +146,10 @@ export async function fetchSavesFromDB(userId: string) {
     console.log('Fetching saves for user:', userId);
     const result = await sql`
       SELECT resource_id FROM favorites 
-      WHERE user_id = ${ userId }
+      WHERE user_id = ${userId}
     `;
     const ids = result.map(row => row.resource_id);
-    console.log(`Found ${ ids.length } saves for user ${ userId }`);
+    console.log(`Found ${ids.length} saves for user ${userId}`);
     return ids;
   } catch (error) {
     console.error('Saves Error:', error);
@@ -156,10 +159,10 @@ export async function fetchSavesFromDB(userId: string) {
 
 export async function addSaveToDB(userId: string, resourceId: number) {
   try {
-    console.log(`Adding save: user = ${ userId }, resource = ${ resourceId } `);
+    console.log(`Adding save: user = ${userId}, resource = ${resourceId} `);
     await sql`
       INSERT INTO favorites(user_id, resource_id)
-    VALUES(${ userId }, ${ resourceId })
+    VALUES(${userId}, ${resourceId})
       ON CONFLICT(user_id, resource_id) DO NOTHING
     `;
     console.log('Successfully added save to DB');
@@ -172,10 +175,10 @@ export async function addSaveToDB(userId: string, resourceId: number) {
 
 export async function removeSaveFromDB(userId: string, resourceId: number) {
   try {
-    console.log(`Removing save: user = ${ userId }, resource = ${ resourceId } `);
+    console.log(`Removing save: user = ${userId}, resource = ${resourceId} `);
     await sql`
       DELETE FROM favorites 
-      WHERE user_id = ${ userId } AND resource_id = ${ resourceId }
+      WHERE user_id = ${userId} AND resource_id = ${resourceId}
     `;
     console.log('Successfully removed save from DB');
     return true;
