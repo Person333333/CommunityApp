@@ -10,9 +10,6 @@ export async function fetchResourcesFromDB(options: {
   limit?: number;
 }) {
   try {
-    let baseConditions = ['is_approved = true'];
-    let params: any[] = [];
-
     // Base parameters (shared)
     let params: any[] = [];
 
