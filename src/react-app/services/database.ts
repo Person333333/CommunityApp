@@ -13,43 +13,76 @@ export async function fetchResourcesFromDB(options: {
     let baseConditions = ['is_approved = true'];
     let params: any[] = [];
 
-    if (options.featured) {
-      baseConditions.push('is_featured = true');
-    }
+    // Base parameters (shared)
+    let params: any[] = [];
 
+    // 1. Curated Resources Conditions
+    // Curated table doesn't have is_approved (all are valid) or status column
+    let curatedConditions: string[] = [];
+
+    // 2. Submissions Conditions
+    // Submissions table uses status='approved'
+    let submissionConditions: string[] = ["status = 'approved'"];
+
+    // Apply shared filters
     if (options.category) {
-      baseConditions.push('category = $' + (params.length + 1));
+      const paramIdx = params.length + 1;
+      curatedConditions.push(`category = $${paramIdx}`);
+      submissionConditions.push(`category = $${paramIdx}`);
       params.push(options.category);
     }
 
     if (options.search) {
       const searchParam = '%' + options.search + '%';
-      baseConditions.push(`(
+      const searchClause = `(
         title ILIKE $${params.length + 1} OR 
         description ILIKE $${params.length + 2} OR 
         city ILIKE $${params.length + 3} OR 
         state ILIKE $${params.length + 4} OR 
         zip ILIKE $${params.length + 5}
-      )`);
+      )`;
+
+      curatedConditions.push(searchClause);
+      submissionConditions.push(searchClause);
       params.push(searchParam, searchParam, searchParam, searchParam, searchParam);
     }
 
-    const whereClause = baseConditions.length > 0 ? `WHERE ${baseConditions.join(' AND ')}` : '';
+    // Featured Logic
+    // If featured=true, we ONLY query curated_resources (submissions can't be featured yet)
+    // If featured=false or undefined, we query both (but submissions are never featured)
+    if (options.featured) {
+      curatedConditions.push('is_featured = true');
+    }
 
-    // Query both curated_resources and resource_submissions tables
-    const query = `
-      SELECT *, user_id FROM curated_resources ${whereClause}
-      UNION ALL
-      SELECT 
-        id, title, description, category, contact_email as email, phone, website,
-        address, city, state, zip, image_url, latitude, longitude,
-        audience, hours, services, tags,
-        CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,
-        false as is_featured,
-        created_at, updated_at, user_id
-      FROM resource_submissions ${whereClause}
-      ORDER BY is_featured DESC, created_at DESC, title ASC
-      ${options.limit ? `LIMIT ${options.limit}` : ''}
+    // Construct Clauses
+    const curatedWhere = curatedConditions.length > 0 ? `WHERE ${curatedConditions.join(' AND ')}` : '';
+    const submissionWhere = submissionConditions.length > 0 ? `WHERE ${submissionConditions.join(' AND ')}` : '';
+
+    // Construct Query
+    let query = '';
+
+    // Part 1: Curated Resources
+    query += `SELECT *, user_id FROM curated_resources ${curatedWhere}`;
+
+    // Part 2: Submissions (only if not filtering for featured, or if we want to allow featured submissions in future)
+    // For now, if featured is requested, we assume submissions aren't featured, so we don't need to query them at all
+    // BUT to be safe and simple, we'll just query them if !options.featured
+    if (!options.featured) {
+      query += `
+        UNION ALL
+        SELECT 
+          id, title, description, category, contact_email as email, phone, website,
+          address, city, state, zip, image_url, latitude, longitude,
+          audience, hours, services, tags,
+          CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,
+          false as is_featured,
+          created_at, updated_at, user_id
+        FROM resource_submissions ${submissionWhere}
+      `;
+    }
+
+    query += ` ORDER BY is_featured DESC, created_at DESC, title ASC`;
+      ${ options.limit ? `LIMIT ${options.limit}` : '' }
     `;
 
     const result: any = await sql.query(query, params);
@@ -66,8 +99,8 @@ export async function fetchMySubmissionsFromDB(userId: string) {
     console.log('Fetching submissions for owner:', userId);
     // Query resource_submissions table
     const results = await sql`
-      SELECT * FROM resource_submissions 
-      WHERE user_id = ${userId}
+    SELECT * FROM resource_submissions 
+      WHERE user_id = ${ userId }
       ORDER BY created_at DESC
     `;
     return results;
@@ -79,11 +112,11 @@ export async function fetchMySubmissionsFromDB(userId: string) {
 
 export async function deleteResourceFromDB(resourceId: number, userId: string) {
   try {
-    console.log(`Deleting resource ${resourceId} for user ${userId}`);
+    console.log(`Deleting resource ${ resourceId } for user ${ userId }`);
     // Delete from resource_submissions table
     await sql`
       DELETE FROM resource_submissions 
-      WHERE id = ${resourceId} AND user_id = ${userId}
+      WHERE id = ${ resourceId } AND user_id = ${ userId }
     `;
     return true;
   } catch (error) {
@@ -113,10 +146,10 @@ export async function fetchSavesFromDB(userId: string) {
     console.log('Fetching saves for user:', userId);
     const result = await sql`
       SELECT resource_id FROM favorites 
-      WHERE user_id = ${userId}
+      WHERE user_id = ${ userId }
     `;
     const ids = result.map(row => row.resource_id);
-    console.log(`Found ${ids.length} saves for user ${userId}`);
+    console.log(`Found ${ ids.length } saves for user ${ userId }`);
     return ids;
   } catch (error) {
     console.error('Saves Error:', error);
@@ -126,11 +159,11 @@ export async function fetchSavesFromDB(userId: string) {
 
 export async function addSaveToDB(userId: string, resourceId: number) {
   try {
-    console.log(`Adding save: user=${userId}, resource=${resourceId}`);
+    console.log(`Adding save: user = ${ userId }, resource = ${ resourceId } `);
     await sql`
-      INSERT INTO favorites (user_id, resource_id)
-      VALUES (${userId}, ${resourceId})
-      ON CONFLICT (user_id, resource_id) DO NOTHING
+      INSERT INTO favorites(user_id, resource_id)
+    VALUES(${ userId }, ${ resourceId })
+      ON CONFLICT(user_id, resource_id) DO NOTHING
     `;
     console.log('Successfully added save to DB');
     return true;
@@ -142,10 +175,10 @@ export async function addSaveToDB(userId: string, resourceId: number) {
 
 export async function removeSaveFromDB(userId: string, resourceId: number) {
   try {
-    console.log(`Removing save: user=${userId}, resource=${resourceId}`);
+    console.log(`Removing save: user = ${ userId }, resource = ${ resourceId } `);
     await sql`
       DELETE FROM favorites 
-      WHERE user_id = ${userId} AND resource_id = ${resourceId}
+      WHERE user_id = ${ userId } AND resource_id = ${ resourceId }
     `;
     console.log('Successfully removed save from DB');
     return true;
