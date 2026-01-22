@@ -237,6 +237,18 @@
       "viewSubmissions": "View My Submissions"
     }
   },
+  "mySubmissions": {
+    "title": "My Submissions",
+    "subtitle": "Manage the resources you've submitted to the community directory",
+    "total": "Total Submissions",
+    "noSubmissions": "You haven't submitted any resources yet",
+    "submitFirst": "Submit Your First Resource",
+    "status": "Status",
+    "approved": "Approved",
+    "pending": "Pending Review",
+    "submitted": "Submitted",
+    "visitWebsite": "Visit Website"
+  },
   "references": {
     "title": "References & Documentation",
     "subtitle": "Complete development documentation and attribution",
@@ -302,16 +314,5 @@
     "clear": "Clear",
     "all": "All",
     "none": "None"
-  },
-  "categories": {
-    "Housing": "Housing",
-    "Food": "Food",
-    "Food Assistance": "Food Assistance",
-    "Healthcare": "Healthcare",
-    "Employment": "Employment",
-    "Education": "Education",
-    "Transportation": "Transportation",
-    "Mental Health": "Mental Health",
-    "Legal Aid": "Legal Aid"
   }
 }

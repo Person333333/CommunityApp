@@ -42,7 +42,7 @@ export default function MySubmissions() {
     };
 
     const handleDelete = async (resourceId: number) => {
-        if (!user || !window.confirm('Are you sure you want to delete this resource? This action cannot be undone.')) {
+        if (!user || !window.confirm(t('discover.confirmDelete'))) {
             return;
         }
 
@@ -52,11 +52,11 @@ export default function MySubmissions() {
             if (success) {
                 setResources(prev => prev.filter(r => r.id !== resourceId));
             } else {
-                alert('Failed to delete resource. Please try again.');
+                alert(t('discover.deleteError'));
             }
         } catch (error) {
             console.error('Delete error:', error);
-            alert('Failed to delete resource. Please try again.');
+            alert(t('discover.deleteError'));
         } finally {
             setIsDeleting(null);
         }
@@ -88,10 +88,10 @@ export default function MySubmissions() {
                     className="mb-8"
                 >
                     <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
-                        My Submissions
+                        {t('mySubmissions.title')}
                     </h1>
                     <p className="text-xl text-slate-300">
-                        Manage the resources you've submitted to the community directory
+                        {t('mySubmissions.subtitle')}
                     </p>
                 </motion.div>
 
@@ -108,7 +108,7 @@ export default function MySubmissions() {
                                 <UserIcon className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                                <p className="text-sm text-slate-400">Total Submissions</p>
+                                <p className="text-sm text-slate-400">{t('mySubmissions.total')}</p>
                                 <p className="text-3xl font-bold text-slate-100">{resources.length}</p>
                             </div>
                         </div>
@@ -120,13 +120,13 @@ export default function MySubmissions() {
                     <GlassCard variant="teal" className="text-center py-12">
                         <div className="space-y-4">
                             <p className="text-xl text-slate-300">
-                                You haven't submitted any resources yet
+                                {t('mySubmissions.noSubmissions')}
                             </p>
                             <button
                                 onClick={() => navigate('/submit')}
                                 className="px-6 py-3 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg hover:from-teal-700 hover:to-amber-700 transition-all"
                             >
-                                Submit Your First Resource
+                                {t('mySubmissions.submitFirst')}
                             </button>
                         </div>
                     </GlassCard>
@@ -203,7 +203,7 @@ export default function MySubmissions() {
                                                         className="hover:text-teal-300 transition-colors truncate"
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
-                                                        Visit Website
+                                                        {t('mySubmissions.visitWebsite')}
                                                     </a>
                                                 </div>
                                             )}
@@ -218,12 +218,12 @@ export default function MySubmissions() {
                                         {/* Status */}
                                         <div className="mt-4 pt-4 border-t border-white/10">
                                             <p className="text-xs text-slate-400">
-                                                Status: <span className="text-teal-300">
-                                                    {resource.is_approved ? 'Approved' : 'Pending Review'}
+                                                {t('mySubmissions.status')}: <span className="text-teal-300">
+                                                    {resource.is_approved ? t('mySubmissions.approved') : t('mySubmissions.pending')}
                                                 </span>
                                             </p>
                                             <p className="text-xs text-slate-400 mt-1">
-                                                Submitted: {new Date(resource.created_at || '').toLocaleDateString()}
+                                                {t('mySubmissions.submitted')}: {new Date(resource.created_at || '').toLocaleDateString()}
                                             </p>
                                         </div>
                                     </div>
