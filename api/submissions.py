@@ -35,21 +35,23 @@ class handler(BaseHTTPRequestHandler):
             conn = psycopg2.connect(db_url)
             cur = conn.cursor()
             
-            # 1. Insert into curated_resources (the live directory table)
-            query_curated = """
-                INSERT INTO curated_resources (
-                    title, description, category, email, phone, website, 
-                    address, city, state, zip, image_url, latitude, longitude,
+            # Insert into resource_submissions table only
+            query = """
+                INSERT INTO resource_submissions (
+                    title, description, category, contact_name, contact_email, 
+                    phone, website, address, city, state, zip,
+                    image_url, latitude, longitude,
                     audience, hours, services, tags, user_id,
-                    is_approved, is_featured
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    status, submitted_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
             """
             
-            values_curated = (
+            values = (
                 data.get('title'),
                 data.get('description'),
                 data.get('category'),
+                data.get('contact_name'),
                 data.get('contact_email'),
                 data.get('phone'),
                 data.get('website'),
@@ -62,39 +64,15 @@ class handler(BaseHTTPRequestHandler):
                 data.get('longitude'),
                 data.get('audience'),
                 data.get('hours'),
-                data.get('services'), # Should be string or JSON? Text matches DB schema.
-                data.get('tags'),     # Should be string or JSON? Text matches DB schema.
+                data.get('services'),
+                data.get('tags'),
                 data.get('user_id'),
-                data.get('is_approved', True),
-                data.get('is_featured', False)
-            )
-            
-            cur.execute(query_curated, values_curated)
-            resource_id = cur.fetchone()[0]
-
-            # 2. Also insert into resource_submissions (as requested by user)
-            query_subs = """
-                INSERT INTO resource_submissions (
-                    title, description, category, contact_name, contact_email, 
-                    phone, website, address, city, state, 
-                    status, submitted_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            values_subs = (
-                data.get('title'),
-                data.get('description'),
-                data.get('category'),
-                data.get('contact_name'),
-                data.get('contact_email'),
-                data.get('phone'),
-                data.get('website'),
-                data.get('address'),
-                data.get('city'),
-                data.get('state'),
-                'approved', # Default to approved based on user's preference
+                'approved',  # Auto-approve submissions
                 datetime.now()
             )
-            cur.execute(query_subs, values_subs)
+            
+            cur.execute(query, values)
+            resource_id = cur.fetchone()[0]
 
             conn.commit()
             cur.close()

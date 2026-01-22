@@ -30,8 +30,18 @@ export async function fetchResourcesFromDB(options: {
 
     const whereClause = baseConditions.length > 0 ? `WHERE ${baseConditions.join(' AND ')}` : '';
 
+    // Query both curated_resources and resource_submissions tables
     const query = `
       SELECT *, user_id FROM curated_resources ${whereClause}
+      UNION ALL
+      SELECT 
+        id, title, description, category, contact_email as email, phone, website,
+        address, city, state, zip, image_url, latitude, longitude,
+        audience, hours, services, tags,
+        CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,
+        false as is_featured,
+        created_at, updated_at, user_id
+      FROM resource_submissions ${whereClause}
       ORDER BY is_featured DESC, created_at DESC, title ASC
       ${options.limit ? `LIMIT ${options.limit}` : ''}
     `;
@@ -48,9 +58,9 @@ export async function fetchResourcesFromDB(options: {
 export async function fetchMySubmissionsFromDB(userId: string) {
   try {
     console.log('Fetching submissions for owner:', userId);
-    // Use the template literal style for safety and simplicity
+    // Query resource_submissions table
     const results = await sql`
-      SELECT * FROM curated_resources 
+      SELECT * FROM resource_submissions 
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
     `;
@@ -64,9 +74,9 @@ export async function fetchMySubmissionsFromDB(userId: string) {
 export async function deleteResourceFromDB(resourceId: number, userId: string) {
   try {
     console.log(`Deleting resource ${resourceId} for user ${userId}`);
-    // Only allow deletion if the user matches
+    // Delete from resource_submissions table
     await sql`
-      DELETE FROM curated_resources 
+      DELETE FROM resource_submissions 
       WHERE id = ${resourceId} AND user_id = ${userId}
     `;
     return true;
@@ -78,11 +88,12 @@ export async function deleteResourceFromDB(resourceId: number, userId: string) {
 
 export async function fetchStatsFromDB() {
   try {
-    const total = await sql`SELECT COUNT(*) FROM curated_resources WHERE is_approved = true`;
+    const curatedTotal = await sql`SELECT COUNT(*) FROM curated_resources WHERE is_approved = true`;
+    const submissionsTotal = await sql`SELECT COUNT(*) FROM resource_submissions WHERE status = 'approved'`;
     const featured = await sql`SELECT COUNT(*) FROM curated_resources WHERE is_featured = true AND is_approved = true`;
 
     return {
-      total: parseInt(total[0].count) || 0,
+      total: (parseInt(curatedTotal[0].count) || 0) + (parseInt(submissionsTotal[0].count) || 0),
       featured: parseInt(featured[0].count) || 0
     };
   } catch (error) {
