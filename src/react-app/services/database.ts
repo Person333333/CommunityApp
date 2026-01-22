@@ -84,8 +84,8 @@ export async function fetchResourcesFromDB(options: {
       query += ` LIMIT ${options.limit}`;
     }
 
-    // @ts-ignore - Neon driver supports string queries but types might be strict
-    const result: any = await sql(query, params);
+    // @ts-ignore - Using .query() for dynamic SQL strings as per Neon driver error message
+    const result: any = await sql.query(query, params);
     // Neon serverless query result usually has .rows
     return result.rows || result;
   } catch (error) {
