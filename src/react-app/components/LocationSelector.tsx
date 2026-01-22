@@ -4,7 +4,7 @@ import { MapPin, Navigation, Check, Loader2 } from 'lucide-react';
 import { useLocation } from '@/react-app/hooks/useLocation';
 
 export default function LocationSelector() {
-    const { location, loading, currentZip, setZipCodeLocation, requestLocation, locationSource } = useLocation();
+    const { loading, currentZip, setZipCodeLocation, requestLocation, locationSource } = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [zipInput, setZipInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,8 +78,8 @@ export default function LocationSelector() {
                             <button
                                 onClick={handleUseCurrentLocation}
                                 className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left ${locationSource === 'gps'
-                                        ? 'bg-teal-500/20 text-teal-300 ring-1 ring-teal-500/50'
-                                        : 'hover:bg-white/5 text-slate-300 hover:text-slate-100'
+                                    ? 'bg-teal-500/20 text-teal-300 ring-1 ring-teal-500/50'
+                                    : 'hover:bg-white/5 text-slate-300 hover:text-slate-100'
                                     }`}
                             >
                                 <div className={`p-2 rounded-full ${locationSource === 'gps' ? 'bg-teal-500/20' : 'bg-slate-800'}`}>
