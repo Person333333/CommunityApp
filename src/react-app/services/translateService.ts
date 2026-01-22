@@ -80,6 +80,11 @@ export class TranslateService {
         // Deep copy resources to avoid mutating original state
         const translatedResources = JSON.parse(JSON.stringify(resources));
 
+        // Preserve original categories for map icons and filtering logic
+        translatedResources.forEach((resource: any, idx: number) => {
+            resource.category_raw = resources[idx].category;
+        });
+
         mapIndices.forEach((mapM, i) => {
             if (translatedValues[i]) {
                 translatedResources[mapM.resourceIndex][mapM.field] = translatedValues[i];

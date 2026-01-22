@@ -15,11 +15,20 @@ export default function LanguageSelector() {
     { code: i18n.language || 'en', name: (i18n.language || 'en').toUpperCase() };
 
   const handleLanguageChange = async (langCode: string) => {
-    // Check if translation already exists
-    if (i18n.hasResourceBundle(langCode, 'translation')) {
+    // Cache busting check
+    const currentVersion = enTranslations.app.version;
+    const cachedVersion = localStorage.getItem(`translation_version_${langCode}`);
+
+    // Check if translation already exists and is up to date
+    if (i18n.hasResourceBundle(langCode, 'translation') && cachedVersion === currentVersion) {
       i18n.changeLanguage(langCode);
       setIsOpen(false);
       return;
+    }
+
+    // Clear existing bundle if version mismatch to force re-translation
+    if (cachedVersion !== currentVersion && i18n.hasResourceBundle(langCode, 'translation')) {
+      console.log(`Refreshing translations for ${langCode} (version ${cachedVersion} -> ${currentVersion})`);
     }
 
     // If not, we need to translate 'en' resources
@@ -27,6 +36,7 @@ export default function LanguageSelector() {
       setIsTranslating(true);
       const translatedResources = await TranslateService.translateJSON(enTranslations, langCode);
       i18n.addResourceBundle(langCode, 'translation', translatedResources, true, true);
+      localStorage.setItem(`translation_version_${langCode}`, currentVersion);
       i18n.changeLanguage(langCode);
       setIsOpen(false);
     } catch (error) {

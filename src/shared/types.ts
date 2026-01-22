@@ -5,6 +5,7 @@ export const ResourceSchema = z.object({
   title: z.string(),
   description: z.string(),
   category: z.string(),
+  category_raw: z.string().optional(),
   tags: z.string().nullable(),
   address: z.string().nullable(),
   city: z.string().nullable(),

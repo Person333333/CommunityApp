@@ -169,7 +169,7 @@ export default function MapComponent({
           const coords = getResourceCoordinates(resource);
           if (!coords) return null as any;
 
-          const icon = categoryIcons[resource.category as keyof typeof categoryIcons] || categoryIcons.Default;
+          const icon = categoryIcons[(resource.category_raw || resource.category) as keyof typeof categoryIcons] || categoryIcons.Default;
 
           return (
             <Marker
@@ -262,7 +262,7 @@ export default function MapComponent({
 
           // Show a single marker for the cluster
           const mainResource = clusterResources[0];
-          const icon = categoryIcons[mainResource.category as keyof typeof categoryIcons] || categoryIcons.Default;
+          const icon = categoryIcons[(mainResource.category_raw || mainResource.category) as keyof typeof categoryIcons] || categoryIcons.Default;
 
           return (
             <Marker
@@ -330,13 +330,13 @@ export default function MapComponent({
             {Object.entries(categoryIcons).slice(0, -1).map(([category, _]) => (
               <div key={category} className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${category === 'Housing' ? 'bg-blue-500' :
-                    category === 'Food' || category === 'Food Assistance' ? 'bg-green-500' :
-                      category === 'Healthcare' ? 'bg-red-500' :
-                        category === 'Employment' ? 'bg-purple-500' :
-                          category === 'Education' ? 'bg-yellow-500' :
-                            category === 'Transportation' ? 'bg-indigo-500' :
-                              category === 'Mental Health' ? 'bg-pink-500' :
-                                'bg-orange-500'
+                  category === 'Food' || category === 'Food Assistance' ? 'bg-green-500' :
+                    category === 'Healthcare' ? 'bg-red-500' :
+                      category === 'Employment' ? 'bg-purple-500' :
+                        category === 'Education' ? 'bg-yellow-500' :
+                          category === 'Transportation' ? 'bg-indigo-500' :
+                            category === 'Mental Health' ? 'bg-pink-500' :
+                              'bg-orange-500'
                   }`} />
                 <span className="text-gray-700 truncate">{t(`categories.${category}`, category)}</span>
               </div>
