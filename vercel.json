@@ -3,6 +3,17 @@
   "outputDirectory": "dist",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "vite",
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/translate",
@@ -11,6 +22,14 @@
     {
       "source": "/api/submissions",
       "destination": "/api/submissions"
+    },
+    {
+      "source": "/api/delete_resource",
+      "destination": "/api/delete_resource"
+    },
+    {
+      "source": "/api/my_submissions",
+      "destination": "/api/my_submissions"
     },
     {
       "source": "/(.*)",
