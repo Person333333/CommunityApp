@@ -173,6 +173,12 @@ export default function Submit() {
               </GlassButton>
               <GlassButton
                 variant="secondary"
+                onClick={() => window.location.href = '/my-submissions'}
+              >
+                {t('submit.success.viewSubmissions')}
+              </GlassButton>
+              <GlassButton
+                variant="secondary"
                 onClick={() => window.location.href = '/discover'}
               >
                 {t('submit.success.browse')}

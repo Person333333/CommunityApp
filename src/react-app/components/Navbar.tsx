@@ -94,6 +94,7 @@ export default function Navbar() {
                     </div>
                     <div className="space-y-2">
                       <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">Account</Link>
+                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">My Submissions</Link>
                       <button
                         onClick={() => signOut()}
                         className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-rose-300"

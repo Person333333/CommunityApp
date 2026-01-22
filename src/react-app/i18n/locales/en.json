@@ -221,7 +221,8 @@
       "title": "Submission Received!",
       "text": "Thank you for helping to build our community resource directory. Your submission will be reviewed and published shortly.",
       "submitAnother": "Submit Another",
-      "browse": "Browse Resources"
+      "browse": "Browse Resources",
+      "viewSubmissions": "View My Submissions"
     }
   },
   "references": {
