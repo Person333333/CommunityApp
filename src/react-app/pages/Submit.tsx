@@ -117,7 +117,7 @@ export default function Submit() {
 
       if (response.ok) {
         setSuccess(true);
-        triggerCelebration();
+        // triggerCelebration(); // Removed per user request
         setFormData({
           title: '', description: '', category: '', contact_name: '', contact_email: '',
           phone: '', website: '', address: '', city: '', state: '', zip: '',
