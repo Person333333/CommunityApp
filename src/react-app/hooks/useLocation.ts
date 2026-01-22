@@ -128,6 +128,9 @@ export function useLocation(): LocationState {
         const loc: [number, number] = [position.coords.latitude, position.coords.longitude];
         setLocation(loc);
         setSource('gps');
+        // Save to local storage
+        localStorage.setItem('community-location', JSON.stringify(loc));
+        localStorage.setItem('community-location-source', 'gps');
         setLoading(false);
         setError(null);
       },
