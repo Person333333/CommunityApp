@@ -59,7 +59,16 @@ export async function fetchResourcesFromDB(options: {
     let query = '';
 
     // Part 1: Curated Resources
-    query += `SELECT *, user_id FROM curated_resources ${curatedWhere}`;
+    query += `
+      SELECT 
+        id, title, description, category, email, phone, website,
+        address, city, state, zip, image_url, latitude, longitude,
+        audience, hours, services, tags,
+        true as is_approved,
+        is_featured,
+        created_at, updated_at, user_id
+      FROM curated_resources ${curatedWhere}
+    `;
 
     // Part 2: Submissions (only if not filtering for featured, or if we want to allow featured submissions in future)
     // For now, if featured is requested, we assume submissions aren't featured, so we don't need to query them at all
