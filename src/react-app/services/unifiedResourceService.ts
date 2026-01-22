@@ -20,10 +20,12 @@ export class UnifiedResourceService {
       // Fetch from 211 API (or mock data) - DISABLED to force use of curated DB
       const apiResources: ResourceType[] = [];
 
+      // Fetch resources from Neon (merges curated and main tables)
+      // Default includeUserSubmitted to true if not specified
+      const includeUser = params.includeUserSubmitted !== false;
 
-      // Fetch user-submitted resources from Neon if requested
       let userResources: ResourceType[] = [];
-      if (params.includeUserSubmitted) {
+      if (includeUser) {
         userResources = await this.fetchUserSubmittedResources(params);
       }
 
@@ -35,6 +37,30 @@ export class UnifiedResourceService {
     } catch (error) {
       console.error('Error fetching resources:', error);
       return [];
+    }
+  }
+
+  /**
+   * Fetch resources for a specific owner
+   */
+  async getUserSubmissions(userId: string): Promise<ResourceType[]> {
+    try {
+      return await db.fetchMySubmissionsFromDB(userId) as ResourceType[];
+    } catch (error) {
+      console.error('Error fetching user submissions:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Delete a resource owned by the user
+   */
+  async deleteResource(resourceId: number, userId: string): Promise<boolean> {
+    try {
+      return await db.deleteResourceFromDB(resourceId, userId);
+    } catch (error) {
+      console.error('Error deleting resource:', error);
+      return false;
     }
   }
 

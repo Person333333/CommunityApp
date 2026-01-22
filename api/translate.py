@@ -37,8 +37,8 @@ class handler(BaseHTTPRequestHandler):
         data = json.loads(post_data.decode('utf-8'))
 
         text = data.get('text')
-        dest = data.get('target_lang', 'en')
-        src = data.get('source_lang', 'auto')
+        dest = data.get('target_lang', 'en').lower()
+        src = data.get('source_lang', 'auto').lower()
 
         if not text:
             self.send_response(400)

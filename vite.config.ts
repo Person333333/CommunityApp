@@ -10,6 +10,11 @@ export default defineConfig({
         target: 'http://localhost:3002',
         changeOrigin: true,
         secure: false,
+      },
+      '/api/submissions': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
       }
     }
   },

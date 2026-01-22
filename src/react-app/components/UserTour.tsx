@@ -14,7 +14,7 @@ interface TourStep {
 const tourSteps: TourStep[] = [
   {
     id: 'welcome',
-    title: 'Welcome to Community Compass! 🎉',
+    title: 'Welcome to Community Compass',
     content: 'Let us show you around to help you find the resources you need. This quick tour will take just a minute.',
     position: 'center'
   },
@@ -34,7 +34,7 @@ const tourSteps: TourStep[] = [
   },
   {
     id: 'complete',
-    title: 'All Set! 🚀',
+    title: 'All Set',
     content: 'You\'re ready to explore. Remember to use the helper button if you have any questions. Happy resource hunting!',
     position: 'center'
   }

@@ -9,6 +9,10 @@
       "destination": "/api/translate"
     },
     {
+      "source": "/api/submissions",
+      "destination": "/api/submissions"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

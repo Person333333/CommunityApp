@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
+  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 0, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
@@ -94,6 +94,7 @@ export default function Home() {
     return (
       <LocationRequest
         onRequestLocation={requestLocation}
+        onZipCodeSearch={setZipCodeLocation}
         loading={locationLoading}
         error={locationError}
       />
@@ -243,8 +244,8 @@ export default function Home() {
                     onClick={() => setSelectedResource(resource)}
                   >
                     <div className="space-y-4">
-                      {/* Image removed - leaving space blank for now */}
-                      {/* {resource.image_url && (
+                      {/* Image restored */}
+                      {resource.image_url && (
                         <div className="aspect-video rounded-lg overflow-hidden">
                           <img
                             src={resource.image_url}
@@ -252,7 +253,7 @@ export default function Home() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                      )} */}
+                      )}
                       <div>
                         <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
                           {resource.category}

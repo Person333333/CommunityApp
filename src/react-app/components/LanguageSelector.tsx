@@ -12,7 +12,7 @@ export default function LanguageSelector() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const currentLanguage = SUPPORTED_LANGUAGES.find(l => l.code === i18n.language) ||
-    { code: i18n.language, name: i18n.language.toUpperCase() };
+    { code: i18n.language || 'en', name: (i18n.language || 'en').toUpperCase() };
 
   const handleLanguageChange = async (langCode: string) => {
     // Check if translation already exists

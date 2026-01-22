@@ -19,10 +19,11 @@ export const ResourceSchema = z.object({
   image_url: z.string().nullable(),
   latitude: z.number().nullable().optional(),
   longitude: z.number().nullable().optional(),
-  is_featured: z.number().transform(val => val === 1),
-  is_approved: z.number().transform(val => val === 1),
-  created_at: z.string(),
-  updated_at: z.string(),
+  is_featured: z.union([z.boolean(), z.number().transform(val => val === 1)]),
+  is_approved: z.union([z.boolean(), z.number().transform(val => val === 1)]),
+  user_id: z.string().nullable().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export type ResourceType = z.infer<typeof ResourceSchema>;

@@ -21,7 +21,7 @@ export default function About() {
             {t('about.title')}
           </h1>
           <p className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            {/* Content will be added later */}
+            {t('about.subtitle')}
           </p>
         </motion.div>
 
@@ -33,18 +33,11 @@ export default function About() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <GlassCard variant="strong" className="p-8 md:p-12">
-            <div className="flex items-start gap-6 mb-6">
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-slate-100 mb-4">{t('about.vision')}</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
-                  {/* Content will be added later */}
-                </p>
-                <p className="text-lg text-slate-300 leading-relaxed">
-                  {/* Content will be added later */}
-                </p>
-              </div>
-            </div>
+          <GlassCard variant="strong" className="p-8 md:p-12 text-center">
+            <h2 className="text-3xl font-bold text-slate-100 mb-6">{t('about.vision')}</h2>
+            <p className="text-lg text-slate-300 leading-relaxed max-w-4xl mx-auto">
+              {t('about.visionText')}
+            </p>
           </GlassCard>
         </motion.div>
 
@@ -56,29 +49,11 @@ export default function About() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mb-16"
         >
-          <GlassCard variant="teal" className="p-8 md:p-12">
-            <div className="flex items-start gap-6 mb-6">
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-slate-100 mb-4">{t('about.mission')}</h2>
-                <p className="text-lg text-slate-300 leading-relaxed mb-4">
-                  {/* Content will be added later */}
-                </p>
-                <ul className="space-y-3 text-lg text-slate-300">
-                  <li className="flex items-start gap-3">
-                    <span>{/* Content will be added later */}</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span>{/* Content will be added later */}</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span>{/* Content will be added later */}</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span>{/* Content will be added later */}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <GlassCard variant="teal" className="p-8 md:p-12 text-center">
+            <h2 className="text-3xl font-bold text-slate-100 mb-6">{t('about.mission')}</h2>
+            <p className="text-lg text-slate-300 leading-relaxed max-w-4xl mx-auto">
+              {t('about.missionText')}
+            </p>
           </GlassCard>
         </motion.div>
 
@@ -93,7 +68,7 @@ export default function About() {
             <GlassCard variant="teal" className="p-6 h-full text-center">
               <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.compassion')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                {/* Content will be added later */}
+                {t('about.compassionText')}
               </p>
             </GlassCard>
           </motion.div>
@@ -107,7 +82,7 @@ export default function About() {
             <GlassCard variant="teal" className="p-6 h-full text-center">
               <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.community')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                {/* Content will be added later */}
+                {t('about.communityText')}
               </p>
             </GlassCard>
           </motion.div>
@@ -121,7 +96,7 @@ export default function About() {
             <GlassCard variant="teal" className="p-6 h-full text-center">
               <h3 className="text-xl font-bold text-slate-100 mb-3">{t('about.accessibility')}</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                {/* Content will be added later */}
+                {t('about.accessibilityText')}
               </p>
             </GlassCard>
           </motion.div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Send, Sparkles, Lock, User } from 'lucide-react';
+import { Send, Sparkles, Lock, User, MapPin, Loader2 } from 'lucide-react';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { Link } from 'react-router';
 import confetti from 'canvas-confetti';
@@ -24,10 +24,43 @@ export default function Submit() {
     address: '',
     city: '',
     state: '',
+    zip: '',
+    audience: '',
+    hours: '',
+    services: '',
+    tags: '',
+    image_url: '',
+    latitude: '',
+    longitude: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [locating, setLocating] = useState(false);
+
+  const handleGetLocation = () => {
+    setLocating(true);
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      setLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setFormData(prev => ({
+          ...prev,
+          latitude: position.coords.latitude.toString(),
+          longitude: position.coords.longitude.toString()
+        }));
+        setLocating(false);
+      },
+      () => {
+        alert('Unable to retrieve your location');
+        setLocating(false);
+      }
+    );
+  };
 
   // ... (keep handleChange and celebration code same until render) ...
 
@@ -70,7 +103,14 @@ export default function Submit() {
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          user_id: user?.id,
+          latitude: formData.latitude ? parseFloat(formData.latitude) : null,
+          longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+          is_approved: true, // Make visible immediately as requested
+          is_featured: false,
+        }),
       });
 
       const data = await response.json();
@@ -80,7 +120,9 @@ export default function Submit() {
         triggerCelebration();
         setFormData({
           title: '', description: '', category: '', contact_name: '', contact_email: '',
-          phone: '', website: '', address: '', city: '', state: '',
+          phone: '', website: '', address: '', city: '', state: '', zip: '',
+          audience: '', hours: '', services: '', tags: '',
+          image_url: '', latitude: '', longitude: '',
         });
       } else {
         setErrors(data.error?.issues?.reduce((acc: any, issue: any) => {
@@ -265,6 +307,46 @@ export default function Submit() {
                       <p className="mt-1 text-sm text-red-400">{errors.category}</p>
                     )}
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                      label={t('submit.form.audience')}
+                      name="audience"
+                      value={formData.audience}
+                      onChange={handleChange}
+                      error={errors.audience}
+                      placeholder="e.g., Families, Seniors, Veterans..."
+                    />
+
+                    <FormField
+                      label={t('submit.form.hours')}
+                      name="hours"
+                      value={formData.hours}
+                      onChange={handleChange}
+                      error={errors.hours}
+                      placeholder="e.g., Mon-Fri 9am-5pm"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                      label={t('submit.form.services')}
+                      name="services"
+                      value={formData.services}
+                      onChange={handleChange}
+                      error={errors.services}
+                      placeholder="e.g., Counseling, Legal Aid..."
+                    />
+
+                    <FormField
+                      label={t('submit.form.tags')}
+                      name="tags"
+                      value={formData.tags}
+                      onChange={handleChange}
+                      error={errors.tags}
+                      placeholder="e.g., urgent, community, local..."
+                    />
+                  </div>
                 </div>
 
                 {/* Contact Information */}
@@ -352,7 +434,64 @@ export default function Submit() {
                       error={errors.state}
                       placeholder="WA"
                     />
+
+                    <FormField
+                      label={t('submit.form.zip')}
+                      name="zip"
+                      value={formData.zip}
+                      onChange={handleChange}
+                      error={errors.zip}
+                      placeholder="98101"
+                    />
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                      label="Latitude"
+                      name="latitude"
+                      type="number"
+                      step="any"
+                      value={formData.latitude}
+                      onChange={handleChange}
+                      placeholder="e.g., 47.6062"
+                    />
+                    <FormField
+                      label="Longitude"
+                      name="longitude"
+                      type="number"
+                      step="any"
+                      value={formData.longitude}
+                      onChange={handleChange}
+                      placeholder="e.g., -122.3321"
+                    />
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleGetLocation}
+                      disabled={locating}
+                      className="text-sm text-teal-300 hover:text-teal-200 flex items-center gap-1 transition-colors"
+                    >
+                      {locating ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
+                      {locating ? 'Locating...' : 'Use My Current Location'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Media */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
+                    Media
+                  </h3>
+                  <FormField
+                    label="Image URL"
+                    name="image_url"
+                    type="url"
+                    value={formData.image_url}
+                    onChange={handleChange}
+                    placeholder="https://images.unsplash.com/photo-..."
+                  />
                 </div>
 
                 {/* Submit Button */}
@@ -386,7 +525,7 @@ export default function Submit() {
           </motion.div>
         </SignedIn>
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -401,6 +540,7 @@ function FormField({
   rows = 3,
   type = 'text',
   placeholder,
+  step,
 }: {
   label: string;
   name: string;
@@ -412,6 +552,7 @@ function FormField({
   rows?: number;
   type?: string;
   placeholder?: string;
+  step?: string;
 }) {
   const [focused, setFocused] = useState(false);
 
@@ -447,6 +588,7 @@ function FormField({
           onBlur={() => setFocused(false)}
           required={required}
           placeholder={placeholder}
+          step={step}
           className={inputClasses}
         />
       )}
@@ -462,3 +604,4 @@ function FormField({
     </div>
   );
 }
+

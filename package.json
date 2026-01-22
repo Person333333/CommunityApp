@@ -51,8 +51,8 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
-    "dev": "concurrently \"node simple-server.cjs\" \"python3 local_server.py\" \"vite\"",
-    "server": "node simple-server.cjs",
+    "dev": "concurrently \"python3 local_server.py\" \"vite\"",
+    "server": "python3 local_server.py",
     "lint": "eslint ."
   }
 }

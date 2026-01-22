@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, X, MapPin, Phone, Globe, Clock, Heart, MapPinned, Sparkles } from 'lucide-react';
+import { Search, Filter, X, MapPin, Phone, Globe, Clock, Heart, MapPinned, Sparkles, Trash2, User } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -22,7 +22,7 @@ export default function Discover() {
   const getTranslatedDescription = (resource: ResourceType): string => {
     return resource.description;
   };
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation } = useLocation();
+  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,8 @@ export default function Discover() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showMySubmissions, setShowMySubmissions] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<number | null>(null);
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const { user } = useUser();
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
@@ -88,19 +90,15 @@ export default function Discover() {
 
         let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
 
-        // Optionally filter by favorites
-        if (showFavoritesOnly && !user) {
-          setAllResources([]);
-          setLoading(false);
-          return;
-        }
+        // Apply Favorites filter
         if (showFavoritesOnly && user) {
-          try {
-            const ids = await unifiedResourceService.getUserSavedResources(user.id);
-            list = list.filter(r => ids.includes(r.id));
-          } catch (_) {
-            // ignore filtering if favorites API fails
-          }
+          const ids = await unifiedResourceService.getUserSavedResources(user.id);
+          list = list.filter(r => ids.includes(r.id));
+        }
+
+        // Apply My Submissions filter
+        if (showMySubmissions && user) {
+          list = list.filter(r => r.user_id === user.id);
         }
 
         // If language is not English, translate immediately
@@ -170,6 +168,26 @@ export default function Discover() {
     setSearchParams(params);
   };
 
+  const handleDelete = async (resourceId: number) => {
+    if (!user || !window.confirm(t('discover.confirmDelete'))) return;
+
+    setIsDeleting(resourceId);
+    try {
+      const success = await unifiedResourceService.deleteResource(resourceId, user.id);
+      if (success) {
+        setAllResources(prev => prev.filter(r => r.id !== resourceId));
+        alert(t('discover.resourceDeleted'));
+      } else {
+        alert(t('discover.deleteError'));
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert(t('discover.deleteError'));
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
   const handleAISearch = async () => {
     if (!aiSearchService.isAvailable()) return;
 
@@ -215,6 +233,7 @@ export default function Discover() {
     return (
       <LocationRequest
         onRequestLocation={requestLocation}
+        onZipCodeSearch={setZipCodeLocation}
         loading={locationLoading}
         error={locationError}
       />
@@ -358,11 +377,26 @@ export default function Discover() {
                 </GlassButton>
                 <GlassButton
                   variant={showFavoritesOnly ? 'primary' : 'secondary'}
-                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  onClick={() => {
+                    setShowFavoritesOnly(!showFavoritesOnly);
+                    if (!showFavoritesOnly) setShowMySubmissions(false);
+                  }}
                   data-tour="favorites"
                 >
-                  <Heart className="w-5 h-5" />
+                  <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-white' : ''}`} />
                 </GlassButton>
+                {user && (
+                  <GlassButton
+                    variant={showMySubmissions ? 'primary' : 'secondary'}
+                    onClick={() => {
+                      setShowMySubmissions(!showMySubmissions);
+                      if (!showMySubmissions) setShowFavoritesOnly(false);
+                    }}
+                    title={t('discover.mySubmissions')}
+                  >
+                    <User className="w-5 h-5" />
+                  </GlassButton>
+                )}
                 {!showLocalOnly && (
                   <GlassButton
                     variant="secondary"
@@ -587,33 +621,48 @@ export default function Discover() {
                         <span className="absolute top-3 left-3 z-10 text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">{t('discover.featured')}</span>
                       )}
                       {/* Favorite toggle - visible always; prompts sign-in if needed */}
-                      <button
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          if (!user) {
-                            if (window.confirm(t('discover.signInFav'))) {
-                              window.location.href = '/sign-in';
+                      <div className="absolute top-3 right-3 z-10 flex gap-2">
+                        {user && resource.user_id === user.id && (
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              await handleDelete(resource.id);
+                            }}
+                            disabled={isDeleting === resource.id}
+                            className={`p-2 rounded-full glass hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors pointer-events-auto`}
+                            aria-label="Delete resource"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        )}
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (!user) {
+                              if (window.confirm(t('discover.signInFav'))) {
+                                window.location.href = '/sign-in';
+                              }
+                              return;
                             }
-                            return;
-                          }
-                          const isFav = favoriteIds.includes(resource.id);
-                          try {
-                            if (isFav) {
-                              await unifiedResourceService.unsaveResource(user.id, resource.id);
-                            } else {
-                              await unifiedResourceService.saveResource(user.id, resource.id);
+                            const isFav = favoriteIds.includes(resource.id);
+                            try {
+                              if (isFav) {
+                                await unifiedResourceService.unsaveResource(user.id, resource.id);
+                              } else {
+                                await unifiedResourceService.saveResource(user.id, resource.id);
+                              }
+                            } finally {
+                              fetchFavorites();
                             }
-                          } finally {
-                            fetchFavorites();
-                          }
-                        }}
-                        className={`absolute top-3 right-3 z-10 p-2 rounded-full pointer-events-auto ${user && favoriteIds.includes(resource.id) ? 'bg-amber-500/30' : 'glass'}`}
-                        aria-label="Toggle favorite"
-                      >
-                        <Heart className={`w-5 h-5 ${user && favoriteIds.includes(resource.id) ? 'text-amber-400' : 'text-slate-300'}`} />
-                      </button>
-                      {/* Image removed - leaving space blank for now */}
-                      {/* {resource.image_url && (
+                          }}
+                          className={`p-2 rounded-full pointer-events-auto ${user && favoriteIds.includes(resource.id) ? 'bg-amber-500/30' : 'glass'}`}
+                          aria-label="Toggle favorite"
+                        >
+                          <Heart className={`w-5 h-5 ${user && favoriteIds.includes(resource.id) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`} />
+                        </button>
+                      </div>
+                      {/* Image restored */}
+                      {resource.image_url && (
                         <div className="aspect-video rounded-lg overflow-hidden mb-4 -mx-6 -mt-6">
                           <img
                             src={resource.image_url}
@@ -626,7 +675,7 @@ export default function Discover() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                      )} */}
+                      )}
 
                       <div className="flex-1 space-y-3">
                         <div>

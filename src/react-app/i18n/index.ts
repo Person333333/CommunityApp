@@ -11,7 +11,9 @@ const resources = {
   en: { translation: enTranslations },
   es: { translation: esTranslations },
   fr: { translation: frTranslations },
-  'zh-cn': { translation: zhTranslations }
+  'zh-cn': { translation: zhTranslations },
+  'zh-CN': { translation: zhTranslations },
+  'zh': { translation: zhTranslations }
 };
 
 i18n

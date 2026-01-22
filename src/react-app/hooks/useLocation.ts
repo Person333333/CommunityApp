@@ -14,7 +14,7 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
   const R = 6371; // Earth's radius in kilometers
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
+  const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -29,7 +29,7 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
   // Try ZipCodeAPI.com first (US only, very reliable)
   try {
     const response = await fetch(`https://www.zipcodeapi.com/rest/DemoAPI/info.json/${zipCode}/degrees`);
-    
+
     if (response.ok) {
       const data = await response.json();
       if (data && data.lat && data.lng) {
@@ -51,7 +51,7 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
         }
       }
     );
-    
+
     if (response.ok) {
       const data = await response.json();
       if (data && data.length > 0) {
@@ -67,7 +67,7 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
   // Fallback: Try Zippopotam.us API
   try {
     const response = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
-    
+
     if (response.ok) {
       const data = await response.json();
       if (data && data.places && data.places.length > 0) {
@@ -110,11 +110,12 @@ export function useLocation(): LocationState {
   const [location, setLocation] = useState<[number, number] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [source, setSource] = useState<'gps' | 'zip' | null>(null);
 
   const requestLocation = useCallback(() => {
     setLoading(true);
     setError(null);
-    
+
     if (!('geolocation' in navigator)) {
       setError('Geolocation is not supported by your browser');
       setLoading(false);
@@ -125,6 +126,7 @@ export function useLocation(): LocationState {
       (position) => {
         const loc: [number, number] = [position.coords.latitude, position.coords.longitude];
         setLocation(loc);
+        setSource('gps');
         setLoading(false);
         setError(null);
       },
@@ -145,13 +147,14 @@ export function useLocation(): LocationState {
     console.log('setZipCodeLocation called with:', zipCode);
     setLoading(true);
     setError(null);
-    
+
     try {
       console.log('Calling getZipCodeCoordinates...');
       const coords = await getZipCodeCoordinates(zipCode);
       console.log('Got coordinates:', coords);
       if (coords) {
         setLocation(coords);
+        setSource('zip');
         console.log(`ZIP Code ${zipCode} set to location: ${coords}`);
       } else {
         console.log('No coordinates found for ZIP:', zipCode);
@@ -170,6 +173,6 @@ export function useLocation(): LocationState {
     requestLocation();
   }, [requestLocation]);
 
-  return { location, loading, error, requestLocation, setZipCodeLocation, locationSource: location ? 'gps' : null };
+  return { location, loading, error, requestLocation, setZipCodeLocation, locationSource: source };
 }
 

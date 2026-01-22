@@ -14,6 +14,12 @@ interface LocationRequestProps {
 
 export default function LocationRequest({ onRequestLocation, onZipCodeSearch, loading = false, error = null }: LocationRequestProps) {
   const { t } = useTranslation();
+  console.log('LocationRequest PROPS:', {
+    onRequestLocation: !!onRequestLocation,
+    onZipCodeSearch: !!onZipCodeSearch,
+    loading,
+    error
+  });
   const [zipCode, setZipCode] = useState('');
   const [useZip, setUseZip] = useState(false);
   return (
