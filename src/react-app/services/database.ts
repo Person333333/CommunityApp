@@ -24,8 +24,14 @@ export async function fetchResourcesFromDB(options: {
 
     if (options.search) {
       const searchParam = '%' + options.search + '%';
-      baseConditions.push('(title ILIKE $' + (params.length + 1) + ' OR description ILIKE $' + (params.length + 2) + ')');
-      params.push(searchParam, searchParam);
+      baseConditions.push(`(
+        title ILIKE $${params.length + 1} OR 
+        description ILIKE $${params.length + 2} OR 
+        city ILIKE $${params.length + 3} OR 
+        state ILIKE $${params.length + 4} OR 
+        zip ILIKE $${params.length + 5}
+      )`);
+      params.push(searchParam, searchParam, searchParam, searchParam, searchParam);
     }
 
     const whereClause = baseConditions.length > 0 ? `WHERE ${baseConditions.join(' AND ')}` : '';
