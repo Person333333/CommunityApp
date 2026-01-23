@@ -14,6 +14,25 @@ load_dotenv()
 CACHE_FILE = 'translation_cache.json'
 translation_cache = {}
 
+def load_cache():
+    global translation_cache
+    if os.path.exists(CACHE_FILE):
+        try:
+            with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+                translation_cache = json.load(f)
+            print(f"Loaded {sum(len(v) for v in translation_cache.values())} cached translations", file=sys.stderr)
+        except Exception as e:
+            print(f"Failed to load cache: {e}", file=sys.stderr)
+            translation_cache = {}
+
+def save_cache():
+    try:
+        with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(translation_cache, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Failed to save cache: {e}", file=sys.stderr)
+
+
 def get_db_connection():
     db_url = os.getenv('VITE_NEON_DATABASE_URL') or os.getenv('DATABASE_URL') or os.getenv('NEON_DATABASE_URL')
     if not db_url:
