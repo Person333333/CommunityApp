@@ -16,22 +16,38 @@ import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
+import { useLocation } from "@/react-app/context/LocationContext";
 
 export default function App() {
   const [showTour, setShowTour] = useState(false);
+  const { location, loading: locationLoading } = useLocation();
 
-  // Check for tour trigger in URL params
+  // Check for tour trigger (URL param or first-time visit)
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const shouldShowTour = urlParams.get('tour') === 'true';
-    const tourCompleted = localStorage.getItem('community-tour-completed');
+    // Only proceed if location is set and we're not loading location
+    if (locationLoading || !location) return;
 
-    if (shouldShowTour && !tourCompleted) {
-      setShowTour(true);
-      // Clean up URL params
-      window.history.replaceState({}, '', window.location.pathname);
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceTour = urlParams.get('tour') === 'true';
+    const tourCompleted = localStorage.getItem('community-tour-completed');
+    const tourShownThisSession = sessionStorage.getItem('tour-shown-session');
+
+    // Show tour if forced via URL or if it's a first-time visitor
+    if ((forceTour || !tourCompleted) && !tourShownThisSession) {
+      // Delay slightly to ensure layout is ready
+      const timer = setTimeout(() => {
+        setShowTour(true);
+        sessionStorage.setItem('tour-shown-session', 'true');
+      }, 1500);
+
+      // Clean up URL params if forced
+      if (forceTour) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [location, locationLoading]);
 
   return (
     <Router>

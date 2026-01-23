@@ -19,7 +19,7 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
 
     // Try ZipCodeAPI.com first
     try {
-        const response = await fetch(`https://www.zipcodeapi.com/rest/DemoAPI/info.json/${zipCode}/degrees`);
+        const response = await fetch(`/zip-api/rest/DemoAPI/info.json/${zipCode}/degrees`);
         if (response.ok) {
             const data = await response.json();
             if (data && data.lat && data.lng) {

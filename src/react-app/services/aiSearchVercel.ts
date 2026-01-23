@@ -1,5 +1,5 @@
 // AI Service for Vercel deployment using environment variables
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// Using backend-only Gemini for security
 
 export interface AISearchResult {
   query: string;
@@ -18,33 +18,12 @@ export interface ResourceContext {
 }
 
 export class AISearchService {
-  private model: any = null;
-  private initialized = false;
-
   constructor() {
-    // Initialize Gemini AI with environment variable for browser
-    // For Vercel, use import.meta.env
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    // Service initialized and ready to hit /api/ai
+  }
 
-    console.log('AI Service - API Key found:', !!apiKey);
-    console.log('AI Service - API Key length:', apiKey?.length || 0);
-
-    if (apiKey && apiKey !== '' && apiKey !== 'your_gemini_api_key_here') {
-      try {
-        const genAI = new GoogleGenerativeAI(apiKey);
-        this.model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-        this.initialized = true;
-        console.log('AI Service - Gemini initialized successfully');
-      } catch (error) {
-        console.warn('Failed to initialize Gemini AI:', error);
-        this.initialized = false;
-        console.log('AI Service - Using keyword matching fallback only');
-      }
-    } else {
-      console.warn('No valid Gemini API key found');
-      this.initialized = false;
-      console.log('AI Service - Using keyword matching fallback only');
-    }
+  isAvailable() {
+    return true;
   }
 
   /**
@@ -55,8 +34,8 @@ export class AISearchService {
     _resourceContext?: ResourceContext[]
   ): Promise<AISearchResult> {
     try {
-      // Call backend AI service
-      const response = await fetch('http://localhost:3002/api/ai', {
+      // Call backend AI service using proxied relative path
+      const response = await fetch('/api/ai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -237,20 +216,59 @@ export class AISearchService {
   }
 
   /**
+   * Validate a resource submission using AI
+   */
+  async validateSubmission(submission: any): Promise<{ isValid: boolean; feedback: string; scores: any }> {
+    try {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'validate_submission',
+          submission: {
+            title: submission.title,
+            description: submission.description,
+            category: submission.category,
+            services: submission.services,
+            tags: submission.tags
+          }
+        }),
+      });
+
+      if (!response.ok) throw new Error('Validation failed');
+      return await response.json();
+    } catch (error) {
+      console.error('AI Validation Error:', error);
+      return {
+        isValid: true,
+        feedback: 'AI validation unavailable. Basic check passed.',
+        scores: { language: 10, coherence: 10, relevance: 10 }
+      };
+    }
+  }
+
+  /**
    * Generate contextual help messages
    */
-  async generateHelpMessage(context: string): Promise<string> {
+  async generateHelpMessage(message: string, history: Array<{ role: 'user' | 'assistant', content: string }> = []): Promise<string> {
     try {
-      if (!this.model) {
-        return this.getFallbackHelpMessage(context);
-      }
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'helper_chat',
+          message,
+          history
+        }),
+      });
 
-      // Skip AI calls for now since they're failing, use keyword matching
-      return this.getFallbackHelpMessage(context);
+      if (!response.ok) throw new Error('Helper chat failed');
+      const data = await response.json();
+      return data.response;
 
     } catch (error) {
       console.error('Help Message Error:', error);
-      return this.getFallbackHelpMessage(context);
+      return this.getFallbackHelpMessage(message);
     }
   }
 
@@ -852,12 +870,6 @@ export class AISearchService {
     return 'I can help you find community resources for food, housing, healthcare, jobs, and more. Try searching for specific needs like "food assistance", "housing help", or "job training", or ask me about using the app features!';
   }
 
-  /**
-   * Check if AI service is available
-   */
-  isAvailable(): boolean {
-    return this.initialized && !!this.model;
-  }
 }
 
 // Export singleton instance

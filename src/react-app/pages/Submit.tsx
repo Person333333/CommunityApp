@@ -9,6 +9,7 @@ import GlassButton from '@/react-app/components/GlassButton';
 import { categories } from '@/shared/types';
 
 import { useTranslation } from 'react-i18next';
+import { aiSearchService } from '@/react-app/services/aiSearch';
 
 export default function Submit() {
   const { t } = useTranslation();
@@ -81,11 +82,61 @@ export default function Submit() {
 
 
 
+  const [validating, setValidating] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     setErrors({});
 
+    // 1. Basic syntactic validation
+    const newErrors: Record<string, string> = {};
+    if (!formData.title.trim()) newErrors.title = "Title is required";
+    if (!formData.description.trim()) newErrors.description = "Description is required";
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.contact_email || !emailRegex.test(formData.contact_email)) {
+      newErrors.contact_email = "Please enter a valid email address";
+    }
+
+    const isLikelyGibberish = (text: string): boolean => {
+      const cleanText = text.trim().toLowerCase();
+      const knownGibberish = ['ferferf', 'orejfr', 'asdf', 'qwerty', '0ijo9ij', 'vorjovrk'];
+      if (knownGibberish.some(g => cleanText.includes(g))) return true;
+      const consonantCluster = /[bcdfghjklmnpqrstvwxyz]{6,}/i;
+      return consonantCluster.test(cleanText);
+    };
+
+    if (isLikelyGibberish(formData.title) || isLikelyGibberish(formData.description)) {
+      setErrors({ general: "Please provide a more descriptive and readable title/description." });
+      return;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // 2. AI Validation
+    setValidating(true);
+    try {
+      const aiResponse = await aiSearchService.validateSubmission(formData);
+      if (!aiResponse.isValid) {
+        setErrors({ general: `AI Quality Check Failed: ${aiResponse.feedback}` });
+        setValidating(false);
+        return;
+      }
+    } catch (err) {
+      console.error('AI validation error:', err);
+      setErrors({ general: "Unable to verify content at this time. Please try again in 1 minute." });
+      setValidating(false);
+      return;
+    } finally {
+      // We don't setValidating(false) here because we want to be explicit about when it ends
+      // If we returned early, we already set it to false.
+    }
+
+    setValidating(false);
+    setSubmitting(true);
     try {
       const response = await fetch('/api/submissions', {
         method: 'POST',
@@ -104,7 +155,6 @@ export default function Submit() {
 
       if (response.ok) {
         setSuccess(true);
-        // triggerCelebration(); // Removed per user request
         setFormData({
           title: '', description: '', category: '', contact_name: '', contact_email: '',
           phone: '', website: '', address: '', city: '', state: '', zip: '',
@@ -115,7 +165,7 @@ export default function Submit() {
         setErrors(data.error?.issues?.reduce((acc: any, issue: any) => {
           acc[issue.path[0]] = issue.message;
           return acc;
-        }, {}) || { general: t('submit.form.errors.general') });
+        }, {}) || { general: data.error?.general || t('submit.form.errors.general') });
       }
     } catch (error) {
       setErrors({ general: t('submit.form.errors.network') });
@@ -308,7 +358,7 @@ export default function Submit() {
                       value={formData.audience}
                       onChange={handleChange}
                       error={errors.audience}
-                      placeholder="e.g., Families, Seniors, Veterans..."
+                      placeholder={t('submit.form.audiencePlaceholder')}
                     />
 
                     <FormField
@@ -317,7 +367,7 @@ export default function Submit() {
                       value={formData.hours}
                       onChange={handleChange}
                       error={errors.hours}
-                      placeholder="e.g., Mon-Fri 9am-5pm"
+                      placeholder={t('submit.form.hoursPlaceholder')}
                     />
                   </div>
 
@@ -328,7 +378,7 @@ export default function Submit() {
                       value={formData.services}
                       onChange={handleChange}
                       error={errors.services}
-                      placeholder="e.g., Counseling, Legal Aid..."
+                      placeholder={t('submit.form.servicesPlaceholder')}
                     />
 
                     <FormField
@@ -337,7 +387,7 @@ export default function Submit() {
                       value={formData.tags}
                       onChange={handleChange}
                       error={errors.tags}
-                      placeholder="e.g., urgent, community, local..."
+                      placeholder={t('submit.form.tagsPlaceholder')}
                     />
                   </div>
                 </div>
@@ -440,7 +490,7 @@ export default function Submit() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField
-                      label="Latitude"
+                      label={t('submit.form.latitude')}
                       name="latitude"
                       type="number"
                       step="any"
@@ -449,7 +499,7 @@ export default function Submit() {
                       placeholder="e.g., 47.6062"
                     />
                     <FormField
-                      label="Longitude"
+                      label={t('submit.form.longitude')}
                       name="longitude"
                       type="number"
                       step="any"
@@ -467,7 +517,7 @@ export default function Submit() {
                       className="text-sm text-teal-300 hover:text-teal-200 flex items-center gap-1 transition-colors"
                     >
                       {locating ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
-                      {locating ? 'Locating...' : 'Use My Current Location'}
+                      {locating ? t('submit.form.locating') : t('submit.form.useMyLocation')}
                     </button>
                   </div>
                 </div>
@@ -475,10 +525,10 @@ export default function Submit() {
                 {/* Media */}
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
-                    Media
+                    {t('submit.form.media')}
                   </h3>
                   <FormField
-                    label="Image URL"
+                    label={t('submit.form.imageUrl')}
                     name="image_url"
                     type="url"
                     value={formData.image_url}
@@ -493,10 +543,19 @@ export default function Submit() {
                     variant="primary"
                     size="lg"
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || validating}
                     className="w-full"
                   >
-                    {submitting ? (
+                    {validating ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        {t('submit.form.verifying')}
+                      </span>
+                    ) : submitting ? (
                       <span className="flex items-center justify-center gap-2">
                         <motion.div
                           animate={{ rotate: 360 }}

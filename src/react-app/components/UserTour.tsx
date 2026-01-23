@@ -1,44 +1,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Compass, Search, MapPin } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { X, ArrowRight, ArrowLeft, Compass, Search, MapPin, Sparkles, Globe, Bot, PlusCircle, FolderHeart } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
 import GlassCard from './GlassCard';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router';
 
 interface TourStep {
   id: string;
-  title: string;
-  content: string;
-  target?: string; // CSS selector for the target element
+  titleKey: string;
+  contentKey: string;
+  target?: string;
+  path?: string;
   position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
 }
-
-const tourSteps: TourStep[] = [
-  {
-    id: 'welcome',
-    title: 'Welcome to Community Compass',
-    content: 'Let us show you around to help you find the resources you need. This quick tour will take just a minute.',
-    position: 'center'
-  },
-  {
-    id: 'discover',
-    title: 'Discover Resources',
-    content: 'This is where you can search and filter through hundreds of community resources. Try selecting multiple categories to narrow your search!',
-    target: '[data-tour="discover"]',
-    position: 'bottom'
-  },
-  {
-    id: 'map',
-    title: 'Interactive Map',
-    content: 'View resources on an interactive map to see what\'s available near you. Click on markers to see details!',
-    target: '[data-tour="map"]',
-    position: 'bottom'
-  },
-  {
-    id: 'complete',
-    title: 'All Set',
-    content: 'You\'re ready to explore. Remember to use the helper button if you have any questions. Happy resource hunting!',
-    position: 'center'
-  }
-];
 
 interface UserTourProps {
   isOpen: boolean;
@@ -47,8 +21,90 @@ interface UserTourProps {
 }
 
 export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [highlightedElement, setHighlightedElement] = useState<Element | null>(null);
+
+  const tourSteps: TourStep[] = useMemo(() => [
+    {
+      id: 'welcome',
+      titleKey: 'tour.welcome.title',
+      contentKey: 'tour.welcome.content',
+      path: '/',
+      position: 'center'
+    },
+    {
+      id: 'discover',
+      titleKey: 'tour.discover.title',
+      contentKey: 'tour.discover.content',
+      target: '[data-tour="discover"]',
+      path: '/discover',
+      position: 'bottom'
+    },
+    {
+      id: 'ai-search',
+      titleKey: 'tour.aiSearch.title',
+      contentKey: 'tour.aiSearch.content',
+      target: '[data-tour="ai-search"]',
+      path: '/discover',
+      position: 'bottom'
+    },
+    {
+      id: 'my-resources',
+      titleKey: 'tour.myResources.title',
+      contentKey: 'tour.myResources.content',
+      target: '[data-tour="my-resources"]',
+      path: '/discover',
+      position: 'bottom'
+    },
+    {
+      id: 'translation',
+      titleKey: 'tour.translation.title',
+      contentKey: 'tour.translation.content',
+      target: '[data-tour="language-selector"]',
+      position: 'bottom'
+    },
+    {
+      id: 'map',
+      titleKey: 'tour.map.title',
+      contentKey: 'tour.map.content',
+      target: '[data-tour="map"]',
+      path: '/map',
+      position: 'bottom'
+    },
+    {
+      id: 'add-resource',
+      titleKey: 'tour.addResource.title',
+      contentKey: 'tour.addResource.content',
+      target: '[data-tour="add-resource"]',
+      path: '/submit',
+      position: 'bottom'
+    },
+    {
+      id: 'helper',
+      titleKey: 'tour.helper.title',
+      contentKey: 'tour.helper.content',
+      target: '[data-tour="helper-button"]',
+      position: 'top'
+    },
+    {
+      id: 'complete',
+      titleKey: 'tour.complete.title',
+      contentKey: 'tour.complete.content',
+      position: 'center'
+    }
+  ], []);
+
+  // Handle navigation when step changes
+  useEffect(() => {
+    if (!isOpen) return;
+    const step = tourSteps[currentStep];
+    if (step.path && location.pathname !== step.path) {
+      navigate(step.path);
+    }
+  }, [currentStep, isOpen, navigate, location.pathname, tourSteps]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -62,31 +118,31 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
     const step = tourSteps[currentStep];
     let pollTimer: NodeJS.Timeout;
     let attempts = 0;
-    const maxAttempts = 20; // Try for 5 seconds (20 * 250ms)
+    const maxAttempts = 20;
 
     const findAndHighlight = () => {
       if (step.target) {
         const element = document.querySelector(step.target);
 
         if (element) {
-          // Found it! Setup highlight
           if (highlightedElement) {
             highlightedElement.removeAttribute('data-tour-highlighted');
           }
 
           element.setAttribute('data-tour-highlighted', 'true');
           setHighlightedElement(element);
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // Only scroll if it's not a fixed element (simplified check)
+          const style = window.getComputedStyle(element);
+          if (style.position !== 'fixed') {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         } else {
-          // Not found yet
           attempts++;
           if (attempts < maxAttempts) {
             pollTimer = setTimeout(findAndHighlight, 250);
           } else {
-            console.warn(`Tour step ${step.id}: Target ${step.target} not found after timeout.`);
-            // Fallback: Just show the modal centered? 
-            // Or maybe the user is still loading. 
-            // For now, let's just clear highlight so at least the modal text shows if we handle position gracefully.
+            console.warn(`Tour step ${step.id}: Target ${step.target} not found.`);
             if (highlightedElement) {
               highlightedElement.removeAttribute('data-tour-highlighted');
               setHighlightedElement(null);
@@ -94,7 +150,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
           }
         }
       } else {
-        // No target needed (center step like 'welcome')
         if (highlightedElement) {
           highlightedElement.removeAttribute('data-tour-highlighted');
           setHighlightedElement(null);
@@ -107,7 +162,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
     return () => {
       clearTimeout(pollTimer);
     };
-  }, [currentStep, isOpen]);
+  }, [currentStep, isOpen, tourSteps, highlightedElement, location.pathname]);
 
   const handleNext = () => {
     if (currentStep < tourSteps.length - 1) {
@@ -124,7 +179,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
   };
 
   const handleComplete = () => {
-    // Mark tour as completed in localStorage
     localStorage.setItem('community-tour-completed', 'true');
     onComplete?.();
     onClose();
@@ -142,7 +196,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
 
   return (
     <>
-      {/* Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -151,54 +204,56 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
         onClick={onClose}
       />
 
-      {/* Tour Content */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentStep}
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: -20 }}
-          className="fixed z-50 max-w-md"
+          className="fixed z-50 max-w-md w-full px-4"
           style={{
-            top: step.position === 'center' ? '50%' : step.target ? 'auto' : '20%',
-            left: step.position === 'center' ? '50%' : step.target ? 'auto' : '50%',
+            top: step.position === 'center' ? '50%' : step.position === 'top' ? '80px' : (step.target ? 'auto' : '20%'),
+            left: '50%',
             transform: step.position === 'center' ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
-            bottom: step.position === 'bottom' ? '20px' : 'auto'
+            bottom: step.position === 'bottom' ? '80px' : 'auto',
           }}
         >
           <GlassCard variant="strong" className="p-6">
-            {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-amber-500 rounded-full flex items-center justify-center">
-                  {currentStep === 0 && <Compass className="w-5 h-5 text-white" />}
-                  {currentStep === 1 && <Search className="w-5 h-5 text-white" />}
-                  {currentStep === 2 && <MapPin className="w-5 h-5 text-white" />}
-                  {currentStep === 3 && <Compass className="w-5 h-5 text-white" />}
+                  {step.id === 'welcome' && <Compass className="w-5 h-5 text-white" />}
+                  {step.id === 'discover' && <Search className="w-5 h-5 text-white" />}
+                  {step.id === 'ai-search' && <Sparkles className="w-5 h-5 text-white" />}
+                  {step.id === 'my-resources' && <FolderHeart className="w-5 h-5 text-white" />}
+                  {step.id === 'translation' && <Globe className="w-5 h-5 text-white" />}
+                  {step.id === 'map' && <MapPin className="w-5 h-5 text-white" />}
+                  {step.id === 'add-resource' && <PlusCircle className="w-5 h-5 text-white" />}
+                  {step.id === 'helper' && <Bot className="w-5 h-5 text-white" />}
+                  {step.id === 'complete' && <Compass className="w-5 h-5 text-white" />}
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-100">
-                    {step.title}
+                    {t(step.titleKey)}
                   </h3>
                   <p className="text-sm text-slate-400">
-                    Step {currentStep + 1} of {tourSteps.length}
+                    {t('tour.step', { current: currentStep + 1, total: tourSteps.length })}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="text-slate-400 hover:text-slate-200 transition-colors"
+                aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Content */}
-            <p className="text-slate-300 mb-6">
-              {step.content}
+            <p className="text-slate-300 mb-6 leading-relaxed">
+              {t(step.contentKey)}
             </p>
 
-            {/* Progress */}
             <div className="flex gap-1 mb-6">
               {tourSteps.map((_, index) => (
                 <div
@@ -209,31 +264,30 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
               ))}
             </div>
 
-            {/* Actions */}
             <div className="flex items-center justify-between">
               <button
                 onClick={handleSkip}
-                className="text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                className="text-sm text-slate-400 hover:text-slate-200 transition-colors font-medium"
               >
-                Skip tour
+                {t('tour.skip')}
               </button>
 
               <div className="flex gap-2">
                 {!isFirstStep && (
                   <button
                     onClick={handlePrevious}
-                    className="flex items-center gap-2 px-4 py-2 glass border border-white/10 text-slate-300 hover:border-teal-400/30 transition-all rounded-lg"
+                    className="flex items-center gap-2 px-4 py-2 glass border border-white/10 text-slate-300 hover:border-teal-400/30 transition-all rounded-lg text-sm font-medium"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    Previous
+                    {t('tour.previous')}
                   </button>
                 )}
 
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg hover:from-teal-700 hover:to-amber-700 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg hover:from-teal-700 hover:to-amber-700 transition-all text-sm font-medium shadow-lg shadow-teal-500/20"
                 >
-                  {isLastStep ? 'Get Started' : 'Next'}
+                  {isLastStep ? t('tour.complete.getStarted') : t('tour.next')}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -242,14 +296,17 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
         </motion.div>
       </AnimatePresence>
 
-      {/* Tour Styles */}
       <style>{`
         [data-tour-highlighted="true"] {
-          position: relative;
-          z-index: 45;
+          position: relative !important;
+          z-index: 45 !important;
           box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.3), 0 0 0 8px rgba(20, 184, 166, 0.1);
           border-radius: 8px;
           transition: all 0.3s ease;
+        }
+
+        .fixed[data-tour-highlighted="true"] {
+          position: fixed !important;
         }
         
         [data-tour-highlighted="true"]::before {

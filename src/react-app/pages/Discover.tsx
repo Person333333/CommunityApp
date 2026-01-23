@@ -13,6 +13,7 @@ import { aiSearchService } from '@/react-app/services/aiSearch';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { useTranslation } from 'react-i18next';
 import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
+import GuestAuthModal from '@/react-app/components/GuestAuthModal';
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
@@ -39,6 +40,17 @@ export default function Discover() {
   const [aiRecommendations, setAiRecommendations] = useState<any>(null);
   const [aiActive, setAiActive] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
+  const [authModal, setAuthModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'favorite' | 'submissions';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'favorite'
+  });
 
   // Handle translation when language changes
   useEffect(() => {
@@ -334,6 +346,7 @@ export default function Discover() {
                     whileTap={{ scale: 0.95 }}
                     onClick={handleAISearch}
                     disabled={aiLoading}
+                    data-tour="ai-search"
                     className={`relative px-4 py-2 rounded-full font-medium transition-all bg-gradient-to-r from-teal-600 to-amber-600 text-white shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40`}
                   >
                     <Sparkles className="w-5 h-5 inline mr-2" />
@@ -375,20 +388,28 @@ export default function Discover() {
                 >
                   <Filter className="w-5 h-5" />
                 </GlassButton>
-                <GlassButton
-                  variant={showFavoritesOnly ? 'primary' : 'secondary'}
-                  onClick={() => {
-                    setShowFavoritesOnly(!showFavoritesOnly);
-                    if (!showFavoritesOnly) setShowMySubmissions(false);
-                  }}
-                  data-tour="favorites"
-                >
-                  <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-white' : ''}`} />
-                </GlassButton>
-                {user && (
+                <div data-tour="my-resources" className="flex gap-2">
+                  <GlassButton
+                    variant={showFavoritesOnly ? 'primary' : 'secondary'}
+                    onClick={() => {
+                      setShowFavoritesOnly(!showFavoritesOnly);
+                      if (!showFavoritesOnly) setShowMySubmissions(false);
+                    }}
+                  >
+                    <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-white' : ''}`} />
+                  </GlassButton>
                   <GlassButton
                     variant={showMySubmissions ? 'primary' : 'secondary'}
                     onClick={() => {
+                      if (!user) {
+                        setAuthModal({
+                          isOpen: true,
+                          title: t('discover.mySubmissions'),
+                          message: t('discover.signInSubmissions'),
+                          type: 'submissions'
+                        });
+                        return;
+                      }
                       setShowMySubmissions(!showMySubmissions);
                       if (!showMySubmissions) setShowFavoritesOnly(false);
                     }}
@@ -396,7 +417,7 @@ export default function Discover() {
                   >
                     <User className="w-5 h-5" />
                   </GlassButton>
-                )}
+                </div>
                 {!showLocalOnly && (
                   <GlassButton
                     variant="secondary"
@@ -639,9 +660,12 @@ export default function Discover() {
                           onClick={async (e) => {
                             e.stopPropagation();
                             if (!user) {
-                              if (window.confirm(t('discover.signInFav'))) {
-                                window.location.href = '/sign-in';
-                              }
+                              setAuthModal({
+                                isOpen: true,
+                                title: t('saves.saveResource'),
+                                message: t('discover.signInFav'),
+                                type: 'favorite'
+                              });
                               return;
                             }
                             const isFav = favoriteIds.includes(resource.id);
@@ -817,6 +841,13 @@ export default function Discover() {
         resource={selectedResource}
         isOpen={!!selectedResource}
         onClose={() => setSelectedResource(null)}
+      />
+      <GuestAuthModal
+        isOpen={authModal.isOpen}
+        onClose={() => setAuthModal(prev => ({ ...prev, isOpen: false }))}
+        title={authModal.title}
+        message={authModal.message}
+        type={authModal.type}
       />
     </div>
   );

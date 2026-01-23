@@ -9,180 +9,149 @@ class handler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         data = json.loads(post_data.decode('utf-8'))
 
+        task = data.get('task', 'search')
         query = data.get('query', '')
+        
+        # Site information for AI context
+        site_info = """
+        Website Name: Community Compass
+        Mission: Helping people find community resources like food assistance, healthcare, housing, and financial aid.
+        Key Features:
+        - Discovery: A searchable list of hundreds of local resources.
+        - AI Search: Users can type natural language (e.g., "I'm hungry") and the AI suggests categories.
+        - Map: Interactive view with custom pins and a "Density View" to see resource clusters.
+        - Favorites: Users can save resources to their account by clicking the heart icon.
+        - Translation: One-click translation of everything. To change language, click the globe icon or the language selector in the top navigation bar.
+        - Navigation: Nav links for Home, Discover, Map, Add Resource (Submit), About, and My Submissions (to manage your own posts).
+        - Adding Resources: Click "Add Resource" in the navigation bar to share a new service with the community.
+        """
 
-        if not query:
-            self.send_response(400)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'error': 'No query provided'}).encode('utf-8'))
+        gemini_key = os.environ.get('VITE_GEMINI_API_KEY')
+        if not gemini_key or gemini_key == 'your_gemini_api_key_here':
+            self.send_error(500, "Gemini API key not configured")
             return
 
-        # Try to use Gemini AI if available
-        gemini_key = os.environ.get('VITE_GEMINI_API_KEY')
-        
-        if gemini_key and gemini_key != 'your_gemini_api_key_here':
-            try:
-                # Import here to avoid errors if google-generativeai not installed
-                import google.generativeai as genai
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel('gemini-flash-latest')
+
+            if task == 'validate_submission':
+                submission = data.get('submission', {})
+                prompt = f"""
+                You are a quality control assistant for a community resource directory called Community Compass.
+                Your job is to validate a user's resource submission.
                 
-                genai.configure(api_key=gemini_key)
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                Submission Data:
+                - Title: {submission.get('title')}
+                - Description: {submission.get('description')}
+                - Category: {submission.get('category')}
+                - Services: {submission.get('services')}
+                - Tags: {submission.get('tags')}
                 
-                # Create a focused prompt for resource categorization
-                prompt = f"""You are a community resource assistant. Analyze this user query and suggest relevant resource categories.
-
-User query: "{query}"
-
-Available categories:
-- Food Assistance
-- Healthcare
-- Housing
-- Employment
-- Mental Health
-- Financial Assistance
-- Education
-- Transportation
-- Child Care
-- Senior Services
-- Legal Aid
-- Veterans Services
-
-Respond in JSON format:
-{{
-  "categories": ["category1", "category2"],
-  "recommendations": ["brief helpful tip 1", "brief helpful tip 2"],
-  "explanation": "one sentence explaining why these categories match"
-}}
-
-Only suggest categories that are clearly relevant. Maximum 3 categories."""
-
+                Validation Criteria:
+                1. Written in clear, proper English.
+                2. Not gibberish or spam (e.g., random letters like "vorjovrk" or "0ijo9ij" MUST be rejected).
+                3. The title, description, category, and services are logically consistent (e.g., if category is "Food", the services shouldn't be "Legal Aid").
+                4. The description must be helpful and descriptive.
+                
+                If the title or description looks like random typing or placeholders, "isValid" MUST be false.
+                
+                Respond ONLY in JSON format:
+                {{
+                  "isValid": false,
+                  "feedback": "Reason why it is invalid...",
+                  "scores": {{ ... }}
+                }}
+                OR
+                {{
+                  "isValid": true,
+                  "feedback": "Brief summary",
+                  "scores": {{ ... }}
+                }}
+                """
                 response = model.generate_content(prompt)
                 result_text = response.text.strip()
-                
-                # Extract JSON from response (handle markdown code blocks)
                 if '```json' in result_text:
                     result_text = result_text.split('```json')[1].split('```')[0].strip()
                 elif '```' in result_text:
                     result_text = result_text.split('```')[1].split('```')[0].strip()
                 
-                ai_result = json.loads(result_text)
+                self.send_json_response(json.loads(result_text))
+                return
+
+            elif task == 'helper_chat':
+                history = data.get('history', [])
+                current_message = data.get('message', '')
                 
-                response_data = {
+                prompt = f"""
+                You are the Community Compass AI Assistant. You are warm, helpful, and knowledgeable about the platform.
+                
+                {site_info}
+                
+                Rules:
+                - Respond to the user's latest question.
+                - Use the site information to guide them on how to use the website.
+                - If they ask about resources, tell them how to use the search or categories.
+                - Keep responses concise but friendly (max 3-4 sentences).
+                - Use bullet points for lists.
+                
+                Chat History:
+                {json.dumps(history)}
+                
+                User's latest question: "{current_message}"
+                """
+                response = model.generate_content(prompt)
+                self.send_json_response({'response': response.text.strip()})
+                return
+
+            else: # Default search/categorization
+                prompt = f"""You are a community resource assistant. Analyze this user query and suggest relevant resource categories.
+
+User query: "{query}"
+
+Available categories:
+- Food Assistance, Healthcare, Housing, Employment, Mental Health, Financial Assistance, Education, Transportation, Child Care, Senior Services, Legal Aid, Veterans Services
+
+Respond in JSON format:
+{{
+  "categories": ["category1"],
+  "recommendations": ["tip"],
+  "explanation": "why"
+}}
+"""
+                response = model.generate_content(prompt)
+                result_text = response.text.strip()
+                if '```json' in result_text:
+                    result_text = result_text.split('```json')[1].split('```')[0].strip()
+                ai_result = json.loads(result_text)
+                self.send_json_response({
                     'query': query,
-                    'recommendations': ai_result.get('recommendations', [])[:3],
-                    'explanation': ai_result.get('explanation', 'AI-powered search results'),
-                    'categories': ai_result.get('categories', [])[:3],
+                    'recommendations': ai_result.get('recommendations', []),
+                    'explanation': ai_result.get('explanation', ''),
+                    'categories': ai_result.get('categories', []),
                     'confidence': 0.9,
                     'type': 'gemini'
-                }
-                
-                print(f'Gemini AI: "{query}" -> {response_data["categories"]}', file=sys.stderr)
-                
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps(response_data).encode('utf-8'))
+                })
                 return
-                
-            except Exception as e:
-                print(f'Gemini AI error: {e}, falling back to keyword matching', file=sys.stderr)
-                # Fall through to keyword matching
 
-        # Fallback: Smart keyword-to-category mapping
-        query_lower = query.lower()
-        categories = []
-        recommendations = []
-        
-        # Food-related
-        if any(word in query_lower for word in ['food', 'hungry', 'meal', 'eat', 'grocer', 'pantry']):
-            categories.append('Food Assistance')
-            recommendations.append('Found food banks, pantries, and meal programs in your area')
-        
-        # Healthcare
-        if any(word in query_lower for word in ['health', 'doctor', 'medical', 'clinic', 'sick', 'medicine']):
-            categories.append('Healthcare')
-            recommendations.append('Located free and low-cost clinics and medical services')
-        
-        # Housing
-        if any(word in query_lower for word in ['housing', 'shelter', 'home', 'rent', 'homeless']):
-            categories.append('Housing')
-            recommendations.append('Found emergency shelters and housing assistance programs')
-        
-        # Employment
-        if any(word in query_lower for word in ['job', 'work', 'employ', 'career', 'resume']):
-            categories.append('Employment')
-            recommendations.append('Discovered job centers and career development resources')
-        
-        # Mental Health
-        if any(word in query_lower for word in ['mental', 'therapy', 'counsel', 'depress', 'anxiety', 'stress']):
-            categories.append('Mental Health')
-            recommendations.append('Found counseling services and mental health support')
-        
-        # Financial
-        if any(word in query_lower for word in ['money', 'bill', 'pay', 'financial', 'debt', 'utility']):
-            categories.append('Financial Assistance')
-            recommendations.append('Located bill payment assistance and financial aid programs')
-        
-        # Education
-        if any(word in query_lower for word in ['education', 'learn', 'class', 'school', 'ged', 'tutor']):
-            categories.append('Education')
-            recommendations.append('Found educational programs and learning resources')
-        
-        # Transportation
-        if any(word in query_lower for word in ['transport', 'ride', 'bus', 'travel', 'car']):
-            categories.append('Transportation')
-            recommendations.append('Located transportation assistance and ride services')
-        
-        # Child Care
-        if any(word in query_lower for word in ['child', 'kid', 'daycare', 'babysit']):
-            categories.append('Child Care')
-            recommendations.append('Found child care services and assistance programs')
-        
-        # Senior Services
-        if any(word in query_lower for word in ['senior', 'elder', 'older', 'retire', 'aging']):
-            categories.append('Senior Services')
-            recommendations.append('Located services specifically for older adults')
-        
-        # Legal Aid
-        if any(word in query_lower for word in ['legal', 'lawyer', 'court', 'attorney', 'law']):
-            categories.append('Legal Aid')
-            recommendations.append('Found free legal assistance and legal services')
-        
-        # Veterans
-        if any(word in query_lower for word in ['veteran', 'military', 'army', 'navy', 'marine']):
-            categories.append('Veterans Services')
-            recommendations.append('Located veteran-specific programs and benefits')
+        except Exception as e:
+            print(f'AI error: {e}', file=sys.stderr)
+            self.send_error(500, str(e))
 
-        # Default response if no categories matched
-        if not categories:
-            recommendations = [
-                'Searching all available resources for your query',
-                'Try using specific keywords like "food", "health", "housing", or "jobs"',
-                'Browse categories to find the type of help you need'
-            ]
-            explanation = 'I\'m searching for resources that match your description. Try being more specific about what kind of help you need.'
-        else:
-            explanation = f'Based on your search, I recommend looking at {", ".join(categories)} resources.'
-
-        # Build response
-        response_data = {
-            'query': query,
-            'recommendations': recommendations[:3],
-            'explanation': explanation,
-            'categories': categories,
-            'confidence': 0.7 if categories else 0.4,
-            'type': 'keyword'
-        }
-
+    def send_json_response(self, data):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        self.wfile.write(json.dumps(response_data).encode('utf-8'))
-        
-        print(f'Keyword matching: "{query}" -> {len(categories)} categories', file=sys.stderr)
+        self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def send_error(self, code, message):
+        self.send_response(code)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps({'error': message}).encode('utf-8'))
 
     def do_OPTIONS(self):
         self.send_response(200)

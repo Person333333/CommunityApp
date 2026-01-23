@@ -8,10 +8,30 @@ import sys
 import json
 
 class RouterHandler(BaseHTTPRequestHandler):
+    def send_json_response(self, data):
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def send_error(self, code, message):
+        self.send_response(code)
+        self.send_header('Content-subtype', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps({'error': message}).encode('utf-8'))
+
     def do_POST(self):
         print(f"DEBUG: RouterHandler received POST request for {self.path}", file=sys.stderr)
         try:
-            path = self.path.split('?')[0].rstrip('/')
+            path = self.path.split('?')[0]
+            # Normalize path: remove trailing slash but keep it if it's just '/'
+            if len(path) > 1:
+                path = path.rstrip('/')
+            
+            print(f"DEBUG: Normalized path: '{path}'", file=sys.stderr)
+            
             if path == '/api/translate':
                 return TranslateHandler.do_POST(self)
             elif path == '/api/submissions':
@@ -23,7 +43,7 @@ class RouterHandler(BaseHTTPRequestHandler):
             elif path == '/api/ai':
                 return AIHandler.do_POST(self)
             else:
-                print(f"404 Not Found: {self.path}", file=sys.stderr)
+                print(f"404 Not Found: '{path}' (original: '{self.path}')", file=sys.stderr)
                 self.send_response(404)
                 self.end_headers()
                 self.wfile.write(b'Not Found')

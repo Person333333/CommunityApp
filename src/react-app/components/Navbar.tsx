@@ -54,7 +54,7 @@ export default function Navbar() {
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
             <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
-            <NavLink to="/submit">{t('nav.addResource')}</NavLink>
+            <NavLink to="/submit" data-tour="add-resource">{t('nav.addResource')}</NavLink>
             <NavLink to="/about">{t('nav.about')}</NavLink>
             <NavLink to="/references">{t('nav.references')}</NavLink>
 
@@ -110,7 +110,9 @@ export default function Navbar() {
               {/* Location Selector */}
               <LocationSelector />
               {/* Language Selector */}
-              <LanguageSelector />
+              <div data-tour="language-selector">
+                <LanguageSelector />
+              </div>
             </div>
           </div>
 

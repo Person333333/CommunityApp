@@ -3,29 +3,68 @@ import json
 import sys
 import os
 import time
+import psycopg2
 from deep_translator import GoogleTranslator
+from dotenv import load_dotenv
+
+load_dotenv('.env.local')
+load_dotenv()
 
 # Persistent Cache Configuration
 CACHE_FILE = 'translation_cache.json'
 translation_cache = {}
 
-def load_cache():
-    global translation_cache
-    if os.path.exists(CACHE_FILE):
-        try:
-            with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                translation_cache = json.load(f)
-            print(f"Loaded {sum(len(v) for v in translation_cache.values())} cached translations", file=sys.stderr)
-        except Exception as e:
-            print(f"Failed to load cache: {e}", file=sys.stderr)
-            translation_cache = {}
-
-def save_cache():
+def get_db_connection():
+    db_url = os.getenv('VITE_NEON_DATABASE_URL') or os.getenv('DATABASE_URL') or os.getenv('NEON_DATABASE_URL')
+    if not db_url:
+        return None
     try:
-        with open(CACHE_FILE, 'w', encoding='utf-8') as f:
-            json.dump(translation_cache, f, ensure_ascii=False, indent=2)
+        return psycopg2.connect(db_url)
+    except:
+        return None
+
+def fetch_from_db(src, dest, texts):
+    conn = get_db_connection()
+    if not conn:
+        return {}
+    
+    results = {}
+    try:
+        cur = conn.cursor()
+        # Query for all texts in the batch at once
+        cur.execute("""
+            SELECT original_text, translated_text 
+            FROM translations 
+            WHERE src_lang = %s AND dest_lang = %s AND original_text = ANY(%s)
+        """, (src, dest, texts))
+        
+        for orig, trans in cur.fetchall():
+            results[orig] = trans
+            
+        cur.close()
+        conn.close()
     except Exception as e:
-        print(f"Failed to save cache: {e}", file=sys.stderr)
+        print(f"DB Fetch Error: {e}", file=sys.stderr)
+    return results
+
+def save_to_db(src, dest, translations):
+    conn = get_db_connection()
+    if not conn:
+        return
+    
+    try:
+        cur = conn.cursor()
+        for orig, trans in translations.items():
+            cur.execute("""
+                INSERT INTO translations (src_lang, dest_lang, original_text, translated_text)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (src_lang, dest_lang, original_text) DO NOTHING
+            """, (src, dest, orig, trans))
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"DB Save Error: {e}", file=sys.stderr)
 
 # Load cache on startup
 load_cache()
@@ -64,7 +103,7 @@ class handler(BaseHTTPRequestHandler):
         missing_indices = []
         missing_texts = []
 
-        # 1. Check Cache
+        # 1. Check In-Memory Cache
         for i, original in enumerate(inputs):
             if original in translation_cache[cache_key_group]:
                 results[i] = translation_cache[cache_key_group][original]
@@ -72,7 +111,27 @@ class handler(BaseHTTPRequestHandler):
                 missing_indices.append(i)
                 missing_texts.append(original)
 
-        # 2. Translate Missing Items
+        # 2. Check Database Cache for items not in memory
+        if missing_texts:
+            db_results = fetch_from_db(src, dest, missing_texts)
+            still_missing_indices = []
+            still_missing_texts = []
+            
+            for i, idx in enumerate(missing_indices):
+                original = missing_texts[i]
+                if original in db_results:
+                    translated = db_results[original]
+                    results[idx] = translated
+                    # Update memory cache
+                    translation_cache[cache_key_group][original] = translated
+                else:
+                    still_missing_indices.append(idx)
+                    still_missing_texts.append(original)
+            
+            missing_indices = still_missing_indices
+            missing_texts = still_missing_texts
+
+        # 3. Translate Missing Items via AI
         if missing_texts:
             print(f"Translating {len(missing_texts)} new items to {dest} (Cached: {len(inputs) - len(missing_texts)})...", file=sys.stderr)
             
@@ -84,13 +143,13 @@ class handler(BaseHTTPRequestHandler):
                 translator = GoogleTranslator(source=src, target=target)
                 
                 # Batch process missing items
-                batch_size = 10
+                batch_size = 50
                 translated_batch_results = []
                 
                 for i in range(0, len(missing_texts), batch_size):
-                    # Rate limit protection
+                    # Rate limit protection - reduced for better responsiveness
                     if i > 0: 
-                        time.sleep(1) # 1s delay between batches
+                        time.sleep(0.1) 
                     
                     batch = missing_texts[i:i+batch_size]
                     try:
@@ -101,15 +160,20 @@ class handler(BaseHTTPRequestHandler):
                         # Fallback: return original text for failed items to prevent crash
                         translated_batch_results.extend(batch)
 
-                # Update Results and Cache
+                # Update Results, Database, and Memory Cache
+                new_translations_to_save = {}
                 for idx, t_text in enumerate(translated_batch_results):
                     original_idx = missing_indices[idx]
                     original_text = missing_texts[idx]
                     
                     results[original_idx] = t_text
                     translation_cache[cache_key_group][original_text] = t_text
+                    new_translations_to_save[original_text] = t_text
                 
-                # Save cache after updating
+                # Save to Database
+                save_to_db(src, dest, new_translations_to_save)
+                
+                # Save local file cache as backup
                 save_cache()
                 
             except Exception as e:

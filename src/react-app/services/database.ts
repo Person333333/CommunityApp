@@ -108,7 +108,9 @@ export async function fetchMySubmissionsFromDB(userId: string) {
     console.log('Fetching submissions for owner:', userId);
     // Query resource_submissions table
     const results = await sql`
-    SELECT * FROM resource_submissions 
+    SELECT *, 
+      CASE WHEN status = 'approved' THEN true ELSE false END as is_approved 
+    FROM resource_submissions 
       WHERE user_id = ${userId}
       ORDER BY created_at DESC
     `;

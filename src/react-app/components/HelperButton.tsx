@@ -67,7 +67,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
     try {
       // Use AI service if available, otherwise fallback to rule-based responses
       if (aiSearchService.isAvailable()) {
-        let response = await aiSearchService.generateHelpMessage(userMessage);
+        let response = await aiSearchService.generateHelpMessage(userMessage, chatHistory);
 
         // Translate response if not in English
         if (i18n.language !== 'en') {
@@ -102,7 +102,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
 
     try {
       if (aiSearchService.isAvailable()) {
-        let response = await aiSearchService.generateHelpMessage(question);
+        let response = await aiSearchService.generateHelpMessage(question, chatHistory);
 
         // Translate response if not in English
         if (i18n.language !== 'en') {
@@ -161,6 +161,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        data-tour="helper-button"
         className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full flex items-center justify-center shadow-lg z-40 hover:shadow-xl transition-shadow"
       >
         <AnimatePresence mode="wait">

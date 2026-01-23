@@ -25,5 +25,20 @@ export const SUPPORTED_LANGUAGES = [
     { code: 'fa', name: 'Persian' },
     { code: 'sw', name: 'Swahili' },
     { code: 'tl', name: 'Filipino' },
-    { code: 'ur', name: 'Urdu' }
+    { code: 'ur', name: 'Urdu' },
+    { code: 'ta', name: 'Tamil' },
+    { code: 'te', name: 'Telugu' },
+    { code: 'kn', name: 'Kannada' },
+    { code: 'ml', name: 'Malayalam' },
+    { code: 'gu', name: 'Gujarati' },
+    { code: 'mr', name: 'Marathi' },
+    { code: 'pa', name: 'Punjabi' },
+    { code: 'sv', name: 'Swedish' },
+    { code: 'no', name: 'Norwegian' },
+    { code: 'da', name: 'Danish' },
+    { code: 'fi', name: 'Finnish' },
+    { code: 'cs', name: 'Czech' },
+    { code: 'hu', name: 'Hungarian' },
+    { code: 'ro', name: 'Romanian' },
+    { code: 'sk', name: 'Slovak' }
 ].sort((a, b) => a.name.localeCompare(b.name));

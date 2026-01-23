@@ -15,6 +15,27 @@ export default defineConfig({
         target: 'http://localhost:3002',
         changeOrigin: true,
         secure: false,
+      },
+      '/api/ai': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/api/my_submissions': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/api/delete_resource': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/zip-api': {
+        target: 'https://www.zipcodeapi.com',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/zip-api/, ''),
       }
     }
   },

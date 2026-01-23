@@ -15,6 +15,13 @@ export default function LanguageSelector() {
     { code: i18n.language || 'en', name: (i18n.language || 'en').toUpperCase() };
 
   const handleLanguageChange = async (langCode: string) => {
+    // If switching to English, do it immediately
+    if (langCode === 'en') {
+      i18n.changeLanguage('en');
+      setIsOpen(false);
+      return;
+    }
+
     // Cache busting check
     const currentVersion = enTranslations.app.version;
     const cachedVersion = localStorage.getItem(`translation_version_${langCode}`);
