@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, FileText, Download } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import { useTranslation } from 'react-i18next';
 
@@ -91,8 +91,17 @@ export default function References() {
             transition={{ delay: 0.1 }}
           >
             <GlassCard>
-              <div className="mb-6">
+              <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-xl font-normal text-slate-300">{t('references.workLog')}</h2>
+                <a
+                  href="/documents/work-log.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-teal-300 hover:text-teal-200 transition-colors px-3 py-1.5 glass rounded-lg"
+                >
+                  <FileText className="w-4 h-4" />
+                  View Full PDF
+                </a>
               </div>
 
               <div className="space-y-4">
@@ -123,8 +132,17 @@ export default function References() {
             transition={{ delay: 0.2 }}
           >
             <GlassCard>
-              <div className="mb-6">
+              <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-xl font-normal text-slate-300">{t('references.copyright')}</h2>
+                <a
+                  href="/documents/copyright-checklist.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-teal-300 hover:text-teal-200 transition-colors px-3 py-1.5 glass rounded-lg"
+                >
+                  <Download className="w-4 h-4" />
+                  View Full PDF
+                </a>
               </div>
 
               <div className="grid gap-3">
