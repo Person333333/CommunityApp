@@ -28,24 +28,32 @@ class handler(BaseHTTPRequestHandler):
         """
 
         # Try multiple possible environment variable names for the API key
+        # VITE_ is for frontend, GEMINI_API_KEY is standard for backend
         gemini_key = (
+            os.environ.get('GEMINI_API_KEY') or
             os.environ.get('VITE_GEMINI_API_KEY') or 
-            os.environ.get('GEMINI_API_KEY') or 
             os.environ.get('NEXT_PUBLIC_GEMINI_API_KEY')
         )
         
         if not gemini_key or gemini_key == 'your_gemini_api_key_here':
-            error_msg = "Gemini API key not configured on Vercel. Please add 'VITE_GEMINI_API_KEY' or 'GEMINI_API_KEY' to your Vercel project environment variables."
+            error_msg = "Gemini API key not found. Please add 'GEMINI_API_KEY' (without VITE_ prefix) to your Vercel Project Settings."
             print(f"ERROR: {error_msg}", file=sys.stderr)
             self.send_error(500, error_msg)
             return
 
         try:
             genai.configure(api_key=gemini_key)
-            # Use 1.5-flash as it is the most stable widely available model
-            model = genai.GenerativeModel('gemini-1.5-flash')
             
-            print(f"DEBUG: AI Task started: {task}. Key masked: {gemini_key[:4]}...{gemini_key[-4:] if len(gemini_key) > 8 else ''}", file=sys.stderr)
+            # Try 1.5-flash first, fallback to pro if needed
+            try:
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                # Light test to see if model exists
+                print(f"DEBUG: Using gemini-1.5-flash", file=sys.stderr)
+            except:
+                model = genai.GenerativeModel('gemini-pro')
+                print(f"DEBUG: Fallback to gemini-pro", file=sys.stderr)
+            
+            print(f"DEBUG: AI Task started: {task}. Key detected.", file=sys.stderr)
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
