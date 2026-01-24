@@ -42,7 +42,8 @@ class handler(BaseHTTPRequestHandler):
 
         try:
             import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
+            # Use REST transport instead of gRPC for better compatibility with serverless (Vercel)
+            genai.configure(api_key=gemini_key, transport='rest')
             
             # Try 1.5-flash first
             try:
@@ -163,8 +164,10 @@ Respond in JSON format:
                 return
 
         except Exception as e:
-            print(f'AI error: {e}', file=sys.stderr)
-            self.send_error(500, str(e))
+            error_type = type(e).__name__
+            error_details = str(e)
+            print(f'AI error ({error_type}): {error_details}', file=sys.stderr)
+            self.send_error(500, f"AI Service Error ({error_type}): {error_details}")
 
     def send_json_response(self, data):
         self.send_response(200)
