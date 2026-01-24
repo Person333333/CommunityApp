@@ -2,7 +2,6 @@ from http.server import BaseHTTPRequestHandler
 import json
 import sys
 import os
-import google.generativeai as genai
 
 # Cache working model name globally to avoid redundant tests on serverless re-runs
 WORKING_MODEL_NAME = None
@@ -43,6 +42,7 @@ class handler(BaseHTTPRequestHandler):
             return
 
         try:
+            import google.generativeai as genai
             global WORKING_MODEL_NAME
             genai.configure(api_key=gemini_key, transport='rest')
             
