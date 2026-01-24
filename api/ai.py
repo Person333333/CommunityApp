@@ -2,6 +2,10 @@ from http.server import BaseHTTPRequestHandler
 import json
 import sys
 import os
+import google.generativeai as genai
+
+# Cache working model name globally to avoid redundant tests on serverless re-runs
+WORKING_MODEL_NAME = None
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -26,8 +30,6 @@ class handler(BaseHTTPRequestHandler):
         - Adding Resources: Click "Add Resource" in the navigation bar to share a new service with the community.
         """
 
-        # Try multiple possible environment variable names for the API key
-        # VITE_ is for frontend, GEMINI_API_KEY is standard for backend
         gemini_key = (
             os.environ.get('GEMINI_API_KEY') or
             os.environ.get('VITE_GEMINI_API_KEY') or 
@@ -41,32 +43,30 @@ class handler(BaseHTTPRequestHandler):
             return
 
         try:
-            import google.generativeai as genai
-            # Use REST transport instead of gRPC for better compatibility with serverless (Vercel)
+            global WORKING_MODEL_NAME
             genai.configure(api_key=gemini_key, transport='rest')
             
-            # Try most likely valid model names in order
-            model_names = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro']
-            model = None
-            last_model_err = ""
+            # If we don't have a cached working model, we must find one
+            if not WORKING_MODEL_NAME:
+                # Try most likely valid model names in order
+                model_names = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro', 'models/gemini-1.5-flash']
+                for m_name in model_names:
+                    try:
+                        test_model = genai.GenerativeModel(m_name)
+                        # We MUST call generate_content to verify the model is actually accessible
+                        test_model.generate_content("ping", request_options={"timeout": 5})
+                        WORKING_MODEL_NAME = m_name
+                        print(f"DEBUG: Successfully found working model: {m_name}", file=sys.stderr)
+                        break
+                    except Exception as test_err:
+                        print(f"DEBUG: Model {m_name} failed: {test_err}", file=sys.stderr)
+                        continue
             
-            for m_name in model_names:
-                try:
-                    model = genai.GenerativeModel(m_name)
-                    # Test if model is supported by doing a light content generation
-                    # (Note: this might be slow, but it's the only way to be sure without list_models)
-                    print(f"DEBUG: Trying model {m_name}", file=sys.stderr)
-                    # We don't want to actually call it every time if we can help it
-                    # but the error happened at model creation/usage time
-                    break
-                except Exception as e:
-                    last_model_err = str(e)
-                    continue
-            
-            if not model:
-                raise Exception(f"Failed to initialize any Gemini model. Last error: {last_model_err}")
-            
-            print(f"DEBUG: AI Task started: {task}.", file=sys.stderr)
+            if not WORKING_MODEL_NAME:
+                raise Exception("Could not find any accessible Gemini model after trying multiple names.")
+                
+            model = genai.GenerativeModel(WORKING_MODEL_NAME)
+            print(f"DEBUG: AI Task started: {task} using {WORKING_MODEL_NAME}", file=sys.stderr)
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
