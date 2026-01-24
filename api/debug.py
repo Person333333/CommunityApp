@@ -34,12 +34,24 @@ class handler(BaseHTTPRequestHandler):
             else:
                 conn = psycopg2.connect(db_url)
                 cur = conn.cursor()
-                # Check for translations table
-                cur.execute("SELECT COUNT(*) FROM translations")
-                count = cur.fetchone()[0]
+                # List all tables
+                cur.execute("""
+                    SELECT table_name 
+                    FROM information_schema.tables 
+                    WHERE table_schema = 'public'
+                """)
+                tables = [row[0] for row in cur.fetchall()]
+                
+                # Check specifics for translations if it exists
+                trans_count = 0
+                if 'translations' in tables:
+                    cur.execute("SELECT COUNT(*) FROM translations")
+                    trans_count = cur.fetchone()[0]
+                
                 diagnostics["database_status"] = {
                     "status": "Success",
-                    "translation_count": count
+                    "all_tables": tables,
+                    "translations_count": trans_count
                 }
                 cur.close()
                 conn.close()
