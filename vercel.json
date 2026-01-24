@@ -32,6 +32,14 @@
       "destination": "/api/my_submissions"
     },
     {
+      "source": "/api/ai",
+      "destination": "/api/ai"
+    },
+    {
+      "source": "/api/debug",
+      "destination": "/api/debug"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

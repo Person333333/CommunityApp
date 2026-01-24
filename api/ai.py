@@ -2,7 +2,6 @@ from http.server import BaseHTTPRequestHandler
 import json
 import sys
 import os
-import google.generativeai as genai
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -42,18 +41,19 @@ class handler(BaseHTTPRequestHandler):
             return
 
         try:
+            import google.generativeai as genai
             genai.configure(api_key=gemini_key)
             
-            # Try 1.5-flash first, fallback to pro if needed
+            # Try 1.5-flash first
             try:
                 model = genai.GenerativeModel('gemini-1.5-flash')
-                # Light test to see if model exists
                 print(f"DEBUG: Using gemini-1.5-flash", file=sys.stderr)
-            except:
+            except Exception as e:
+                print(f"DEBUG: 1.5-flash creation failed: {e}", file=sys.stderr)
                 model = genai.GenerativeModel('gemini-pro')
                 print(f"DEBUG: Fallback to gemini-pro", file=sys.stderr)
             
-            print(f"DEBUG: AI Task started: {task}. Key detected.", file=sys.stderr)
+            print(f"DEBUG: AI Task started: {task}.", file=sys.stderr)
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
