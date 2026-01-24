@@ -11,21 +11,43 @@ class handler(BaseHTTPRequestHandler):
         self.run_diagnostics()
 
     def run_diagnostics(self):
-        # NO EXTERNAL CALLS - JUST ENVIRONMENT CHECK
         diagnostics = {
             "status": "I AM ALIVE",
             "build_info": {
-                "timestamp": "2026-01-23 18:05:00 UTC",
-                "id": "final-heartbeat-v7"
+                "timestamp": "2026-01-24 10:25:00 UTC",
+                "id": "global-translation-check-v8"
             },
             "environment_variables": {
-                "GEMINI_API_KEY_PRESENT": "GEMINI_API_KEY" in os.environ,
-                "VITE_GEMINI_API_KEY_PRESENT": "VITE_GEMINI_API_KEY" in os.environ,
-                "DATABASE_URL_PRESENT": "DATABASE_URL" in os.environ or "VITE_NEON_DATABASE_URL" in os.environ
+                "GEMINI_API_KEY_PRESENT": "GEMINI_API_KEY" in os.environ or "VITE_GEMINI_API_KEY" in os.environ,
+                "NEON_DATABASE_URL_PRESENT": "NEON_DATABASE_URL" in os.environ or "VITE_NEON_DATABASE_URL" in os.environ
             },
-            "python_version": sys.version,
-            "path": sys.path
+            "database_status": "PENDING",
+            "python_version": sys.version
         }
+
+        # Test Database for Translations
+        try:
+            import psycopg2
+            db_url = os.environ.get('NEON_DATABASE_URL') or os.environ.get('VITE_NEON_DATABASE_URL')
+            if not db_url:
+                diagnostics["database_status"] = "Skipped: No URL"
+            else:
+                conn = psycopg2.connect(db_url)
+                cur = conn.cursor()
+                # Check for translations table
+                cur.execute("SELECT COUNT(*) FROM translations")
+                count = cur.fetchone()[0]
+                diagnostics["database_status"] = {
+                    "status": "Success",
+                    "translation_count": count
+                }
+                cur.close()
+                conn.close()
+        except Exception as e:
+            diagnostics["database_status"] = {
+                "status": f"Failed: {type(e).__name__}",
+                "error": str(e)
+            }
 
         self.send_response(200)
         self.send_header('Content-type', 'application/json')

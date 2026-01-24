@@ -50,15 +50,19 @@ def fetch_from_db(src, dest, texts):
     results = {}
     try:
         cur = conn.cursor()
-        # Query for all texts in the batch at once
-        cur.execute("""
-            SELECT original_text, translated_text 
-            FROM translations 
-            WHERE src_lang = %s AND dest_lang = %s AND original_text = ANY(%s)
-        """, (src, dest, texts))
-        
-        for orig, trans in cur.fetchall():
-            results[orig] = trans
+        if texts:
+            # Query for all texts in the batch at once
+            # Support fallback: if searching for 'auto', also check 'en' since most site content is English
+            query = """
+                SELECT original_text, translated_text 
+                FROM translations 
+                WHERE dest_lang = %s AND original_text = ANY(%s)
+                AND (src_lang = %s OR (%s = 'auto' AND src_lang = 'en'))
+            """
+            cur.execute(query, (dest, texts, src, src))
+            
+            for orig, trans in cur.fetchall():
+                results[orig] = trans
             
         cur.close()
         conn.close()
@@ -73,12 +77,17 @@ def save_to_db(src, dest, translations):
     
     try:
         cur = conn.cursor()
-        for orig, trans in translations.items():
-            cur.execute("""
-                INSERT INTO translations (src_lang, dest_lang, original_text, translated_text)
-                VALUES (%s, %s, %s, %s)
-                ON CONFLICT (src_lang, dest_lang, original_text) DO NOTHING
-            """, (src, dest, orig, trans))
+        # Use execute_values or a batch insert for better performance
+        from psycopg2.extras import execute_values
+        
+        data_to_insert = [(src, dest, orig, trans) for orig, trans in translations.items()]
+        
+        execute_values(cur, """
+            INSERT INTO translations (src_lang, dest_lang, original_text, translated_text)
+            VALUES %s
+            ON CONFLICT (src_lang, dest_lang, original_text) DO NOTHING
+        """, data_to_insert)
+        
         conn.commit()
         cur.close()
         conn.close()
