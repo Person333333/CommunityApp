@@ -45,10 +45,16 @@ class handler(BaseHTTPRequestHandler):
             import google.generativeai as genai
             genai.configure(api_key=gemini_key, transport='rest')
             
-            # Use gemini-1.5-flash-latest as the high-speed default
-            # If this becomes an issue, we'll catch it in the task block below
-            model_name = 'gemini-1.5-flash-latest'
-            model = genai.GenerativeModel(model_name)
+            # Use the exact model strings confirmed by your /api/debug output
+            # Crucially, many environments now require the 'models/' prefix
+            model_name = 'models/gemini-flash-latest'
+            
+            try:
+                model = genai.GenerativeModel(model_name)
+            except:
+                # Primary fallback from confirmed list
+                model_name = 'models/gemini-pro-latest'
+                model = genai.GenerativeModel(model_name)
             
             print(f"DEBUG: AI Task started: {task} using {model_name}", file=sys.stderr)
 
