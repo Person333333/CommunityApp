@@ -13,6 +13,11 @@ class handler(BaseHTTPRequestHandler):
 
     def run_diagnostics(self):
         diagnostics = {
+            "build_info": {
+                "timestamp": "2026-01-23 17:45:00 UTC",
+                "version": "v1.2",
+                "id": "debug-smoke-test-v2"
+            },
             "python_version": sys.version,
             "environment_variables": {
                 "GEMINI_API_KEY_PRESENT": "GEMINI_API_KEY" in os.environ,
@@ -28,15 +33,16 @@ class handler(BaseHTTPRequestHandler):
             if not key:
                 diagnostics["smoke_test"]["status"] = "Skipped: No Key"
             else:
+                # Force REST and use a very simple non-chat prompt for minimal latency
                 genai.configure(api_key=key, transport='rest')
                 model = genai.GenerativeModel('gemini-1.5-flash')
-                # Try a very simple prompt
-                response = model.generate_content("Say hello", request_options={"timeout": 10})
+                response = model.generate_content("Ping", request_options={"timeout": 5})
                 diagnostics["smoke_test"]["status"] = "Success"
-                diagnostics["smoke_test"]["response"] = response.text
+                diagnostics["smoke_test"]["response_text"] = response.text
         except Exception as e:
             diagnostics["smoke_test"]["status"] = f"Failed: {type(e).__name__}"
             diagnostics["smoke_test"]["error"] = str(e)
+            diagnostics["smoke_test"]["traceback"] = "Import Error" if "google" not in sys.modules else "Execution Error"
 
         # Try pip freeze
         try:
