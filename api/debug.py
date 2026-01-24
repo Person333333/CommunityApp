@@ -17,25 +17,26 @@ class handler(BaseHTTPRequestHandler):
             "environment_variables": {
                 "GEMINI_API_KEY_PRESENT": "GEMINI_API_KEY" in os.environ,
                 "VITE_GEMINI_API_KEY_PRESENT": "VITE_GEMINI_API_KEY" in os.environ,
-                "DATABASE_URL_PRESENT": "DATABASE_URL" in os.environ,
-                "VITE_NEON_DATABASE_URL_PRESENT": "VITE_NEON_DATABASE_URL" in os.environ,
             },
-            "installed_packages": [],
-            "imports": {}
+            "smoke_test": {}
         }
         
-        # Check imports
+        # Test Gemini
         try:
-            import google.generativeai
-            diagnostics["imports"]["google-generativeai"] = "Success"
+            import google.generativeai as genai
+            key = os.environ.get('GEMINI_API_KEY') or os.environ.get('VITE_GEMINI_API_KEY')
+            if not key:
+                diagnostics["smoke_test"]["status"] = "Skipped: No Key"
+            else:
+                genai.configure(api_key=key, transport='rest')
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                # Try a very simple prompt
+                response = model.generate_content("Say hello", request_options={"timeout": 10})
+                diagnostics["smoke_test"]["status"] = "Success"
+                diagnostics["smoke_test"]["response"] = response.text
         except Exception as e:
-            diagnostics["imports"]["google-generativeai"] = f"Failed: {str(e)}"
-
-        try:
-            import psycopg2
-            diagnostics["imports"]["psycopg2"] = "Success"
-        except Exception as e:
-            diagnostics["imports"]["psycopg2"] = f"Failed: {str(e)}"
+            diagnostics["smoke_test"]["status"] = f"Failed: {type(e).__name__}"
+            diagnostics["smoke_test"]["error"] = str(e)
 
         # Try pip freeze
         try:
