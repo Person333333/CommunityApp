@@ -42,6 +42,13 @@ class handler(BaseHTTPRequestHandler):
                 """)
                 tables = [row[0] for row in cur.fetchall()]
                 
+                # Check columns for resource tables
+                table_info = {}
+                for t_name in ['curated_resources', 'resource_submissions']:
+                    if t_name in tables:
+                        cur.execute(f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{t_name}'")
+                        table_info[t_name] = {row[0]: row[1] for row in cur.fetchall()}
+                
                 # Check specifics for translations if it exists
                 trans_count = 0
                 if 'translations' in tables:
@@ -51,6 +58,7 @@ class handler(BaseHTTPRequestHandler):
                 diagnostics["database_status"] = {
                     "status": "Success",
                     "all_tables": tables,
+                    "table_schemas": table_info,
                     "translations_count": trans_count
                 }
                 cur.close()
