@@ -33,16 +33,36 @@ class handler(BaseHTTPRequestHandler):
             if not key:
                 diagnostics["smoke_test"]["status"] = "Skipped: No Key"
             else:
-                # Force REST and use a very simple non-chat prompt for minimal latency
                 genai.configure(api_key=key, transport='rest')
-                model = genai.GenerativeModel('gemini-1.5-flash')
-                response = model.generate_content("Ping", request_options={"timeout": 5})
-                diagnostics["smoke_test"]["status"] = "Success"
-                diagnostics["smoke_test"]["response_text"] = response.text
-        except Exception as e:
-            diagnostics["smoke_test"]["status"] = f"Failed: {type(e).__name__}"
-            diagnostics["smoke_test"]["error"] = str(e)
-            diagnostics["smoke_test"]["traceback"] = "Import Error" if "google" not in sys.modules else "Execution Error"
+                
+                # List available models
+                models = []
+                try:
+                    for m in genai.list_models():
+                        if 'generateContent' in m.supported_generation_methods:
+                            models.append(m.name)
+                    diagnostics["available_models"] = models[:10] # Show first 10
+                except Exception as e:
+                    diagnostics["available_models"] = f"Error listing: {str(e)}"
+
+                # Try the most likely valid model names
+                test_models = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro']
+                last_err = ""
+                for m_name in test_models:
+                    try:
+                        model = genai.GenerativeModel(m_name)
+                        response = model.generate_content("Ping", request_options={"timeout": 5})
+                        diagnostics["smoke_test"]["status"] = "Success"
+                        diagnostics["smoke_test"]["model_used"] = m_name
+                        diagnostics["smoke_test"]["response_text"] = response.text
+                        break
+                    except Exception as e:
+                        last_err = f"{m_name}: {str(e)}"
+                        continue
+                
+                if diagnostics["smoke_test"].get("status") != "Success":
+                    diagnostics["smoke_test"]["status"] = "Failed all attempts"
+                    diagnostics["smoke_test"]["last_error"] = last_err
 
         # Try pip freeze
         try:

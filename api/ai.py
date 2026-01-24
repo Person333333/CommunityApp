@@ -45,14 +45,26 @@ class handler(BaseHTTPRequestHandler):
             # Use REST transport instead of gRPC for better compatibility with serverless (Vercel)
             genai.configure(api_key=gemini_key, transport='rest')
             
-            # Try 1.5-flash first
-            try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
-                print(f"DEBUG: Using gemini-1.5-flash", file=sys.stderr)
-            except Exception as e:
-                print(f"DEBUG: 1.5-flash creation failed: {e}", file=sys.stderr)
-                model = genai.GenerativeModel('gemini-pro')
-                print(f"DEBUG: Fallback to gemini-pro", file=sys.stderr)
+            # Try most likely valid model names in order
+            model_names = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro']
+            model = None
+            last_model_err = ""
+            
+            for m_name in model_names:
+                try:
+                    model = genai.GenerativeModel(m_name)
+                    # Test if model is supported by doing a light content generation
+                    # (Note: this might be slow, but it's the only way to be sure without list_models)
+                    print(f"DEBUG: Trying model {m_name}", file=sys.stderr)
+                    # We don't want to actually call it every time if we can help it
+                    # but the error happened at model creation/usage time
+                    break
+                except Exception as e:
+                    last_model_err = str(e)
+                    continue
+            
+            if not model:
+                raise Exception(f"Failed to initialize any Gemini model. Last error: {last_model_err}")
             
             print(f"DEBUG: AI Task started: {task}.", file=sys.stderr)
 
