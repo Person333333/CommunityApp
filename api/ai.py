@@ -43,39 +43,14 @@ class handler(BaseHTTPRequestHandler):
 
         try:
             import google.generativeai as genai
-            global WORKING_MODEL_NAME
             genai.configure(api_key=gemini_key, transport='rest')
             
-            # If we don't have a cached working model, we must find one
-            if not WORKING_MODEL_NAME:
-                # Try both v1 and v1beta
-                for api_ver in ['v1', 'v1beta']:
-                    if WORKING_MODEL_NAME: break
-                    try:
-                        # Re-configure with specific API version if needed
-                        # (Note: genai.configure doesn't take api_version, 
-                        # but some environments are sensitive to it)
-                        genai.configure(api_key=gemini_key, transport='rest')
-                        
-                        # Try most likely valid model names in order
-                        model_names = ['gemini-1.5-flash-latest', 'gemini-pro', 'gemini-1.5-flash', 'gemini-1.0-pro']
-                        for m_name in model_names:
-                            try:
-                                test_model = genai.GenerativeModel(m_name)
-                                test_model.generate_content("ping", request_options={"timeout": 5})
-                                WORKING_MODEL_NAME = m_name
-                                print(f"DEBUG: Successfully found working model: {m_name} (API implied)", file=sys.stderr)
-                                break
-                            except Exception as test_err:
-                                print(f"DEBUG: Model {m_name} on {api_ver} failed: {test_err}", file=sys.stderr)
-                                continue
-                    except:
-                        continue
-                if not WORKING_MODEL_NAME: # Check again after the loop
-                    raise Exception("Could not find any accessible Gemini model after trying multiple names.")
-                
-            model = genai.GenerativeModel(WORKING_MODEL_NAME)
-            print(f"DEBUG: AI Task started: {task} using {WORKING_MODEL_NAME}", file=sys.stderr)
+            # Use gemini-1.5-flash-latest as the high-speed default
+            # If this becomes an issue, we'll catch it in the task block below
+            model_name = 'gemini-1.5-flash-latest'
+            model = genai.GenerativeModel(model_name)
+            
+            print(f"DEBUG: AI Task started: {task} using {model_name}", file=sys.stderr)
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
