@@ -26,15 +26,22 @@ class handler(BaseHTTPRequestHandler):
         - Adding Resources: Click "Add Resource" in the navigation bar to share a new service with the community.
         """
 
-        gemini_key = os.environ.get('VITE_GEMINI_API_KEY')
+        # Try multiple possible environment variable names for the API key
+        gemini_key = (
+            os.environ.get('VITE_GEMINI_API_KEY') or 
+            os.environ.get('GEMINI_API_KEY') or 
+            os.environ.get('NEXT_PUBLIC_GEMINI_API_KEY')
+        )
+        
         if not gemini_key or gemini_key == 'your_gemini_api_key_here':
-            self.send_error(500, "Gemini API key not configured")
+            self.send_error(500, "Gemini API key not configured on Vercel. Please add 'VITE_GEMINI_API_KEY' or 'GEMINI_API_KEY' to your Vercel project environment variables.")
             return
 
         try:
             import google.generativeai as genai
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel('gemini-flash-latest')
+            # Use 1.5-flash as it is the most stable widely available model
+            model = genai.GenerativeModel('gemini-1.5-flash')
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
