@@ -82,7 +82,9 @@ export async function fetchResourcesFromDB(options: {
           audience, hours, services, tags,
           CASE WHEN status = 'approved' THEN true ELSE false END as is_approved,
           false as is_featured,
-          created_at, updated_at, user_id
+          submitted_at as created_at, 
+          submitted_at as updated_at,
+          user_id
         FROM resource_submissions ${submissionWhere}
       `;
     }
