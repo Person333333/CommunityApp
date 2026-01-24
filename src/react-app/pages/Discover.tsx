@@ -100,7 +100,7 @@ export default function Discover() {
           userId: user?.id
         });
 
-        let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+        let list: ResourceType[] = (data as ResourceType[]).filter((r: ResourceType) => r.address || (r.latitude && r.longitude));
 
         // Apply Favorites filter
         if (showFavoritesOnly && user) {

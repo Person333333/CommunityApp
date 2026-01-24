@@ -35,7 +35,7 @@ export default function Map() {
     const fetchResources = async () => {
       try {
         const data = await unifiedResourceService.fetchAllResources({ includeUserSubmitted: true });
-        const filtered = (data as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
+        const filtered = (data as ResourceType[]).filter((r: ResourceType) => r.address || (r.latitude && r.longitude));
         setOriginalResources(filtered);
         setAllResources(filtered);
         setResourcesLoading(false);

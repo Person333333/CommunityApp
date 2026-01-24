@@ -63,6 +63,26 @@ export default function Submit() {
     );
   };
 
+  const geocodeAddress = async (address: string, city: string, state: string, zip: string) => {
+    try {
+      const fullAddress = `${address}, ${city}, ${state} ${zip}`.trim();
+      if (!fullAddress) return null;
+
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}&limit=1`);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        return {
+          lat: data[0].lat,
+          lon: data[0].lon
+        };
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+    }
+    return null;
+  };
+
   // ... (keep handleChange and celebration code same until render) ...
 
   const handleChange = (
@@ -137,6 +157,19 @@ export default function Submit() {
 
     setValidating(false);
     setSubmitting(true);
+
+    let finalLat = formData.latitude;
+    let finalLng = formData.longitude;
+
+    // Auto-geocoding if coordinates are missing but address is present
+    if (!finalLat || !finalLng) {
+      const coords = await geocodeAddress(formData.address, formData.city, formData.state, formData.zip);
+      if (coords) {
+        finalLat = coords.lat.toString();
+        finalLng = coords.lon.toString();
+      }
+    }
+
     try {
       const response = await fetch('/api/submissions', {
         method: 'POST',
@@ -144,8 +177,8 @@ export default function Submit() {
         body: JSON.stringify({
           ...formData,
           user_id: user?.id,
-          latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-          longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+          latitude: finalLat ? parseFloat(finalLat) : null,
+          longitude: finalLng ? parseFloat(finalLng) : null,
           is_approved: true, // Make visible immediately as requested
           is_featured: false,
         }),
