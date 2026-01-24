@@ -141,7 +141,10 @@ export default function Discover() {
     // Apply local filter if enabled
     if (showLocalOnly && userLocation) {
       filtered = filtered.filter(resource => {
-        if (!resource.latitude || !resource.longitude) return false;
+        // If resource doesn't have coordinates, don't hide it from the list
+        // (It just won't show up as a pinpoint on the map)
+        if (!resource.latitude || !resource.longitude) return true;
+
         const distance = calculateDistance(
           userLocation[0],
           userLocation[1],

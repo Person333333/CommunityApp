@@ -98,7 +98,9 @@ export default function Map() {
 
     // Filter resources within the local radius
     return filtered.filter(resource => {
-      if (!resource.latitude || !resource.longitude) return false;
+      // If resource doesn't have coordinates, don't hide it from the sidebar list
+      if (!resource.latitude || !resource.longitude) return true;
+
       const distance = calculateDistance(
         userLocation[0],
         userLocation[1],
