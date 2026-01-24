@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import sys
 import os
+import google.generativeai as genai
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -34,14 +35,17 @@ class handler(BaseHTTPRequestHandler):
         )
         
         if not gemini_key or gemini_key == 'your_gemini_api_key_here':
-            self.send_error(500, "Gemini API key not configured on Vercel. Please add 'VITE_GEMINI_API_KEY' or 'GEMINI_API_KEY' to your Vercel project environment variables.")
+            error_msg = "Gemini API key not configured on Vercel. Please add 'VITE_GEMINI_API_KEY' or 'GEMINI_API_KEY' to your Vercel project environment variables."
+            print(f"ERROR: {error_msg}", file=sys.stderr)
+            self.send_error(500, error_msg)
             return
 
         try:
-            import google.generativeai as genai
             genai.configure(api_key=gemini_key)
             # Use 1.5-flash as it is the most stable widely available model
             model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            print(f"DEBUG: AI Task started: {task}. Key masked: {gemini_key[:4]}...{gemini_key[-4:] if len(gemini_key) > 8 else ''}", file=sys.stderr)
 
             if task == 'validate_submission':
                 submission = data.get('submission', {})
@@ -109,7 +113,15 @@ class handler(BaseHTTPRequestHandler):
                 User's latest question: "{current_message}"
                 """
                 response = model.generate_content(prompt)
-                self.send_json_response({'response': response.text.strip()})
+                
+                # Robust extraction of text to handle safety blocks
+                try:
+                    chat_response = response.text.strip()
+                except Exception as e:
+                    print(f"DEBUG: AI Chat Blocked or Failed: {e}", file=sys.stderr)
+                    chat_response = "I'm sorry, I encountered a safety filter or an error while generating a response. Please try rephrasing your question!"
+                
+                self.send_json_response({'response': chat_response})
                 return
 
             else: # Default search/categorization
