@@ -19,18 +19,24 @@ def load_cache():
     if os.path.exists(CACHE_FILE):
         try:
             with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                translation_cache = json.load(f)
-            print(f"Loaded {sum(len(v) for v in translation_cache.values())} cached translations", file=sys.stderr)
+                full_cache = json.load(f)
+            # ONLY PERSIST ENGLISH TO LOCAL FILE (to keep default loading fast)
+            # Everything else stays in Neon
+            translation_cache = {k: v for k, v in full_cache.items() if k.endswith(':en')}
+            print(f"Loaded {sum(len(v) for v in translation_cache.values())} English translations from local cache", file=sys.stderr)
         except Exception as e:
             print(f"Failed to load cache: {e}", file=sys.stderr)
             translation_cache = {}
 
 def save_cache():
     try:
-        with open(CACHE_FILE, 'w', encoding='utf-8') as f:
-            json.dump(translation_cache, f, ensure_ascii=False, indent=2)
+        # Only save English translations to the local JSON file
+        english_only = {k: v for k, v in translation_cache.items() if k.endswith(':en')}
+        if english_only:
+            with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+                json.dump(english_only, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        print(f"Failed to save cache: {e}", file=sys.stderr)
+        print(f"Failed to save English local cache: {e}", file=sys.stderr)
 
 
 def get_db_connection():
