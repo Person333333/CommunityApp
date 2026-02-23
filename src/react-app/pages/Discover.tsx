@@ -40,6 +40,10 @@ export default function Discover() {
   const [aiRecommendations, setAiRecommendations] = useState<any>(null);
   const [aiActive, setAiActive] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
+  const [localFavoriteIds, setLocalFavoriteIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem('community_favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -173,6 +177,30 @@ export default function Discover() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  const toggleLocalFavorite = (id: number) => {
+    setLocalFavoriteIds(prev => {
+      const updated = prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id];
+      localStorage.setItem('community_favorites', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const handleShare = async (resource: ResourceType) => {
+    const shareUrl = `${window.location.origin}/discover?resource=${resource.id}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: resource.title,
+          text: resource.description,
+          url: shareUrl,
+        });
+      } catch (err) { console.log('Share failed:', err); }
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+      alert('Link copied to clipboard!');
+    }
+  };
+
   const handleSearch = () => {
     // Hide AI recommendations when using regular search
     setAiActive(false);
@@ -264,12 +292,37 @@ export default function Discover() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
             {t('discover.title')}
           </h1>
-          <p className="text-xl text-slate-300">
+          <p className="text-xl text-slate-800 font-bold mb-8">
             {t('discover.subtitle')}
           </p>
+
+          <div className="flex flex-wrap gap-2 mb-6">
+            {[
+              { id: 'food', label: 'Food', icon: <Heart className="w-4 h-4" />, cat: 'Food Assistance' },
+              { id: 'housing', label: 'Housing', icon: <MapPin className="w-4 h-4" />, cat: 'Housing' },
+              { id: 'health', label: 'Healthcare', icon: <Phone className="w-4 h-4" />, cat: 'Healthcare' },
+              { id: 'mental', label: 'Mental Health', icon: <Sparkles className="w-4 h-4" />, cat: 'Mental Health' },
+              { id: 'job', label: 'Employment', icon: <Globe className="w-4 h-4" />, cat: 'Job Assistance' },
+              { id: 'emergency', label: 'Emergency', icon: <X className="w-4 h-4" />, cat: 'Emergency' }
+            ].map(need => (
+              <GlassButton
+                key={need.id}
+                size="sm"
+                variant={selectedCategories.includes(need.cat) ? 'primary' : 'secondary'}
+                onClick={() => {
+                  setSelectedCategories([need.cat]);
+                  setSearchParams({ category: need.cat });
+                }}
+                className="flex items-center gap-2 px-4 py-2 text-sm"
+              >
+                {need.icon}
+                {need.label}
+              </GlassButton>
+            ))}
+          </div>
         </motion.div>
 
         {/* Local Filter Notice */}
@@ -284,10 +337,10 @@ export default function Discover() {
                 <div className="flex items-center gap-3">
                   <MapPinned className="w-5 h-5 text-teal-300 flex-shrink-0" />
                   <div>
-                    <p className="text-slate-100 font-medium">
+                    <p className="text-blue-900 font-black uppercase tracking-widest text-lg">
                       {t('discover.showingLocal')}
                     </p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-700 font-bold">
                       {resources.length} {t('discover.ofResources')} {allResources.length} {t('discover.resourcesInArea')}
                     </p>
                   </div>
@@ -296,7 +349,7 @@ export default function Discover() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowLocalOnly(false)}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-slate-100 text-sm font-medium transition-colors flex-shrink-0"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-bold transition-all flex-shrink-0 shadow-lg"
                 >
                   {t('discover.showAll')}
                 </motion.button>
@@ -316,7 +369,7 @@ export default function Discover() {
           <GlassCard variant="strong">
             <div className="space-y-4">
               {/* Search input */}
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1 flex items-center gap-3 glass-teal rounded-full px-4 py-3">
                   <Search className="w-5 h-5 text-teal-300 flex-shrink-0" />
                   <input
@@ -329,7 +382,7 @@ export default function Discover() {
                       setAiActive(false);
                     }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-400"
+                    className="flex-1 bg-transparent border-none outline-none text-slate-900 placeholder-slate-500 font-bold text-lg"
                   />
                   {searchTerm && (
                     <button
@@ -340,95 +393,61 @@ export default function Discover() {
                     </button>
                   )}
                 </div>
-                <GlassButton variant="primary" onClick={handleSearch} className={`transition-all ${aiActive ? 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-500/25' : ''}`}>
-                  {t('discover.search')}
-                </GlassButton>
-                {aiSearchService.isAvailable() && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleAISearch}
-                    disabled={aiLoading}
-                    data-tour="ai-search"
-                    className={`relative px-4 py-2 rounded-full font-medium transition-all bg-gradient-to-r from-teal-600 to-amber-600 text-white shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40`}
-                  >
-                    <Sparkles className="w-5 h-5 inline mr-2" />
-                    {t('discover.ai')}
-                    {aiLoading && (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="absolute -top-1 -right-1 w-3 h-3 border-2 border-purple-400 border-t-transparent rounded-full"
-                      />
-                    )}
-                  </motion.button>
-                )}
-                {/* Translation button disabled - API issues */}
-                {/* {i18n.language !== 'en' && (
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <GlassButton variant="primary" onClick={handleSearch} className={`flex-1 sm:flex-initial transition-all ${aiActive ? 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-500/25' : ''}`}>
+                    {t('discover.search')}
+                  </GlassButton>
+                  {aiSearchService.isAvailable() && (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleAISearch}
+                      disabled={aiLoading}
+                      className={`relative flex-1 sm:flex-initial px-4 py-2 rounded-full font-medium transition-all bg-gradient-to-r from-teal-600 to-amber-600 text-white shadow-lg shadow-teal-500/25`}
+                    >
+                      <Sparkles className="w-5 h-5 inline" />
+                    </motion.button>
+                  )}
                   <GlassButton
                     variant="secondary"
-                    onClick={translateAllDescriptions}
-                    disabled={isTranslatingAll}
-                    className="relative"
+                    onClick={() => setShowFilters(!showFilters)}
                   >
-                    {isTranslatingAll ? (
-                      <>
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-4 h-4 border-2 border-teal-400 border-t-transparent rounded-full mr-2 inline-block"
-                        />
-                        Translating...
-                      </>
-                    ) : (
-                      t('discover.translateDescriptions')
-                    )}
-                  </GlassButton>
-                )} */}
-                <GlassButton
-                  variant="secondary"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <Filter className="w-5 h-5" />
-                </GlassButton>
-                <div data-tour="my-resources" className="flex gap-2">
-                  <GlassButton
-                    variant={showFavoritesOnly ? 'primary' : 'secondary'}
-                    onClick={() => {
-                      setShowFavoritesOnly(!showFavoritesOnly);
-                      if (!showFavoritesOnly) setShowMySubmissions(false);
-                    }}
-                  >
-                    <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-white' : ''}`} />
-                  </GlassButton>
-                  <GlassButton
-                    variant={showMySubmissions ? 'primary' : 'secondary'}
-                    onClick={() => {
-                      if (!user) {
-                        setAuthModal({
-                          isOpen: true,
-                          title: t('discover.mySubmissions'),
-                          message: t('discover.signInSubmissions'),
-                          type: 'submissions'
-                        });
-                        return;
-                      }
-                      setShowMySubmissions(!showMySubmissions);
-                      if (!showMySubmissions) setShowFavoritesOnly(false);
-                    }}
-                    title={t('discover.mySubmissions')}
-                  >
-                    <User className="w-5 h-5" />
+                    <Filter className="w-5 h-5" />
                   </GlassButton>
                 </div>
-                {!showLocalOnly && (
-                  <GlassButton
-                    variant="secondary"
-                    onClick={() => setShowLocalOnly(true)}
-                  >
-                    <MapPinned className="w-5 h-5" />
-                  </GlassButton>
-                )}
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+                <GlassButton
+                  variant={showFavoritesOnly ? 'primary' : 'secondary'}
+                  size="sm"
+                  className="aspect-square p-2"
+                  onClick={() => {
+                    setShowFavoritesOnly(!showFavoritesOnly);
+                    if (!showFavoritesOnly) setShowMySubmissions(false);
+                  }}
+                >
+                  <Heart className={`w-4 h-4 ${showFavoritesOnly ? 'fill-white' : ''}`} />
+                </GlassButton>
+                <GlassButton
+                  variant={showMySubmissions ? 'primary' : 'secondary'}
+                  size="sm"
+                  className="aspect-square p-2"
+                  onClick={() => {
+                    if (!user) {
+                      setAuthModal({
+                        isOpen: true,
+                        title: t('discover.mySubmissions'),
+                        message: t('discover.signInSubmissions'),
+                        type: 'submissions'
+                      });
+                      return;
+                    }
+                    setShowMySubmissions(!showMySubmissions);
+                    if (!showMySubmissions) setShowFavoritesOnly(false);
+                  }}
+                >
+                  <User className="w-4 h-4" />
+                </GlassButton>
               </div>
 
               {/* Filters panel */}
@@ -440,7 +459,7 @@ export default function Discover() {
                   className="pt-4 border-t border-white/10"
                 >
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                    <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">
                       {t('discover.categoryLabel')}
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
@@ -460,7 +479,7 @@ export default function Discover() {
                           }}
                           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategories.includes(category)
                             ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
-                            : 'glass-teal text-slate-200 hover:glass-strong'
+                            : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 shadow-sm'
                             }`}
                         >
                           {category}
@@ -474,7 +493,7 @@ export default function Discover() {
               {/* Active filters */}
               {hasActiveFilters && (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm text-slate-400">{t('discover.activeFilters')}</span>
+                  <span className="text-sm text-slate-700 font-bold">{t('discover.activeFilters')}</span>
                   {searchTerm && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -506,7 +525,7 @@ export default function Discover() {
                   ))}
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-teal-300 hover:text-teal-200 underline"
+                    className="text-sm text-blue-700 hover:text-blue-900 font-bold underline"
                   >
                     {t('discover.clearAll')}
                   </button>
@@ -589,14 +608,14 @@ export default function Discover() {
           ) : resources.length === 0 ? (
             <GlassCard variant="teal" className="text-center py-12">
               <div className="space-y-4">
-                <p className="text-xl text-slate-300">
+                <p className="text-xl text-slate-800 font-bold">
                   {aiActive && aiRecommendations ?
                     t('discover.noResourcesAI', { query: aiRecommendations.query }) :
                     t('discover.noResources')
                   }
                 </p>
-                <div className="text-sm text-slate-400 space-y-2">
-                  <p>{t('discover.tips')}</p>
+                <div className="text-sm text-slate-800 space-y-2">
+                  <p className="font-black text-slate-900 uppercase tracking-widest">{t('discover.tips')}</p>
                   <ul className="text-left max-w-md mx-auto space-y-1">
                     {aiActive && aiRecommendations ? (
                       <>
@@ -621,7 +640,7 @@ export default function Discover() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-sm text-slate-400 mb-4"
+                className="text-sm text-slate-700 mb-4 font-bold uppercase tracking-widest"
               >
                 {t('discover.findResources')} {resources.length} {t('home.stats.resources')}
               </motion.div>
@@ -663,12 +682,7 @@ export default function Discover() {
                           onClick={async (e) => {
                             e.stopPropagation();
                             if (!user) {
-                              setAuthModal({
-                                isOpen: true,
-                                title: t('saves.saveResource'),
-                                message: t('discover.signInFav'),
-                                type: 'favorite'
-                              });
+                              toggleLocalFavorite(resource.id);
                               return;
                             }
                             const isFav = favoriteIds.includes(resource.id);
@@ -682,10 +696,10 @@ export default function Discover() {
                               fetchFavorites();
                             }
                           }}
-                          className={`p-2 rounded-full pointer-events-auto ${user && favoriteIds.includes(resource.id) ? 'bg-amber-500/30' : 'glass'}`}
+                          className={`p-2 rounded-full pointer-events-auto ${(user && favoriteIds.includes(resource.id)) || (!user && localFavoriteIds.includes(resource.id)) ? 'bg-amber-500/30' : 'glass'}`}
                           aria-label="Toggle favorite"
                         >
-                          <Heart className={`w-5 h-5 ${user && favoriteIds.includes(resource.id) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`} />
+                          <Heart className={`w-5 h-5 ${(user && favoriteIds.includes(resource.id)) || (!user && localFavoriteIds.includes(resource.id)) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`} />
                         </button>
                       </div>
                       {/* Image restored */}
@@ -706,23 +720,23 @@ export default function Discover() {
 
                       <div className="flex-1 space-y-3">
                         <div>
-                          <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
+                          <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
                             {resource.category}
                           </span>
-                          <h3 className="text-xl font-bold text-slate-100 mt-1">
+                          <h3 className="text-xl font-bold text-slate-900 mt-1">
                             {resource.title}
                           </h3>
                         </div>
 
-                        <p className="text-slate-300 text-sm line-clamp-3">
+                        <p className="text-slate-700 text-sm line-clamp-3 leading-relaxed font-bold">
                           {getTranslatedDescription(resource)}
                         </p>
 
                         <div className="space-y-2 pt-2">
                           {resource.address && (
                             <div className="flex items-start gap-2 text-sm text-slate-400">
-                              <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5 text-teal-400" />
-                              <span>{resource.address}, {resource.city}, {resource.state}</span>
+                              <MapPin className="w-5 h-5 flex-shrink-0 text-blue-700" />
+                              <span className="text-slate-900 font-black text-lg">{resource.address}, {resource.city}, {resource.state}</span>
                             </div>
                           )}
                           {resource.phone && (
@@ -770,12 +784,12 @@ export default function Discover() {
 
                         {resource.services && (
                           <div className="pt-2">
-                            <div className="text-slate-200 text-sm font-semibold mb-1">{t('discover.services')}</div>
+                            <div className="text-slate-900 text-sm font-black uppercase tracking-widest mb-1">{t('discover.services')}</div>
                             <div className="flex flex-wrap gap-1">
                               {resource.services.split(',').map((service, i) => (
                                 <span
                                   key={i}
-                                  className="text-xs px-2 py-1 glass-ochre rounded-full text-slate-300"
+                                  className="text-xs px-3 py-1.5 bg-blue-50 text-blue-900 font-bold rounded-full border border-blue-100"
                                 >
                                   {service.trim()}
                                 </span>
@@ -796,6 +810,22 @@ export default function Discover() {
                             </div>
                           </div>
                         )}
+
+                        <div className="flex gap-1 pt-3 mt-auto border-t border-white/5">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleShare(resource); }}
+                            className="flex-1 flex items-center justify-center gap-1.5 p-1.5 rounded-lg glass hover:bg-white/10 text-[10px] text-slate-300 transition-colors"
+                          >
+                            <Globe className="w-3.5 h-3.5" /> Share
+                          </button>
+                          <a
+                            href={`mailto:?subject=Helpful Resource: ${resource.title}&body=Check out this community resource: ${window.location.origin}/discover?resource=${resource.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-1.5 rounded-lg glass hover:bg-white/10 text-slate-300 transition-colors"
+                          >
+                            <Phone className="w-3.5 h-3.5 rotate-0" />
+                          </a>
+                        </div>
                       </div>
 
                       {/* Actions */}

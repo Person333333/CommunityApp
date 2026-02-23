@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote } from 'lucide-react';
 import { Link } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -26,7 +26,6 @@ export default function Home() {
       return;
     }
 
-    // Fetch featured resources and stats
     const fetchData = async () => {
       try {
         const [featuredData, statsData] = await Promise.all([
@@ -36,7 +35,6 @@ export default function Home() {
 
         let filtered = (featuredData as ResourceType[]).filter((r: ResourceType) => r.address && r.latitude && r.longitude);
 
-        // Translate if needed
         const currentLang = i18n.language;
         if (currentLang !== 'en') {
           const { TranslateService } = await import('@/react-app/services/translateService');
@@ -46,7 +44,7 @@ export default function Home() {
         setAllFeaturedResources(filtered);
         setStats({
           totalResources: (statsData as any).total || 0,
-          categories: [] // Categories not currently returned by stats API
+          categories: []
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -56,7 +54,6 @@ export default function Home() {
     fetchData();
   }, [userLocation, i18n.language]);
 
-  // Handle translation when language changes (re-translate existing)
   useEffect(() => {
     const translateExisting = async () => {
       if (i18n.language === 'en' || allFeaturedResources.length === 0) return;
@@ -69,14 +66,12 @@ export default function Home() {
     translateExisting();
   }, [i18n.language]);
 
-  // Filter featured resources by distance - only show local featured resources
   const LOCAL_RADIUS_KM = 300;
   const featuredResources = useMemo(() => {
     if (!userLocation || allFeaturedResources.length === 0) {
       return [];
     }
 
-    // Only show local featured resources
     return allFeaturedResources.filter(resource => {
       if (!resource.latitude || !resource.longitude) return false;
       const distance = calculateDistance(
@@ -86,10 +81,9 @@ export default function Home() {
         resource.longitude
       );
       return distance <= LOCAL_RADIUS_KM;
-    }).slice(0, 3); // Limit to 3 for display
+    });
   }, [allFeaturedResources, userLocation]);
 
-  // Don't render home page content until we have location
   if (locationLoading || !userLocation) {
     return (
       <LocationRequest
@@ -102,25 +96,24 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section with Parallax */}
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* Animated background gradients */}
-        <motion.div
-          className="absolute inset-0 opacity-30"
-          animate={{
-            background: [
-              'radial-gradient(circle at 20% 50%, rgba(15, 118, 110, 0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 50%, rgba(245, 158, 11, 0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 50% 80%, rgba(15, 118, 110, 0.3) 0%, transparent 50%)',
-            ],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], x: [0, 100, 0], y: [0, 50, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1.2, 1, 1.2], x: [0, -100, 0], y: [0, -50, 0] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl"
+          />
+        </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            {/* Compass animation */}
+          <div className="max-w-6xl mx-auto text-center">
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -130,208 +123,260 @@ export default function Home() {
               <AnimatedCompass />
             </motion.div>
 
-            {/* Hero text */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-center space-y-6"
+              className="space-y-6"
             >
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-                <span className="block text-amber-400 mb-2">{t('home.hero.title1')}</span>
-                <span className="block gradient-text">{t('home.hero.title2')}</span>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+                <span className="block text-blue-600 mb-2">{t('home.hero.title1')}</span>
+                <span className="block text-slate-900 border-b-4 border-blue-500 w-fit mx-auto pb-2">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto">
+              <p className="text-xl sm:text-2xl text-slate-700 max-w-3xl mx-auto font-bold leading-relaxed">
                 {t('home.hero.subtitle')}
               </p>
 
-              {/* Search bar */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="max-w-2xl mx-auto mt-8"
               >
-                <div className="glass-strong rounded-full p-2 flex items-center gap-2">
-                  <Search className="w-6 h-6 text-teal-300 ml-4" />
-                  <input
-                    type="text"
-                    placeholder={t('home.hero.searchPlaceholder')}
-                    className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-400 px-4 py-3"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        const value = e.currentTarget.value;
-                        if (value) {
-                          window.location.href = `/discover?q=${encodeURIComponent(value)}`;
+                <div className="bg-white rounded-3xl sm:rounded-full p-2 flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10 border border-slate-100">
+                  <div className="flex items-center gap-2 w-full flex-1">
+                    <Search className="w-6 h-6 text-blue-500 ml-4" />
+                    <input
+                      type="text"
+                      placeholder={t('home.hero.searchPlaceholder')}
+                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-400 px-4 py-3 w-full font-medium"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          const value = e.currentTarget.value;
+                          if (value) window.location.href = `/discover?q=${encodeURIComponent(value)}`;
                         }
-                      }
-                    }}
-                  />
-                  <Link to="/discover">
-                    <GlassButton variant="primary" size="md">
+                      }}
+                    />
+                  </div>
+                  <Link to="/discover" className="w-full sm:w-auto">
+                    <GlassButton variant="primary" size="md" className="w-full">
                       {t('home.hero.explore')}
                     </GlassButton>
                   </Link>
                 </div>
               </motion.div>
 
-              {/* Quick stats */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex justify-center gap-8 mt-8 text-sm text-slate-300"
+                className="flex justify-center flex-wrap gap-8 mt-12 text-sm text-slate-700 font-bold uppercase tracking-wider"
               >
                 <div className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-teal-400" />
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                    <Heart className="w-4 h-4 text-blue-600" />
+                  </div>
                   <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
                 <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center">
+                    <Compass className="w-4 h-4 text-indigo-600" />
+                  </div>
                   <span>12+ {t('home.stats.categories')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-teal-400" />
+                  <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-amber-600" />
+                  </div>
                   <span>{t('home.stats.localSupport')}</span>
                 </div>
               </motion.div>
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator removed */}
       </section>
 
-      {/* Featured Resources Spotlight */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-6xl">
+      {/* Spotlight Carousel */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
+        <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
+            <h2 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
               {t('home.spotlight.title')}
             </h2>
-            <p className="text-xl text-slate-300">
+            <p className="text-xl text-slate-700 font-bold">
               {t('home.spotlight.subtitle')}
             </p>
           </motion.div>
 
           {featuredResources.length === 0 ? (
-            <GlassCard variant="teal" className="text-center py-12">
-              <p className="text-xl text-slate-300">
-                {t('home.spotlight.noResources')}
-              </p>
+            <GlassCard className="text-center py-12">
+              <p className="text-xl text-slate-700 font-bold">{t('home.spotlight.noResources')}</p>
             </GlassCard>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featuredResources.map((resource, index) => (
-                <motion.div
-                  key={resource.id}
-                  initial={{ opacity: 0, y: 30, rotateY: -15 }}
-                  whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <GlassCard
-                    hover
-                    variant="teal"
-                    className="h-full cursor-pointer"
-                    onClick={() => setSelectedResource(resource)}
-                  >
-                    <div className="space-y-4">
-                      {/* Image restored */}
-                      {resource.image_url && (
-                        <div className="aspect-video rounded-lg overflow-hidden">
-                          <img
-                            src={resource.image_url}
-                            alt={resource.title}
-                            className="w-full h-full object-cover"
-                          />
+            <div className="relative overflow-hidden px-4">
+              <motion.div
+                className="flex gap-8"
+                animate={{ x: [0, -1032, 0] }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              >
+                {[...featuredResources, ...featuredResources].map((resource, index) => (
+                  <div key={`${resource.id}-${index}`} className="w-full md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
+                    <GlassCard
+                      hover
+                      className="h-full cursor-pointer bg-white border border-slate-100 shadow-sm"
+                      onClick={() => setSelectedResource(resource)}
+                    >
+                      <div className="space-y-4">
+                        {resource.image_url && (
+                          <div className="aspect-video rounded-lg overflow-hidden relative">
+                            <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
+                            <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full">Featured</div>
+                          </div>
+                        )}
+                        <div>
+                          <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">{resource.category}</span>
+                          <h3 className="text-xl font-bold text-slate-900 mt-2 line-clamp-1">{resource.title}</h3>
                         </div>
-                      )}
-                      <div>
-                        <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">
-                          {resource.category}
-                        </span>
-                        <h3 className="text-2xl font-bold text-slate-100 mt-2">
-                          {resource.title}
-                        </h3>
+                        <p className="text-slate-700 text-sm line-clamp-2 leading-relaxed font-medium">{resource.description}</p>
+                        <div className="flex items-center justify-between pt-2">
+                          <button className="text-blue-700 font-bold text-xs flex items-center gap-2 hover:text-blue-900 transition-colors">
+                            Explore Details <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-slate-300 line-clamp-3">
-                        {resource.description}
-                      </p>
-                      <div className="flex items-center justify-between pt-4">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedResource(resource);
-                          }}
-                          className="text-teal-300 hover:text-teal-200 flex items-center gap-2 group"
-                        >
-                          {t('home.spotlight.learnMore')}
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      </div>
-                    </div>
-                  </GlassCard>
-                </motion.div>
-              ))}
+                    </GlassCard>
+                  </div>
+                ))}
+              </motion.div>
             </div>
           )}
+        </div>
+      </section>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="text-center mt-12"
-          >
-            <Link to="/discover">
-              <GlassButton variant="primary" size="lg">
-                {t('home.spotlight.viewAll')}
+      {/* Impact Stats */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16">
+            <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.impact.title')}</h2>
+            <p className="text-xl text-slate-700 font-bold">{t('home.impact.subtitle')}</p>
+          </motion.div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-4xl font-bold text-blue-600 mb-2">1,247+</div>
+              <div className="text-slate-700 text-xs font-bold uppercase tracking-widest">{t('home.impact.neighborsHelped')}</div>
+            </div>
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.totalResources}+</div>
+              <div className="text-slate-700 text-xs font-bold uppercase tracking-widest">{t('home.impact.localOrgs')}</div>
+            </div>
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-4xl font-bold text-amber-600 mb-2">12+</div>
+              <div className="text-slate-700 text-xs font-bold uppercase tracking-widest">{t('home.impact.neighborhoods')}</div>
+            </div>
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
+              <div className="text-slate-700 text-xs font-bold uppercase tracking-widest">Community Care</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-slate-50/30">
+        <div className="container mx-auto max-w-6xl px-4">
+          <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.stories.title')}</h2>
+            <p className="text-xl text-slate-700 font-bold">{t('home.stories.subtitle')}</p>
+          </motion.div>
+          <div className="relative overflow-hidden px-4">
+            <motion.div
+              className="flex gap-8"
+              animate={{ x: [0, -1200, 0] }}
+              transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+            >
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-blue-500 shadow-xl">
+                <Quote className="w-10 h-10 text-blue-100 mb-6" />
+                <blockquote className="text-lg text-slate-800 font-bold italic mb-8 leading-relaxed">
+                  "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">MS</div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-lg">Maria Sanchez</div>
+                    <div className="text-sm font-semibold text-blue-600 uppercase">Northgate Neighbor</div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-indigo-500 shadow-xl">
+                <Quote className="w-10 h-10 text-indigo-100 mb-6" />
+                <blockquote className="text-lg text-slate-800 font-bold italic mb-8 leading-relaxed">
+                  "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xl">JT</div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-lg">James Thompson</div>
+                    <div className="text-sm font-semibold text-indigo-600 uppercase">Community Organizer</div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-amber-500 shadow-xl">
+                <Quote className="w-10 h-10 text-amber-100 mb-6" />
+                <blockquote className="text-lg text-slate-800 font-bold italic mb-8 leading-relaxed">
+                  "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-xl">LW</div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-lg">Linda Wright</div>
+                    <div className="text-sm font-semibold text-amber-600 uppercase">Single Parent & Educator</div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              {/* Duplicate for seamless loop */}
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-blue-500 shadow-xl">
+                <Quote className="w-10 h-10 text-blue-100 mb-6" />
+                <blockquote className="text-lg text-slate-800 font-bold italic mb-8 leading-relaxed">
+                  "When my family was facing a sudden medical emergency..."
+                </blockquote>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">MS</div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-lg">Maria Sanchez</div>
+                    <div className="text-sm font-semibold text-blue-600 uppercase">Northgate Neighbor</div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 px-4 bg-white">
+        <div className="container mx-auto max-w-4xl">
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] text-center text-white shadow-2xl p-16">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">{t('home.cta.title')}</h2>
+            <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-bold">{t('home.cta.subtitle')}</p>
+            <Link to="/submit">
+              <GlassButton variant="primary" size="lg" className="bg-white text-blue-700 hover:bg-slate-50 border border-blue-200 px-12 h-16 text-xl shadow-xl hover:shadow-2xl">
+                {t('home.cta.button')}
               </GlassButton>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-4xl">
-          <GlassCard variant="strong" className="text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">
-                {t('home.cta.title')}
-              </h2>
-              <p className="text-lg text-slate-300 mb-8">
-                {t('home.cta.subtitle')}
-              </p>
-              <Link to="/submit">
-                <GlassButton variant="primary" size="lg">
-                  {t('home.cta.button')}
-                </GlassButton>
-              </Link>
-            </motion.div>
-          </GlassCard>
-        </div>
-      </section>
-
-      {/* Resource Detail Modal */}
-      <ResourceDetailModal
-        resource={selectedResource}
-        isOpen={!!selectedResource}
-        onClose={() => setSelectedResource(null)}
-      />
+      <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
     </div>
   );
 }

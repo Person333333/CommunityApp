@@ -28,16 +28,27 @@
   },
   "home": {
     "hero": {
-      "title1": "Find Your Path",
-      "title2": "to Community Support",
-      "subtitle": "Discover local resources, connect with support services, and find the help you need—all in one place",
-      "searchPlaceholder": "Search for food banks, housing, healthcare, and more...",
-      "explore": "Explore"
+      "title1": "Your Neighborhood,",
+      "title2": "Your Community",
+      "subtitle": "Connecting neighbors with local support, one hand at a time. Find the help you need, right where you live.",
+      "searchPlaceholder": "Find help in your neighborhood...",
+      "explore": "Explore Community"
     },
     "stats": {
-      "resources": "Resources",
-      "categories": "Categories",
-      "localSupport": "Local Support"
+      "resources": "Community Resources",
+      "categories": "Support Categories",
+      "localSupport": "Help Nearby"
+    },
+    "impact": {
+      "title": "Our Community Impact",
+      "subtitle": "Seeing how we grow together",
+      "neighborsHelped": "Neighbors Helped",
+      "localOrgs": "Local Organizations",
+      "neighborhoods": "Neighborhoods Served"
+    },
+    "stories": {
+      "title": "Real Stories from Our Community",
+      "subtitle": "Neighbors helping neighbors"
     },
     "spotlight": {
       "title": "Spotlight Resources",
@@ -203,6 +214,16 @@
     "errorVerify": "Verification incomplete. Please try again.",
     "errorGeneric": "An error occurred"
   },
+  "account": {
+    "title": "Your Account",
+    "subtitle": "Manage your profile and preferences",
+    "avatar": "Avatar",
+    "viewResources": "View Resources",
+    "submitResource": "Submit a Resource",
+    "signOut": "Sign Out",
+    "pleaseSignIn": "Please sign in",
+    "signInToManage": "You need to sign in to manage your account."
+  },
   "submit": {
     "title": "Submit a Resource",
     "subtitle": "Help us build a comprehensive directory of community support services",
@@ -254,11 +275,11 @@
       }
     },
     "success": {
-      "title": "Submission Received!",
-      "text": "Thank you for helping to build our community resource directory. Your submission will be reviewed and published shortly.",
-      "submitAnother": "Submit Another",
-      "browse": "Browse Resources",
-      "viewSubmissions": "View My Submissions"
+      "title": "Thank You, Neighbor!",
+      "text": "Your contribution helps strengthen our community. Our team will review the details to ensure they help as many people as possible.",
+      "submitAnother": "Share More Help",
+      "browse": "Explore Resources",
+      "viewSubmissions": "My Shared Resources"
     }
   },
   "mySubmissions": {

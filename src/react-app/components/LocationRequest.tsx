@@ -35,30 +35,32 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
             transition={{ duration: 2, repeat: loading ? Infinity : 0, ease: "linear" }}
             className="inline-block mb-6"
           >
-            <MapPin className="w-16 h-16 text-teal-400 mx-auto" />
+            <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center shadow-inner">
+              <MapPin className="w-10 h-10 text-blue-600" />
+            </div>
           </motion.div>
 
-          <h2 className="text-3xl font-bold text-slate-100 mb-4">
+          <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-widest">
             {t('location.title')}
           </h2>
 
-          <p className="text-slate-300 mb-6">
+          <p className="text-slate-800 mb-8 font-bold leading-relaxed">
             {t('location.description')}
           </p>
 
           {/* ZIP Code Option */}
           <div className="mb-6">
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-6">
               <button
                 onClick={() => setUseZip(false)}
-                className={`flex-1 py-2 px-4 rounded-lg transition-colors ${!useZip ? 'bg-teal-500/30 border border-teal-400/50' : 'glass hover:bg-white/10'
+                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${!useZip ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                   }`}
               >
                 {t('location.useMyLocation')}
               </button>
               <button
                 onClick={() => setUseZip(true)}
-                className={`flex-1 py-2 px-4 rounded-lg transition-colors ${useZip ? 'bg-teal-500/30 border border-teal-400/50' : 'glass hover:bg-white/10'
+                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${useZip ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                   }`}
               >
                 {t('location.useZipCode')}
@@ -126,7 +128,7 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
             )}
           </GlassButton>
 
-          <p className="text-xs text-slate-400 mt-4">
+          <p className="text-xs text-slate-600 mt-6 font-bold uppercase tracking-widest">
             {t('location.hint')}
           </p>
         </GlassCard>

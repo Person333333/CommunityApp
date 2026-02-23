@@ -5,20 +5,51 @@
 
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  
-  /* Glassmorphism color palette */
-  --glass-teal: rgba(15, 118, 110, 0.15);
-  --glass-teal-strong: rgba(15, 118, 110, 0.3);
-  --glass-ochre: rgba(245, 158, 11, 0.15);
-  --glass-ochre-strong: rgba(245, 158, 11, 0.3);
-  --glass-slate: rgba(248, 250, 252, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-border-strong: rgba(255, 255, 255, 0.3);
-  
-  /* Gradients */
-  --gradient-hero: linear-gradient(135deg, #0f766e 0%, #f59e0b 100%);
-  --gradient-warm: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #dc2626 100%);
-  --gradient-cool: linear-gradient(135deg, #06b6d4 0%, #0f766e 50%, #065f46 100%);
+
+  /* NEW Light & Warm Palette */
+  --bg-primary: #ffffff;
+  /* White */
+  --bg-secondary: #f8fafc;
+  /* Very light blue-gray */
+
+  --primary: #2563eb;
+  /* Bright trustworthy blue */
+  --primary-light: #dbeafe;
+  /* Light blue for backgrounds */
+  --primary-hover: #1d4ed8;
+
+  --secondary: #4f46e5;
+  /* Royal Indigo */
+  --secondary-light: #e0e7ff;
+  /* Light indigo */
+  --secondary-hover: #4338ca;
+
+  --accent: #f59e0b;
+  /* Warmth orange */
+  --accent-light: #fef3c7;
+
+  /* Darkened for better contrast/accessibility */
+  --text-primary: #0f172a;
+  /* Slate 900 */
+  --text-secondary: #1e293b;
+  /* Slate 800 */
+  --text-muted: #334155;
+  /* Slate 700 */
+
+  /* Light Mode Glassmorphism - Slightly more visible borders */
+  --glass-white: rgba(255, 255, 255, 0.8);
+  --glass-white-strong: rgba(255, 255, 255, 0.95);
+  --glass-blue: rgba(37, 99, 235, 0.05);
+  --glass-green: rgba(79, 70, 229, 0.05);
+  /* Now Indigo */
+  --glass-border: rgba(148, 163, 184, 0.4);
+  /* Slate 300 */
+  --glass-border-strong: rgba(100, 116, 139, 0.6);
+
+  /* Gradients - Warmer and more approachable */
+  --gradient-trust: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  --gradient-hero: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
 }
 
 * {
@@ -30,45 +61,56 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0f0e 0%, #1a2522 50%, #2d3c38 100%);
-  color: #f8fafc;
+  background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1e3a8a;
+  /* Deep blue for headings */
 }
 
-/* Glassmorphism utilities */
+/* Updated Glassmorphism utilities for light mode */
 .glass {
-  background: var(--glass-slate);
+  background: var(--glass-white);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
 }
 
 .glass-teal {
-  background: var(--glass-teal);
+  background: var(--glass-blue);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-ochre {
-  background: var(--glass-ochre);
+  background: rgba(245, 158, 11, 0.05);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-strong {
-  background: rgba(248, 250, 252, 0.2);
+  background: var(--glass-white-strong);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 /* Smooth scroll */
@@ -80,7 +122,7 @@ html {
   html {
     scroll-behavior: auto;
   }
-  
+
   *,
   *::before,
   *::after {
@@ -92,11 +134,14 @@ html {
 
 /* Custom animations */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-15px);
   }
 }
 
@@ -104,28 +149,33 @@ html {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
   }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.1);
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
   }
-  100% {
-    background-position: 1000px 0;
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -133,12 +183,12 @@ html {
   animation: float 6s ease-in-out infinite;
 }
 
-.animate-rotate {
-  animation: rotate 20s linear infinite;
+.animate-slide-left {
+  animation: slide-in-left 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.animate-slide-right {
+  animation: slide-in-right 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Gradient text */
@@ -149,26 +199,44 @@ html {
   background-clip: text;
 }
 
-/* Focus styles */
-*:focus-visible {
-  outline: 2px solid #0f766e;
-  outline-offset: 2px;
+/* Category Badges - High contrast */
+.badge-food {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #dbeafe;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 10px;
+.badge-housing {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+.badge-health {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--glass-teal-strong);
-  border-radius: 5px;
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+
+  button,
+  a,
+  input {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 118, 110, 0.5);
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body,
+html {
+  overflow-x: hidden;
+  width: 100%;
 }

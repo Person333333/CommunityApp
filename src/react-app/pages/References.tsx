@@ -59,10 +59,10 @@ export default function References() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-light text-slate-100 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
             {t('references.title')}
           </h1>
-          <p className="text-xl text-slate-400">
+          <p className="text-xl text-slate-800 font-bold">
             {t('references.subtitle')}
           </p>
         </motion.div>
@@ -70,27 +70,27 @@ export default function References() {
         <div className="space-y-12">
           {/* Professional Documents Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <GlassCard variant="teal" hover className="flex flex-col items-center text-center p-8">
-              <FileText className="w-12 h-12 text-teal-400 mb-4" />
-              <h2 className="text-xl font-medium text-slate-200 mb-4">{t('references.workLog')}</h2>
+            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-blue-50 border-blue-100 shadow-xl">
+              <FileText className="w-12 h-12 text-blue-600 mb-4" />
+              <h2 className="text-xl font-bold text-blue-900 mb-4">{t('references.workLog')}</h2>
               <a
                 href="/documents/work-log.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 glass rounded-xl text-teal-300 hover:text-teal-200 transition-all font-medium"
+                className="w-full py-3 bg-white hover:bg-slate-50 border border-blue-200 rounded-xl text-blue-700 transition-all font-bold shadow-sm"
               >
                 View PDF Work Log
               </a>
             </GlassCard>
 
-            <GlassCard variant="teal" hover className="flex flex-col items-center text-center p-8">
-              <Download className="w-12 h-12 text-amber-400 mb-4" />
-              <h2 className="text-xl font-medium text-slate-200 mb-4">{t('references.copyright')}</h2>
+            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-amber-50 border-amber-100 shadow-xl">
+              <Download className="w-12 h-12 text-amber-600 mb-4" />
+              <h2 className="text-xl font-bold text-amber-900 mb-4">{t('references.copyright')}</h2>
               <a
                 href="/documents/copyright-checklist.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 glass rounded-xl text-amber-300 hover:text-amber-200 transition-all font-medium"
+                className="w-full py-3 bg-white hover:bg-slate-50 border border-amber-200 rounded-xl text-amber-700 transition-all font-bold shadow-sm"
               >
                 View PDF Checklist
               </a>
@@ -98,15 +98,15 @@ export default function References() {
           </section>
 
           {/* Clean Lists */}
-          <GlassCard className="p-8 space-y-10">
+          <GlassCard className="p-8 space-y-10 bg-white border-slate-100 shadow-2xl">
             {/* Tech Stack */}
             <div>
-              <h2 className="text-2xl font-light text-slate-200 mb-6 border-b border-white/10 pb-2">Tech Stack</h2>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Tech Stack</h2>
               <ul className="space-y-3">
                 {techStack.map((item, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-400">
-                    <span className="text-slate-300">{item.category}</span>
-                    <span className="text-sm italic">{item.tech}</span>
+                  <li key={i} className="flex justify-between items-center text-slate-700">
+                    <span className="text-slate-900 font-bold">{item.category}</span>
+                    <span className="text-sm italic font-bold text-indigo-700">{item.tech}</span>
                   </li>
                 ))}
               </ul>
@@ -114,12 +114,12 @@ export default function References() {
 
             {/* Libraries */}
             <div>
-              <h2 className="text-2xl font-light text-slate-200 mb-6 border-b border-white/10 pb-2">Additional Libraries</h2>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Additional Libraries</h2>
               <ul className="space-y-3">
                 {additionalLibraries.map((lib, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-400">
-                    <span className="text-slate-300 font-mono text-sm">{lib.name}</span>
-                    <span className="text-sm italic text-right">{lib.purpose}</span>
+                  <li key={i} className="flex justify-between items-center text-slate-700">
+                    <span className="text-indigo-900 font-mono text-sm font-bold">{lib.name}</span>
+                    <span className="text-sm italic font-bold text-right">{lib.purpose}</span>
                   </li>
                 ))}
               </ul>
@@ -127,16 +127,16 @@ export default function References() {
 
             {/* Image Links */}
             <div>
-              <h2 className="text-2xl font-light text-slate-200 mb-6 border-b border-white/10 pb-2">Resource Image Sources</h2>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Resource Image Sources</h2>
               <ul className="space-y-3">
                 {resourceImages.map((img, i) => (
                   <li key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 overflow-hidden">
-                    <span className="text-slate-300 text-sm whitespace-nowrap">{img.title}</span>
+                    <span className="text-slate-900 text-sm font-bold whitespace-nowrap">{img.title}</span>
                     <a
                       href={img.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-teal-400 hover:text-teal-300 transition-colors truncate sm:max-w-[60%]"
+                      className="text-xs text-blue-600 hover:text-blue-800 transition-colors truncate sm:max-w-[60%] font-bold"
                     >
                       {img.url}
                     </a>
@@ -147,16 +147,16 @@ export default function References() {
 
             {/* Research Links */}
             <div>
-              <h2 className="text-2xl font-light text-slate-200 mb-6 border-b border-white/10 pb-2">Research & Documentation</h2>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Research & Documentation</h2>
               <ul className="space-y-3">
                 {researchLinks.map((link, i) => (
                   <li key={i} className="flex justify-between items-center">
-                    <span className="text-slate-300 text-sm">{link.title}</span>
+                    <span className="text-slate-900 text-sm font-bold">{link.title}</span>
                     <a
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-teal-400 hover:text-teal-300"
+                      className="text-blue-600 hover:text-blue-800 font-bold"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </a>

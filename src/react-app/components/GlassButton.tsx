@@ -15,12 +15,12 @@ export default function GlassButton({
   className = '',
   ...props
 }: GlassButtonProps) {
-  const baseClass = 'glass font-medium rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-transparent';
+  const baseClass = `font-bold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${variant === 'ghost' ? 'glass' : ''}`;
 
   const variantClass = {
-    primary: 'bg-gradient-to-r from-teal-600 to-amber-600 text-white hover:shadow-lg hover:shadow-teal-500/50',
-    secondary: 'glass-teal text-teal-100 hover:glass-strong',
-    ghost: 'hover:glass-teal text-slate-100',
+    primary: 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl shadow-blue-500/10',
+    secondary: 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-xl shadow-indigo-500/10',
+    ghost: 'hover:bg-slate-100 text-slate-800',
   }[variant];
 
   const sizeClass = {

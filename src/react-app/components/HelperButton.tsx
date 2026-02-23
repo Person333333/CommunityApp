@@ -162,7 +162,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
         data-tour="helper-button"
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full flex items-center justify-center shadow-lg z-40 hover:shadow-xl transition-shadow"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-2xl z-40 hover:scale-110 transition-transform border-4 border-white/20"
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -201,12 +201,12 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
             <GlassCard variant="strong" className="flex flex-col h-full">
               {/* Header */}
               <div className="flex items-center gap-3 p-4 border-b border-white/10">
-                <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-amber-500 rounded-full flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                  <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-slate-100">{t('helper.title')}</h3>
-                  <p className="text-xs text-slate-400">{t('helper.subtitle')}</p>
+                  <h3 className="font-bold text-slate-900 uppercase tracking-widest text-sm">{t('helper.title')}</h3>
+                  <p className="text-xs text-slate-600 font-medium">{t('helper.subtitle')}</p>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={action.action}
-                      className="flex items-center gap-2 px-3 py-2 glass-teal rounded-lg text-xs text-slate-200 hover:glass-strong transition-all"
+                      className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-lg text-xs text-slate-800 font-bold transition-all shadow-sm"
                     >
                       {action.icon}
                       <span>{action.label}</span>
@@ -239,9 +239,9 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.role === 'user'
-                        ? 'bg-gradient-to-r from-teal-600 to-amber-600 text-white'
-                        : 'glass-teal text-slate-200'
+                      className={`max-w-[85%] p-4 rounded-2xl text-sm shadow-md ${msg.role === 'user'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-tr-none'
+                        : 'bg-white border border-slate-100 text-slate-800 rounded-tl-none font-bold'
                         }`}
                     >
                       {msg.content.split('\n').map((line, i) => (
@@ -267,11 +267,11 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex justify-start"
                   >
-                    <div className="glass-teal p-3 rounded-lg">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="bg-slate-50 border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                      <div className="flex gap-1.5">
+                        <div className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2.5 h-2.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2.5 h-2.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </motion.div>
@@ -287,14 +287,14 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder={t('helper.inputPlaceholder')}
-                    className="flex-1 glass-teal border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold transition-all"
                   />
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSendMessage}
                     disabled={!message.trim() || isTyping}
-                    className="w-8 h-8 bg-gradient-to-r from-teal-600 to-amber-600 rounded-lg flex items-center justify-center disabled:opacity-50"
+                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center disabled:opacity-50 shadow-lg hover:shadow-blue-500/20"
                   >
                     <Send className="w-4 h-4 text-white" />
                   </motion.button>

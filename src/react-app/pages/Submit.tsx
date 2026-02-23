@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Send, Sparkles, Lock, User, MapPin, Loader2 } from 'lucide-react';
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
-import { Link } from 'react-router';
+import { Send, Sparkles, MapPin, Loader2, Info } from 'lucide-react';
+import { useUser } from '@clerk/clerk-react';
 
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -83,14 +82,11 @@ export default function Submit() {
     return null;
   };
 
-  // ... (keep handleChange and celebration code same until render) ...
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -100,15 +96,12 @@ export default function Submit() {
     }
   };
 
-
-
   const [validating, setValidating] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
-    // 1. Basic syntactic validation
     const newErrors: Record<string, string> = {};
     if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.description.trim()) newErrors.description = "Description is required";
@@ -136,7 +129,6 @@ export default function Submit() {
       return;
     }
 
-    // 2. AI Validation
     setValidating(true);
     try {
       const aiResponse = await aiSearchService.validateSubmission(formData);
@@ -150,9 +142,6 @@ export default function Submit() {
       setErrors({ general: "Unable to verify content at this time. Please try again in 1 minute." });
       setValidating(false);
       return;
-    } finally {
-      // We don't setValidating(false) here because we want to be explicit about when it ends
-      // If we returned early, we already set it to false.
     }
 
     setValidating(false);
@@ -161,7 +150,6 @@ export default function Submit() {
     let finalLat = formData.latitude;
     let finalLng = formData.longitude;
 
-    // Auto-geocoding if coordinates are missing but address is present
     if (!finalLat || !finalLng) {
       const coords = await geocodeAddress(formData.address, formData.city, formData.state, formData.zip);
       if (coords) {
@@ -179,7 +167,7 @@ export default function Submit() {
           user_id: user?.id,
           latitude: finalLat ? parseFloat(finalLat) : null,
           longitude: finalLng ? parseFloat(finalLng) : null,
-          is_approved: true, // Make visible immediately as requested
+          is_approved: true,
           is_featured: false,
         }),
       });
@@ -209,48 +197,36 @@ export default function Submit() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 bg-white">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", duration: 0.6 }}
           className="max-w-2xl w-full"
         >
-          <GlassCard variant="strong" className="text-center">
+          <GlassCard className="text-center p-12 bg-white border border-slate-100 shadow-2xl">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-teal-500 to-amber-500 flex items-center justify-center"
+              className="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-lg"
             >
-              <Sparkles className="w-10 h-10 text-white" />
+              <Sparkles className="w-12 h-12" />
             </motion.div>
 
-            <h2 className="text-3xl sm:text-4xl font-bold gradient-text mb-4">
+            <h2 className="text-4xl font-bold text-blue-900 mb-4">
               {t('submit.success.title')}
             </h2>
 
-            <p className="text-lg text-slate-300 mb-8">
+            <p className="text-xl text-slate-700 mb-10 font-bold">
               {t('submit.success.text')}
             </p>
 
             <div className="flex gap-4 justify-center flex-wrap">
-              <GlassButton
-                variant="primary"
-                onClick={() => setSuccess(false)}
-              >
+              <GlassButton variant="primary" onClick={() => setSuccess(false)} className="px-8 h-14">
                 {t('submit.success.submitAnother')}
               </GlassButton>
-              <GlassButton
-                variant="secondary"
-                onClick={() => window.location.href = '/my-submissions'}
-              >
-                {t('submit.success.viewSubmissions')}
-              </GlassButton>
-              <GlassButton
-                variant="secondary"
-                onClick={() => window.location.href = '/discover'}
-              >
+              <GlassButton variant="secondary" onClick={() => window.location.href = '/discover'} className="px-8 h-14">
                 {t('submit.success.browse')}
               </GlassButton>
             </div>
@@ -261,354 +237,237 @@ export default function Submit() {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto max-w-3xl">
+    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="container mx-auto max-w-4xl text-slate-100">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
+          <h1 className="text-5xl font-bold text-blue-900 mb-4">
             {t('submit.title')}
           </h1>
-          <p className="text-xl text-slate-300">
+          <p className="text-xl text-slate-800 font-bold max-w-2xl mx-auto leading-relaxed">
             {t('submit.subtitle')}
           </p>
         </motion.div>
 
-        <SignedOut>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="max-w-2xl mx-auto"
-          >
-            <GlassCard className="text-center">
-              <div className="py-12">
-                <Lock className="w-16 h-16 mx-auto text-teal-400 mb-6" />
-                <h2 className="text-2xl font-bold text-slate-100 mb-4">
-                  {t('submit.signInRequired.title')}
-                </h2>
-                <p className="text-lg text-slate-300 mb-8">
-                  {t('submit.signInRequired.text')}
-                </p>
-                <Link to="/sign-in">
-                  <GlassButton size="lg" className="inline-flex items-center gap-2">
-                    <User className="w-5 h-5" />
-                    {t('submit.signInRequired.button')}
-                  </GlassButton>
-                </Link>
-              </div>
-            </GlassCard>
-          </motion.div>
-        </SignedOut>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <GlassCard className="bg-white border border-slate-100 shadow-xl overflow-hidden p-0">
+            <div className="bg-blue-700 p-8 flex items-center gap-6 text-white text-lg font-black">
+              <Info className="w-8 h-8" />
+              <p className="uppercase tracking-widest">{t('submit.form.resourceInfo')}</p>
+            </div>
+            <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-10">
+              {errors.general && (
+                <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg text-red-800 font-medium shadow-sm">
+                  {errors.general}
+                </div>
+              )}
 
-        <SignedIn>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-6 max-w-2xl mx-auto"
-          >
-            <GlassCard variant="teal" className="text-center">
-              <div className="flex items-center gap-3 justify-center">
-                <User className="w-5 h-5 text-teal-300" />
-                <span className="text-slate-100">
-                  {t('submit.signInRequired.signedInAs')} <span className="text-teal-300 font-medium">{user?.primaryEmailAddress?.emailAddress}</span>
-                </span>
-              </div>
-            </GlassCard>
-          </motion.div>
+              <div className="space-y-8">
+                <FormField
+                  label={t('submit.form.title')}
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  error={errors.title}
+                  required
+                  placeholder={t('submit.form.titlePlaceholder')}
+                />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <GlassCard variant="strong">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {errors.general && (
-                  <div className="glass-ochre p-4 rounded-lg text-red-300">
-                    {errors.general}
-                  </div>
-                )}
+                <FormField
+                  label={t('submit.form.description')}
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  error={errors.description}
+                  required
+                  multiline
+                  rows={4}
+                  placeholder={t('submit.form.descriptionPlaceholder')}
+                />
 
-                {/* Resource Information */}
-                <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
-                    {t('submit.form.resourceInfo')}
-                  </h3>
-
-                  <FormField
-                    label={t('submit.form.title')}
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    error={errors.title}
-                    required
-                    placeholder={t('submit.form.titlePlaceholder')}
-                  />
-
-                  <FormField
-                    label={t('submit.form.description')}
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    error={errors.description}
-                    required
-                    multiline
-                    rows={4}
-                    placeholder={t('submit.form.descriptionPlaceholder')}
-                  />
-
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      {t('submit.form.category')} <span className="text-red-400">*</span>
+                    <label className="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-widest">
+                      {t('submit.form.category')} <span className="text-red-500">*</span>
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
                       required
-                      className="w-full glass-teal rounded-lg px-4 py-3 text-slate-100 bg-transparent border-none outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium appearance-none"
                     >
                       <option value="" disabled>{t('submit.form.selectCategory')}</option>
                       {categories.map(cat => (
-                        <option key={cat} value={cat} className="bg-slate-800">
+                        <option key={cat} value={cat}>
                           {t(`categories.${cat}`, cat)}
                         </option>
                       ))}
                     </select>
                     {errors.category && (
-                      <p className="mt-1 text-sm text-red-400">{errors.category}</p>
+                      <p className="mt-2 text-sm text-red-500 font-medium">{errors.category}</p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.audience')}
-                      name="audience"
-                      value={formData.audience}
-                      onChange={handleChange}
-                      error={errors.audience}
-                      placeholder={t('submit.form.audiencePlaceholder')}
-                    />
-
-                    <FormField
-                      label={t('submit.form.hours')}
-                      name="hours"
-                      value={formData.hours}
-                      onChange={handleChange}
-                      error={errors.hours}
-                      placeholder={t('submit.form.hoursPlaceholder')}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.services')}
-                      name="services"
-                      value={formData.services}
-                      onChange={handleChange}
-                      error={errors.services}
-                      placeholder={t('submit.form.servicesPlaceholder')}
-                    />
-
-                    <FormField
-                      label={t('submit.form.tags')}
-                      name="tags"
-                      value={formData.tags}
-                      onChange={handleChange}
-                      error={errors.tags}
-                      placeholder={t('submit.form.tagsPlaceholder')}
-                    />
-                  </div>
-                </div>
-
-                {/* Contact Information */}
-                <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
-                    {t('submit.form.contactInfo')}
-                  </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.contactName')}
-                      name="contact_name"
-                      value={formData.contact_name}
-                      onChange={handleChange}
-                      error={errors.contact_name}
-                      required
-                      placeholder={t('submit.form.contactNamePlaceholder')}
-                    />
-
-                    <FormField
-                      label={t('submit.form.email')}
-                      name="contact_email"
-                      type="email"
-                      value={formData.contact_email}
-                      onChange={handleChange}
-                      error={errors.contact_email}
-                      required
-                      placeholder="your@email.com"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.phone')}
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      error={errors.phone}
-                      placeholder="(555) 123-4567"
-                    />
-
-                    <FormField
-                      label={t('submit.form.website')}
-                      name="website"
-                      type="url"
-                      value={formData.website}
-                      onChange={handleChange}
-                      error={errors.website}
-                      placeholder="https://example.com"
-                    />
-                  </div>
-                </div>
-
-                {/* Location */}
-                <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
-                    {t('submit.form.location')}
-                  </h3>
-
                   <FormField
-                    label={t('submit.form.address')}
-                    name="address"
-                    value={formData.address}
+                    label={t('submit.form.audience')}
+                    name="audience"
+                    value={formData.audience}
                     onChange={handleChange}
-                    error={errors.address}
-                    placeholder="123 Main Street"
-                  />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.city')}
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      error={errors.city}
-                      placeholder="Seattle"
-                    />
-
-                    <FormField
-                      label={t('submit.form.state')}
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      error={errors.state}
-                      placeholder="WA"
-                    />
-
-                    <FormField
-                      label={t('submit.form.zip')}
-                      name="zip"
-                      value={formData.zip}
-                      onChange={handleChange}
-                      error={errors.zip}
-                      placeholder="98101"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                      label={t('submit.form.latitude')}
-                      name="latitude"
-                      type="number"
-                      step="any"
-                      value={formData.latitude}
-                      onChange={handleChange}
-                      placeholder="e.g., 47.6062"
-                    />
-                    <FormField
-                      label={t('submit.form.longitude')}
-                      name="longitude"
-                      type="number"
-                      step="any"
-                      value={formData.longitude}
-                      onChange={handleChange}
-                      placeholder="e.g., -122.3321"
-                    />
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      onClick={handleGetLocation}
-                      disabled={locating}
-                      className="text-sm text-teal-300 hover:text-teal-200 flex items-center gap-1 transition-colors"
-                    >
-                      {locating ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
-                      {locating ? t('submit.form.locating') : t('submit.form.useMyLocation')}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Media */}
-                <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-slate-100 border-b border-white/10 pb-2">
-                    {t('submit.form.media')}
-                  </h3>
-                  <FormField
-                    label={t('submit.form.imageUrl')}
-                    name="image_url"
-                    type="url"
-                    value={formData.image_url}
-                    onChange={handleChange}
-                    placeholder="https://images.unsplash.com/photo-..."
+                    error={errors.audience}
+                    placeholder={t('submit.form.audiencePlaceholder')}
                   />
                 </div>
 
-                {/* Submit Button */}
-                <div className="pt-6">
-                  <GlassButton
-                    variant="primary"
-                    size="lg"
-                    type="submit"
-                    disabled={submitting || validating}
-                    className="w-full"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <FormField
+                    label={t('submit.form.hours')}
+                    name="hours"
+                    value={formData.hours}
+                    onChange={handleChange}
+                    error={errors.hours}
+                    placeholder={t('submit.form.hoursPlaceholder')}
+                  />
+                  <FormField
+                    label={t('submit.form.services')}
+                    name="services"
+                    value={formData.services}
+                    onChange={handleChange}
+                    error={errors.services}
+                    placeholder={t('submit.form.servicesPlaceholder')}
+                  />
+                </div>
+              </div>
+
+              <div className="pt-10 border-t border-slate-100 space-y-8">
+                <h3 className="text-lg font-bold text-blue-900 uppercase tracking-widest flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">02</span>
+                  {t('submit.form.contactInfo')}
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <FormField
+                    label={t('submit.form.contactName')}
+                    name="contact_name"
+                    value={formData.contact_name}
+                    onChange={handleChange}
+                    error={errors.contact_name}
+                    required
+                    placeholder={t('submit.form.contactNamePlaceholder')}
+                  />
+
+                  <FormField
+                    label={t('submit.form.email')}
+                    name="contact_email"
+                    type="email"
+                    value={formData.contact_email}
+                    onChange={handleChange}
+                    error={errors.contact_email}
+                    required
+                    placeholder="your@email.com"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-10 border-t border-slate-100 space-y-8">
+                <h3 className="text-lg font-bold text-blue-900 uppercase tracking-widest flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">03</span>
+                  {t('submit.form.location')}
+                </h3>
+
+                <FormField
+                  label={t('submit.form.address')}
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  error={errors.address}
+                  placeholder="123 Main Street"
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <FormField
+                    label={t('submit.form.city')}
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    error={errors.city}
+                    placeholder="Seattle"
+                  />
+                  <FormField
+                    label={t('submit.form.state')}
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    error={errors.state}
+                    placeholder="WA"
+                  />
+                  <FormField
+                    label={t('submit.form.zip')}
+                    name="zip"
+                    value={formData.zip}
+                    onChange={handleChange}
+                    error={errors.zip}
+                    placeholder="98101"
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleGetLocation}
+                    disabled={locating}
+                    className="text-sm text-blue-700 hover:text-blue-900 font-black flex items-center gap-2 transition-colors bg-blue-100 px-6 py-3 rounded-full shadow-sm"
                   >
-                    {validating ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                        />
-                        {t('submit.form.verifying')}
-                      </span>
-                    ) : submitting ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                        />
-                        {t('submit.form.submitting')}
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <Send className="w-5 h-5" />
-                        {t('submit.form.button')}
-                      </span>
-                    )}
-                  </GlassButton>
+                    {locating ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
+                    {locating ? t('submit.form.locating') : t('submit.form.useMyLocation')}
+                  </button>
                 </div>
-              </form>
-            </GlassCard>
-          </motion.div>
-        </SignedIn>
+              </div>
+
+              <div className="pt-12">
+                <GlassButton
+                  variant="primary"
+                  size="lg"
+                  type="submit"
+                  disabled={submitting || validating}
+                  className="w-full h-16 text-xl rounded-2xl shadow-xl shadow-blue-600/20"
+                >
+                  {validating ? (
+                    <span className="flex items-center justify-center gap-3">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-6 h-6 border-3 border-white border-t-transparent rounded-full"
+                      />
+                      {t('submit.form.verifying')}
+                    </span>
+                  ) : submitting ? (
+                    <span className="flex items-center justify-center gap-3">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-6 h-6 border-3 border-white border-t-transparent rounded-full"
+                      />
+                      {t('submit.form.submitting')}
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-3">
+                      <Send className="w-6 h-6" />
+                      {t('submit.form.button')}
+                    </span>
+                  )}
+                </GlassButton>
+              </div>
+            </form>
+          </GlassCard>
+        </motion.div>
       </div>
     </div >
   );
@@ -641,16 +500,11 @@ function FormField({
 }) {
   const [focused, setFocused] = useState(false);
 
-  const inputClasses = "w-full glass-teal rounded-lg px-4 py-3 text-slate-100 bg-transparent border-none outline-none focus:ring-2 focus:ring-teal-500 transition-all";
-
   return (
-    <div>
-      <motion.label
-        className="block text-sm font-medium text-slate-300 mb-2"
-        animate={{ color: focused ? '#5eead4' : '#cbd5e1' }}
-      >
-        {label} {required && <span className="text-red-400">*</span>}
-      </motion.label>
+    <div className="space-y-3">
+      <label className={`block text-sm font-black uppercase tracking-widest transition-colors ${focused ? 'text-blue-600' : 'text-slate-800'}`}>
+        {label} {required && <span className="text-red-600">*</span>}
+      </label>
       {multiline ? (
         <textarea
           name={name}
@@ -661,7 +515,7 @@ function FormField({
           required={required}
           rows={rows}
           placeholder={placeholder}
-          className={inputClasses}
+          className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-4 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
         />
       ) : (
         <input
@@ -674,14 +528,14 @@ function FormField({
           required={required}
           placeholder={placeholder}
           step={step}
-          className={inputClasses}
+          className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-4 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
         />
       )}
       {error && (
         <motion.p
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-1 text-sm text-red-400"
+          className="mt-2 text-sm text-red-500 font-bold"
         >
           {error}
         </motion.p>
@@ -689,4 +543,3 @@ function FormField({
     </div>
   );
 }
-

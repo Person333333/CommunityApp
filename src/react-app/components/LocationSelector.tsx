@@ -46,16 +46,16 @@ export default function LocationSelector() {
                 title={t('location.changeLocation')}
             >
                 {loading ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-teal-400" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-teal-400" />
                 ) : locationSource === 'zip' && currentZip ? (
                     <>
-                        <MapPin className="w-4 h-4 text-amber-400" />
-                        <span className="font-medium">{currentZip}</span>
+                        <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                        <span className="font-medium text-[10px]">{currentZip}</span>
                     </>
                 ) : (
                     <>
-                        <Navigation className="w-4 h-4 text-teal-400 fill-teal-400/20" />
-                        <span className="hidden sm:inline">{t('location.currentLocation')}</span>
+                        <Navigation className="w-3.5 h-3.5 text-teal-400 fill-teal-400/20" />
+                        <span className="hidden sm:inline text-[10px] font-bold tracking-tight">GPS</span>
                     </>
                 )}
             </button>

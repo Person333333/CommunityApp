@@ -145,7 +145,7 @@ export default function Map() {
           <h1 className="text-4xl sm:text-5xl font-bold gradient-text mb-4">
             {t('map.title')}
           </h1>
-          <p className="text-xl text-slate-300">
+          <p className="text-xl text-slate-800 font-bold">
             {t('map.subtitle')}
           </p>
         </motion.div>
@@ -157,15 +157,18 @@ export default function Map() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-4"
           >
-            <GlassCard variant="teal" className="p-4">
+            <GlassCard className="p-4 bg-white border-blue-100 shadow-xl overflow-hidden relative">
+              <div className="absolute top-0 left-0 w-1 h-full bg-blue-600" />
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div className="flex items-center gap-3">
-                  <MapPinned className="w-5 h-5 text-teal-300 flex-shrink-0" />
+                  <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                    <MapPinned className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                  </div>
                   <div>
-                    <p className="text-slate-100 font-medium">
+                    <p className="text-slate-900 font-black uppercase tracking-widest text-xs">
                       {t('map.showingLocalOnly')}
                     </p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-700 font-bold">
                       {t('map.showingLocal', { count: resources.length, total: allResources.length })}
                     </p>
                   </div>
@@ -174,7 +177,7 @@ export default function Map() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowLocalOnly(false)}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-slate-100 text-sm font-medium transition-colors flex-shrink-0"
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-xl text-white text-sm font-black transition-all flex-shrink-0 shadow-lg shadow-blue-500/20 uppercase tracking-widest"
                 >
                   {t('map.showAll')}
                 </motion.button>
@@ -196,8 +199,8 @@ export default function Map() {
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowHeatmap(!showHeatmap)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${showHeatmap
-                ? 'bg-teal-500/20 border-teal-400/50 text-teal-300'
-                : 'glass border-white/10 text-slate-300 hover:border-teal-400/30'
+                ? 'bg-blue-600 text-white border-blue-700 shadow-md transform scale-105'
+                : 'bg-white border-slate-200 text-slate-800 hover:border-blue-400 shadow-sm'
                 } border`}
             >
               <BarChart3 className="w-4 h-4" />
@@ -209,7 +212,7 @@ export default function Map() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowLocalOnly(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg glass border border-white/10 text-slate-300 hover:border-teal-400/30 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-800 hover:border-blue-400 shadow-sm transition-all"
               >
                 <MapPinned className="w-4 h-4" />
                 {t('map.showLocalOnly')}
@@ -218,10 +221,10 @@ export default function Map() {
 
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="flex items-center gap-2 glass px-4 py-2 rounded-lg border border-white/10"
+              className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 shadow-sm"
             >
-              <Layers className="w-4 h-4 text-teal-400" />
-              <span className="text-slate-300">{resources.length} {t('map.resources')}</span>
+              <Layers className="w-4 h-4 text-blue-600" />
+              <span className="text-blue-900 font-bold">{resources.length} {t('map.resources')}</span>
             </motion.div>
 
             {isTranslatingResources && (
@@ -254,9 +257,9 @@ export default function Map() {
                   );
                 }}
                 className={`px-3 py-1 rounded-full text-sm transition-all ${selectedCategories.includes(category)
-                  ? 'bg-teal-500/20 border-teal-400/50 text-teal-300'
-                  : 'glass border-white/10 text-slate-300 hover:border-teal-400/30'
-                  } border`}
+                  ? 'bg-blue-600 text-white border-blue-700 border shadow-md'
+                  : 'bg-white border-slate-200 text-slate-800 border hover:border-blue-400 shadow-sm'
+                  }`}
               >
                 {category} ({count})
               </motion.button>
@@ -266,7 +269,7 @@ export default function Map() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedCategories([])}
-                className="px-3 py-1 rounded-full text-sm glass border border-rose-400/30 text-rose-300 hover:border-rose-400/50"
+                className="px-3 py-1 rounded-full text-sm bg-red-50 border border-red-200 text-red-700 hover:bg-red-100 transition-colors font-bold"
               >
                 {t('map.clearAll')}
               </motion.button>
@@ -313,8 +316,8 @@ export default function Map() {
               transition={{ delay: 0.3 }}
             >
               <GlassCard>
-                <h3 className="text-lg font-semibold text-slate-100 mb-4 flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-teal-400" />
+                <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-2 uppercase tracking-widest">
+                  <BarChart3 className="w-5 h-5 text-blue-600" />
                   {t('map.distribution')}
                 </h3>
                 <div className="space-y-2">
@@ -323,17 +326,17 @@ export default function Map() {
                     .slice(0, 6)
                     .map(([category, count]) => (
                       <div key={category} className="flex items-center justify-between">
-                        <span className="text-sm text-slate-300">{category}</span>
+                        <span className="text-sm text-slate-800 font-bold">{category}</span>
                         <div className="flex items-center gap-2">
                           <div className="w-16 h-2 bg-slate-700 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-teal-500 to-amber-500 rounded-full"
+                              className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
                               style={{
                                 width: `${(count / Math.max(...Object.values(categoryStats))) * 100}%`
                               }}
                             />
                           </div>
-                          <span className="text-sm font-medium text-teal-300 w-6 text-right">
+                          <span className="text-sm font-bold text-blue-700 w-6 text-right">
                             {count}
                           </span>
                         </div>
@@ -349,8 +352,8 @@ export default function Map() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h2 className="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-2">
-                <Navigation className="w-6 h-6 text-teal-400" />
+              <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <Navigation className="w-6 h-6 text-blue-600" />
                 {t('map.nearbyResources', { count: resources.length })}
               </h2>
 
@@ -364,29 +367,29 @@ export default function Map() {
                   >
                     <GlassCard
                       hover
-                      variant={selectedResource?.id === resource.id ? 'teal' : 'default'}
-                      className="cursor-pointer"
+                      variant={selectedResource?.id === resource.id ? 'strong' : 'default'}
+                      className={`cursor-pointer ${selectedResource?.id === resource.id ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-100'}`}
                       onClick={() => handleResourceClick(resource)}
                     >
                       <div className="space-y-2">
                         <div className="flex items-start gap-2">
-                          <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                          <MapPin className={`w-5 h-5 flex-shrink-0 mt-0.5 ${selectedResource?.id === resource.id ? 'text-blue-600' : 'text-blue-400'}`} />
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-slate-100 truncate">
+                            <h3 className={`font-bold truncate ${selectedResource?.id === resource.id ? 'text-blue-900' : 'text-slate-900'}`}>
                               {resource.title}
                             </h3>
-                            <p className="text-sm text-slate-400 truncate">
+                            <p className="text-sm text-slate-800 font-bold truncate">
                               {resource.address}, {resource.city}
                             </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <span className="inline-block text-xs px-2 py-1 glass-ochre rounded-full text-slate-300">
+                          <span className="inline-block text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-800 font-bold uppercase">
                             {resource.category}
                           </span>
                           {resource.is_featured && (
-                            <span className="inline-block text-xs px-2 py-1 bg-amber-500/20 text-amber-300 rounded-full">
+                            <span className="inline-block text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-bold uppercase">
                               {t('map.featured')}
                             </span>
                           )}
@@ -396,21 +399,21 @@ export default function Map() {
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
-                            className="pt-3 border-t border-white/10 space-y-2"
+                            className="pt-3 border-t border-blue-100 space-y-2"
                           >
-                            <p className="text-sm text-slate-300 line-clamp-2">
+                            <p className="text-sm text-slate-800 font-bold line-clamp-2">
                               {resource.description}
                             </p>
 
                             {resource.audience && (
-                              <p className="text-xs text-slate-400">
-                                <span className="font-medium">{t('map.target')}</span> {resource.audience}
+                              <p className="text-xs text-slate-700 font-bold">
+                                <span className="text-blue-600 uppercase tracking-widest text-[10px]">{t('map.target')}</span> {resource.audience}
                               </p>
                             )}
 
                             {resource.hours && (
-                              <p className="text-xs text-slate-400">
-                                <span className="font-medium">{t('map.hours')}</span> {resource.hours}
+                              <p className="text-xs text-slate-700 font-bold">
+                                <span className="text-blue-600 uppercase tracking-widest text-[10px]">{t('map.hours')}</span> {resource.hours}
                               </p>
                             )}
 
@@ -420,7 +423,7 @@ export default function Map() {
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
                                   href={`tel:${resource.phone}`}
-                                  className="flex items-center gap-1 text-xs bg-green-500/20 text-green-300 border border-green-400/30 px-2 py-1 rounded-full hover:bg-green-500/30 transition-colors"
+                                  className="flex items-center gap-1 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors font-bold shadow-md shadow-indigo-200"
                                 >
                                   <Phone className="w-3 h-3" />
                                   {t('map.call')}
@@ -434,7 +437,7 @@ export default function Map() {
                                   href={resource.website}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center gap-1 text-xs bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-1 rounded-full hover:bg-blue-500/30 transition-colors"
+                                  className="flex items-center gap-1 text-xs bg-white text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors font-bold shadow-sm"
                                 >
                                   <Globe className="w-3 h-3" />
                                   {t('map.visit')}

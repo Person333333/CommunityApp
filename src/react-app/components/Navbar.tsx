@@ -6,6 +6,7 @@ import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
 import LocationSelector from './LocationSelector';
 import { useTranslation } from 'react-i18next';
+import Translated from './Translated';
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ export default function Navbar() {
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
-    ['rgba(248, 250, 252, 0.05)', 'rgba(248, 250, 252, 0.15)']
+    ['rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.8)']
   );
 
   const backdropBlur = useTransform(
@@ -29,7 +30,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-50 border-b border-white/10"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/50"
       style={{
         backgroundColor,
         backdropFilter: backdropBlur,
@@ -37,20 +38,20 @@ export default function Navbar() {
       }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
             <motion.div
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
             >
-              <Compass className="w-8 h-8 text-teal-400" />
+              <Compass className="w-8 h-8 text-blue-600" />
             </motion.div>
-            <span className="text-xl font-bold gradient-text">Community Compass</span>
+            <span className="text-xl font-bold text-slate-900">Community Compass</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-10 ml-24 flex-nowrap min-w-max">
+          <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max">
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
             <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
@@ -63,13 +64,13 @@ export default function Navbar() {
               <SignedOut>
                 <Link
                   to="/sign-in"
-                  className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium"
+                  className="text-slate-700 hover:text-blue-600 transition-colors duration-200 font-semibold"
                 >
                   {t('nav.signIn')}
                 </Link>
                 <Link
                   to="/sign-up"
-                  className="glass-teal px-4 py-2 rounded-lg text-slate-100 hover:glass-strong transition-all font-medium"
+                  className="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-700 transition-all font-semibold shadow-md"
                 >
                   {t('nav.signUp')}
                 </Link>
@@ -89,18 +90,18 @@ export default function Navbar() {
                         {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                       </div>
                       <div>
-                        <div className="text-slate-100 font-semibold leading-tight">{user?.fullName || 'Your Account'}</div>
-                        <div className="text-slate-400 text-sm truncate">{user?.primaryEmailAddress?.emailAddress}</div>
+                        <div className="text-slate-100 font-semibold leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
+                        <div className="text-slate-400 text-sm truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">Account</Link>
-                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">My Submissions</Link>
+                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">{t('nav.account')}</Link>
+                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">{t('discover.mySubmissions')}</Link>
                       <button
                         onClick={() => signOut()}
                         className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-rose-300"
                       >
-                        Sign out
+                        {t('account.signOut')}
                       </button>
                     </div>
                   </div>
@@ -177,9 +178,9 @@ export default function Navbar() {
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center">
                           {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                         </div>
-                        <div className="text-slate-100 font-medium">{user?.firstName || 'Account'}</div>
+                        <div className="text-slate-100 font-medium"><Translated text={user?.firstName || 'Account'} /></div>
                       </div>
-                      <button onClick={() => signOut()} className="text-rose-300 hover:text-rose-200 text-sm">Sign out</button>
+                      <button onClick={() => signOut()} className="text-rose-300 hover:text-rose-200 text-sm">{t('account.signOut')}</button>
                     </div>
                   </div>
                 </SignedIn>
@@ -196,7 +197,7 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
   return (
     <Link
       to={to}
-      className="text-slate-100 hover:text-teal-300 transition-colors duration-200 font-medium whitespace-nowrap"
+      className="text-slate-700 hover:text-blue-600 transition-colors duration-200 font-semibold whitespace-nowrap"
       {...props}
     >
       {children}
