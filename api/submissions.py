@@ -15,21 +15,21 @@ class handler(BaseHTTPRequestHandler):
         try:
             content_length = int(self.headers.get('Content-Length', 0))
             if content_length == 0:
-                self.send_error_response(400, "Empty request body")
+                handler.send_error_response(self, 400, "Empty request body")
                 return
 
             post_data = self.rfile.read(content_length)
             try:
                 data = json.loads(post_data.decode('utf-8'))
             except json.JSONDecodeError as e:
-                self.send_error_response(400, f"Invalid JSON: {str(e)}")
+                handler.send_error_response(self, 400, f"Invalid JSON: {str(e)}")
                 return
 
             print(f"DEBUG: Received submission data (keys): {list(data.keys())}", file=sys.stderr)
 
             db_url = os.getenv('VITE_NEON_DATABASE_URL') or os.getenv('DATABASE_URL') or os.getenv('NEON_DATABASE_URL')
             if not db_url:
-                self.send_error_response(500, "Database URL not configured")
+                handler.send_error_response(self, 500, "Database URL not configured")
                 return
 
             conn = psycopg2.connect(db_url)
@@ -89,7 +89,7 @@ class handler(BaseHTTPRequestHandler):
             print(f"ERROR: Submission failure: {str(e)}", file=sys.stderr)
             import traceback
             traceback.print_exc(file=sys.stderr)
-            self.send_error_response(500, str(e))
+            handler.send_error_response(self, 500, str(e))
 
     def send_error_response(self, code, message):
         self.send_response(code)
