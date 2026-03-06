@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -18,35 +18,8 @@ export default function Home() {
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
-  const [volunteerResources, setVolunteerResources] = useState<ResourceType[]>([]);
   const [popularResources, setPopularResources] = useState<ResourceType[]>([]);
   const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
-  const [bulletinItems] = useState([
-    {
-      type: 'emergency',
-      title: 'Winter Storm Alert',
-      desc: 'Local warming centers are open across the county. Stay safe and check on your neighbors.',
-      date: 'Today'
-    },
-    {
-      type: 'emergency',
-      title: 'Power Outage Update',
-      desc: 'Partial power restored in the downtown area. Crews are working on the remaining residential blocks.',
-      date: 'Today'
-    },
-    {
-      type: 'event',
-      title: 'Community Garden Kickoff',
-      desc: 'Join us this Saturday at 10am for the spring planting event at Northgate Park.',
-      date: 'Mar 15'
-    },
-    {
-      type: 'news',
-      title: 'New Library Hours',
-      desc: 'The Central Library is extending evening hours until 9pm on weekdays.',
-      date: 'Mar 12'
-    }
-  ]);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -71,14 +44,7 @@ export default function Home() {
 
         setAllFeaturedResources(list.filter(r => r.is_featured));
 
-        // Volunteer: filter by tags, services, or category containing "volunteer"
-        const volunteer = list.filter(r =>
-          r.category?.toLowerCase().includes('volunteer') ||
-          r.services?.toLowerCase().includes('volunteer') ||
-          r.tags?.toLowerCase().includes('volunteer') ||
-          r.description?.toLowerCase().includes('volunteer')
-        ).slice(0, 4);
-        setVolunteerResources(volunteer);
+
 
         // Popular and Recent Quick Picks using real DB sorting
         const popular = await unifiedResourceService.fetchAllResources({ limit: 6, sortBy: 'popular' });
@@ -128,6 +94,16 @@ export default function Home() {
       return distance <= LOCAL_RADIUS_KM;
     });
   }, [allFeaturedResources, userLocation]);
+
+  const displaySpotlights = useMemo(() => {
+    // Combine featured and popular
+    const combined = [...featuredResources, ...popularResources];
+    // Filter to unique resources by ID
+    const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
+    const featuredUnique = Array.from(new Map(featuredResources.map(i => [i.id, i])).values());
+    const count = Math.max(3, featuredUnique.length);
+    return unique.slice(0, count);
+  }, [featuredResources, popularResources]);
 
   if (locationLoading || !userLocation) {
     return (
@@ -259,7 +235,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {featuredResources.length === 0 ? (
+          {displaySpotlights.length === 0 ? (
             <GlassCard className="text-center py-12">
               <p className="text-xl text-slate-700 font-bold">{t('home.spotlight.noResources')}</p>
             </GlassCard>
@@ -270,7 +246,7 @@ export default function Home() {
                 animate={{ x: [0, -1032, 0] }}
                 transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               >
-                {[...featuredResources, ...featuredResources].map((resource, index) => (
+                {[...displaySpotlights, ...displaySpotlights].map((resource, index) => (
                   <div key={`${resource.id}-${index}`} className="w-72 sm:w-full md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
                     <GlassCard
                       hover
@@ -381,98 +357,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bulletin Board & Volunteer Opportunities */}
-      <section className="py-12 sm:py-20 bg-slate-50/50">
+      {/* How It Works Section */}
+      <section className="py-12 sm:py-20 bg-slate-50/50 border-t border-slate-100">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Bulletin Board */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-blue-900">{t('home.board.title')}</h2>
-              </div>
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl font-bold text-blue-900 mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto font-bold">{t('home.howItWorks.subtitle', 'Your hub for finding and sharing crucial local resources.')}</p>
+          </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-                <div className="aspect-video sm:aspect-square rounded-xl sm:rounded-2xl overflow-hidden shadow-lg border border-blue-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=800"
-                    alt="Local Community Center"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div className="space-y-2 sm:space-y-3 max-h-[300px] sm:max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                  {bulletinItems.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1 }}
-                    >
-                      <div className="bg-white border border-slate-100 rounded-lg sm:rounded-xl p-2.5 sm:p-3 shadow-sm hover:shadow-md transition-all flex gap-2 sm:gap-3 group">
-                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.type === 'emergency' ? 'bg-rose-100 text-rose-600' :
-                          item.type === 'event' ? 'bg-amber-100 text-amber-600' :
-                            'bg-blue-100 text-blue-600'
-                          }`}>
-                          {item.type === 'emergency' ? <Search className="w-5 h-5 animate-pulse" /> :
-                            item.type === 'event' ? <Compass className="w-5 h-5" /> :
-                              <Heart className="w-5 h-5" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                            <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full ${item.type === 'emergency' ? 'bg-rose-600 text-white' :
-                              item.type === 'event' ? 'bg-amber-100 text-amber-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
-                              {t(`home.board.${item.type}`)}
-                            </span>
-                            <span className="text-[10px] font-black text-slate-400">{item.date}</span>
-                          </div>
-                          <h3 className="text-sm font-black text-slate-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight truncate">{item.title}</h3>
-                          <p className="text-slate-600 text-[11px] leading-tight font-bold line-clamp-1">{item.desc}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Search className="w-8 h-8" />
               </div>
+              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step1.title', '1. Discover')}</h3>
+              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step1.desc', 'Search our interactive directory or talk to our AI assistant to find exactly what you need in your area.')}</p>
             </div>
 
-            {/* Volunteer Opportunities */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-blue-900">{t('home.volunteer.title')}</h2>
-              <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl relative overflow-hidden h-full flex flex-col justify-between min-h-[400px]">
-                <div className="absolute top-0 right-0 p-6 opacity-5">
-                  <Heart className="w-24 h-24 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-slate-900 font-black mb-6 italic text-sm">"{t('home.volunteer.subtitle')}"</p>
-                  <div className="space-y-4">
-                    {volunteerResources.length > 0 ? (
-                      volunteerResources.map(resource => (
-                        <div key={resource.id} className="flex gap-4 items-center p-2 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => setSelectedResource(resource)}>
-                          <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <Heart className="w-5 h-5 text-blue-600" />
-                          </div>
-                          <div className="flex-1 overflow-hidden">
-                            <h4 className="text-xs font-black text-slate-900 truncate uppercase tracking-tight">{resource.title}</h4>
-                            <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
-                              Explore Role
-                            </span>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-xs text-slate-600 italic">Finding local opportunities...</p>
-                    )}
-                  </div>
-                </div>
-                <Link to="/discover?q=volunteer" className="mt-6">
-                  <GlassButton variant="primary" size="md" className="w-full h-12 text-xs font-black uppercase tracking-widest">
-                    Join the Movement
-                  </GlassButton>
-                </Link>
+            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Heart className="w-8 h-8" />
               </div>
+              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step2.title', '2. Connect')}</h3>
+              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step2.desc', 'Get immediate access to contact info, hours, directions, and services for local organizations.')}</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Users className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step3.title', '3. Contribute')}</h3>
+              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.')}</p>
             </div>
           </div>
         </div>
