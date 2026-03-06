@@ -11,6 +11,7 @@ import SignInPage from "@/react-app/pages/auth/SignIn";
 import SignUpPage from "@/react-app/pages/auth/SignUp";
 import AccountPage from "@/react-app/pages/auth/Account";
 import MySubmissionsPage from "@/react-app/pages/MySubmissions";
+import NotFoundPage from "@/react-app/pages/NotFound";
 import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
@@ -71,6 +72,9 @@ export default function App() {
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/my-submissions" element={<MySubmissionsPage />} />
+
+        {/* Catch-all Route for 404 Page Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
       <UserTour

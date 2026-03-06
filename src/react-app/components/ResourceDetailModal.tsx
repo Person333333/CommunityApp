@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag } from 'lucide-react';
+import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -13,6 +14,12 @@ interface ResourceDetailModalProps {
 
 export default function ResourceDetailModal({ resource, isOpen, onClose }: ResourceDetailModalProps) {
   const { t } = useTranslation();
+  const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
+
+  // Reset report state when modal opens/closes or resource changes
+  useEffect(() => {
+    setReportState('idle');
+  }, [isOpen, resource]);
 
   if (!resource) return null;
 
@@ -210,36 +217,69 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     </div>
                   )}
 
-                  {/* Actions */}
-                  <div className="flex flex-wrap gap-3 pt-4 border-t border-white/10">
-                    {resource.website && (
-                      <a
-                        href={resource.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <GlassButton variant="primary">
-                          <Globe className="w-4 h-4 mr-2" />
-                          {t('resource.visitWebsite')}
-                        </GlassButton>
-                      </a>
-                    )}
-                    {resource.phone && (
-                      <a href={`tel:${resource.phone}`}>
-                        <GlassButton variant="secondary">
-                          <Phone className="w-4 h-4 mr-2" />
-                          {t('resource.callNow')}
-                        </GlassButton>
-                      </a>
-                    )}
-                    {resource.email && (
-                      <a href={`mailto:${resource.email}`}>
-                        <GlassButton variant="secondary">
-                          <Mail className="w-4 h-4 mr-2" />
-                          {t('resource.sendEmail')}
-                        </GlassButton>
-                      </a>
-                    )}
+                  {/* Actions & Report */}
+                  <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 pt-4 border-t border-white/10">
+                    <div className="flex flex-wrap gap-3">
+                      {resource.website && (
+                        <a
+                          href={resource.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <GlassButton variant="primary">
+                            <Globe className="w-4 h-4 mr-2" />
+                            {t('resource.visitWebsite')}
+                          </GlassButton>
+                        </a>
+                      )}
+                      {resource.phone && (
+                        <a href={`tel:${resource.phone}`}>
+                          <GlassButton variant="secondary">
+                            <Phone className="w-4 h-4 mr-2" />
+                            {t('resource.callNow')}
+                          </GlassButton>
+                        </a>
+                      )}
+                      {resource.email && (
+                        <a href={`mailto:${resource.email}`}>
+                          <GlassButton variant="secondary">
+                            <Mail className="w-4 h-4 mr-2" />
+                            {t('resource.sendEmail')}
+                          </GlassButton>
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="text-right">
+                      {reportState === 'idle' ? (
+                        <button
+                          onClick={() => {
+                            setReportState('reporting');
+                            setTimeout(() => setReportState('success'), 800);
+                          }}
+                          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-rose-600 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
+                        >
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          Report Issue
+                        </button>
+                      ) : reportState === 'reporting' ? (
+                        <span className="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-widest mt-2 sm:mt-0">
+                          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+                            <Compass className="w-3.5 h-3.5" />
+                          </motion.div>
+                          Submitting...
+                        </span>
+                      ) : (
+                        <motion.span
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center justify-end gap-1.5 text-xs font-bold text-emerald-600 uppercase tracking-widest mt-2 sm:mt-0"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          Reported to Mods
+                        </motion.span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </GlassCard>
