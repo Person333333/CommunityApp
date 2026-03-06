@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route, useLocation as useRouterLocation } from "react-router";
 import { useState, useEffect } from "react";
 import './i18n'; // Initialize i18n
 import HomePage from "@/react-app/pages/Home";
@@ -16,6 +16,14 @@ import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
 import { useLocation } from "@/react-app/context/LocationContext";
+
+function ScrollToTop() {
+  const { pathname } = useRouterLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 export default function App() {
   const [showTour, setShowTour] = useState(false);
@@ -50,6 +58,7 @@ export default function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
