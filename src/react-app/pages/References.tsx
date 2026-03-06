@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ExternalLink, FileText, Download } from 'lucide-react';
+import { ExternalLink, FileText, Download, Info } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import { useTranslation } from 'react-i18next';
 
@@ -99,6 +99,37 @@ export default function References() {
 
           {/* Clean Lists */}
           <GlassCard className="p-8 space-y-10 bg-white border-slate-100 shadow-2xl">
+            {/* Project Information */}
+            <div>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-2 uppercase tracking-widest">
+                <Info className="w-6 h-6 text-blue-500" /> Project Information
+              </h2>
+              <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-700">
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Event</h3>
+                    <p className="font-bold text-lg">Washington TSA Webmaster (HS)</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Chapter</h3>
+                    <p className="font-bold text-lg">2139 (Inglemoor High School)</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Theme</h3>
+                    <p className="font-bold text-lg">Community Resource Hub</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Team Members</h3>
+                    <ul className="list-disc pl-5 font-bold space-y-1 mt-1">
+                      <li>Nathan Choy</li>
+                      <li>Nikhil Vincent</li>
+                      <li>George Xu</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Tech Stack */}
             <div>
               <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Tech Stack</h2>

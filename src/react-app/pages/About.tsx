@@ -206,7 +206,7 @@ export default function About() {
               <div className="space-y-12 relative">
                 {[
                   { year: "2024", title: "The Humble Spark", desc: "Started as a small school project to map local food banks." },
-                  { year: "2025", title: "Regional Expansion", desc: "Launched the full Community Hub platform across the county." },
+                  { year: "2025", title: "TSA Webmaster Challenge", desc: "Developed into a full Community Resource Hub for the Washington TSA Webmaster competition by Chapter 2139 (Inglemoor High School)." },
                   { year: "2026", title: "Future Vision", desc: "Integrating AI-driven matching and global multi-language support." }
                 ].map((item, idx) => (
                   <div key={idx} className="flex gap-8 items-start relative pb-12 last:pb-0">
