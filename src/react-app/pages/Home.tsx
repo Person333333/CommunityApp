@@ -143,7 +143,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
             animate={{ scale: [1, 1.2, 1], x: [0, 100, 0], y: [0, 50, 0] }}
@@ -163,7 +163,7 @@ export default function Home() {
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-12"
+              className="mb-6 sm:mb-12"
             >
               <AnimatedCompass />
             </motion.div>
@@ -174,12 +174,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="space-y-6"
             >
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
                 <span className="block text-blue-800 mb-2 font-black">{t('home.hero.title1')}</span>
                 <span className="block text-black border-b-8 border-blue-500 w-fit mx-auto pb-2 font-black tracking-tighter">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-xl sm:text-2xl text-slate-950 max-w-3xl mx-auto font-black leading-relaxed">
+              <p className="text-base sm:text-xl lg:text-2xl text-slate-950 max-w-3xl mx-auto font-black leading-relaxed">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -189,13 +189,13 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="max-w-2xl mx-auto mt-8"
               >
-                <div className="bg-white rounded-3xl sm:rounded-full p-2 flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10 border border-slate-100">
+                <div className="bg-white rounded-2xl sm:rounded-full p-2 flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10 border border-slate-100">
                   <div className="flex items-center gap-2 w-full flex-1">
-                    <Search className="w-6 h-6 text-blue-500 ml-4" />
+                    <Search className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 ml-3 sm:ml-4" />
                     <input
                       type="text"
                       placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 px-4 py-3 w-full font-medium"
+                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 px-3 sm:px-4 py-2.5 sm:py-3 w-full font-medium text-sm sm:text-base"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           const value = e.currentTarget.value;
@@ -216,11 +216,11 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex justify-center flex-wrap gap-8 mt-12 text-sm text-slate-900 font-black uppercase tracking-wider"
+                className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-900 font-black uppercase tracking-wider"
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                    <Heart className="w-4 h-4 text-blue-600" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
                   </div>
                   <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
@@ -243,15 +243,15 @@ export default function Home() {
       </section>
 
       {/* Spotlight Carousel */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50">
+      <section className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-16"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-3 sm:mb-4">
               {t('home.spotlight.title')}
             </h2>
             <p className="text-xl text-slate-900 font-black">
@@ -271,7 +271,7 @@ export default function Home() {
                 transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               >
                 {[...featuredResources, ...featuredResources].map((resource, index) => (
-                  <div key={`${resource.id}-${index}`} className="w-full md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
+                  <div key={`${resource.id}-${index}`} className="w-72 sm:w-full md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
                     <GlassCard
                       hover
                       className="h-full cursor-pointer bg-white border border-slate-100 shadow-sm"
@@ -305,9 +305,9 @@ export default function Home() {
       </section>
 
       {/* Community Quick Picks - "Popular" & "Recent" */}
-      <section className="py-16 px-4 bg-white border-y border-slate-100 overflow-hidden">
+      <section className="py-10 sm:py-16 px-3 sm:px-4 bg-white border-y border-slate-100 overflow-hidden">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 gap-8 sm:gap-12 md:grid-cols-2">
             {/* Popular in Neighborhood */}
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -328,8 +328,8 @@ export default function Home() {
                     className="flex-shrink-0 w-64 snap-start border border-slate-100 rounded-3xl p-4 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
-                        <Star className="w-6 h-6 text-amber-500 group-hover:text-white transition-colors" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <Star className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-white transition-colors" />
                       </div>
                       <div className="min-w-0">
                         <span className="text-[10px] font-black text-blue-700 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded group-hover:bg-blue-600 group-hover:text-white transition-colors">{resource.category}</span>
@@ -361,11 +361,11 @@ export default function Home() {
                     key={resource.id}
                     whileHover={{ y: -4 }}
                     onClick={() => setSelectedResource(resource)}
-                    className="flex-shrink-0 w-64 snap-start border border-slate-100 rounded-3xl p-4 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group"
+                    className="flex-shrink-0 w-56 sm:w-64 snap-start border border-slate-100 rounded-2xl sm:rounded-3xl p-3 sm:p-4 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                        <Heart className="w-6 h-6 text-rose-500 group-hover:text-white transition-colors" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                        <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-500 group-hover:text-white transition-colors" />
                       </div>
                       <div className="min-w-0">
                         <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded group-hover:bg-indigo-600 group-hover:text-white transition-colors">{resource.category}</span>
@@ -382,8 +382,8 @@ export default function Home() {
       </section>
 
       {/* Bulletin Board & Volunteer Opportunities */}
-      <section className="py-20 bg-slate-50/50">
-        <div className="container mx-auto px-4 max-w-7xl">
+      <section className="py-12 sm:py-20 bg-slate-50/50">
+        <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Bulletin Board */}
             <div className="space-y-6">
@@ -391,8 +391,8 @@ export default function Home() {
                 <h2 className="text-2xl font-bold text-blue-900">{t('home.board.title')}</h2>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="aspect-square rounded-2xl overflow-hidden shadow-lg border border-blue-100">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                <div className="aspect-video sm:aspect-square rounded-xl sm:rounded-2xl overflow-hidden shadow-lg border border-blue-100">
                   <img
                     src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=800"
                     alt="Local Community Center"
@@ -400,7 +400,7 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2 sm:space-y-3 max-h-[300px] sm:max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                   {bulletinItems.map((item, idx) => (
                     <motion.div
                       key={idx}
@@ -409,8 +409,8 @@ export default function Home() {
                       viewport={{ once: true }}
                       transition={{ delay: idx * 0.1 }}
                     >
-                      <div className="bg-white border border-slate-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex gap-3 group">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.type === 'emergency' ? 'bg-rose-100 text-rose-600' :
+                      <div className="bg-white border border-slate-100 rounded-lg sm:rounded-xl p-2.5 sm:p-3 shadow-sm hover:shadow-md transition-all flex gap-2 sm:gap-3 group">
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${item.type === 'emergency' ? 'bg-rose-100 text-rose-600' :
                           item.type === 'event' ? 'bg-amber-100 text-amber-600' :
                             'bg-blue-100 text-blue-600'
                           }`}>
