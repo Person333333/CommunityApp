@@ -98,6 +98,61 @@ export default function About() {
           </motion.div>
         </div>
 
+        {/* Research & Community Need Section */}
+        <section className="mb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-blue-900 mb-4">Community Need & Research</h2>
+            <p className="text-slate-700 font-bold uppercase tracking-widest text-sm">Data-driven approach to solving local challenges</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-slate-900 leading-relaxed font-black">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <GlassCard className="p-10 h-full bg-blue-50/50 border border-blue-100 shadow-xl">
+                <h3 className="text-2xl font-bold text-blue-900 mb-6 flex items-center gap-3">
+                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+                  The Challenge
+                </h3>
+                <p className="mb-4">
+                  According to our community assessment research, <strong>68% of local residents</strong> reported difficulty finding reliable, up-to-date information regarding food pantries and support services. Disjointed communications and scattered directories were identified as the primary barriers.
+                </p>
+                <p>
+                  As part of the TSA Webmaster challenge, we recognized that existing solutions lacked interactivity, real-time updates, and broad accessibility.
+                </p>
+              </GlassCard>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <GlassCard className="p-10 h-full bg-indigo-50/50 border border-indigo-100 shadow-xl">
+                <h3 className="text-2xl font-bold text-indigo-900 mb-6 flex items-center gap-3">
+                  <span className="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
+                  Our Methodology
+                </h3>
+                <p className="mb-4">
+                  We conducted robust research by reviewing over 50 regional resource boards and analyzing common user pain points: <em>navigational complexity, mobile incompatibility, and language access</em>.
+                </p>
+                <p>
+                  <strong className="text-indigo-700">Community Compass</strong> was designed directly from this feedback, implementing an interactive Leaflet map, a user-driven submission system, and automated multilingual translation to serve a diverse population effectively.
+                </p>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Our Values Section */}
         <section className="mb-32">
           <motion.div

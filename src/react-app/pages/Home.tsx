@@ -225,8 +225,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-16"
+            className="text-center mb-8 sm:mb-16 flex flex-col items-center"
           >
+            <span className="bg-blue-100 text-blue-800 text-xs font-black px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest border border-blue-200">
+              Community Resource Highlights
+            </span>
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-3 sm:mb-4">
               {t('home.spotlight.title')}
             </h2>

@@ -29,17 +29,17 @@ export default function References() {
     { name: 'framer-motion', purpose: 'Smooth UI animations and transitions' }
   ];
 
-  const resourceImages = [
-    { title: 'Ballard Food Bank', url: 'https://nfg-sofun.s3.amazonaws.com/uploads/project/photo/47515/poster_board_21BFBext-002__1_.jpg' },
-    { title: 'Carolyn Downs Family Medical Center', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgaXbt6ak400M-jeYQpT1Dr8F22NWEywpRoQ&s' },
-    { title: 'Sound Health - Capitol Hill', url: 'https://www.rehab.com/wp-content/uploads/2024/09/sound-capitol-hill-seattle-wa-98122-front-entrance-696x392.webp' },
-    { title: 'DC Central Kitchen', url: 'https://dccentralkitchen.org/wp-content/uploads/2022/03/DCCentralKitchen_logo-hi-res.png' },
-    { title: 'Coalition for the Homeless', url: 'https://www.coalitionforthehomeless.org/wp-content/uploads/2023/08/site_logo.svg' },
-    { title: 'Boston Medical Center', url: 'https://www.bmc.org/sites/default/files/styles/hospital_full_image/public/2018-05/Boston_Medical_Center_Menino_Building_0.jpg' },
-    { title: 'Pine Street Inn', url: 'https://www.pinestreetinn.org/sites/default/files/styles/hero_image/public/2020-05/PineStreetInn_Building_Exterior.jpg' },
-    { title: 'Rosie\'s Place', url: 'https://www.rosiesplace.org/assets/images/home-hero.jpg' },
-    { title: 'Greater Boston Food Bank', url: 'https://www.gbfb.org/wp-content/themes/gbfb/assets/img/gbfb-logo-color.svg' },
-    { title: 'Martha\'s Table', url: 'https://marthastable.org/wp-content/themes/marthastable/assets/img/logo.png' }
+  const resourceLinks = [
+    { title: 'Ballard Food Bank', url: 'https://www.ballardfoodbank.org/' },
+    { title: 'Carolyn Downs Family Medical Center', url: 'https://neighborcare.org/clinics/carolyn-downs/' },
+    { title: 'Sound Health', url: 'https://www.sound.health/' },
+    { title: 'DC Central Kitchen', url: 'https://dccentralkitchen.org/' },
+    { title: 'Coalition for the Homeless', url: 'https://www.coalitionforthehomeless.org/' },
+    { title: 'Boston Medical Center', url: 'https://www.bmc.org/' },
+    { title: 'Pine Street Inn', url: 'https://www.pinestreetinn.org/' },
+    { title: 'Rosie\'s Place', url: 'https://www.rosiesplace.org/' },
+    { title: 'Greater Boston Food Bank', url: 'https://www.gbfb.org/' },
+    { title: 'Martha\'s Table', url: 'https://marthastable.org/' }
   ];
 
   const researchLinks = [
@@ -156,20 +156,20 @@ export default function References() {
               </ul>
             </div>
 
-            {/* Image Links */}
+            {/* Organization Links */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Resource Image Sources</h2>
+              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Inspiration & Organizations</h2>
               <ul className="space-y-3">
-                {resourceImages.map((img, i) => (
+                {resourceLinks.map((org, i) => (
                   <li key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 overflow-hidden">
-                    <span className="text-slate-900 text-sm font-bold whitespace-nowrap">{img.title}</span>
+                    <span className="text-slate-900 text-sm font-bold whitespace-nowrap">{org.title}</span>
                     <a
-                      href={img.url}
+                      href={org.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-blue-600 hover:text-blue-800 transition-colors truncate sm:max-w-[60%] font-bold"
                     >
-                      {img.url}
+                      {org.url}
                     </a>
                   </li>
                 ))}
