@@ -103,7 +103,8 @@ export async function fetchResourcesFromDB(options: {
         true as is_approved,
         is_featured,
         created_at, updated_at, user_id,
-        click_count
+        click_count,
+        NULL as contact_email
       FROM curated_resources ${curatedWhere}
     `;
 
@@ -122,7 +123,8 @@ export async function fetchResourcesFromDB(options: {
           submitted_at as created_at, 
           submitted_at as updated_at,
           user_id,
-          click_count
+          click_count,
+          contact_email
         FROM resource_submissions ${submissionWhere}
       `;
     }

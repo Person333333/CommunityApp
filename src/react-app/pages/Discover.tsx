@@ -42,6 +42,10 @@ export default function Discover() {
   const [popularResources, setPopularResources] = useState<ResourceType[]>([]);
   const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
   const [categoryStack, setCategoryStack] = useState<CategoryNode[]>([]);
+  const [guestEmail, setGuestEmail] = useState<string>(() => {
+    return localStorage.getItem('community_guest_email') || '';
+  });
+  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -102,8 +106,12 @@ export default function Discover() {
           }
         }
 
-        if (showMySubmissions && user) {
-          list = list.filter(r => r.user_id === user.id);
+        if (showMySubmissions) {
+          if (user) {
+            list = list.filter(r => r.user_id === user.id);
+          } else if (guestEmail) {
+            list = list.filter(r => r.contact_email?.toLowerCase() === guestEmail.toLowerCase());
+          }
         }
 
         const currentLang = i18n.language;
@@ -131,7 +139,7 @@ export default function Discover() {
     };
 
     fetchResources();
-  }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language, localFavoriteIds]);
+  }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language, localFavoriteIds, guestEmail]);
 
   const LOCAL_RADIUS_KM = 300;
   const [showLocalOnly, setShowLocalOnly] = useState(true);
@@ -343,8 +351,8 @@ export default function Discover() {
                   <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-white' : ''}`} /> My Favorites
                 </GlassButton>
                 <GlassButton variant={showMySubmissions ? 'primary' : 'secondary'} size="sm" onClick={() => {
-                  if (!user) {
-                    setAuthModal({ isOpen: true, title: t('discover.mySubmissions'), message: t('discover.signInSubmissions'), type: 'submissions' });
+                  if (!user && !guestEmail) {
+                    setShowEmailPrompt(true);
                     return;
                   }
                   setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
@@ -352,6 +360,41 @@ export default function Discover() {
                   <User className="w-4 h-4 mr-2" /> {t('discover.mySubmissions')}
                 </GlassButton>
               </div>
+
+              {/* Guest email prompt */}
+              {showEmailPrompt && !user && (
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
+                  <p className="text-sm font-bold text-slate-800">Enter the email you used when submitting to find your resources:</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      className="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                    />
+                    <button
+                      onClick={() => {
+                        if (guestEmail) {
+                          localStorage.setItem('community_guest_email', guestEmail);
+                          setShowEmailPrompt(false);
+                          setShowMySubmissions(true);
+                          setShowFavoritesOnly(false);
+                        }
+                      }}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors"
+                    >
+                      Find
+                    </button>
+                    <button
+                      onClick={() => setShowEmailPrompt(false)}
+                      className="text-slate-500 hover:text-slate-700 text-sm font-bold"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Hierarchical Explorer */}
               <div data-tour="category-explorer" className="pt-4 border-t border-slate-100">

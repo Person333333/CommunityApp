@@ -23,6 +23,7 @@ export const ResourceSchema = z.object({
   is_featured: z.union([z.boolean(), z.number().transform(val => val === 1)]),
   is_approved: z.union([z.boolean(), z.number().transform(val => val === 1)]),
   user_id: z.string().nullable().optional(),
+  contact_email: z.string().nullable().optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
   click_count: z.number().optional().nullable(),
