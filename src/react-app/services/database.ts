@@ -248,7 +248,7 @@ export async function removeSaveFromDB(userId: string, resourceId: number) {
 export async function incrementClickCountInDB(resourceId: number) {
   try {
     // Try updating curated_resources first
-    const curatedUpdate = await sql`
+    await sql`
       UPDATE curated_resources 
       SET click_count = COALESCE(click_count, 0) + 1 
       WHERE id = ${resourceId}

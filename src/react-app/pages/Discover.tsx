@@ -321,7 +321,7 @@ export default function Discover() {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <GlassButton variant="primary" onClick={handleSearch} className="flex-1 sm:flex-initial shadow-lg">
+                  <GlassButton variant="primary" onClick={() => handleSearch()} className="flex-1 sm:flex-initial shadow-lg">
                     {t('discover.search')}
                   </GlassButton>
                   <motion.button
