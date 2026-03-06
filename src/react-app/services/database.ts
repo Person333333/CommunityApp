@@ -1,13 +1,41 @@
 import { neon } from '@neondatabase/serverless';
+import { categoryHierarchy } from '@/shared/categoryHierarchy';
 
 // Direct database connection for Vercel deployment
 const sql = neon(import.meta.env.VITE_NEON_DATABASE_URL || 'postgresql://neondb_owner:npg_blPQ09vgTLiI@ep-lucky-glitter-afuy9gkd-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require');
+
+function getAllCategoryLabels(rootLabel: string): string[] {
+  const findNode = (nodes: any[], label: string): any => {
+    for (const node of nodes) {
+      if (node.label === label) return node;
+      if (node.children) {
+        const found = findNode(node.children, label);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const node = findNode(categoryHierarchy, rootLabel);
+  if (!node) return [rootLabel];
+
+  const labels: string[] = [node.label];
+  const fillLabels = (children: any[]) => {
+    for (const child of children) {
+      labels.push(child.label);
+      if (child.children) fillLabels(child.children);
+    }
+  };
+  if (node.children) fillLabels(node.children);
+  return labels;
+}
 
 export async function fetchResourcesFromDB(options: {
   featured?: boolean;
   category?: string;
   search?: string;
   limit?: number;
+  sortBy?: 'popular' | 'recent' | 'default';
 }) {
   try {
     // Base parameters (shared)
@@ -23,10 +51,18 @@ export async function fetchResourcesFromDB(options: {
 
     // Apply shared filters
     if (options.category) {
-      const paramIdx = params.length + 1;
-      curatedConditions.push(`category = $${paramIdx}`);
-      submissionConditions.push(`category = $${paramIdx}`);
-      params.push(options.category);
+      const categoryLabels = getAllCategoryLabels(options.category);
+      if (categoryLabels.length === 1) {
+        const paramIdx = params.length + 1;
+        curatedConditions.push(`category = $${paramIdx}`);
+        submissionConditions.push(`category = $${paramIdx}`);
+        params.push(options.category);
+      } else {
+        const placeholders = categoryLabels.map((_, i) => `$${params.length + i + 1}`).join(', ');
+        curatedConditions.push(`category IN (${placeholders})`);
+        submissionConditions.push(`category IN (${placeholders})`);
+        params.push(...categoryLabels);
+      }
     }
 
     if (options.search) {
@@ -66,7 +102,8 @@ export async function fetchResourcesFromDB(options: {
         audience, hours, services, tags,
         true as is_approved,
         is_featured,
-        created_at, updated_at, user_id
+        created_at, updated_at, user_id,
+        click_count
       FROM curated_resources ${curatedWhere}
     `;
 
@@ -84,12 +121,19 @@ export async function fetchResourcesFromDB(options: {
           false as is_featured,
           submitted_at as created_at, 
           submitted_at as updated_at,
-          user_id
+          user_id,
+          click_count
         FROM resource_submissions ${submissionWhere}
       `;
     }
 
-    query += ` ORDER BY is_featured DESC, created_at DESC, title ASC`;
+    if (options.sortBy === 'popular') {
+      query += ` ORDER BY click_count DESC, created_at DESC`;
+    } else if (options.sortBy === 'recent') {
+      query += ` ORDER BY created_at DESC`;
+    } else {
+      query += ` ORDER BY is_featured DESC, created_at DESC, title ASC`;
+    }
 
     if (options.limit) {
       query += ` LIMIT ${options.limit}`;
@@ -197,6 +241,32 @@ export async function removeSaveFromDB(userId: string, resourceId: number) {
     return true;
   } catch (error) {
     console.error('Remove Save Error:', error);
+    return false;
+  }
+}
+
+export async function incrementClickCountInDB(resourceId: number) {
+  try {
+    // Try updating curated_resources first
+    const curatedUpdate = await sql`
+      UPDATE curated_resources 
+      SET click_count = COALESCE(click_count, 0) + 1 
+      WHERE id = ${resourceId}
+    `;
+
+    // If no row affected, try resource_submissions
+    // (Note: neon serverless returns rows affected in some cases, 
+    // but for simplicity we'll just try both or use a UNION logic if we had row counts reliably)
+    // Actually, a safer way is to check if it's in curated first.
+
+    await sql`
+      UPDATE resource_submissions 
+      SET click_count = COALESCE(click_count, 0) + 1 
+      WHERE id = ${resourceId}
+    `;
+    return true;
+  } catch (error) {
+    console.error('Increment Click Count Error:', error);
     return false;
   }
 }

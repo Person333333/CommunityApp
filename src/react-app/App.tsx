@@ -4,7 +4,6 @@ import './i18n'; // Initialize i18n
 import HomePage from "@/react-app/pages/Home";
 import DiscoverPage from "@/react-app/pages/Discover";
 import SubmitPage from "@/react-app/pages/Submit";
-import MapPage from "@/react-app/pages/Map";
 import ReferencesPage from "@/react-app/pages/References";
 import AboutPage from "@/react-app/pages/About";
 
@@ -56,7 +55,6 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/discover" element={<DiscoverPage />} />
         <Route path="/submit" element={<SubmitPage />} />
-        <Route path="/map" element={<MapPage />} />
         <Route path="/references" element={<ReferencesPage />} />
         <Route path="/about" element={<AboutPage />} />
 

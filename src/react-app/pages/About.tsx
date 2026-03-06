@@ -1,14 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router';
-import {
-  Heart,
-  Users,
-  Leaf,
-  Lightbulb,
-  Clock,
-  Compass,
-  Quote
-} from 'lucide-react';
+import { Heart, Users, Leaf, Lightbulb, Clock, Compass, Quote } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import { useTranslation } from 'react-i18next';
@@ -29,9 +21,16 @@ export default function About() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-blue-900 mb-8">
             {t('about.title')}
           </h1>
-          <p className="text-xl sm:text-2xl text-slate-800 max-w-3xl mx-auto leading-relaxed italic font-bold">
+          <p className="text-xl sm:text-2xl text-black max-w-3xl mx-auto leading-relaxed italic font-black">
             "From a simple idea to a neighborhood movement."
           </p>
+          <div className="mt-12 aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white max-w-4xl mx-auto">
+            <img
+              src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1200"
+              alt="Community Gathering"
+              className="w-full h-full object-cover"
+            />
+          </div>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: "100px" }}
@@ -54,7 +53,7 @@ export default function About() {
                   <h2 className="text-4xl font-bold text-blue-900 mb-6 flex items-center gap-3">
                     <Compass className="w-8 h-8 text-blue-500" /> {t('about.vision')}
                   </h2>
-                  <p className="text-lg text-slate-800 leading-relaxed font-bold">
+                  <p className="text-lg text-slate-900 leading-relaxed font-black">
                     {t('about.visionText')}
                   </p>
                 </div>
@@ -90,7 +89,7 @@ export default function About() {
                   <h2 className="text-4xl font-bold text-slate-900 mb-6 flex items-center gap-3">
                     <Heart className="w-8 h-8 text-emerald-500" /> {t('about.mission')}
                   </h2>
-                  <p className="text-lg text-slate-800 leading-relaxed font-bold">
+                  <p className="text-lg text-slate-900 leading-relaxed font-black">
                     {t('about.missionText')}
                   </p>
                 </div>
@@ -145,7 +144,7 @@ export default function About() {
                 <GlassCard className={`p-8 h-full text-center hover:shadow-2xl transition-all duration-500 border border-slate-100 ${value.bg}`}>
                   <div className="mb-6 flex justify-center">{value.icon}</div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4">{value.title}</h3>
-                  <p className="text-slate-800 text-sm leading-relaxed font-bold">{value.text}</p>
+                  <p className="text-slate-900 text-sm leading-relaxed font-black">{value.text}</p>
                 </GlassCard>
               </motion.div>
             ))}
@@ -177,7 +176,7 @@ export default function About() {
               <div className="lg:w-1/2 p-12 flex flex-col justify-center">
                 <Quote className="w-12 h-12 text-blue-100 mb-6" />
                 <h3 className="text-4xl font-bold text-blue-900 mb-8">Inspired by Tradition, Driven by Need</h3>
-                <div className="space-y-6 text-slate-800 leading-relaxed text-lg font-bold">
+                <div className="space-y-6 text-slate-900 leading-relaxed text-lg font-black">
                   <p>
                     Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner.
                   </p>
@@ -217,8 +216,8 @@ export default function About() {
                     </div>
                     <div>
                       <div className="text-blue-600 font-bold mb-1">{item.year}</div>
-                      <h4 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h4>
-                      <p className="text-slate-800 leading-relaxed font-bold">{item.desc}</p>
+                      <h4 className="text-xl font-black text-slate-900 mb-2">{item.title}</h4>
+                      <p className="text-slate-900 leading-relaxed font-black">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -235,16 +234,16 @@ export default function About() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-16 text-white shadow-2xl">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+          <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-[3rem] p-16 text-white shadow-2xl">
+            <h2 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tight">
               Ready to help your neighborhood?
             </h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
+            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-black text-blue-50">
               Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.
             </p>
             <div className="flex flex-wrap justify-center gap-6">
               <Link to="/submit">
-                <GlassButton variant="secondary" size="lg" className="bg-white text-blue-600 hover:bg-blue-50 border-none px-12 h-16 text-lg">
+                <GlassButton variant="secondary" size="lg" className="bg-white !text-slate-950 border-none px-12 h-16 text-lg font-black shadow-xl uppercase tracking-widest transition-all hover:bg-slate-50">
                   {t('about.submitResource')}
                 </GlassButton>
               </Link>

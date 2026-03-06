@@ -6,6 +6,7 @@ export interface UnifiedSearchParams extends SearchParams {
   includeUserSubmitted?: boolean;
   userId?: string;
   featured?: boolean;
+  sortBy?: 'popular' | 'recent' | 'default';
 }
 
 /**
@@ -72,7 +73,8 @@ export class UnifiedResourceService {
       const dbResources = await db.fetchResourcesFromDB({
         featured: params.featured,
         category: params.category,
-        search: params.keyword
+        search: params.keyword,
+        sortBy: params.sortBy
       });
 
       return dbResources as ResourceType[];
@@ -173,6 +175,18 @@ export class UnifiedResourceService {
     } catch (error) {
       console.error('Error fetching stats:', error);
       return { total: 0, featured: 0, userSubmitted: 0 };
+    }
+  }
+
+  /**
+   * Increment the click count (popularity) of a resource
+   */
+  async recordClick(resourceId: number): Promise<boolean> {
+    try {
+      return await db.incrementClickCountInDB(resourceId);
+    } catch (error) {
+      console.error('Error recording click:', error);
+      return false;
     }
   }
 

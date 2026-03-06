@@ -53,7 +53,6 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max">
             <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
-            <NavLink to="/map" data-tour="map">{t('nav.map')}</NavLink>
 
             <NavLink to="/submit" data-tour="add-resource">{t('nav.addResource')}</NavLink>
             <NavLink to="/about">{t('nav.about')}</NavLink>
@@ -78,7 +77,7 @@ export default function Navbar() {
               <SignedIn>
                 <button
                   onClick={() => setShowAccountMenu(!showAccountMenu)}
-                  className="w-9 h-9 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center shadow hover:opacity-90"
+                  className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center shadow hover:opacity-90"
                   aria-label="Account menu"
                 >
                   {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
@@ -86,20 +85,20 @@ export default function Navbar() {
                 {showAccountMenu && (
                   <div className="absolute right-0 top-12 w-64 glass p-4 rounded-xl border border-white/10 shadow-xl backdrop-blur">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center">
                         {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                       </div>
                       <div>
-                        <div className="text-slate-100 font-semibold leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
-                        <div className="text-slate-400 text-sm truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
+                        <div className="text-slate-900 font-black leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
+                        <div className="text-slate-600 text-xs font-black truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">{t('nav.account')}</Link>
-                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-slate-100">{t('discover.mySubmissions')}</Link>
+                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-slate-900 font-black">{t('nav.account')}</Link>
+                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-slate-900 font-black">{t('discover.mySubmissions')}</Link>
                       <button
                         onClick={() => signOut()}
-                        className="block w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-rose-300"
+                        className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-rose-700 font-black"
                       >
                         {t('account.signOut')}
                       </button>
@@ -139,9 +138,6 @@ export default function Navbar() {
               <MobileNavLink to="/discover" onClick={() => setIsOpen(false)}>
                 {t('nav.discover')}
               </MobileNavLink>
-              <MobileNavLink to="/map" onClick={() => setIsOpen(false)}>
-                {t('nav.map')}
-              </MobileNavLink>
 
               <MobileNavLink to="/submit" onClick={() => setIsOpen(false)}>
                 {t('nav.addResource')}
@@ -159,28 +155,28 @@ export default function Navbar() {
                   <Link
                     to="/sign-in"
                     onClick={() => setIsOpen(false)}
-                    className="block w-full glass-teal px-4 py-3 rounded-lg text-slate-100 hover:glass-strong transition-all text-left"
+                    className="block w-full bg-blue-50 px-4 py-3 rounded-lg text-slate-900 border border-blue-100 hover:bg-blue-100 transition-all text-left font-bold"
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/sign-up"
                     onClick={() => setIsOpen(false)}
-                    className="block w-full glass px-4 py-3 rounded-lg text-slate-100 hover:glass-strong transition-all text-left"
+                    className="block w-full bg-blue-600 px-4 py-3 rounded-lg text-white hover:bg-blue-700 transition-all text-left font-bold shadow-md"
                   >
                     Sign Up
                   </Link>
                 </SignedOut>
                 <SignedIn>
-                  <div className="px-4 py-3 glass rounded-lg">
+                  <div className="px-4 py-3 bg-white border border-slate-200 rounded-lg shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-600 to-amber-600 text-white font-semibold flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center">
                           {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                         </div>
-                        <div className="text-slate-100 font-medium"><Translated text={user?.firstName || 'Account'} /></div>
+                        <div className="text-slate-900 font-bold"><Translated text={user?.firstName || 'Account'} /></div>
                       </div>
-                      <button onClick={() => signOut()} className="text-rose-300 hover:text-rose-200 text-sm">{t('account.signOut')}</button>
+                      <button onClick={() => signOut()} className="text-rose-600 hover:text-rose-800 text-sm font-bold uppercase tracking-widest">{t('account.signOut')}</button>
                     </div>
                   </div>
                 </SignedIn>
@@ -218,7 +214,7 @@ function MobileNavLink({
     <Link
       to={to}
       onClick={onClick}
-      className="glass-teal px-4 py-3 rounded-lg text-slate-100 hover:glass-strong transition-all"
+      className="block w-full bg-slate-50 px-4 py-3 rounded-lg text-slate-900 hover:bg-slate-100 transition-all border border-slate-100 font-bold mb-2"
     >
       {children}
     </Link>

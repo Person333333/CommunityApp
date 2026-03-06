@@ -25,6 +25,7 @@ export const ResourceSchema = z.object({
   user_id: z.string().nullable().optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
+  click_count: z.number().optional().nullable(),
 });
 
 export type ResourceType = z.infer<typeof ResourceSchema>;

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Compass, Search, MapPin, Sparkles, Globe, Bot, PlusCircle, FolderHeart } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Compass, Search, Sparkles, Globe, Bot, PlusCircle, FolderHeart, MapPinned, Star } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import GlassCard from './GlassCard';
 import { useTranslation } from 'react-i18next';
@@ -39,9 +39,25 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       id: 'discover',
       titleKey: 'tour.discover.title',
       contentKey: 'tour.discover.content',
-      target: '[data-tour="discover"]',
+      target: '[data-tour="search"]',
       path: '/discover',
       position: 'bottom'
+    },
+    {
+      id: 'explorer',
+      titleKey: 'tour.explorer.title',
+      contentKey: 'tour.explorer.content',
+      target: '[data-tour="category-explorer"]',
+      path: '/discover',
+      position: 'bottom'
+    },
+    {
+      id: 'highlights',
+      titleKey: 'tour.highlights.title',
+      contentKey: 'tour.highlights.content',
+      target: '[data-tour="highlights-sidebar"]',
+      path: '/discover',
+      position: 'left'
     },
     {
       id: 'ai-search',
@@ -67,11 +83,11 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       position: 'bottom'
     },
     {
-      id: 'map',
-      titleKey: 'tour.map.title',
-      contentKey: 'tour.map.content',
-      target: '[data-tour="map"]',
-      path: '/map',
+      id: 'unified-map',
+      titleKey: 'tour.unifiedMap.title',
+      contentKey: 'tour.unifiedMap.content',
+      target: '[data-tour="map-toggle"]',
+      path: '/discover',
       position: 'bottom'
     },
     {
@@ -80,6 +96,14 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       contentKey: 'tour.addResource.content',
       target: '[data-tour="add-resource"]',
       path: '/submit',
+      position: 'bottom'
+    },
+    {
+      id: 'board',
+      titleKey: 'tour.board.title',
+      contentKey: 'tour.board.content',
+      target: '[data-tour="bulletin-board"]',
+      path: '/',
       position: 'bottom'
     },
     {
@@ -97,7 +121,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
     }
   ], []);
 
-  // Handle navigation when step changes
   useEffect(() => {
     if (!isOpen) return;
     const step = tourSteps[currentStep];
@@ -132,7 +155,6 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
           element.setAttribute('data-tour-highlighted', 'true');
           setHighlightedElement(element);
 
-          // Only scroll if it's not a fixed element (simplified check)
           const style = window.getComputedStyle(element);
           if (style.position !== 'fixed') {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -218,39 +240,42 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
             bottom: step.position === 'bottom' ? '80px' : 'auto',
           }}
         >
-          <GlassCard variant="strong" className="p-6">
+          <GlassCard variant="strong" className="p-6 bg-white border border-slate-200 shadow-2xl">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-amber-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                   {step.id === 'welcome' && <Compass className="w-5 h-5 text-white" />}
                   {step.id === 'discover' && <Search className="w-5 h-5 text-white" />}
+                  {step.id === 'explorer' && <Compass className="w-5 h-5 text-white" />}
+                  {step.id === 'highlights' && <Star className="w-5 h-5 text-white" />}
                   {step.id === 'ai-search' && <Sparkles className="w-5 h-5 text-white" />}
                   {step.id === 'my-resources' && <FolderHeart className="w-5 h-5 text-white" />}
                   {step.id === 'translation' && <Globe className="w-5 h-5 text-white" />}
-                  {step.id === 'map' && <MapPin className="w-5 h-5 text-white" />}
+                  {step.id === 'unified-map' && <MapPinned className="w-5 h-5 text-white" />}
                   {step.id === 'add-resource' && <PlusCircle className="w-5 h-5 text-white" />}
+                  {step.id === 'board' && <Compass className="w-5 h-5 text-white" />}
                   {step.id === 'helper' && <Bot className="w-5 h-5 text-white" />}
                   {step.id === 'complete' && <Compass className="w-5 h-5 text-white" />}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-100">
+                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">
                     {t(step.titleKey)}
                   </h3>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
                     {t('tour.step', { current: currentStep + 1, total: tourSteps.length })}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-200 transition-colors"
+                className="text-slate-400 hover:text-slate-600 transition-colors"
                 aria-label="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-slate-900" />
               </button>
             </div>
 
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-900 mb-8 leading-relaxed font-black text-sm">
               {t(step.contentKey)}
             </p>
 
@@ -258,8 +283,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
               {tourSteps.map((_, index) => (
                 <div
                   key={index}
-                  className={`flex-1 h-1 rounded-full transition-colors ${index <= currentStep ? 'bg-gradient-to-r from-teal-500 to-amber-500' : 'bg-slate-600'
-                    }`}
+                  className={`flex-1 h-1.5 rounded-full transition-all duration-300 ${index <= currentStep ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600' : 'bg-slate-100'}`}
                 />
               ))}
             </div>
@@ -276,7 +300,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                 {!isFirstStep && (
                   <button
                     onClick={handlePrevious}
-                    className="flex items-center gap-2 px-4 py-2 glass border border-white/10 text-slate-300 hover:border-teal-400/30 transition-all rounded-lg text-sm font-medium"
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 text-slate-900 hover:bg-slate-100 transition-all rounded-lg text-sm font-black"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     {t('tour.previous')}
@@ -285,7 +309,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
 
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg hover:from-teal-700 hover:to-amber-700 transition-all text-sm font-medium shadow-lg shadow-teal-500/20"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all text-sm font-black shadow-lg shadow-blue-500/20"
                 >
                   {isLastStep ? t('tour.complete.getStarted') : t('tour.next')}
                   <ArrowRight className="w-4 h-4" />
@@ -300,7 +324,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
         [data-tour-highlighted="true"] {
           position: relative !important;
           z-index: 45 !important;
-          box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.3), 0 0 0 8px rgba(20, 184, 166, 0.1);
+          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3), 0 0 0 8px rgba(37, 99, 235, 0.1);
           border-radius: 8px;
           transition: all 0.3s ease;
         }
@@ -313,7 +337,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
           content: '';
           position: absolute;
           inset: -8px;
-          border: 2px dashed rgb(20, 184, 166);
+          border: 2px dashed rgb(37, 99, 235);
           border-radius: 12px;
           pointer-events: none;
           animation: pulse 2s infinite;

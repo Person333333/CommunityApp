@@ -81,8 +81,8 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                 <div className="p-6 space-y-6">
                   {/* Description */}
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-200 mb-2">{t('resource.description')}</h3>
-                    <p className="text-slate-300 leading-relaxed">
+                    <h3 className="text-lg font-black text-indigo-950 mb-2 uppercase tracking-tight">{t('resource.description')}</h3>
+                    <p className="text-slate-900 leading-relaxed font-bold opacity-90">
                       {resource.description}
                     </p>
                   </div>
@@ -90,28 +90,26 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 p-4 rounded-2xl">
+                        <MapPin className="w-6 h-6 text-blue-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.address')}</p>
-                          <p className="text-slate-100">
+                          <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest mb-1">{t('resource.address')}</p>
+                          <p className="text-slate-950 font-black text-lg leading-tight">
                             {resource.address}
-                            {resource.city && `, ${resource.city}`}
-                            {resource.state && `, ${resource.state}`}
-                            {resource.zip && ` ${resource.zip}`}
+                            {resource.city && <span className="block text-sm opacity-80">{resource.city}, {resource.state} {resource.zip}</span>}
                           </p>
                         </div>
                       </div>
                     )}
 
                     {resource.phone && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <Phone className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
+                        <Phone className="w-6 h-6 text-indigo-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.phone')}</p>
+                          <p className="text-[10px] font-black text-indigo-900 uppercase tracking-widest mb-1">{t('resource.phone')}</p>
                           <a
                             href={`tel:${resource.phone}`}
-                            className="text-teal-300 hover:text-teal-200 transition-colors"
+                            className="text-indigo-950 font-black text-xl hover:text-blue-700 transition-colors"
                           >
                             {resource.phone}
                           </a>
@@ -120,13 +118,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.email && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <Mail className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-slate-100 border border-slate-200 p-4 rounded-2xl">
+                        <Mail className="w-6 h-6 text-slate-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.email')}</p>
+                          <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-1">{t('resource.email')}</p>
                           <a
                             href={`mailto:${resource.email}`}
-                            className="text-teal-300 hover:text-teal-200 transition-colors break-all"
+                            className="text-slate-950 font-black hover:text-blue-700 transition-colors break-all"
                           >
                             {resource.email}
                           </a>
@@ -135,15 +133,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.website && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <Globe className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 p-4 rounded-2xl">
+                        <Globe className="w-6 h-6 text-blue-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.website')}</p>
+                          <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest mb-1">{t('resource.website')}</p>
                           <a
                             href={resource.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-teal-300 hover:text-teal-200 transition-colors break-all"
+                            className="text-blue-950 font-black hover:text-blue-700 transition-colors break-all underline decoration-blue-200"
                           >
                             {t('resource.visitWebsite')}
                           </a>
@@ -152,21 +150,21 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.hours && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <Clock className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-amber-50 border border-amber-100 p-4 rounded-2xl">
+                        <Clock className="w-6 h-6 text-amber-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.hours')}</p>
-                          <p className="text-slate-100">{resource.hours}</p>
+                          <p className="text-[10px] font-black text-amber-900 uppercase tracking-widest mb-1">{t('resource.hours')}</p>
+                          <p className="text-amber-950 font-black">{resource.hours}</p>
                         </div>
                       </div>
                     )}
 
                     {resource.audience && (
-                      <div className="flex items-start gap-3 glass-teal p-4 rounded-lg">
-                        <Users className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-rose-50 border border-rose-100 p-4 rounded-2xl">
+                        <Users className="w-6 h-6 text-rose-700 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm text-slate-400 mb-1">{t('resource.audience')}</p>
-                          <p className="text-slate-100">{resource.audience}</p>
+                          <p className="text-[10px] font-black text-rose-900 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
+                          <p className="text-rose-950 font-black">{resource.audience}</p>
                         </div>
                       </div>
                     )}
@@ -174,16 +172,16 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   {/* Services */}
                   {resource.services && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200 mb-3 flex items-center gap-2">
-                        <Tag className="w-5 h-5 text-teal-400" />
+                    <div className="pt-4">
+                      <h3 className="text-sm font-black text-indigo-950 mb-3 flex items-center gap-2 uppercase tracking-widest">
+                        <Tag className="w-4 h-4 text-indigo-600" />
                         {t('resource.services')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.services.split(',').map((service, i) => (
                           <span
                             key={i}
-                            className="text-sm px-3 py-1.5 glass-ochre rounded-full text-slate-300"
+                            className="text-xs px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-950 font-black"
                           >
                             {service.trim()}
                           </span>
