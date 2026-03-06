@@ -42,10 +42,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto" onClick={(e) => e.stopPropagation()}>
               <GlassCard variant="strong" className="p-0 overflow-hidden">
                 {/* Header */}
                 <div className="relative">

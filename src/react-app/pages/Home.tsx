@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
   const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
@@ -170,21 +172,29 @@ export default function Home() {
                     <Search className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 ml-3 sm:ml-4" />
                     <input
                       type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder={t('home.hero.searchPlaceholder')}
                       className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 px-3 sm:px-4 py-2.5 sm:py-3 w-full font-medium text-sm sm:text-base"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          const value = e.currentTarget.value;
-                          if (value) window.location.href = `/discover?q=${encodeURIComponent(value)}`;
+                          if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                          else navigate('/discover');
                         }
                       }}
                     />
                   </div>
-                  <Link to="/discover" className="w-full sm:w-auto">
-                    <GlassButton variant="primary" size="md" className="w-full">
-                      {t('home.hero.explore')}
-                    </GlassButton>
-                  </Link>
+                  <GlassButton
+                    variant="primary"
+                    size="md"
+                    className="w-full sm:w-auto"
+                    onClick={() => {
+                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                      else navigate('/discover');
+                    }}
+                  >
+                    {t('home.hero.explore')}
+                  </GlassButton>
                 </div>
               </motion.div>
 
