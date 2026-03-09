@@ -56,9 +56,9 @@ export class UnifiedResourceService {
   /**
    * Delete a resource owned by the user
    */
-  async deleteResource(resourceId: number, userId: string): Promise<boolean> {
+  async deleteResource(resourceId: number, identifier: string): Promise<boolean> {
     try {
-      return await db.deleteResourceFromDB(resourceId, userId);
+      return await db.deleteResourceFromDB(resourceId, identifier);
     } catch (error) {
       console.error('Error deleting resource:', error);
       return false;

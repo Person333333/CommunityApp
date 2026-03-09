@@ -56,7 +56,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max">
-            <NavLink to="/discover" data-tour="discover">{t('nav.discover')}</NavLink>
+            <NavLink to="/discover" className="py-4">{t('nav.discover')}</NavLink>
 
             <NavLink to="/submit" data-tour="add-resource">{t('nav.addResource')}</NavLink>
             <NavLink to="/about">{t('nav.about')}</NavLink>

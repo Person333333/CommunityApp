@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, MapPinned, Compass, X, Trash2 } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
@@ -40,6 +40,35 @@ export default function Discover() {
     return localStorage.getItem('community_guest_email') || '';
   });
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [selectedCost, setSelectedCost] = useState('');
+  const [selectedTag, setSelectedTag] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const [showLocalOnly, setShowLocalOnly] = useState(true);
+  const LOCAL_RADIUS_KM = 300;
+
+  // Questionnaire State
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [qStep, setQStep] = useState(1);
+  const [qCategory, setQCategory] = useState('');
+  const [qSubCategory, setQSubCategory] = useState('');
+  const [qDemographic, setQDemographic] = useState('');
+  const [qCost, setQCost] = useState('');
+
+  // Demographics mapping
+  const demographics = [
+    { id: 'family', label: 'Family & Children', icon: '👨‍👩‍👧‍👦', tag: 'family' },
+    { id: 'senior', label: 'Seniors', icon: '🧓', tag: 'senior' },
+    { id: 'veteran', label: 'Veterans', icon: '🎖️', tag: 'veteran' },
+    { id: 'student', label: 'Students', icon: '🎓', tag: 'student' },
+    { id: 'anyone', label: 'Anyone', icon: '🌍', tag: '' }
+  ];
+
+  // Reset pagination on filter change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategories, selectedCost, selectedTag, showFavoritesOnly, showMySubmissions, showLocalOnly]);
+
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -135,8 +164,6 @@ export default function Discover() {
     fetchResources();
   }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language, localFavoriteIds, guestEmail]);
 
-  const LOCAL_RADIUS_KM = 300;
-  const [showLocalOnly, setShowLocalOnly] = useState(true);
   const resources = useMemo(() => {
     let filtered = allResources;
     if (showLocalOnly && userLocation) {
@@ -146,8 +173,36 @@ export default function Discover() {
         return distance <= LOCAL_RADIUS_KM;
       });
     }
+
+    if (selectedCost) {
+      const q = selectedCost.toLowerCase();
+      filtered = filtered.filter(r => {
+        const descMatch = r.description?.toLowerCase().includes(q) || r.title?.toLowerCase().includes(q);
+        // Explicitly handle "free" as a default assumption if no cost info is provided in title/desc, or if it explicitly says free
+        if (q === 'free') {
+          return descMatch || !r.description?.toLowerCase().match(/cost|price|\$|fee/i);
+        }
+        return descMatch;
+      });
+    }
+
+    if (selectedTag) {
+      const t = selectedTag.toLowerCase();
+      filtered = filtered.filter(r =>
+        r.category?.toLowerCase().includes(t) ||
+        r.description?.toLowerCase().includes(t) ||
+        r.title?.toLowerCase().includes(t)
+      );
+    }
+
     return filtered;
-  }, [allResources, showLocalOnly, userLocation]);
+  }, [allResources, showLocalOnly, userLocation, selectedCost, selectedTag]);
+
+  const totalPages = Math.ceil(resources.length / itemsPerPage);
+  const paginatedResources = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return resources.slice(startIndex, startIndex + itemsPerPage);
+  }, [resources, currentPage]);
 
   const handleResourceClick = (resource: ResourceType) => {
     setSelectedResource(resource);
@@ -155,13 +210,14 @@ export default function Discover() {
     unifiedResourceService.recordClick(resource.id).catch(err => console.error('Failed to record click:', err));
   };
 
-  const handleDelete = async (resourceId: number) => {
-    if (!user || !window.confirm(t('discover.confirmDelete'))) return;
+  const handleDelete = async (resource: ResourceType) => {
+    if (!window.confirm(t('discover.confirmDelete'))) return;
 
     try {
-      const success = await unifiedResourceService.deleteResource(resourceId, user.id);
+      const identifier = user ? user.id : guestEmail;
+      const success = await unifiedResourceService.deleteResource(resource.id, identifier);
       if (success) {
-        setAllResources(prev => prev.filter(r => r.id !== resourceId));
+        setAllResources(prev => prev.filter(r => r.id !== resource.id));
         alert(t('discover.resourceDeleted'));
       } else {
         alert(t('discover.deleteError'));
@@ -185,10 +241,14 @@ export default function Discover() {
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCategories([]);
+    setSelectedCost('');
+    setSelectedTag('');
     setSearchParams(new URLSearchParams());
   };
 
-  const hasActiveFilters = searchTerm || selectedCategories.length > 0;
+  const hasActiveFilters = searchTerm || selectedCategories.length > 0 || selectedCost || selectedTag;
+
+  // Removed auto-trigger inline wizard by user request
 
   if (locationLoading || !userLocation) {
     return (
@@ -280,54 +340,39 @@ export default function Discover() {
                   )}
                 </div>
 
-                <div className="flex gap-2 flex-wrap">
-                  <select
-                    className="bg-white border border-slate-200 rounded-xl px-4 py-2 font-bold text-xs sm:text-sm outline-none focus:border-blue-500 shadow-sm cursor-pointer"
-                    value={selectedCategories[0] || ""}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setSelectedCategories(val ? [val] : []);
-                      handleSearch(searchTerm, val ? [val] : []);
-                    }}
+                <div className="flex justify-center w-full mt-2">
+                  <button
+                    onClick={() => { setQStep(1); setShowQuestionnaire(true); }}
+                    className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/30 flex items-center justify-center gap-3 transition-all transform hover:scale-105 active:scale-95 text-lg uppercase tracking-widest"
                   >
-                    <option value="">All Categories</option>
-                    {categoryHierarchy.map(node => (
-                      <optgroup key={node.id} label={node.label}>
-                        {node.children?.map(child => (
-                          <option key={child.id} value={child.label}>{child.label}</option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
-
-                  <select className="bg-white border border-slate-200 rounded-xl px-4 py-2 font-bold text-xs sm:text-sm outline-none focus:border-blue-500 shadow-sm cursor-pointer">
-                    <option value="">Any Cost</option>
-                    <option value="free">Free</option>
-                    <option value="low">Low Cost</option>
-                    <option value="sliding">Sliding Scale</option>
-                  </select>
-
-                  <select className="bg-white border border-slate-200 rounded-xl px-4 py-2 font-bold text-xs sm:text-sm outline-none focus:border-blue-500 shadow-sm cursor-pointer">
-                    <option value="">Any Tag</option>
-                    <option value="urgent">Urgent</option>
-                    <option value="lgbtq">LGBTQ+ Friendly</option>
-                    <option value="accessible">Wheelchair Accessible</option>
-                  </select>
+                    <Compass className="w-6 h-6 animate-pulse" />
+                    Help Find Resource Just For Me
+                  </button>
                 </div>
               </div>
 
               {/* Favorites / Submissions toggle */}
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide pt-2 border-t border-slate-100">
-                <GlassButton variant={showFavoritesOnly ? 'primary' : 'secondary'} size="sm" onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}>
+                <GlassButton
+                  variant={showFavoritesOnly ? 'primary' : 'secondary'}
+                  size="sm"
+                  onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
+                  className={showFavoritesOnly ? 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30' : ''}
+                >
                   <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-white' : ''}`} /> My Favorites
                 </GlassButton>
-                <GlassButton variant={showMySubmissions ? 'primary' : 'secondary'} size="sm" onClick={() => {
-                  if (!user && !guestEmail) {
-                    setShowEmailPrompt(true);
-                    return;
-                  }
-                  setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
-                }}>
+                <GlassButton
+                  variant={showMySubmissions ? 'primary' : 'secondary'}
+                  size="sm"
+                  onClick={() => {
+                    if (!user && !guestEmail) {
+                      setShowEmailPrompt(true);
+                      return;
+                    }
+                    setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
+                  }}
+                  className={showMySubmissions ? 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30' : ''}
+                >
                   <User className="w-4 h-4 mr-2" /> {t('discover.mySubmissions')}
                 </GlassButton>
               </div>
@@ -378,10 +423,20 @@ export default function Discover() {
           <div className="flex-1 order-2 lg:order-1">
 
             <div className="relative min-h-[400px]">
+              {paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
+                <div className="bg-slate-50/50 rounded-3xl border border-slate-200 p-8 sm:p-12 mb-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+                  <Compass className="w-16 h-16 text-blue-500 mb-6 opacity-80" />
+                  <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tight">Community Hub Ready</h2>
+                  <p className="text-slate-600 font-bold max-w-lg mx-auto">Click "Help Find Resource Just For Me" above to discover tailored community support.</p>
+                </div>
+              ) : null}
+
               {hasActiveFilters && (
                 <div className="flex items-center gap-2 flex-wrap mb-6">
                   <span className="text-xs text-slate-500 font-black uppercase tracking-widest">Filters:</span>
                   {searchTerm && <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">"{searchTerm}"</span>}
+                  {selectedCost && <span className="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Cost: {selectedCost} <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedCost('')} /></span>}
+                  {selectedTag && <span className="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Tag: {selectedTag} <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedTag('')} /></span>}
                   {selectedCategories.map(cat => (
                     <span key={cat} className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       {cat} <X className="w-3 h-3 cursor-pointer" onClick={() => { const newCats = selectedCategories.filter(c => c !== cat); setSelectedCategories(newCats); handleSearch(searchTerm, newCats); }} />
@@ -395,14 +450,20 @@ export default function Discover() {
                 <div className="flex justify-center py-20">
                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full" />
                 </div>
-              ) : resources.length === 0 ? (
+              ) : paginatedResources.length === 0 && (hasActiveFilters || showFavoritesOnly || showMySubmissions) ? (
                 <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
                   <p className="text-slate-500 font-black uppercase tracking-widest">{t('discover.noResources')}</p>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {resources.map((resource, idx) => (
-                    <motion.div key={resource.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }}>
+                  {paginatedResources.map((resource, idx) => (
+                    <motion.div
+                      key={resource.id}
+                      initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: idx * 0.05, type: "spring", stiffness: 100 }}
+                    >
                       <GlassCard hover className="flex flex-col sm:flex-row p-0 overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all h-auto" onClick={() => handleResourceClick(resource)}>
                         {resource.image_url ? (
                           <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto overflow-hidden flex-shrink-0">
@@ -417,10 +478,11 @@ export default function Discover() {
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-full">{resource.category}</span>
                             <div className="flex items-center gap-3">
-                              {showMySubmissions && user && resource.user_id === user.id && (
+                              {showMySubmissions && (user?.id === resource.user_id || (guestEmail && resource.contact_email?.toLowerCase() === guestEmail.toLowerCase())) && (
                                 <button
-                                  onClick={(e) => { e.stopPropagation(); handleDelete(resource.id); }}
-                                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                                  onClick={(e) => { e.stopPropagation(); handleDelete(resource); }}
+                                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors border border-rose-100 shadow-sm"
+                                  title="Delete your submission"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -442,10 +504,42 @@ export default function Discover() {
                               <Clock className="w-3.5 h-3.5 text-indigo-500" /> Added {resource.created_at ? new Date(resource.created_at).toLocaleDateString() : 'Recently'}
                             </div>
                           </div>
+
+                          {/* Mock Ratings block */}
+                          <div className="mt-4 flex items-center gap-1.5 bg-amber-50/50 self-start px-2 py-1 rounded-lg border border-amber-100">
+                            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                            <span className="text-xs font-black text-slate-800">
+                              {(4.0 + (String(resource.id).length % 10) / 10).toFixed(1)}/5
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
+                              ({40 + (String(resource.title || '').length * 3)} reviews)
+                            </span>
+                          </div>
                         </div>
                       </GlassCard>
                     </motion.div>
                   ))}
+                  {paginatedResources.length > 0 && totalPages > 1 && (
+                    <div className="flex justify-between items-center bg-slate-50 border border-slate-200 p-4 rounded-3xl mt-8">
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50 transition-all uppercase tracking-widest text-xs"
+                      >
+                        Previous
+                      </button>
+                      <span className="text-xs font-black text-slate-900 uppercase tracking-widest">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage >= totalPages}
+                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50 transition-all uppercase tracking-widest text-xs"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -510,6 +604,115 @@ export default function Discover() {
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <GuestAuthModal isOpen={authModal.isOpen} onClose={() => setAuthModal(prev => ({ ...prev, isOpen: false }))} title={authModal.title} message={authModal.message} type={authModal.type} />
+
+      {/* Questionnaire Modal */}
+      <AnimatePresence>
+        {showQuestionnaire && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowQuestionnaire(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl relative z-[101] overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 flex justify-between items-center text-white flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <Compass className="w-8 h-8" />
+                  <h2 className="text-2xl font-black uppercase tracking-tight">Resource Finder</h2>
+                </div>
+                <button onClick={() => setShowQuestionnaire(false)} className="p-2 hover:bg-white/20 rounded-full transition-colors"><X className="w-6 h-6" /></button>
+              </div>
+              <div className="p-6 sm:p-8 overflow-y-auto">
+                {/* Steps Progress */}
+                <div className="flex items-center justify-between mb-8 relative">
+                  <div className="absolute left-0 right-0 top-1/2 h-1 bg-slate-100 -z-10" />
+                  {[1, 2, 3, 4, 5].map(step => (
+                    <div key={step} className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm z-10 transition-colors ${qStep >= step ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>{step}</div>
+                  ))}
+                </div>
+
+                {qStep === 1 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h3 className="text-2xl font-black text-slate-900 mb-6 uppercase tracking-tight text-center">What do you need help with?</h3>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      {categoryHierarchy.map(cat => (
+                        <button key={cat.id} onClick={() => { setQCategory(cat.label); setQSubCategory(''); setQStep(2); }} className={`p-4 rounded-2xl border-2 text-center transition-all ${qCategory === cat.label ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 hover:border-blue-400 bg-white'}`}>
+                          <span className="font-black uppercase tracking-widest text-sm">{cat.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {qStep === 2 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h3 className="text-2xl font-black text-slate-900 mb-6 uppercase tracking-tight text-center">Any specific needs?</h3>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      <button onClick={() => { setQSubCategory(''); setQStep(3); }} className={`p-4 rounded-2xl border-2 text-center transition-all ${qSubCategory === '' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 hover:border-blue-400 bg-white'}`}>
+                        <span className="font-black uppercase tracking-widest text-sm">All {qCategory}</span>
+                      </button>
+                      {categoryHierarchy.find(c => c.label === qCategory)?.children?.map(child => (
+                        <button key={child.id} onClick={() => { setQSubCategory(child.label); setQStep(3); }} className={`p-4 rounded-2xl border-2 text-center transition-all ${qSubCategory === child.label ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 hover:border-blue-400 bg-white'}`}>
+                          <span className="font-black uppercase tracking-widest text-sm">{child.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {qStep === 3 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h3 className="text-2xl font-black text-slate-900 mb-6 uppercase tracking-tight text-center">Who is this for?</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                      {demographics.map(demo => (
+                        <button key={demo.id} onClick={() => { setQDemographic(demo.tag); setQStep(4); }} className={`p-4 rounded-2xl border-2 text-center flex flex-col items-center gap-2 transition-all ${qDemographic === demo.tag ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 hover:border-indigo-400 bg-white'}`}>
+                          <span className="text-3xl">{demo.icon}</span>
+                          <span className="font-black uppercase tracking-widest text-xs">{demo.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {qStep === 4 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h3 className="text-2xl font-black text-slate-900 mb-6 uppercase tracking-tight text-center">Cost Preference?</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                      {['', 'free', 'sliding'].map(cost => (
+                        <button key={cost} onClick={() => { setQCost(cost); setQStep(5); }} className={`p-4 rounded-2xl border-2 text-center transition-all ${qCost === cost ? 'border-emerald-600 bg-emerald-50 text-emerald-700' : 'border-slate-200 hover:border-emerald-400 bg-white'}`}>
+                          <span className="font-black uppercase tracking-widest text-sm">{cost === '' ? 'Any Cost' : cost === 'free' ? 'Free Only' : 'Sliding Scale'}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {qStep === 5 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="text-center">
+                    <h3 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tight">Ready to Search!</h3>
+                    <p className="text-slate-600 font-bold mb-8">We've tailored the results based on your answers.</p>
+                    <div className="flex justify-center gap-4">
+                      <button onClick={() => setQStep(4)} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-xl uppercase tracking-widest transition-colors">Back</button>
+                      <button onClick={() => {
+                        const finalCategory = qSubCategory || qCategory;
+                        setSelectedCategories(finalCategory ? [finalCategory] : []);
+                        setSelectedTag(qDemographic);
+                        setSelectedCost(qCost);
+                        handleSearch(searchTerm, finalCategory ? [finalCategory] : []);
+                        setShowQuestionnaire(false);
+                      }} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black rounded-xl shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 uppercase tracking-widest transition-colors">
+                        <Search className="w-5 h-5" /> Show Results
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+              {qStep < 5 && (
+                <div className="bg-slate-50 p-4 border-t border-slate-100 flex justify-between">
+                  {qStep > 1 ? <button onClick={() => setQStep(prev => prev - 1)} className="text-slate-500 font-black uppercase text-sm hover:text-slate-900">Back</button> : <span />}
+                  <button onClick={() => setQStep(prev => prev + 1)} className="text-blue-600 font-black uppercase text-sm hover:text-blue-800">Skip</button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

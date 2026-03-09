@@ -16,6 +16,7 @@ import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
+import NeedHelpNow from "@/react-app/components/NeedHelpNow";
 import { useLocation } from "@/react-app/context/LocationContext";
 
 function ScrollToTop() {
@@ -82,6 +83,7 @@ export default function App() {
         onClose={() => setShowTour(false)}
         onComplete={() => setShowTour(false)}
       />
+      <NeedHelpNow />
       <HelperButton onShowTour={() => setShowTour(true)} />
     </Router>
   );

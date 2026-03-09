@@ -169,14 +169,20 @@ export async function fetchMySubmissionsFromDB(userId: string) {
   }
 }
 
-export async function deleteResourceFromDB(resourceId: number, userId: string) {
+export async function deleteResourceFromDB(resourceId: number, identifier: string) {
   try {
-    console.log(`Deleting resource ${resourceId} for user ${userId}`);
-    // Delete from resource_submissions table
-    await sql`
-      DELETE FROM resource_submissions 
-      WHERE id = ${resourceId} AND user_id = ${userId}
-    `;
+    console.log(`Deleting resource ${resourceId} for identifier ${identifier}`);
+    if (identifier.includes('@')) {
+      await sql`
+        DELETE FROM resource_submissions 
+        WHERE id = ${resourceId} AND LOWER(contact_email) = LOWER(${identifier})
+      `;
+    } else {
+      await sql`
+        DELETE FROM resource_submissions 
+        WHERE id = ${resourceId} AND user_id = ${identifier}
+      `;
+    }
     return true;
   } catch (error) {
     console.error('Delete Resource Error:', error);

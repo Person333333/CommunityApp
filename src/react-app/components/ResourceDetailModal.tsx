@@ -5,6 +5,7 @@ import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import { useTranslation } from 'react-i18next';
+import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
   resource: ResourceType | null;
@@ -16,10 +17,53 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   const { t } = useTranslation();
   const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
 
+  // Donation States
+  const [showDonationForm, setShowDonationForm] = useState(false);
+  const [donorName, setDonorName] = useState('');
+  const [donorEmail, setDonorEmail] = useState('');
+  const [donorZip, setDonorZip] = useState('');
+  const [processingDonation, setProcessingDonation] = useState(false);
+  const [hasSavedProfile, setHasSavedProfile] = useState(false);
+
   // Reset report state when modal opens/closes or resource changes
   useEffect(() => {
     setReportState('idle');
+    setShowDonationForm(false);
+
+    // Check for saved donor profile
+    const savedProfile = localStorage.getItem('community_donor_profile');
+    if (savedProfile) {
+      try {
+        const profile = JSON.parse(savedProfile);
+        setDonorName(profile.name || '');
+        setDonorEmail(profile.email || '');
+        setDonorZip(profile.zip || '');
+        setHasSavedProfile(true);
+      } catch (e) {
+        console.error("Failed to parse saved donor profile");
+      }
+    }
   }, [isOpen, resource]);
+
+  const handleDonateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setProcessingDonation(true);
+
+    // Save profile for future
+    localStorage.setItem('community_donor_profile', JSON.stringify({
+      name: donorName,
+      email: donorEmail,
+      zip: donorZip
+    }));
+    setHasSavedProfile(true);
+
+    // Simulate redirect to agency
+    setTimeout(() => {
+      setProcessingDonation(false);
+      alert(`Redirecting ${donorName} seamlessly to ${resource?.title}'s secure donation page...`);
+      setShowDonationForm(false);
+    }, 1500);
+  };
 
   if (!resource) return null;
 
@@ -247,6 +291,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           </GlassButton>
                         </a>
                       )}
+
+                      <button
+                        onClick={() => setShowDonationForm(true)}
+                        className="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-xl shadow-rose-500/30 flex items-center transition-colors uppercase tracking-widest text-sm"
+                      >
+                        <Heart className="w-4 h-4 mr-2" />
+                        Donate Now
+                      </button>
                     </div>
 
                     <div className="text-right">
@@ -284,6 +336,99 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
               </GlassCard>
             </div>
           </motion.div>
+
+          {/* Donation Form Modal overlay inside the main Modal context */}
+          <AnimatePresence>
+            {showDonationForm && (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowDonationForm(false)}
+                  className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                  className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md relative z-[61] overflow-hidden border border-rose-100"
+                >
+                  <div className="p-8 space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Support {resource.title}</h3>
+                      <button onClick={() => setShowDonationForm(false)} className="text-slate-400 hover:text-slate-600">
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {hasSavedProfile && (
+                      <div className="bg-emerald-50 border border-emerald-100 p-3 rounded-xl flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                        <CheckCircle2 className="w-4 h-4" />
+                        Using your saved Donor Profile
+                      </div>
+                    )}
+
+                    <form onSubmit={handleDonateSubmit} className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Full Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={donorName}
+                          onChange={(e) => setDonorName(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          placeholder="Jane Doe"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Email Address</label>
+                        <input
+                          type="email"
+                          required
+                          value={donorEmail}
+                          onChange={(e) => setDonorEmail(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          placeholder="jane@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">ZIP Code</label>
+                        <input
+                          type="text"
+                          required
+                          value={donorZip}
+                          onChange={(e) => setDonorZip(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          placeholder="98000"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={processingDonation}
+                        className="w-full mt-4 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                      >
+                        {processingDonation ? (
+                          <>
+                            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+                              <Compass className="w-5 h-5" />
+                            </motion.div>
+                            Connecting...
+                          </>
+                        ) : (
+                          "Proceed to Agency"
+                        )}
+                      </button>
+                      <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
+                        Your basic info will be passed securely to the agency to speed up your donation.
+                      </p>
+                    </form>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>

@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
 import GlassCard from '@/react-app/components/GlassCard';
+import FlipCard from '@/react-app/components/FlipCard';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
 import { useEffect, useState, useMemo } from 'react';
@@ -24,6 +25,9 @@ export default function Home() {
   const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(true);
+  const [emailSubscribed, setEmailSubscribed] = useState(false);
+  const [subscribeEmail, setSubscribeEmail] = useState('');
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -71,16 +75,16 @@ export default function Home() {
 
   // Carousel Auto-Play Logic
   useEffect(() => {
-    if (isHovered || allFeaturedResources.length <= 3) return;
+    if (!autoPlay || isHovered || allFeaturedResources.length <= 5) return;
     const interval = setInterval(() => {
       setCarouselIndex((prev) => {
-        const total = Math.max(3, allFeaturedResources.length);
+        const total = Math.max(5, allFeaturedResources.length);
         if (prev >= total - 3) return 0;
         return prev + 1;
       });
     }, 4500);
     return () => clearInterval(interval);
-  }, [isHovered, allFeaturedResources.length]);
+  }, [autoPlay, isHovered, allFeaturedResources.length]);
 
   useEffect(() => {
     const translateExisting = async () => {
@@ -118,7 +122,7 @@ export default function Home() {
     // Filter to unique resources by ID
     const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
     const featuredUnique = Array.from(new Map(featuredResources.map(i => [i.id, i])).values());
-    const count = Math.max(3, featuredUnique.length);
+    const count = Math.max(5, featuredUnique.length);
     return unique.slice(0, count);
   }, [featuredResources, popularResources]);
 
@@ -335,14 +339,14 @@ export default function Home() {
               {displaySpotlights.length > 3 && (
                 <>
                   <button
-                    onClick={() => setCarouselIndex(prev => Math.max(0, prev - 1))}
+                    onClick={() => { setCarouselIndex(prev => Math.max(0, prev - 1)); setAutoPlay(false); }}
                     disabled={carouselIndex === 0}
                     className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
                   >
                     <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
-                    onClick={() => setCarouselIndex(prev => Math.min(displaySpotlights.length - 3, prev + 1))}
+                    onClick={() => { setCarouselIndex(prev => Math.min(displaySpotlights.length - 3, prev + 1)); setAutoPlay(false); }}
                     disabled={carouselIndex >= displaySpotlights.length - 3}
                     className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
                   >
@@ -354,7 +358,7 @@ export default function Home() {
                     {Array.from({ length: Math.max(1, displaySpotlights.length - 2) }).map((_, i) => (
                       <button
                         key={i}
-                        onClick={() => setCarouselIndex(i)}
+                        onClick={() => { setCarouselIndex(i); setAutoPlay(false); }}
                         className={`w-2 h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-blue-600' : 'bg-slate-300 hover:bg-blue-400'}`}
                         aria-label={`Go to slide ${i + 1}`}
                       />
@@ -453,29 +457,53 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
-              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Search className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step1.title', '1. Discover')}</h3>
-              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step1.desc', 'Search our interactive directory or talk to our AI assistant to find exactly what you need in your area.')}</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
-              <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Heart className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step2.title', '2. Connect')}</h3>
-              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step2.desc', 'Get immediate access to contact info, hours, directions, and services for local organizations.')}</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform">
-              <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Users className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-black text-slate-900 mb-3 uppercase tracking-tight">{t('home.howItWorks.step3.title', '3. Contribute')}</h3>
-              <p className="text-slate-600 font-bold leading-relaxed">{t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.')}</p>
-            </div>
+            {[
+              {
+                title: t('home.howItWorks.step1.title', '1. Discover'),
+                icon: <Search className="w-8 h-8 text-blue-600" />,
+                iconBg: "bg-blue-50",
+                frontText: "Find what you need.",
+                desc: t('home.howItWorks.step1.desc', 'Search our interactive directory or talk to our AI assistant to find exactly what you need in your area.'),
+                theme: "blue"
+              },
+              {
+                title: t('home.howItWorks.step2.title', '2. Connect'),
+                icon: <Heart className="w-8 h-8 text-indigo-600" />,
+                iconBg: "bg-indigo-50",
+                frontText: "Reach out to local heroes.",
+                desc: t('home.howItWorks.step2.desc', 'Get immediate access to contact info, hours, directions, and services for local organizations.'),
+                theme: "indigo"
+              },
+              {
+                title: t('home.howItWorks.step3.title', '3. Contribute'),
+                icon: <Users className="w-8 h-8 text-emerald-600" />,
+                iconBg: "bg-emerald-50",
+                frontText: "Grow the community hub.",
+                desc: t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.'),
+                theme: "emerald"
+              }
+            ].map((step, idx) => (
+              <FlipCard
+                key={idx}
+                heightClass="h-[320px]"
+                front={
+                  <div className={`bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform h-full flex flex-col items-center justify-center group`}>
+                    <div className={`w-16 h-16 ${step.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-6`}>
+                      {step.icon}
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 mb-3 uppercase tracking-tight">{step.title}</h3>
+                    <p className={`text-sm font-bold text-${step.theme}-600 opacity-80 mb-4 px-2`}>{step.frontText}</p>
+                    <p className={`mt-auto pt-2 font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity text-slate-500`}>Tap to Reveal</p>
+                  </div>
+                }
+                back={
+                  <div className={`bg-${step.theme}-600 rounded-2xl p-8 shadow-xl text-center h-full flex flex-col items-center justify-center text-white`}>
+                    <h3 className="text-xl font-black mb-4 uppercase tracking-tight">{step.title}</h3>
+                    <p className="font-bold leading-relaxed">{step.desc}</p>
+                  </div>
+                }
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -483,27 +511,34 @@ export default function Home() {
       {/* Impact Stats */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 max-w-6xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16 flex flex-col items-center">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-6">
+              <Compass className="w-16 h-16 text-indigo-500 opacity-20" />
+            </motion.div>
             <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.impact.title')}</h2>
             <p className="text-xl text-slate-900 font-black">{t('home.impact.subtitle')}</p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Users className="w-32 h-32" /></div>
               <div className="text-4xl font-bold text-blue-600 mb-2">1,247+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest">{t('home.impact.neighborsHelped')}</div>
-            </div>
-            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.neighborsHelped')}</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity"><Search className="w-32 h-32" /></div>
               <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.totalResources}+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest">{t('home.impact.localOrgs')}</div>
-            </div>
-            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.localOrgs')}</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute -left-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><MapPin className="w-32 h-32" /></div>
               <div className="text-4xl font-bold text-amber-600 mb-2">12+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest">{t('home.impact.neighborhoods')}</div>
-            </div>
-            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.neighborhoods')}</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Clock className="w-32 h-32" /></div>
               <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest">Community Care</div>
-            </div>
+              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">Community Care</div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -579,6 +614,66 @@ export default function Home() {
               </GlassCard>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-20 bg-blue-50/50 border-t border-blue-100/50">
+        <div className="container mx-auto max-w-4xl px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-[3rem] p-10 sm:p-16 border border-slate-100 shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-indigo-500 to-amber-400"></div>
+            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8" />
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">
+              Stay in the Loop
+            </h2>
+            <p className="text-slate-500 font-bold mb-8 max-w-xl mx-auto">
+              Get weekly updates on new local resources, volunteer opportunities, and community gatherings directly to your inbox.
+            </p>
+
+            {emailSubscribed ? (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-green-50 text-green-700 px-6 py-4 rounded-2xl font-black flex items-center justify-center gap-2 border border-green-200"
+              >
+                <Heart className="w-5 h-5 text-green-600 fill-green-600" /> Thanks for subscribing! You're officially on the list.
+              </motion.div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (subscribeEmail) {
+                    setEmailSubscribed(true);
+                    setSubscribeEmail('');
+                  }
+                }}
+                className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
+              >
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email address..."
+                  value={subscribeEmail}
+                  onChange={(e) => setSubscribeEmail(e.target.value)}
+                  className="flex-1 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 font-bold outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-400"
+                />
+                <GlassButton variant="primary" size="lg" className="sm:px-8 py-4 !rounded-2xl shadow-xl flex items-center justify-center gap-2">
+                  Subscribe <Send className="w-4 h-4 ml-1" />
+                </GlassButton>
+              </form>
+            )}
+            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-6">
+              No spam. Unsubscribe at any time.
+            </p>
+          </motion.div>
         </div>
       </section>
 
