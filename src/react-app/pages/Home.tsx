@@ -164,8 +164,8 @@ export default function Home() {
               className="space-y-6"
             >
               <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-                <span className="block text-blue-800 mb-2 font-black">{t('home.hero.title1')}</span>
-                <span className="block text-black border-b-8 border-blue-500 w-fit mx-auto pb-2 font-black tracking-tighter">{t('home.hero.title2')}</span>
+                <span className="block text-slate-700 mb-2 font-black">{t('home.hero.title1')}</span>
+                <span className="block text-slate-900 border-b-4 border-slate-400 w-fit mx-auto pb-2 font-black tracking-tighter">{t('home.hero.title2')}</span>
               </h1>
 
               <p className="text-base sm:text-xl lg:text-2xl text-slate-950 max-w-3xl mx-auto font-black leading-relaxed">
@@ -180,7 +180,7 @@ export default function Home() {
               >
                 <div className="bg-white rounded-2xl sm:rounded-full p-2 flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10 border border-slate-100">
                   <div className="flex items-center gap-2 w-full flex-1">
-                    <Search className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 ml-3 sm:ml-4" />
+                    <Search className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 ml-3 sm:ml-4" />
                     <input
                       type="text"
                       value={searchTerm}
@@ -209,31 +209,26 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-900 font-black uppercase tracking-wider"
-              >
+              <div className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-600 font-semibold uppercase tracking-wider">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
                   </div>
                   <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center">
-                    <Compass className="w-4 h-4 text-indigo-600" />
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                    <Compass className="w-4 h-4 text-slate-500" />
                   </div>
                   <span>12+ {t('home.stats.categories')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-amber-600" />
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-slate-500" />
                   </div>
                   <span>{t('home.stats.localSupport')}</span>
                 </div>
-              </motion.div>
+              </div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
@@ -246,10 +241,10 @@ export default function Home() {
                 className="flex justify-center mt-12 sm:mt-24"
               >
                 <div
-                  className="w-12 h-12 rounded-full glass border border-slate-200 shadow-xl flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
+                  className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
                   onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
                 >
-                  <ChevronDown className="w-6 h-6 text-blue-500" />
+                  <ChevronDown className="w-6 h-6 text-slate-400" />
                 </div>
               </motion.div>
             </motion.div>
@@ -266,7 +261,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-16 flex flex-col items-center"
           >
-            <span className="bg-blue-100 text-blue-800 text-xs font-black px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest border border-blue-200">
+            <span className="bg-slate-100 text-slate-600 text-xs font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest border border-slate-200">
               Community Resource Highlights
             </span>
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-3 sm:mb-4">
@@ -309,12 +304,12 @@ export default function Home() {
                             </div>
                           )}
                           <div>
-                            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">{resource.category}</span>
+                            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{resource.category}</span>
                             <h3 className="text-xl font-black text-slate-900 mt-2 line-clamp-1 uppercase tracking-tight">{resource.title}</h3>
                           </div>
                           <p className="text-slate-900 text-sm line-clamp-2 leading-relaxed font-bold">{resource.description}</p>
                           <div className="flex items-center justify-between pt-2">
-                            <button className="text-blue-700 font-bold text-xs flex items-center gap-2 hover:text-blue-900 transition-colors">
+                            <button className="text-slate-500 font-semibold text-xs flex items-center gap-2 hover:text-slate-800 transition-colors">
                               Explore Details <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           </div>
@@ -501,38 +496,37 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-6xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16 flex flex-col items-center">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-6">
-              <Compass className="w-16 h-16 text-indigo-500 opacity-20" />
+              <Compass className="w-14 h-14 text-slate-400 opacity-30" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.impact.title')}</h2>
-            <p className="text-xl text-slate-900 font-black">{t('home.impact.subtitle')}</p>
+            <h2 className="text-4xl font-bold text-slate-800 mb-4">{t('home.impact.title')}</h2>
+            <p className="text-lg text-slate-500 font-semibold">{t('home.impact.subtitle')}</p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
               <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Users className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">1,247+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.neighborsHelped')}</div>
+              <div className="text-4xl font-bold text-slate-700 mb-2">1,247+</div>
+              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.neighborsHelped')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity"><Search className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.totalResources}+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.localOrgs')}</div>
+              <div className="text-4xl font-bold text-slate-700 mb-2">{stats.totalResources}+</div>
+              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.localOrgs')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
               <div className="absolute -left-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><MapPin className="w-32 h-32" /></div>
               <div className="text-4xl font-bold text-amber-600 mb-2">12+</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">{t('home.impact.neighborhoods')}</div>
+              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.neighborhoods')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
               <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Clock className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
-              <div className="text-slate-900 text-xs font-black uppercase tracking-widest relative z-10">Community Care</div>
+              <div className="text-4xl font-bold text-slate-700 mb-2">24/7</div>
+              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">Community Care</div>
             </motion.div>
           </div>
         </div>
       </section>
-
       {/* Testimonials */}
-      <section className="py-24 bg-slate-50/30">
+      <section className="py-20 bg-white border-t border-slate-100">
         <div className="container mx-auto max-w-6xl px-4">
           <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.stories.title')}</h2>
@@ -544,59 +538,59 @@ export default function Home() {
               animate={{ x: [0, -1200, 0] }}
               transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
             >
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-blue-500 shadow-xl">
-                <Quote className="w-10 h-10 text-blue-100 mb-6" />
-                <blockquote className="text-lg text-slate-900 font-black italic mb-8 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
+                <Quote className="w-8 h-8 text-slate-200 mb-4" />
+                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">MS</div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">MS</div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">Maria Sanchez</div>
-                    <div className="text-sm font-semibold text-blue-600 uppercase">Northgate Neighbor</div>
+                    <div className="font-semibold text-slate-800">Maria Sanchez</div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-indigo-500 shadow-xl">
-                <Quote className="w-10 h-10 text-indigo-100 mb-6" />
-                <blockquote className="text-lg text-slate-900 font-black italic mb-8 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
+                <Quote className="w-8 h-8 text-slate-200 mb-4" />
+                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xl">JT</div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">JT</div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">James Thompson</div>
-                    <div className="text-sm font-semibold text-indigo-600 uppercase">Community Organizer</div>
+                    <div className="font-semibold text-slate-800">James Thompson</div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase">Community Organizer</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-amber-500 shadow-xl">
-                <Quote className="w-10 h-10 text-amber-100 mb-6" />
-                <blockquote className="text-lg text-slate-900 font-black italic mb-8 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-amber-300 shadow-md">
+                <Quote className="w-8 h-8 text-amber-100 mb-4" />
+                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-xl">LW</div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 font-bold text-sm">LW</div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">Linda Wright</div>
-                    <div className="text-sm font-semibold text-amber-600 uppercase">Single Parent & Educator</div>
+                    <div className="font-semibold text-slate-800">Linda Wright</div>
+                    <div className="text-xs font-semibold text-amber-500 uppercase">Single Parent &amp; Educator</div>
                   </div>
                 </div>
               </GlassCard>
 
               {/* Duplicate for seamless loop */}
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-10 bg-white border-l-4 border-blue-500 shadow-xl">
-                <Quote className="w-10 h-10 text-blue-100 mb-6" />
-                <blockquote className="text-lg text-slate-900 font-black italic mb-8 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
+                <Quote className="w-8 h-8 text-slate-200 mb-4" />
+                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">MS</div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">MS</div>
                   <div>
-                    <div className="font-bold text-slate-900 text-lg">Maria Sanchez</div>
-                    <div className="text-sm font-semibold text-blue-600 uppercase">Northgate Neighbor</div>
+                    <div className="font-semibold text-slate-800">Maria Sanchez</div>
+                    <div className="text-xs font-semibold text-slate-400 uppercase">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>
@@ -605,34 +599,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-20 bg-blue-50/50 border-t border-blue-100/50">
-        <div className="container mx-auto max-w-4xl px-4 text-center">
+      {/* Newsletter - toned down */}
+      <section className="py-16 bg-slate-50 border-t border-slate-100">
+        <div className="container mx-auto max-w-2xl px-4 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-[3rem] p-10 sm:p-16 border border-slate-100 shadow-2xl relative overflow-hidden"
+            className="bg-white rounded-2xl p-8 sm:p-12 border border-slate-150 shadow-sm"
           >
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-indigo-500 to-amber-400"></div>
-            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Mail className="w-8 h-8" />
+            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Mail className="w-6 h-6 text-slate-500" />
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">
-              Stay in the Loop
-            </h2>
-            <p className="text-slate-500 font-bold mb-8 max-w-xl mx-auto">
-              Get weekly updates on new local resources, volunteer opportunities, and community gatherings directly to your inbox.
+            <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tight mb-2">Stay in the Loop</h2>
+            <p className="text-slate-500 font-medium mb-6 text-sm">
+              Weekly updates on new resources, volunteer opportunities, and community events.
             </p>
-
             {emailSubscribed ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-green-50 text-green-700 px-6 py-4 rounded-2xl font-black flex items-center justify-center gap-2 border border-green-200"
+                className="bg-green-50 text-green-700 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 border border-green-100"
               >
-                <Heart className="w-5 h-5 text-green-600 fill-green-600" /> Thanks for subscribing! You're officially on the list.
+                <Heart className="w-4 h-4 text-green-600 fill-green-600" /> You're on the list!
               </motion.div>
             ) : (
               <form
@@ -643,42 +633,27 @@ export default function Home() {
                     setSubscribeEmail('');
                   }
                 }}
-                className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
+                className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto"
               >
                 <input
                   type="email"
                   required
-                  placeholder="Enter your email address..."
+                  placeholder="Your email address..."
                   value={subscribeEmail}
                   onChange={(e) => setSubscribeEmail(e.target.value)}
-                  className="flex-1 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 font-bold outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-400"
+                  className="flex-1 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-medium outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 transition-all placeholder:text-slate-400 text-sm"
                 />
-                <GlassButton variant="primary" size="lg" className="sm:px-8 py-4 !rounded-2xl shadow-xl flex items-center justify-center gap-2">
-                  Subscribe <Send className="w-4 h-4 ml-1" />
+                <GlassButton variant="primary" size="md" className="!rounded-xl shadow-sm flex items-center justify-center gap-2">
+                  Subscribe <Send className="w-3.5 h-3.5" />
                 </GlassButton>
               </form>
             )}
-            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-6">
-              No spam. Unsubscribe at any time.
-            </p>
+            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mt-4">No spam. Unsubscribe anytime.</p>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-4 bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-[3rem] text-center text-white shadow-2xl p-16">
-            <h2 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tight">{t('home.cta.title')}</h2>
-            <p className="text-xl text-blue-50 mb-10 max-w-2xl mx-auto font-black leading-relaxed">{t('home.cta.subtitle')}</p>
-            <Link to="/submit">
-              <GlassButton variant="secondary" size="lg" className="bg-white !text-slate-950 border-none px-12 h-16 text-lg font-black shadow-xl uppercase tracking-widest transition-all hover:bg-slate-50">
-                {t('home.cta.button')}
-              </GlassButton>
-            </Link>
-          </div>
-        </div>
-      </section>
+
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
     </div >
