@@ -291,13 +291,13 @@ export default function Home() {
               <div className="overflow-hidden">
                 <motion.div
                   className="flex"
-                  animate={{ x: `-${carouselIndex * 100}%` }}
+                  animate={{ x: `-${(carouselIndex * 100) / 3}%` }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                 >
                   {displaySpotlights.map((resource, index) => (
                     <div
                       key={`${resource.id}-${index}`}
-                      className={`w-full flex-shrink-0 px-4`}
+                      className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
                     >
                       <GlassCard
                         hover
