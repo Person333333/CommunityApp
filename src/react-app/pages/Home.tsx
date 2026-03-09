@@ -73,18 +73,14 @@ export default function Home() {
     fetchData();
   }, [userLocation, i18n.language]);
 
-  // Carousel Auto-Play Logic
+  // Carousel Auto-Play Logic — runs until user manually navigates, then stops for the session
   useEffect(() => {
-    if (!autoPlay || isHovered || allFeaturedResources.length <= 5) return;
+    if (!autoPlay) return;
     const interval = setInterval(() => {
-      setCarouselIndex((prev) => {
-        const total = Math.max(5, allFeaturedResources.length);
-        if (prev >= total - 3) return 0;
-        return prev + 1;
-      });
-    }, 4500);
+      setCarouselIndex((prev) => (prev >= 4 ? 0 : prev + 1));
+    }, 3500);
     return () => clearInterval(interval);
-  }, [autoPlay, isHovered, allFeaturedResources.length]);
+  }, [autoPlay]);
 
   useEffect(() => {
     const translateExisting = async () => {
@@ -117,13 +113,10 @@ export default function Home() {
   }, [allFeaturedResources, userLocation]);
 
   const displaySpotlights = useMemo(() => {
-    // Combine featured and popular
+    // Combine featured and popular, deduplicate, cap at exactly 5
     const combined = [...featuredResources, ...popularResources];
-    // Filter to unique resources by ID
     const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
-    const featuredUnique = Array.from(new Map(featuredResources.map(i => [i.id, i])).values());
-    const count = Math.max(5, featuredUnique.length);
-    return unique.slice(0, count);
+    return unique.slice(0, 5);
   }, [featuredResources, popularResources]);
 
   if (locationLoading || !userLocation) {
@@ -298,13 +291,13 @@ export default function Home() {
               <div className="overflow-hidden">
                 <motion.div
                   className="flex"
-                  animate={{ x: `-${(carouselIndex * 100) / Math.max(1, (window.innerWidth < 640 ? 1 : window.innerWidth < 768 ? 2 : 3))}%` }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  animate={{ x: `-${carouselIndex * 100}%` }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
                 >
                   {displaySpotlights.map((resource, index) => (
                     <div
                       key={`${resource.id}-${index}`}
-                      className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
+                      className={`w-full flex-shrink-0 px-4`}
                     >
                       <GlassCard
                         hover
@@ -336,30 +329,28 @@ export default function Home() {
               </div>
 
               {/* Controls */}
-              {displaySpotlights.length > 3 && (
+              {displaySpotlights.length > 1 && (
                 <>
                   <button
-                    onClick={() => { setCarouselIndex(prev => Math.max(0, prev - 1)); setAutoPlay(false); }}
-                    disabled={carouselIndex === 0}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
+                    onClick={() => { setCarouselIndex(prev => (prev === 0 ? displaySpotlights.length - 1 : prev - 1)); setAutoPlay(false); }}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all z-10 hidden sm:flex"
                   >
                     <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
-                    onClick={() => { setCarouselIndex(prev => Math.min(displaySpotlights.length - 3, prev + 1)); setAutoPlay(false); }}
-                    disabled={carouselIndex >= displaySpotlights.length - 3}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
+                    onClick={() => { setCarouselIndex(prev => (prev >= displaySpotlights.length - 1 ? 0 : prev + 1)); setAutoPlay(false); }}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all z-10 hidden sm:flex"
                   >
                     <ChevronRight className="w-6 h-6" />
                   </button>
 
                   {/* Indicator Dots */}
                   <div className="flex justify-center gap-2 mt-8">
-                    {Array.from({ length: Math.max(1, displaySpotlights.length - 2) }).map((_, i) => (
+                    {displaySpotlights.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => { setCarouselIndex(i); setAutoPlay(false); }}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-blue-600' : 'bg-slate-300 hover:bg-blue-400'}`}
+                        className={`h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-blue-400'}`}
                         aria-label={`Go to slide ${i + 1}`}
                       />
                     ))}
