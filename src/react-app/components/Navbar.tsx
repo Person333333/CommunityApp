@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
@@ -56,7 +56,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max">
-            <NavLink to="/discover" className="py-4">{t('nav.discover')}</NavLink>
+            <NavLink to="/discover">{t('nav.discover')}</NavLink>
 
             <NavLink to="/submit" data-tour="add-resource">{t('nav.addResource')}</NavLink>
             <NavLink to="/about">{t('nav.about')}</NavLink>
@@ -194,13 +194,25 @@ export default function Navbar() {
 }
 
 function NavLink({ to, children, ...props }: { to: string; children: React.ReactNode;[key: string]: any }) {
+  const location = useLocation();
+  const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
+
   return (
     <Link
       to={to}
-      className="text-slate-700 hover:text-blue-600 transition-colors duration-200 font-semibold whitespace-nowrap"
+      className={`relative py-4 text-sm transition-colors duration-200 font-semibold whitespace-nowrap ${
+        isActive ? 'text-blue-600' : 'text-slate-700 hover:text-blue-600'
+      }`}
       {...props}
     >
       {children}
+      {isActive && (
+        <motion.div
+          layoutId="navbar-active"
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-t-md"
+          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+        />
+      )}
     </Link>
   );
 }
@@ -214,11 +226,18 @@ function MobileNavLink({
   children: React.ReactNode;
   onClick: () => void;
 }) {
+  const location = useLocation();
+  const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
+
   return (
     <Link
       to={to}
       onClick={onClick}
-      className="block w-full bg-slate-50 px-4 py-3 rounded-lg text-slate-900 hover:bg-slate-100 transition-all border border-slate-100 font-bold mb-2"
+      className={`block w-full px-4 py-3 rounded-lg transition-all border font-bold mb-2 ${
+        isActive 
+          ? 'bg-blue-50 text-blue-600 border-blue-200' 
+          : 'bg-slate-50 text-slate-900 hover:bg-slate-100 border-slate-100'
+      }`}
     >
       {children}
     </Link>
