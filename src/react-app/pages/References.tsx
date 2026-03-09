@@ -17,7 +17,8 @@ export default function References() {
     { category: 'Maps', tech: 'Leaflet + React Leaflet (1.9.x)' },
     { category: 'Validation', tech: 'Zod (3.24.x)' },
     { category: 'I18n', tech: 'i18next + react-i18next' },
-    { category: 'Translation API', tech: 'Python Flask + deep-translator' }
+    { category: 'Translation API', tech: 'Python Flask + deep-translator' },
+    { category: 'AI Processing', tech: 'Google Gemini API (used for NLP search & content validation)' }
   ];
 
   const additionalLibraries = [

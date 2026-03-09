@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -22,6 +22,8 @@ export default function Home() {
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
   const [popularResources, setPopularResources] = useState<ResourceType[]>([]);
   const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -66,6 +68,19 @@ export default function Home() {
 
     fetchData();
   }, [userLocation, i18n.language]);
+
+  // Carousel Auto-Play Logic
+  useEffect(() => {
+    if (isHovered || allFeaturedResources.length <= 3) return;
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => {
+        const total = Math.max(3, allFeaturedResources.length);
+        if (prev >= total - 3) return 0;
+        return prev + 1;
+      });
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isHovered, allFeaturedResources.length]);
 
   useEffect(() => {
     const translateExisting = async () => {
@@ -223,6 +238,24 @@ export default function Home() {
                   <span>{t('home.stats.localSupport')}</span>
                 </div>
               </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1, y: [0, 10, 0] }}
+                transition={{
+                  opacity: { duration: 0.5, delay: 1.2 },
+                  scale: { duration: 0.5, delay: 1.2 },
+                  y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }
+                }}
+                className="flex justify-center mt-12 sm:mt-24"
+              >
+                <div
+                  className="w-12 h-12 rounded-full glass border border-slate-200 shadow-xl flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
+                  onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
+                >
+                  <ChevronDown className="w-6 h-6 text-blue-500" />
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -253,41 +286,82 @@ export default function Home() {
               <p className="text-xl text-slate-700 font-bold">{t('home.spotlight.noResources')}</p>
             </GlassCard>
           ) : (
-            <div className="relative overflow-hidden px-4">
-              <motion.div
-                className="flex gap-8"
-                animate={{ x: [0, -1032, 0] }}
-                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              >
-                {[...displaySpotlights, ...displaySpotlights].map((resource, index) => (
-                  <div key={`${resource.id}-${index}`} className="w-72 sm:w-full md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
-                    <GlassCard
-                      hover
-                      className="h-full cursor-pointer bg-white border border-slate-100 shadow-sm"
-                      onClick={() => setSelectedResource(resource)}
+            <div
+              className="relative px-4 sm:px-12 group"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <div className="overflow-hidden">
+                <motion.div
+                  className="flex"
+                  animate={{ x: `-${(carouselIndex * 100) / Math.max(1, (window.innerWidth < 640 ? 1 : window.innerWidth < 768 ? 2 : 3))}%` }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                >
+                  {displaySpotlights.map((resource, index) => (
+                    <div
+                      key={`${resource.id}-${index}`}
+                      className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
                     >
-                      <div className="space-y-4">
-                        {resource.image_url && (
-                          <div className="aspect-video rounded-lg overflow-hidden relative">
-                            <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
-                            <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full">Featured</div>
+                      <GlassCard
+                        hover
+                        className="h-full cursor-pointer bg-white border border-slate-100 shadow-sm"
+                        onClick={() => setSelectedResource(resource)}
+                      >
+                        <div className="space-y-4">
+                          {resource.image_url && (
+                            <div className="aspect-video rounded-lg overflow-hidden relative">
+                              <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
+                              <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full">Featured</div>
+                            </div>
+                          )}
+                          <div>
+                            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">{resource.category}</span>
+                            <h3 className="text-xl font-black text-slate-900 mt-2 line-clamp-1 uppercase tracking-tight">{resource.title}</h3>
                           </div>
-                        )}
-                        <div>
-                          <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">{resource.category}</span>
-                          <h3 className="text-xl font-black text-slate-900 mt-2 line-clamp-1 uppercase tracking-tight">{resource.title}</h3>
+                          <p className="text-slate-900 text-sm line-clamp-2 leading-relaxed font-bold">{resource.description}</p>
+                          <div className="flex items-center justify-between pt-2">
+                            <button className="text-blue-700 font-bold text-xs flex items-center gap-2 hover:text-blue-900 transition-colors">
+                              Explore Details <ArrowRight className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </div>
-                        <p className="text-slate-900 text-sm line-clamp-2 leading-relaxed font-bold">{resource.description}</p>
-                        <div className="flex items-center justify-between pt-2">
-                          <button className="text-blue-700 font-bold text-xs flex items-center gap-2 hover:text-blue-900 transition-colors">
-                            Explore Details <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    </GlassCard>
+                      </GlassCard>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+
+              {/* Controls */}
+              {displaySpotlights.length > 3 && (
+                <>
+                  <button
+                    onClick={() => setCarouselIndex(prev => Math.max(0, prev - 1))}
+                    disabled={carouselIndex === 0}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => setCarouselIndex(prev => Math.min(displaySpotlights.length - 3, prev + 1))}
+                    disabled={carouselIndex >= displaySpotlights.length - 3}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all disabled:opacity-0 disabled:pointer-events-none z-10 hidden sm:flex"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+
+                  {/* Indicator Dots */}
+                  <div className="flex justify-center gap-2 mt-8">
+                    {Array.from({ length: Math.max(1, displaySpotlights.length - 2) }).map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCarouselIndex(i)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-blue-600' : 'bg-slate-300 hover:bg-blue-400'}`}
+                        aria-label={`Go to slide ${i + 1}`}
+                      />
+                    ))}
                   </div>
-                ))}
-              </motion.div>
+                </>
+              )}
             </div>
           )}
         </div>

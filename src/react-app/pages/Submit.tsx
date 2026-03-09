@@ -431,7 +431,13 @@ export default function Submit() {
                 </div>
               </div>
 
-              <div className="pt-12">
+              <div className="pt-8">
+                <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex items-start gap-3 mb-6">
+                  <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm font-bold text-slate-700 leading-relaxed">
+                    Submissions are manually verified by site moderators before appearing in the public directory to ensure quality and safety.
+                  </p>
+                </div>
                 <GlassButton
                   variant="primary"
                   size="lg"

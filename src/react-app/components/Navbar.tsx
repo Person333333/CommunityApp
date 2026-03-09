@@ -14,7 +14,7 @@ export default function Navbar() {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { user } = useUser();
   const { signOut } = useClerk();
-  const { scrollY } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
 
   const backgroundColor = useTransform(
     scrollY,
@@ -37,6 +37,10 @@ export default function Navbar() {
         WebkitBackdropFilter: backdropBlur,
       }}
     >
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
