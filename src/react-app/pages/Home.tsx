@@ -24,7 +24,6 @@ export default function Home() {
   const [popularResources, setPopularResources] = useState<ResourceType[]>([]);
   const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
   const [emailSubscribed, setEmailSubscribed] = useState(false);
   const [subscribeEmail, setSubscribeEmail] = useState('');
@@ -285,8 +284,6 @@ export default function Home() {
           ) : (
             <div
               className="relative px-4 sm:px-12 group"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
             >
               <div className="overflow-hidden">
                 <motion.div
