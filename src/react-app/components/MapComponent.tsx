@@ -156,7 +156,7 @@ export default function MapComponent({
           >
             <Popup>
               <div className="p-2">
-                <p className="text-sm font-semibold text-gray-800">
+                <p className="text-sm font-medium text-slate-800">
                   {heat.count} resource{heat.count !== 1 ? 's' : ''} in this area
                 </p>
               </div>
@@ -185,10 +185,10 @@ export default function MapComponent({
               <Popup className="custom-popup" maxWidth={300}>
                 <div className="p-4 space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                    <h3 className="font-semibold text-lg text-slate-900 mb-1">
                       {resource.title}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-600 font-medium">
                       {resource.description}
                     </p>
                   </div>
@@ -278,10 +278,10 @@ export default function MapComponent({
               <Popup className="custom-popup" maxWidth={300}>
                 <div className="p-4 space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                    <h3 className="font-semibold text-lg text-slate-900 mb-1">
                       {heat.count} Resource{heat.count !== 1 ? 's' : ''} in Area
                     </h3>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm text-slate-600 font-medium mb-2">
                       {mainResource.title} and {heat.count - 1} other{heat.count - 1 !== 1 ? 's' : ''}
                     </p>
                   </div>

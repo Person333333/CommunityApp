@@ -61,7 +61,7 @@ export default function About() {
 
       <div className="container mx-auto max-w-6xl py-24 px-4 sm:px-6 lg:px-8">
 
-        {/* Our Vision & Mission - 3D Flip Cards */}
+        {/* Our Vision & Mission - Clean Static Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -211,8 +211,8 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">Our Core Values</h2>
-            <p className="text-slate-700 font-bold uppercase tracking-widest text-sm">Hover or tap to flip</p>
+            <h2 className="text-3xl font-semibold text-slate-900 mb-4">Our Core Values</h2>
+            <p className="text-slate-500 font-medium tracking-wider text-sm uppercase">Guiding principles for community impact</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -337,22 +337,22 @@ export default function About() {
 
         {/* Call to Action */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-[3rem] p-16 text-white shadow-2xl">
-            <h2 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tight">
+          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-12 sm:p-16 shadow-sm">
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-4 text-slate-900">
               Ready to help your neighborhood?
             </h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-black text-blue-50">
+            <p className="text-lg mb-10 max-w-2xl mx-auto leading-relaxed text-slate-600 font-medium">
               Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex flex-wrap justify-center gap-4">
               <Link to="/submit">
-                <GlassButton variant="secondary" size="lg" className="bg-white !text-slate-950 border-none px-12 h-16 text-lg font-black shadow-xl uppercase tracking-widest transition-all hover:bg-slate-50">
+                <GlassButton variant="primary" className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-colors border-none">
                   {t('about.submitResource')}
                 </GlassButton>
               </Link>

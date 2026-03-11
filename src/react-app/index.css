@@ -6,11 +6,10 @@
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  /* NEW Light & Warm Palette */
+  /* Clean Minimalist Palette */
   --bg-primary: #ffffff;
-  /* White */
-  --bg-secondary: #f8fafc;
-  /* Very light blue-gray */
+  --bg-secondary: #f9fafb;
+  /* Gray 50 */
 
   --primary: #1e40af;
   /* Deep Matte Blue */
@@ -55,9 +54,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--bg-primary);
-  background-image:
-    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+  /* Removed radial background gradients for minimalist solid background */
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -69,41 +66,46 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  color: #1e3a8a;
-  /* Deep blue for headings */
+  font-family: 'Inter', sans-serif;
+  /* Unify typography */
+  font-weight: 600;
+  /* Lighter font weight for cleaner look */
+  color: var(--text-primary);
+  /* Slate-900 equivalent */
+  letter-spacing: -0.02em;
+  /* Tighter letter spacing for modern feel */
 }
 
 /* Updated Glassmorphism utilities for light mode */
+/* Updated Clean Glass Utilities */
 .glass {
   background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  /* Subtle or no shadow */
 }
 
 .glass-teal {
   background: var(--glass-blue);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-ochre {
-  background: rgba(245, 158, 11, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(243, 244, 246, 0.5);
+  /* Neutral Gray */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-strong {
-  background: var(--glass-white-strong);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: var(--bg-primary);
   border: 1px solid var(--glass-border-strong);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Lighter shadow */
 }
 
 /* Smooth scroll */
@@ -213,22 +215,26 @@ html {
 }
 
 /* Category Badges - High contrast */
+/* Category Badges - High contrast, Minimalist */
 .badge-food {
-  background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #dbeafe;
+  background: #f3f4f6;
+  /* gray-100 */
+  color: #1f2937;
+  /* gray-800 */
+  border: 1px solid #e5e7eb;
+  /* gray-200 */
 }
 
 .badge-housing {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #bfdbfe;
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
 }
 
 .badge-health {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
 }
 
 /* Mobile Responsiveness */

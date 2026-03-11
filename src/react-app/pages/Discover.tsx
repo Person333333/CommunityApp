@@ -253,16 +253,16 @@ export default function Discover() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-2 sm:mb-4">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 mb-2 sm:mb-4">
             {t('discover.title')}
           </h1>
-          <p className="text-base sm:text-xl text-slate-800 font-bold mb-4 sm:mb-8">
+          <p className="text-base sm:text-xl text-slate-600 font-medium mb-4 sm:mb-8">
             {t('discover.subtitle')}
           </p>
 
           <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
-            <div className="hidden sm:flex items-center gap-2 text-slate-900 font-black text-xs uppercase tracking-widest bg-white/30 px-4 py-2 rounded-full border border-white/50">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
+            <div className="hidden sm:flex items-center gap-2 text-slate-600 font-medium text-xs bg-white/70 px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+              <Sparkles className="w-4 h-4 text-blue-500" />
               <span>{resources.length} verified results</span>
             </div>
           </div>
@@ -271,24 +271,24 @@ export default function Discover() {
         {/* Local Filter Notice */}
         {showLocalOnly && allResources.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <GlassCard variant="teal" className="p-4">
+            <GlassCard variant="teal" className="p-4 bg-teal-50 border-teal-100 shadow-sm">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div className="flex items-center gap-3">
-                  <MapPinned className="w-5 h-5 text-teal-300 flex-shrink-0" />
+                  <MapPinned className="w-5 h-5 text-teal-600 flex-shrink-0" />
                   <div>
-                    <p className="text-blue-900 font-black uppercase tracking-widest text-lg">
+                    <p className="text-teal-900 font-medium text-sm">
                       {t('discover.showingLocal')}
                     </p>
-                    <p className="text-sm text-slate-700 font-bold">
+                    <p className="text-xs text-teal-700 font-normal mt-0.5">
                       {resources.length} {t('discover.ofResources')} {allResources.length} {t('discover.resourcesInArea')}
                     </p>
                   </div>
                 </div>
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setShowLocalOnly(false)}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-bold transition-all flex-shrink-0 shadow-lg"
+                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white text-sm font-medium transition-all flex-shrink-0 shadow-sm"
                 >
                   {t('discover.showAll')}
                 </motion.button>
@@ -303,8 +303,8 @@ export default function Discover() {
             <div className="space-y-6">
               {/* Search input and Dropdowns */}
               <div className="flex flex-col gap-4">
-                <div className="w-full flex items-center gap-2 sm:gap-3 bg-slate-50 border border-slate-200 rounded-full px-3 sm:px-4 py-2.5 sm:py-3 shadow-inner">
-                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
+                <div className="w-full flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 rounded-full px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm hover:border-slate-300 transition-colors">
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 flex-shrink-0" />
                   <input
                     type="text"
                     placeholder={t('discover.searchResources')}
@@ -314,10 +314,10 @@ export default function Discover() {
                       setSearchTerm(val);
                       handleSearch(val);
                     }}
-                    className="flex-1 bg-transparent border-none outline-none text-slate-900 placeholder-slate-500 font-bold text-sm sm:text-lg"
+                    className="flex-1 bg-transparent border-none outline-none text-slate-900 placeholder-slate-400 font-medium text-sm sm:text-base"
                   />
                   {searchTerm && (
-                    <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-500 hover:text-slate-700">
+                    <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600">
                       <X className="w-5 h-5" />
                     </button>
                   )}
@@ -382,7 +382,7 @@ export default function Discover() {
                   variant={showFavoritesOnly ? 'primary' : 'secondary'}
                   size="sm"
                   onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
-                  className={showFavoritesOnly ? 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30' : ''}
+                  className={`${showFavoritesOnly ? 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30' : ''} font-medium`}
                 >
                   <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-white' : ''}`} /> My Favorites
                 </GlassButton>
@@ -396,7 +396,7 @@ export default function Discover() {
                     }
                     setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
                   }}
-                  className={showMySubmissions ? 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30' : ''}
+                  className={`${showMySubmissions ? 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30' : ''} font-medium`}
                 >
                   <User className="w-4 h-4 mr-2" /> {t('discover.mySubmissions')}
                 </GlassButton>
@@ -467,17 +467,17 @@ export default function Discover() {
                       {cat} <X className="w-3 h-3 cursor-pointer" onClick={() => { const newCats = selectedCategories.filter((c: string) => c !== cat); setSelectedCategories(newCats); handleSearch(searchTerm, newCats); }} />
                     </span>
                   ))}
-                  <button onClick={clearFilters} className="text-xs text-blue-600 font-black uppercase tracking-widest underline ml-2">Clear All</button>
+                  <button onClick={clearFilters} className="text-sm text-slate-500 font-medium hover:text-slate-900 ml-2 transition-colors">Clear All</button>
                 </div>
               )}
 
               {loading ? (
                 <div className="flex justify-center py-20">
-                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full" />
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full" />
                 </div>
               ) : paginatedResources.length === 0 && (hasActiveFilters || showFavoritesOnly || showMySubmissions) ? (
-                <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                  <p className="text-slate-500 font-black uppercase tracking-widest">{t('discover.noResources')}</p>
+                <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                  <p className="text-slate-500 font-medium text-sm">{t('discover.noResources')}</p>
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -525,9 +525,9 @@ export default function Discover() {
                               )}
                             </div>
                           </div>
-                          <h3 className="text-base sm:text-xl font-black text-slate-900 mb-1 sm:mb-2 uppercase tracking-tight">{resource.title}</h3>
-                          <p className="text-xs sm:text-sm text-slate-600 font-bold line-clamp-2 leading-relaxed mb-2 sm:mb-4 max-w-2xl">{resource.description}</p>
-                          <div className="flex flex-wrap gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-black text-slate-500 uppercase">
+                          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">{resource.title}</h3>
+                          <p className="text-sm text-slate-600 font-normal line-clamp-2 leading-relaxed mb-4 max-w-2xl">{resource.description}</p>
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium text-slate-500">
                             <div className="flex items-center gap-2">
                               <MapPin className="w-3.5 h-3.5 text-blue-600" /> {resource.address || resource.city || 'Remote Service'}
                             </div>
@@ -562,12 +562,12 @@ export default function Discover() {
                           )}
 
                           {/* Mock Ratings block */}
-                          <div className="mt-4 flex items-center gap-1.5 bg-amber-50/50 self-start px-2 py-1 rounded-lg border border-amber-100">
+                          <div className="mt-4 flex items-center gap-1.5 bg-slate-50 self-start px-2 py-1 rounded-md border border-slate-200">
                             <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                            <span className="text-xs font-black text-slate-800">
+                            <span className="text-xs font-semibold text-slate-700">
                               {(4.0 + (String(resource.id).length % 10) / 10).toFixed(1)}/5
                             </span>
-                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
+                            <span className="text-xs font-normal text-slate-500 ml-1">
                               ({40 + (String(resource.title || '').length * 3)} reviews)
                             </span>
                           </div>
@@ -576,21 +576,21 @@ export default function Discover() {
                     </motion.div>
                   ))}
                   {paginatedResources.length > 0 && totalPages > 1 && (
-                    <div className="flex justify-between items-center bg-slate-50 border border-slate-200 p-4 rounded-3xl mt-8">
+                    <div className="flex justify-between items-center bg-slate-50 border border-slate-200 p-4 rounded-2xl mt-8 shadow-sm">
                       <button
                         onClick={() => setCurrentPage((prev: number) => Math.max(1, prev - 1))}
                         disabled={currentPage === 1}
-                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50 transition-all uppercase tracking-widest text-xs"
+                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition-colors text-sm"
                       >
                         Previous
                       </button>
-                      <span className="text-xs font-black text-slate-900 uppercase tracking-widest">
+                      <span className="text-sm font-medium text-slate-600">
                         Page {currentPage} of {totalPages}
                       </span>
                       <button
                         onClick={() => setCurrentPage((prev: number) => Math.min(totalPages, prev + 1))}
                         disabled={currentPage >= totalPages}
-                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50 transition-all uppercase tracking-widest text-xs"
+                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition-colors text-sm"
                       >
                         Next
                       </button>
