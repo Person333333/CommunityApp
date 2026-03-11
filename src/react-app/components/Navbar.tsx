@@ -37,6 +37,8 @@ export default function Navbar() {
         WebkitBackdropFilter: backdropBlur,
       }}
     >
+      {/* Gradient accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] section-divider" />
       {/* Removed gradient top bar for cleaner minimalist look */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">

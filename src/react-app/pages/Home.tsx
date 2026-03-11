@@ -7,11 +7,44 @@ import GlassCard from '@/react-app/components/GlassCard';
 import FlipCard from '@/react-app/components/FlipCard';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { useTranslation } from 'react-i18next';
+
+// Animated count-up hook
+function useCountUp(target: number, duration = 2000, startOnView = true) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!startOnView) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !hasStarted) setHasStarted(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [hasStarted, startOnView]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let start = 0;
+    const startTime = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, [hasStarted, target, duration]);
+
+  return { count, ref };
+}
 
 export default function Home() {
   const { t, i18n } = useTranslation();
@@ -120,8 +153,14 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        {/* Animated gradient mesh background */}
+        <div className="absolute inset-0 hero-gradient-mesh" />
+        <div className="absolute inset-0 dot-grid-pattern" />
+        {/* Floating blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Removed busy animated background orbs for a cleaner, minimalist aesthetic */}
+          <div className="animate-blob-1 absolute top-[10%] left-[15%] w-72 h-72 rounded-full bg-blue-200/30 blur-3xl" />
+          <div className="animate-blob-2 absolute top-[50%] right-[10%] w-96 h-96 rounded-full bg-indigo-200/25 blur-3xl" />
+          <div className="animate-blob-3 absolute bottom-[10%] left-[40%] w-80 h-80 rounded-full bg-cyan-200/20 blur-3xl" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -193,20 +232,15 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.7 }}
                 className="flex justify-center"
               >
-                <GlassButton
-                  variant="secondary"
-                  size="lg"
-                  className="bg-slate-50 border-slate-200 text-slate-700 font-bold px-8 py-4 !rounded-2xl flex items-center gap-3 hover:bg-slate-100 transition-all shadow-md group"
+                <button
+                  className="bg-white/80 backdrop-blur-sm border border-slate-200/80 text-slate-600 font-medium px-6 py-3 rounded-full flex items-center gap-3 hover:bg-white hover:shadow-lg hover:border-slate-300 transition-all group animate-pulse-glow"
                   onClick={() => navigate('/discover')}
                 >
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Compass className="w-6 h-6 text-blue-600" />
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <Compass className="w-4 h-4 text-blue-600" />
                   </div>
-                  <div className="text-left">
-                    <div className="text-[10px] uppercase tracking-widest font-black opacity-60">Not sure where to start?</div>
-                    <div className="text-lg">Need help finding a resource?</div>
-                  </div>
-                </GlassButton>
+                  <span className="text-sm">Not sure where to start? <strong className="text-slate-800">Let us guide you →</strong></span>
+                </button>
               </motion.div>
 
               <div className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-600 font-semibold uppercase tracking-wider">
@@ -253,7 +287,8 @@ export default function Home() {
       </section>
 
       {/* Spotlight Carousel */}
-      <section className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8 bg-slate-50/50">
+      <div className="section-divider mx-auto max-w-4xl" />
+      <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8 bg-slate-50/50">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -356,7 +391,7 @@ export default function Home() {
 
       {/* How It Works Section */}
       {/* How It Works Section */}
-      <section className="py-12 sm:py-20 bg-slate-50/50 border-t border-slate-100">
+      <section className="py-10 sm:py-16 bg-slate-50/50 border-t border-slate-100">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
           <div className="text-center mb-10 sm:mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-blue-900 mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
@@ -416,47 +451,33 @@ export default function Home() {
       </section>
 
       {/* Impact Stats */}
-      <section className="py-24 bg-white">
+      <div className="section-divider mx-auto max-w-4xl" />
+      <section className="py-16 sm:py-20 bg-white">
         <div className="container mx-auto px-4 max-w-6xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16 flex flex-col items-center">
-            <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-6">
-              <Compass className="w-14 h-14 text-slate-400 opacity-30" />
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 flex flex-col items-center">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-4">
+              <Compass className="w-10 h-10 text-blue-400 opacity-40" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">{t('home.impact.title')}</h2>
-            <p className="text-lg text-slate-500 font-semibold">{t('home.impact.subtitle')}</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-3">{t('home.impact.title')}</h2>
+            <p className="text-base text-slate-500 font-medium">{t('home.impact.subtitle')}</p>
           </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Users className="w-24 h-24" /></div>
-              <div className="text-3xl font-semibold text-slate-900 mb-1">1,247+</div>
-              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.neighborsHelped')}</div>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity"><Search className="w-24 h-24" /></div>
-              <div className="text-3xl font-semibold text-slate-900 mb-1">{stats.totalResources}+</div>
-              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.localOrgs')}</div>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
-              <div className="absolute -left-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><MapPin className="w-24 h-24" /></div>
-              <div className="text-3xl font-semibold text-slate-900 mb-1">12+</div>
-              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.neighborhoods')}</div>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Clock className="w-24 h-24" /></div>
-              <div className="text-3xl font-semibold text-slate-900 mb-1">24/7</div>
-              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">Community Care</div>
-            </motion.div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <StatCard icon={<Users className="w-20 h-20" />} target={1247} suffix="+" label={t('home.impact.neighborsHelped')} color="blue" />
+            <StatCard icon={<Search className="w-20 h-20" />} target={stats.totalResources} suffix="+" label={t('home.impact.localOrgs')} color="indigo" />
+            <StatCard icon={<MapPin className="w-20 h-20" />} target={12} suffix="+" label={t('home.impact.neighborhoods')} color="teal" />
+            <StatCard icon={<Clock className="w-20 h-20" />} target={0} suffix="" label="Community Care" color="amber" staticText="24/7" />
           </div>
         </div>
       </section>
       {/* Testimonials */}
-      <section className="py-20 bg-white border-t border-slate-100">
+      <div className="section-divider mx-auto max-w-4xl" />
+      <section className="py-14 sm:py-20 bg-white">
         <div className="container mx-auto max-w-6xl px-4">
           <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.stories.title')}</h2>
             <p className="text-xl text-slate-900 font-black">{t('home.stories.subtitle')}</p>
           </motion.div>
-          <div className="relative overflow-hidden px-4">
+          <div className="relative overflow-hidden px-4 carousel-fade-edges">
             <motion.div
               className="flex gap-8"
               animate={{ x: [0, -1200, 0] }}
@@ -581,5 +602,28 @@ export default function Home() {
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
     </div >
+  );
+}
+
+// Animated stat card component
+function StatCard({ icon, target, suffix, label, color, staticText }: {
+  icon: React.ReactNode; target: number; suffix: string; label: string; color: string; staticText?: string;
+}) {
+  const { count, ref } = useCountUp(target, 2000);
+  const borderColor = { blue: 'border-l-blue-500', indigo: 'border-l-indigo-500', teal: 'border-l-teal-500', amber: 'border-l-amber-500' }[color] || 'border-l-blue-500';
+
+  return (
+    <motion.div
+      ref={ref}
+      whileHover={{ scale: 1.03, y: -4 }}
+      transition={{ type: 'spring', stiffness: 300 }}
+      className={`bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:shadow-xl transition-shadow`}
+    >
+      <div className="absolute -right-4 -bottom-4 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity">{icon}</div>
+      <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1 tabular-nums relative z-10">
+        {staticText || <>{count.toLocaleString()}{suffix}</>}
+      </div>
+      <div className="text-slate-500 text-[10px] sm:text-xs font-semibold uppercase tracking-wider relative z-10">{label}</div>
+    </motion.div>
   );
 }

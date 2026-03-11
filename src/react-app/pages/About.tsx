@@ -21,7 +21,7 @@ export default function About() {
             alt="Community Connection"
             className="w-full h-full object-cover scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/40 to-white z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-800/30 to-white z-10" />
         </div>
 
         <div className="container mx-auto max-w-6xl px-4 relative z-20 text-center">
@@ -59,10 +59,10 @@ export default function About() {
         </div>
       </section>
 
-      <div className="container mx-auto max-w-6xl py-24 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
 
         {/* Our Vision & Mission - Clean Static Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -143,7 +143,8 @@ export default function About() {
         </div>
 
         {/* Research & Community Need Section */}
-        <section className="mb-32">
+        <div className="section-divider mx-auto max-w-md mb-12" />
+        <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -204,7 +205,8 @@ export default function About() {
         </section>
 
         {/* Our Values Section */}
-        <section className="mb-32">
+        <div className="section-divider mx-auto max-w-md mb-12" />
+        <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -288,7 +290,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, type: "spring", stiffness: 50 }}
-          className="mb-32"
+          className="mb-20"
         >
           <TiltCard>
             <GlassCard variant="strong" className="p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-[3rem]">
