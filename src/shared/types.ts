@@ -15,6 +15,11 @@ export const ResourceSchema = z.object({
   email: z.string().nullable(),
   website: z.string().nullable(),
   hours: z.string().nullable(),
+  schedule: z.string().nullable().optional(),
+  action_urls: z.array(z.object({
+    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer"]),
+    url: z.string().url()
+  })).max(2).optional().nullable(),
   audience: z.string().nullable(),
   services: z.string().nullable(),
   image_url: z.string().nullable(),
@@ -42,6 +47,11 @@ export const ResourceSubmissionSchema = z.object({
   address: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
+  schedule: z.string().optional(),
+  action_urls: z.array(z.object({
+    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer"]),
+    url: z.string().url()
+  })).max(2).optional(),
 });
 
 export type ResourceSubmissionType = z.infer<typeof ResourceSubmissionSchema>;

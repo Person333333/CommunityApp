@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Star, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -21,8 +21,6 @@ export default function Home() {
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
-  const [popularResources, setPopularResources] = useState<ResourceType[]>([]);
-  const [recentResources, setRecentResources] = useState<ResourceType[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const [emailSubscribed, setEmailSubscribed] = useState(false);
@@ -50,15 +48,6 @@ export default function Home() {
         }
 
         setAllFeaturedResources(list.filter(r => r.is_featured));
-
-
-
-        // Popular and Recent Quick Picks using real DB sorting
-        const popular = await unifiedResourceService.fetchAllResources({ limit: 6, sortBy: 'popular' });
-        setPopularResources(popular);
-
-        const recent = await unifiedResourceService.fetchAllResources({ limit: 6, sortBy: 'recent' });
-        setRecentResources(recent);
 
         setStats({
           totalResources: (statsData as any).total || 0,
@@ -112,11 +101,9 @@ export default function Home() {
   }, [allFeaturedResources, userLocation]);
 
   const displaySpotlights = useMemo(() => {
-    // Combine featured and popular, deduplicate, cap at exactly 5
-    const combined = [...featuredResources, ...popularResources];
-    const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
-    return unique.slice(0, 5);
-  }, [featuredResources, popularResources]);
+    // Exactly 5 featured resources
+    return featuredResources.slice(0, 5);
+  }, [featuredResources]);
 
   if (locationLoading || !userLocation) {
     return (
@@ -207,6 +194,28 @@ export default function Home() {
                     {t('home.hero.explore')}
                   </GlassButton>
                 </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                className="flex justify-center"
+              >
+                <GlassButton
+                  variant="secondary"
+                  size="lg"
+                  className="bg-slate-50 border-slate-200 text-slate-700 font-bold px-8 py-4 !rounded-2xl flex items-center gap-3 hover:bg-slate-100 transition-all shadow-md group"
+                  onClick={() => navigate('/discover')}
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <Compass className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-[10px] uppercase tracking-widest font-black opacity-60">Not sure where to start?</div>
+                    <div className="text-lg">Need help finding a resource?</div>
+                  </div>
+                </GlassButton>
               </motion.div>
 
               <div className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-600 font-semibold uppercase tracking-wider">
@@ -351,83 +360,6 @@ export default function Home() {
               )}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Community Quick Picks - "Popular" & "Recent" */}
-      <section className="py-10 sm:py-16 px-3 sm:px-4 bg-white border-y border-slate-100 overflow-hidden">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 gap-8 sm:gap-12 md:grid-cols-2">
-            {/* Popular in Neighborhood */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-2">
-                  <Star className="w-5 h-5 text-amber-500" />
-                  {t('home.popular.title')}
-                </h3>
-                <Link to="/discover" className="text-xs font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
-                  {t('discover.showAll')}
-                </Link>
-              </div>
-              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
-                {popularResources.map(resource => (
-                  <motion.div
-                    key={resource.id}
-                    whileHover={{ y: -4 }}
-                    onClick={() => setSelectedResource(resource)}
-                    className="flex-shrink-0 w-64 snap-start border border-slate-100 rounded-3xl p-4 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
-                        <Star className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-white transition-colors" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[10px] font-black text-blue-700 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded group-hover:bg-blue-600 group-hover:text-white transition-colors">{resource.category}</span>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight truncate">{resource.title}</h4>
-                        </div>
-                        <p className="text-[10px] text-slate-500 font-bold line-clamp-1 mt-1 leading-tight">{resource.description}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Recently Added */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-indigo-500" />
-                  {t('home.recent.title')}
-                </h3>
-                <Link to="/discover" className="text-xs font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
-                  {t('discover.showAll')}
-                </Link>
-              </div>
-              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
-                {recentResources.map(resource => (
-                  <motion.div
-                    key={resource.id}
-                    whileHover={{ y: -4 }}
-                    onClick={() => setSelectedResource(resource)}
-                    className="flex-shrink-0 w-56 sm:w-64 snap-start border border-slate-100 rounded-2xl sm:rounded-3xl p-3 sm:p-4 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                        <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-500 group-hover:text-white transition-colors" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded group-hover:bg-indigo-600 group-hover:text-white transition-colors">{resource.category}</span>
-                        <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight mt-1 truncate">{resource.title}</h4>
-                        <p className="text-[10px] text-slate-500 font-bold line-clamp-1 mt-1 leading-tight">{resource.description}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass } from 'lucide-react';
+import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -129,6 +129,30 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                 {/* Content */}
                 <div className="p-6 space-y-6">
+                  {/* Action Buttons Section - Dynamic from Resource */}
+                  {resource.action_urls && resource.action_urls.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
+                      {resource.action_urls.map((action, idx) => (
+                        <motion.a
+                          key={idx}
+                          href={action.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-lg ${action.label === 'Donate' ? 'bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600' :
+                            action.label === 'Volunteer' ? 'bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700' :
+                              'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'
+                            }`}
+                        >
+                          {action.label === 'Donate' ? <Heart className="w-5 h-5" /> :
+                            action.label === 'Volunteer' ? <Users className="w-5 h-5" /> :
+                              <ExternalLink className="w-5 h-5" />}
+                          {action.label}
+                        </motion.a>
+                      ))}
+                    </div>
+                  )}
                   {/* Description */}
                   <div>
                     <h3 className="text-lg font-black text-indigo-950 mb-2 uppercase tracking-tight">{t('resource.description')}</h3>
@@ -205,6 +229,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         <div>
                           <p className="text-[10px] font-black text-amber-900 uppercase tracking-widest mb-1">{t('resource.hours')}</p>
                           <p className="text-amber-950 font-black">{resource.hours}</p>
+                        </div>
+                      </div>
+                    )}
+                    {resource.schedule && (
+                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
+                        <Calendar className="w-6 h-6 text-indigo-700 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-[10px] font-black text-indigo-900 uppercase tracking-widest mb-1">Specific Schedule</p>
+                          <p className="text-indigo-950 font-black leading-relaxed">{resource.schedule}</p>
                         </div>
                       </div>
                     )}

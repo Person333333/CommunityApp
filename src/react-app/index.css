@@ -12,44 +12,37 @@
   --bg-secondary: #f8fafc;
   /* Very light blue-gray */
 
-  --primary: #2563eb;
-  /* Bright trustworthy blue */
-  --primary-light: #dbeafe;
-  /* Light blue for backgrounds */
-  --primary-hover: #1d4ed8;
+  --primary: #1e40af;
+  /* Deep Matte Blue */
+  --primary-light: #eff6ff;
+  --primary-hover: #1e3a8a;
 
-  --secondary: #4f46e5;
-  /* Royal Indigo */
+  --secondary: #3730a3;
+  /* Deep Indigo */
   --secondary-light: #e0e7ff;
-  /* Light indigo */
-  --secondary-hover: #4338ca;
+  --secondary-hover: #312e81;
 
-  --accent: #f59e0b;
-  /* Warmth orange */
+  --accent: #d97706;
+  /* More matte amber */
   --accent-light: #fef3c7;
 
   /* Darkened for better contrast/accessibility */
   --text-primary: #0f172a;
-  /* Slate 900 */
   --text-secondary: #1e293b;
-  /* Slate 800 */
-  --text-muted: #334155;
-  /* Slate 700 */
+  --text-muted: #475569;
 
-  /* Light Mode Glassmorphism - Slightly more visible borders */
-  --glass-white: rgba(255, 255, 255, 0.8);
-  --glass-white-strong: rgba(255, 255, 255, 0.95);
-  --glass-blue: rgba(37, 99, 235, 0.05);
-  --glass-green: rgba(79, 70, 229, 0.05);
-  /* Now Indigo */
-  --glass-border: rgba(148, 163, 184, 0.4);
-  /* Slate 300 */
-  --glass-border-strong: rgba(100, 116, 139, 0.6);
+  /* Light Mode Glassmorphism */
+  --glass-white: rgba(255, 255, 255, 0.75);
+  --glass-white-strong: rgba(255, 255, 255, 0.92);
+  --glass-blue: rgba(30, 64, 175, 0.03);
+  --glass-green: rgba(55, 48, 163, 0.03);
+  --glass-border: rgba(148, 163, 184, 0.25);
+  --glass-border-strong: rgba(100, 116, 139, 0.4);
 
-  /* Gradients - Warmer and more approachable */
-  --gradient-trust: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-  --gradient-hero: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  /* Gradients - More subtle and professional */
+  --gradient-trust: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+  --gradient-warm: linear-gradient(135deg, #d97706 0%, #b91c1c 100%);
+  --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
 }
 
 * {
@@ -132,16 +125,36 @@ html {
   }
 }
 
-/* Custom animations */
+/* 3D Perspective Wrapper */
+.perspective-container {
+  perspective: 1000px;
+}
+
+@keyframes bounce-slow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
 @keyframes float {
 
   0%,
   100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
   }
 
   50% {
-    transform: translateY(-15px);
+    transform: translateY(-15px) rotate(1deg);
   }
 }
 
