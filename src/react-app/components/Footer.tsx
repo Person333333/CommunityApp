@@ -28,7 +28,7 @@ export default function Footer() {
               </motion.div>
               <span className="text-xl font-bold gradient-text">{t('app.name')}</span>
             </Link>
-            <p className="text-slate-900 text-sm leading-relaxed font-black">
+            <p className="text-slate-600 text-sm leading-relaxed font-medium">
               {t('footer.tagline')}
             </p>
           </motion.div>
@@ -41,8 +41,8 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">{t('about.vision')}</h3>
-            <p className="text-slate-900 text-sm leading-relaxed font-black">
+            <h3 className="text-lg font-semibold text-slate-900">{t('about.vision')}</h3>
+            <p className="text-slate-600 text-sm leading-relaxed font-medium">
               {t('footer.visionText')}
             </p>
           </motion.div>
@@ -55,25 +55,25 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">{t('about.quickLinks')}</h3>
+            <h3 className="text-lg font-semibold text-slate-900">{t('about.quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/discover" className="text-slate-900 hover:text-blue-600 transition-colors text-sm font-black">
+                <Link to="/discover" className="text-slate-600 hover:text-blue-600 transition-colors text-sm font-medium">
                   {t('nav.discover')}
                 </Link>
               </li>
               <li>
-                <Link to="/submit" className="text-slate-900 hover:text-blue-600 transition-colors text-sm font-black">
+                <Link to="/submit" className="text-slate-600 hover:text-blue-600 transition-colors text-sm font-medium">
                   {t('nav.addResource')}
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-slate-900 hover:text-blue-600 transition-colors text-sm font-black">
+                <Link to="/about" className="text-slate-600 hover:text-blue-600 transition-colors text-sm font-medium">
                   {t('nav.about')}
                 </Link>
               </li>
               <li>
-                <Link to="/references" className="text-slate-900 hover:text-blue-600 transition-colors text-sm font-black">
+                <Link to="/references" className="text-slate-600 hover:text-blue-600 transition-colors text-sm font-medium">
                   {t('nav.references')}
                 </Link>
               </li>
@@ -88,23 +88,23 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">{t('about.connectWithUs')}</h3>
+            <h3 className="text-lg font-semibold text-slate-900">{t('about.connectWithUs')}</h3>
             <div className="space-y-3">
               <a
                 href="mailto:hello@communitycompass.org"
-                className="flex items-center gap-3 text-slate-900 hover:text-blue-600 transition-colors text-sm group font-black"
+                className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors text-sm group font-medium"
               >
                 <Mail className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
                 <span>hello@communitycompass.org</span>
               </a>
               <a
                 href="tel:+11234567890"
-                className="flex items-center gap-3 text-slate-900 hover:text-blue-600 transition-colors text-sm group font-black"
+                className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors text-sm group font-medium"
               >
                 <Phone className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
                 <span>+1 (123) 456-7890</span>
               </a>
-              <div className="flex items-start gap-3 text-slate-900 text-sm font-black">
+              <div className="flex items-start gap-3 text-slate-600 text-sm font-medium">
                 <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <span>123 Community Street<br />City, State 12345</span>
               </div>
@@ -120,10 +120,10 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4"
         >
-          <p className="text-slate-900 text-sm font-black">
+          <p className="text-slate-500 text-sm font-medium">
             {t('footer.rights', { year: new Date().getFullYear() })}
           </p>
-          <div className="flex gap-6 text-sm text-slate-900 font-black">
+          <div className="flex gap-6 text-sm text-slate-500 font-medium">
             <Link to="/references" className="hover:text-blue-600 transition-colors">
               {t('footer.privacy')}
             </Link>

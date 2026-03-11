@@ -6,50 +6,36 @@
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  /* NEW Light & Warm Palette */
+  /* Clean Minimalist Palette */
   --bg-primary: #ffffff;
-  /* White */
-  --bg-secondary: #f8fafc;
-  /* Very light blue-gray */
+  --bg-secondary: #f9fafb; /* Gray 50 */
 
-  --primary: #2563eb;
-  /* Bright trustworthy blue */
-  --primary-light: #dbeafe;
-  /* Light blue for backgrounds */
-  --primary-hover: #1d4ed8;
+  --primary: #111827; /* Gray 900 for primary text and elements */
+  --primary-light: #f3f4f6; /* Gray 100 for subtle primary backgrounds */
+  --primary-hover: #374151; /* Gray 700 */
 
-  --secondary: #4f46e5;
-  /* Royal Indigo */
-  --secondary-light: #e0e7ff;
-  /* Light indigo */
-  --secondary-hover: #4338ca;
+  --secondary: #4b5563; /* Gray 600 */
+  --secondary-light: #f9fafb; /* Gray 50 */
+  --secondary-hover: #1f2937; /* Gray 800 */
 
-  --accent: #f59e0b;
-  /* Warmth orange */
-  --accent-light: #fef3c7;
+  --accent: #2563eb; /* Clean Blue 600 for important actions only */
+  --accent-light: #eff6ff; /* Blue 50 */
 
-  /* Darkened for better contrast/accessibility */
-  --text-primary: #0f172a;
-  /* Slate 900 */
-  --text-secondary: #1e293b;
-  /* Slate 800 */
-  --text-muted: #334155;
-  /* Slate 700 */
+  --text-primary: #111827; /* Gray 900 */
+  --text-secondary: #4b5563; /* Gray 600 */
+  --text-muted: #9ca3af; /* Gray 400 */
 
-  /* Light Mode Glassmorphism - Slightly more visible borders */
-  --glass-white: rgba(255, 255, 255, 0.8);
-  --glass-white-strong: rgba(255, 255, 255, 0.95);
-  --glass-blue: rgba(37, 99, 235, 0.05);
-  --glass-green: rgba(79, 70, 229, 0.05);
-  /* Now Indigo */
-  --glass-border: rgba(148, 163, 184, 0.4);
-  /* Slate 300 */
-  --glass-border-strong: rgba(100, 116, 139, 0.6);
+  /* Minimalist Glass/Border */
+  --glass-white: rgba(255, 255, 255, 0.9);
+  --glass-white-strong: rgba(255, 255, 255, 0.98);
+  --glass-blue: rgba(239, 246, 255, 0.5); /* Very subtle blue */
+  --glass-border: rgba(229, 231, 235, 0.8); /* Gray 200 */
+  --glass-border-strong: rgba(209, 213, 219, 0.8); /* Gray 300 */
 
-  /* Gradients - Warmer and more approachable */
-  --gradient-trust: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-  --gradient-hero: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  /* Gradients - Simplified for text only if needed, largely unused now */
+  --gradient-trust: linear-gradient(to right, #111827, #374151);
+  --gradient-warm: linear-gradient(to right, #111827, #374151);
+  --gradient-hero: linear-gradient(to right, #111827, #4b5563);
 }
 
 * {
@@ -62,9 +48,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--bg-primary);
-  background-image:
-    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+  /* Removed radial background gradients for minimalist solid background */
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -76,41 +60,40 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  color: #1e3a8a;
-  /* Deep blue for headings */
+  font-family: 'Inter', sans-serif; /* Unify typography */
+  font-weight: 600; /* Lighter font weight for cleaner look */
+  color: var(--text-primary); /* Slate-900 equivalent */
+  letter-spacing: -0.02em; /* Tighter letter spacing for modern feel */
 }
 
 /* Updated Glassmorphism utilities for light mode */
+/* Updated Clean Glass Utilities */
 .glass {
   background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  /* Subtle or no shadow */
 }
 
 .glass-teal {
   background: var(--glass-blue);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-ochre {
-  background: rgba(245, 158, 11, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(243, 244, 246, 0.5); /* Neutral Gray */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
 }
 
 .glass-strong {
-  background: var(--glass-white-strong);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: var(--bg-primary);
   border: 1px solid var(--glass-border-strong);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Lighter shadow */
 }
 
 /* Smooth scroll */
@@ -200,22 +183,23 @@ html {
 }
 
 /* Category Badges - High contrast */
+/* Category Badges - High contrast, Minimalist */
 .badge-food {
-  background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #dbeafe;
+  background: #f3f4f6; /* gray-100 */
+  color: #1f2937; /* gray-800 */
+  border: 1px solid #e5e7eb; /* gray-200 */
 }
 
 .badge-housing {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #bfdbfe;
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
 }
 
 .badge-health {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
 }
 
 /* Mobile Responsiveness */

@@ -134,16 +134,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], x: [0, 100, 0], y: [0, 50, 0] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1.2, 1, 1.2], x: [0, -100, 0], y: [0, -50, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl"
-          />
+          {/* Removed busy animated background orbs for a cleaner, minimalist aesthetic */}
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -163,12 +154,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="space-y-6"
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-                <span className="block text-slate-700 mb-2 font-black">{t('home.hero.title1')}</span>
-                <span className="block text-slate-900 border-b-4 border-slate-400 w-fit mx-auto pb-2 font-black tracking-tighter">{t('home.hero.title2')}</span>
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight text-slate-900">
+                <span className="block mb-2 font-semibold">{t('home.hero.title1')}</span>
+                <span className="block w-fit mx-auto pb-2 font-bold tracking-tight">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-base sm:text-xl lg:text-2xl text-slate-950 max-w-3xl mx-auto font-black leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -178,7 +169,7 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="max-w-2xl mx-auto mt-8"
               >
-                <div className="bg-white rounded-2xl sm:rounded-full p-2 flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10 border border-slate-100">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-sm border border-slate-200">
                   <div className="flex items-center gap-2 w-full flex-1">
                     <Search className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 ml-3 sm:ml-4" />
                     <input
@@ -217,8 +208,8 @@ export default function Home() {
                   <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                    <Compass className="w-4 h-4 text-slate-500" />
+                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                    <Compass className="w-4 h-4 text-slate-400" />
                   </div>
                   <span>12+ {t('home.stats.categories')}</span>
                 </div>
@@ -261,13 +252,13 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-16 flex flex-col items-center"
           >
-            <span className="bg-slate-100 text-slate-600 text-xs font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest border border-slate-200">
+            <span className="text-slate-500 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider">
               Community Resource Highlights
             </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-blue-900 mb-3 sm:mb-4">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 mb-3 sm:mb-4">
               {t('home.spotlight.title')}
             </h2>
-            <p className="text-xl text-slate-900 font-black">
+            <p className="text-lg text-slate-600 font-medium">
               {t('home.spotlight.subtitle')}
             </p>
           </motion.div>
@@ -304,10 +295,10 @@ export default function Home() {
                             </div>
                           )}
                           <div>
-                            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{resource.category}</span>
-                            <h3 className="text-xl font-black text-slate-900 mt-2 line-clamp-1 uppercase tracking-tight">{resource.title}</h3>
+                            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{resource.category}</span>
+                            <h3 className="text-lg font-semibold text-slate-900 mt-2 line-clamp-1">{resource.title}</h3>
                           </div>
-                          <p className="text-slate-900 text-sm line-clamp-2 leading-relaxed font-bold">{resource.description}</p>
+                          <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">{resource.description}</p>
                           <div className="flex items-center justify-between pt-2">
                             <button className="text-slate-500 font-semibold text-xs flex items-center gap-2 hover:text-slate-800 transition-colors">
                               Explore Details <ArrowRight className="w-3.5 h-3.5" />
@@ -382,11 +373,11 @@ export default function Home() {
                         <Star className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-white transition-colors" />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[10px] font-black text-blue-700 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded group-hover:bg-blue-600 group-hover:text-white transition-colors">{resource.category}</span>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight truncate">{resource.title}</h4>
+                        <span className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">{resource.category}</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <h4 className="text-sm font-semibold text-slate-900 truncate">{resource.title}</h4>
                         </div>
-                        <p className="text-[10px] text-slate-500 font-bold line-clamp-1 mt-1 leading-tight">{resource.description}</p>
+                        <p className="text-[11px] text-slate-500 line-clamp-1 mt-1 leading-tight">{resource.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -418,9 +409,9 @@ export default function Home() {
                         <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-500 group-hover:text-white transition-colors" />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded group-hover:bg-indigo-600 group-hover:text-white transition-colors">{resource.category}</span>
-                        <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight mt-1 truncate">{resource.title}</h4>
-                        <p className="text-[10px] text-slate-500 font-bold line-clamp-1 mt-1 leading-tight">{resource.description}</p>
+                        <span className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">{resource.category}</span>
+                        <h4 className="text-sm font-semibold text-slate-900 mt-1 truncate">{resource.title}</h4>
+                        <p className="text-[11px] text-slate-500 line-clamp-1 mt-1 leading-tight">{resource.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -470,19 +461,19 @@ export default function Home() {
                 key={idx}
                 heightClass="h-[320px]"
                 front={
-                  <div className={`bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center transform hover:-translate-y-1 transition-transform h-full flex flex-col items-center justify-center group`}>
-                    <div className={`w-16 h-16 ${step.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-6`}>
+                  <div className={`bg-white rounded-xl p-8 border border-slate-200 shadow-sm text-center transform hover:-translate-y-1 transition-transform h-full flex flex-col items-center justify-center group`}>
+                    <div className={`w-16 h-16 ${step.iconBg} rounded-xl flex items-center justify-center mx-auto mb-6`}>
                       {step.icon}
                     </div>
-                    <h3 className="text-2xl font-black text-slate-900 mb-3 uppercase tracking-tight">{step.title}</h3>
-                    <p className={`text-sm font-bold text-${step.theme}-600 opacity-80 mb-4 px-2`}>{step.frontText}</p>
-                    <p className={`mt-auto pt-2 font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity text-slate-500`}>Tap to Reveal</p>
+                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{step.title}</h3>
+                    <p className={`text-sm font-medium text-slate-600 mb-4 px-2`}>{step.frontText}</p>
+                    <p className={`mt-auto pt-2 font-semibold text-[11px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity text-slate-400`}>Tap to Reveal</p>
                   </div>
                 }
                 back={
-                  <div className={`bg-${step.theme}-600 rounded-2xl p-8 shadow-xl text-center h-full flex flex-col items-center justify-center text-white`}>
-                    <h3 className="text-xl font-black mb-4 uppercase tracking-tight">{step.title}</h3>
-                    <p className="font-bold leading-relaxed">{step.desc}</p>
+                  <div className={`bg-white rounded-xl p-8 border border-slate-200 shadow-sm text-center h-full flex flex-col items-center justify-center`}>
+                    <h3 className="text-xl font-semibold text-slate-900 mb-4">{step.title}</h3>
+                    <p className="font-medium text-slate-600 leading-relaxed">{step.desc}</p>
                   </div>
                 }
               />
@@ -501,26 +492,26 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-slate-800 mb-4">{t('home.impact.title')}</h2>
             <p className="text-lg text-slate-500 font-semibold">{t('home.impact.subtitle')}</p>
           </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Users className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-slate-700 mb-2">1,247+</div>
-              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.neighborsHelped')}</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Users className="w-24 h-24" /></div>
+              <div className="text-3xl font-semibold text-slate-900 mb-1">1,247+</div>
+              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.neighborsHelped')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity"><Search className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-slate-700 mb-2">{stats.totalResources}+</div>
-              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.localOrgs')}</div>
+            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity"><Search className="w-24 h-24" /></div>
+              <div className="text-3xl font-semibold text-slate-900 mb-1">{stats.totalResources}+</div>
+              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.localOrgs')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
-              <div className="absolute -left-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><MapPin className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-amber-600 mb-2">12+</div>
-              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">{t('home.impact.neighborhoods')}</div>
+            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+              <div className="absolute -left-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><MapPin className="w-24 h-24" /></div>
+              <div className="text-3xl font-semibold text-slate-900 mb-1">12+</div>
+              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">{t('home.impact.neighborhoods')}</div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} className="bg-slate-50 p-8 rounded-2xl border border-slate-150 shadow-sm relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Clock className="w-32 h-32" /></div>
-              <div className="text-4xl font-bold text-slate-700 mb-2">24/7</div>
-              <div className="text-slate-500 text-xs font-semibold uppercase tracking-widest relative z-10">Community Care</div>
+            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group">
+              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><Clock className="w-24 h-24" /></div>
+              <div className="text-3xl font-semibold text-slate-900 mb-1">24/7</div>
+              <div className="text-slate-500 text-xs font-medium uppercase tracking-wider relative z-10">Community Care</div>
             </motion.div>
           </div>
         </div>
@@ -538,59 +529,59 @@ export default function Home() {
               animate={{ x: [0, -1200, 0] }}
               transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
             >
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
-                <Quote className="w-8 h-8 text-slate-200 mb-4" />
-                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
+                <Quote className="w-8 h-8 text-slate-300 mb-4" />
+                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">MS</div>
                   <div>
-                    <div className="font-semibold text-slate-800">Maria Sanchez</div>
-                    <div className="text-xs font-semibold text-slate-400 uppercase">Northgate Neighbor</div>
+                    <div className="font-semibold text-slate-900">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
-                <Quote className="w-8 h-8 text-slate-200 mb-4" />
-                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
+                <Quote className="w-8 h-8 text-slate-300 mb-4" />
+                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">JT</div>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">JT</div>
                   <div>
-                    <div className="font-semibold text-slate-800">James Thompson</div>
-                    <div className="text-xs font-semibold text-slate-400 uppercase">Community Organizer</div>
+                    <div className="font-semibold text-slate-900">James Thompson</div>
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Community Organizer</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-amber-300 shadow-md">
-                <Quote className="w-8 h-8 text-amber-100 mb-4" />
-                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
+                <Quote className="w-8 h-8 text-slate-300 mb-4" />
+                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 font-bold text-sm">LW</div>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">LW</div>
                   <div>
-                    <div className="font-semibold text-slate-800">Linda Wright</div>
-                    <div className="text-xs font-semibold text-amber-500 uppercase">Single Parent &amp; Educator</div>
+                    <div className="font-semibold text-slate-900">Linda Wright</div>
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Single Parent &amp; Educator</div>
                   </div>
                 </div>
               </GlassCard>
 
               {/* Duplicate for seamless loop */}
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border-l-4 border-slate-300 shadow-md">
-                <Quote className="w-8 h-8 text-slate-200 mb-4" />
-                <blockquote className="text-base text-slate-700 font-semibold italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
+                <Quote className="w-8 h-8 text-slate-300 mb-4" />
+                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">MS</div>
                   <div>
-                    <div className="font-semibold text-slate-800">Maria Sanchez</div>
-                    <div className="text-xs font-semibold text-slate-400 uppercase">Northgate Neighbor</div>
+                    <div className="font-semibold text-slate-900">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>

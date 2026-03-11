@@ -14,7 +14,7 @@ export default function Navbar() {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { user } = useUser();
   const { signOut } = useClerk();
-  const { scrollY, scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
 
   const backgroundColor = useTransform(
     scrollY,
@@ -37,10 +37,7 @@ export default function Navbar() {
         WebkitBackdropFilter: backdropBlur,
       }}
     >
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 origin-left"
-        style={{ scaleX: scrollYProgress }}
-      />
+      {/* Removed gradient top bar for cleaner minimalist look */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
@@ -81,7 +78,7 @@ export default function Navbar() {
               <SignedIn>
                 <button
                   onClick={() => setShowAccountMenu(!showAccountMenu)}
-                  className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center shadow hover:opacity-90"
+                  className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center shadow-sm hover:opacity-90"
                   aria-label="Account menu"
                 >
                   {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
@@ -89,20 +86,20 @@ export default function Navbar() {
                 {showAccountMenu && (
                   <div className="absolute right-0 top-12 w-64 glass p-4 rounded-xl border border-white/10 shadow-xl backdrop-blur">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center">
                         {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                       </div>
                       <div>
-                        <div className="text-slate-900 font-black leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
-                        <div className="text-slate-600 text-xs font-black truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
+                        <div className="text-slate-900 font-medium leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
+                        <div className="text-slate-500 text-xs truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-slate-900 font-black">{t('nav.account')}</Link>
-                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-slate-900 font-black">{t('discover.mySubmissions')}</Link>
+                    <div className="space-y-1">
+                      <Link to="/account" className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700 font-medium text-sm">{t('nav.account')}</Link>
+                      <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700 font-medium text-sm">{t('discover.mySubmissions')}</Link>
                       <button
                         onClick={() => signOut()}
-                        className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 text-rose-700 font-black"
+                        className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-rose-600 font-medium text-sm"
                       >
                         {t('account.signOut')}
                       </button>
@@ -172,15 +169,15 @@ export default function Navbar() {
                   </Link>
                 </SignedOut>
                 <SignedIn>
-                  <div className="px-4 py-3 bg-white border border-slate-200 rounded-lg shadow-sm">
+                  <div className="px-4 py-3 bg-white border border-slate-200 rounded-xl shadow-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center">
                           {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                         </div>
-                        <div className="text-slate-900 font-bold"><Translated text={user?.firstName || 'Account'} /></div>
+                        <div className="text-slate-900 font-medium"><Translated text={user?.firstName || 'Account'} /></div>
                       </div>
-                      <button onClick={() => signOut()} className="text-rose-600 hover:text-rose-800 text-sm font-bold uppercase tracking-widest">{t('account.signOut')}</button>
+                      <button onClick={() => signOut()} className="text-rose-600 hover:text-rose-700 text-sm font-medium uppercase tracking-wider">{t('account.signOut')}</button>
                     </div>
                   </div>
                 </SignedIn>
@@ -209,7 +206,7 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
       {isActive && (
         <motion.div
           layoutId="navbar-active"
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-t-md"
+          className="absolute bottom-1 left-0 right-0 h-0.5 bg-slate-800 rounded-full"
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
         />
       )}
