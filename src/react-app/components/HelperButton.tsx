@@ -162,7 +162,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
         data-tour="helper-button"
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-2xl z-40 hover:scale-110 transition-transform border-4 border-white/20"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-blue-600/30 z-40 transition-all"
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -205,8 +205,8 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-slate-900 uppercase tracking-widest text-sm">{t('helper.title')}</h3>
-                  <p className="text-xs text-slate-600 font-medium">{t('helper.subtitle')}</p>
+                  <h3 className="font-semibold text-slate-900 text-sm">{t('helper.title')}</h3>
+                  <p className="text-xs text-slate-500 font-medium">{t('helper.subtitle')}</p>
                 </div>
               </div>
 
@@ -239,9 +239,9 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] p-4 rounded-2xl text-sm shadow-md ${msg.role === 'user'
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-tr-none'
-                        : 'bg-white border border-slate-100 text-slate-800 rounded-tl-none font-bold'
+                      className={`max-w-[85%] p-4 rounded-xl text-sm shadow-sm ${msg.role === 'user'
+                        ? 'bg-blue-600 text-white rounded-tr-none'
+                        : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none font-medium'
                         }`}
                     >
                       {msg.content.split('\n').map((line, i) => (
@@ -294,7 +294,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSendMessage}
                     disabled={!message.trim() || isTyping}
-                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center disabled:opacity-50 shadow-lg hover:shadow-blue-500/20"
+                    className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-xl flex items-center justify-center disabled:opacity-50 shadow-sm transition-colors"
                   >
                     <Send className="w-4 h-4 text-white" />
                   </motion.button>

@@ -49,31 +49,31 @@ export default function GuestAuthModal({ isOpen, onClose, title, message, type }
                                     )}
                                 </div>
 
-                                <h3 className="text-2xl font-black text-slate-900 mb-3 uppercase tracking-widest">
+                                <h3 className="text-xl font-semibold text-slate-900 mb-3">
                                     {title}
                                 </h3>
-                                <p className="text-slate-800 mb-8 leading-relaxed font-bold">
+                                <p className="text-slate-600 mb-8 leading-relaxed font-medium">
                                     {message}
                                 </p>
 
                                 <div className="flex flex-col w-full gap-3">
                                     <Link
                                         to="/sign-in"
-                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-lg shadow-blue-500/20"
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors shadow-sm"
                                     >
                                         <LogIn className="w-5 h-5" />
                                         {t('auth.signInButton')}
                                     </Link>
                                     <Link
                                         to="/sign-up"
-                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-white border border-slate-200 text-slate-800 hover:bg-slate-50 rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-sm"
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-xl font-semibold text-sm transition-colors shadow-sm"
                                     >
                                         <UserPlus className="w-5 h-5" />
                                         {t('auth.signUpButton')}
                                     </Link>
                                     <button
                                         onClick={onClose}
-                                        className="mt-2 text-sm text-slate-600 hover:text-slate-900 transition-colors font-bold"
+                                        className="mt-2 text-sm text-slate-500 hover:text-slate-800 transition-colors font-medium"
                                     >
                                         {t('common.close')}
                                     </button>
