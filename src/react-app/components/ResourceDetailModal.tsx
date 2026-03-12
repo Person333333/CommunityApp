@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download } from 'lucide-react';
+import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download, Volume2, VolumeX } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -18,6 +18,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
   const [shareToast, setShareToast] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(() => {
     if (!resource) return null;
     const saved = localStorage.getItem(`resource-feedback-${resource.id}`);
@@ -38,6 +39,8 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     setShowDonationForm(false);
     setShowQR(false);
     setShareToast(false);
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
     if (resource) {
       const saved = localStorage.getItem(`resource-feedback-${resource.id}`);
       setFeedback(saved as 'up' | 'down' | null);
@@ -109,6 +112,26 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   };
 
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/discover?resource=${resource.id}`)}`;
+
+  const handleReadAloud = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const parts = [
+      resource.title,
+      resource.description || '',
+      resource.address ? `Located at ${resource.address}` : '',
+      resource.hours ? `Open ${resource.hours}` : '',
+    ].filter(Boolean);
+    const utterance = new SpeechSynthesisUtterance(parts.join('. '));
+    utterance.rate = 0.95;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
 
   return (
     <AnimatePresence>
@@ -408,7 +431,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                     </div>
 
-                    {/* Utility Actions: Share / Print / QR */}
+                    {/* Utility Actions: Share / Print / QR / Read Aloud */}
                     <div className="flex flex-wrap gap-2 relative">
                       <button onClick={handleShare} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
                         <Share2 className="w-3.5 h-3.5" /> Share
@@ -418,6 +441,12 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       </button>
                       <button onClick={() => setShowQR(!showQR)} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
                         <QrCode className="w-3.5 h-3.5" /> QR Code
+                      </button>
+                      <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-xs font-bold transition-colors uppercase tracking-widest border px-3 py-2 rounded-lg ${
+                        isSpeaking ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-slate-500 hover:text-blue-600 bg-slate-50 border-slate-200'
+                      }`}>
+                        {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        {isSpeaking ? 'Stop' : 'Read Aloud'}
                       </button>
                       {shareToast && (
                         <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-0 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">

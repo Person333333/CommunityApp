@@ -57,13 +57,13 @@ export default function CommandPalette() {
     ];
 
     // Build category shortcuts from categoryHierarchy
-    const categoryShortcuts: CommandItem[] = Object.keys(categoryHierarchy).slice(0, 8).map(cat => ({
-      id: `cat-${cat}`,
-      label: `Find ${cat}`,
-      description: `Browse ${cat} resources`,
+    const categoryShortcuts: CommandItem[] = categoryHierarchy.slice(0, 8).map(cat => ({
+      id: `cat-${cat.id}`,
+      label: `Find ${cat.label}`,
+      description: `Browse ${cat.label} resources`,
       icon: <MapPin className="w-4 h-4" />,
-      action: () => { navigate(`/discover?category=${encodeURIComponent(cat)}`); close(); },
-      keywords: [cat.toLowerCase(), ...cat.toLowerCase().split(/[\s&]+/)],
+      action: () => { navigate(`/discover?category=${encodeURIComponent(cat.label)}`); close(); },
+      keywords: [cat.label.toLowerCase(), ...cat.label.toLowerCase().split(/[\s&]+/)],
     }));
 
     return [...nav, ...toggles, ...categoryShortcuts];

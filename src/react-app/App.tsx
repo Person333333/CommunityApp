@@ -19,6 +19,7 @@ import HelperButton from "@/react-app/components/HelperButton";
 import NeedHelpNow from "@/react-app/components/NeedHelpNow";
 import AccessibilityWidget from "@/react-app/components/AccessibilityWidget";
 import CommandPalette from "@/react-app/components/CommandPalette";
+import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
 
 function ScrollToTop() {
@@ -91,6 +92,7 @@ export default function App() {
       <NeedHelpNow />
       <AccessibilityWidget />
       <CommandPalette />
+      <KeyboardShortcutsGuide />
       <HelperButton onShowTour={() => setShowTour(true)} />
     </Router>
   );

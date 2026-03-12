@@ -15,6 +15,7 @@ import MapComponent from '@/react-app/components/MapComponent';
 import { useTranslation } from 'react-i18next';
 import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
+import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
@@ -321,6 +322,7 @@ export default function Discover() {
                       <X className="w-5 h-5" />
                     </button>
                   )}
+                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-9 h-9" />
                 </div>
 
                 {/* Filter dropdowns row */}

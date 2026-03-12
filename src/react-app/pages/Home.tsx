@@ -7,6 +7,8 @@ import GlassCard from '@/react-app/components/GlassCard';
 import FlipCard from '@/react-app/components/FlipCard';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
+import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
+import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
@@ -58,6 +60,7 @@ export default function Home() {
   const [autoPlay, setAutoPlay] = useState(true);
   const [emailSubscribed, setEmailSubscribed] = useState(false);
   const [subscribeEmail, setSubscribeEmail] = useState('');
+  const [showWizard, setShowWizard] = useState(false);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -212,6 +215,7 @@ export default function Home() {
                       }}
                     />
                   </div>
+                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-10 h-10" />
                   <GlassButton
                     variant="primary"
                     size="md"
@@ -234,7 +238,7 @@ export default function Home() {
               >
                 <button
                   className="bg-white/80 backdrop-blur-sm border border-slate-200/80 text-slate-600 font-medium px-6 py-3 rounded-full flex items-center gap-3 hover:bg-white hover:shadow-lg hover:border-slate-300 transition-all group animate-pulse-glow"
-                  onClick={() => navigate('/discover')}
+                  onClick={() => setShowWizard(true)}
                 >
                   <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                     <Compass className="w-4 h-4 text-blue-600" />
@@ -647,6 +651,7 @@ export default function Home() {
 
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
+      <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
     </div >
   );
 }
