@@ -448,9 +448,9 @@ export default function Discover() {
                     variant="secondary"
                     size="sm"
                     onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
-                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-rose-600 border-2 border-rose-500 shadow-sm' : 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30 hover:bg-rose-600'}`}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-sky-600 border-2 border-sky-500 shadow-sm' : 'bg-sky-500 !text-white border-sky-600 shadow-sky-500/30 hover:bg-sky-600'}`}
                   >
-                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-rose-500 text-rose-500' : 'fill-white text-white'}`} /> My Favorites
+                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-sky-500 text-sky-500' : 'fill-white text-white'}`} /> My Favorites
                   </GlassButton>
                   <GlassButton
                     variant="secondary"
