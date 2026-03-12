@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -469,6 +469,52 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Recent Community Activity */}
+      <div className="section-divider mx-auto max-w-4xl" />
+      <section className="py-14 sm:py-18 bg-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Activity className="w-5 h-5 text-emerald-500" />
+              <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Live</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Recent Community Activity</h2>
+            <p className="text-sm text-slate-500 font-medium">See the latest resources added by your neighbors</p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {featuredResources.slice(0, 5).map((resource: ResourceType, i: number) => (
+              <motion.div
+                key={resource.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer group"
+                onClick={() => navigate(`/discover?category=${encodeURIComponent(resource.category || '')}`)}
+              >
+                <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400 ring-4 ring-emerald-100" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-slate-900 text-sm group-hover:text-blue-700 transition-colors truncate">{resource.title}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">{resource.category}</span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium mt-1 truncate">{resource.description?.slice(0, 100)}{resource.description && resource.description.length > 100 ? '...' : ''}</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors flex-shrink-0 mt-1" />
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-8">
+            <button onClick={() => navigate('/discover')} className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+              View all resources →
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <div className="section-divider mx-auto max-w-4xl" />
       <section className="py-14 sm:py-20 bg-white">

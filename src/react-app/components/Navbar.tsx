@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
 import LocationSelector from './LocationSelector';
+import ThemeToggle from './ThemeToggle';
 import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 
@@ -112,6 +113,8 @@ export default function Navbar() {
 
               {/* Location Selector */}
               <LocationSelector />
+              {/* Theme Toggle */}
+              <ThemeToggle />
               {/* Language Selector */}
               <div data-tour="language-selector">
                 <LanguageSelector />

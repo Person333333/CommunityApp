@@ -17,6 +17,8 @@ import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
 import NeedHelpNow from "@/react-app/components/NeedHelpNow";
+import AccessibilityWidget from "@/react-app/components/AccessibilityWidget";
+import CommandPalette from "@/react-app/components/CommandPalette";
 import { useLocation } from "@/react-app/context/LocationContext";
 
 function ScrollToTop() {
@@ -60,8 +62,10 @@ export default function App() {
 
   return (
     <Router>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <ScrollToTop />
       <Navbar />
+      <main id="main-content">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/discover" element={<DiscoverPage />} />
@@ -77,6 +81,7 @@ export default function App() {
         {/* Catch-all Route for 404 Page Not Found */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </main>
       <Footer />
       <UserTour
         isOpen={showTour}
@@ -84,6 +89,8 @@ export default function App() {
         onComplete={() => setShowTour(false)}
       />
       <NeedHelpNow />
+      <AccessibilityWidget />
+      <CommandPalette />
       <HelperButton onShowTour={() => setShowTour(true)} />
     </Router>
   );
