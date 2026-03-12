@@ -440,7 +440,7 @@ export default function Discover() {
                   <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
                 {hasActiveFilters && (
-                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">Clear All</button>
+                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-indigo-600 border border-indigo-200 rounded-xl hover:bg-indigo-50 transition-colors">Clear All</button>
                 )}
 
                 <div className="flex gap-2 items-center ml-auto">

@@ -44,23 +44,22 @@ export default function VoiceSearchButton({ onResult, className = '' }: VoiceSea
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       onClick={isListening ? undefined : startListening}
-      className={`relative flex items-center justify-center rounded-full transition-all ${
-        isListening
-          ? 'bg-rose-500 text-white'
+      className={`relative flex items-center justify-center rounded-full transition-all ${isListening
+          ? 'bg-blue-600 text-white'
           : 'bg-slate-100 hover:bg-blue-100 text-slate-500 hover:text-blue-600'
-      } ${className}`}
+        } ${className}`}
       aria-label={isListening ? 'Listening...' : 'Search by voice'}
       title={isListening ? 'Listening...' : 'Search by voice'}
     >
       {isListening && (
         <>
           <motion.div
-            className="absolute inset-0 rounded-full bg-rose-400"
+            className="absolute inset-0 rounded-full bg-blue-400"
             animate={{ scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           />
           <motion.div
-            className="absolute inset-0 rounded-full bg-rose-300"
+            className="absolute inset-0 rounded-full bg-blue-300"
             animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0, 0.3] }}
             transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
           />

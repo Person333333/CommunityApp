@@ -216,7 +216,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           rel="noopener noreferrer"
                           whileHover={{ scale: 1.02, y: -2 }}
                           whileTap={{ scale: 0.98 }}
-                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-lg ${action.label === 'Donate' ? 'bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600' :
+                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-lg ${action.label === 'Donate' ? 'bg-indigo-600 text-white shadow-indigo-500/20 hover:bg-indigo-700' :
                             action.label === 'Volunteer' ? 'bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700' :
                               'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'
                             }`}
@@ -365,11 +365,11 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.audience && (
-                      <div className="flex items-start gap-3 bg-rose-50 border border-rose-100 p-4 rounded-2xl">
-                        <Users className="w-6 h-6 text-rose-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
+                        <Users className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-rose-900 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
-                          <p className="text-rose-950 font-black">{resource.audience}</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
+                          <p className="text-slate-900 font-black">{resource.audience}</p>
                         </div>
                       </div>
                     )}
@@ -449,7 +449,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                       <button
                         onClick={() => setShowDonationForm(true)}
-                        className="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-xl shadow-rose-500/30 flex items-center transition-colors uppercase tracking-widest text-sm"
+                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl shadow-indigo-500/30 flex items-center transition-colors uppercase tracking-widest text-sm"
                       >
                         <Heart className="w-4 h-4 mr-2" />
                         Donate Now
@@ -463,7 +463,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             setReportState('reporting');
                             setTimeout(() => setReportState('success'), 800);
                           }}
-                          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-rose-600 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
+                          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
                         >
                           <AlertTriangle className="w-3.5 h-3.5" />
                           Report Issue
@@ -562,7 +562,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md relative z-[61] overflow-hidden border border-rose-100"
+                  className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md relative z-[61] overflow-hidden border border-indigo-100"
                 >
                   <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">

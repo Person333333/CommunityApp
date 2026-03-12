@@ -114,7 +114,7 @@ export default function Navbar() {
                         <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-slate-700 font-medium text-sm">{t('discover.mySubmissions')}</Link>
                         <button
                           onClick={() => signOut()}
-                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-rose-600 font-medium text-sm"
+                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-slate-50 text-indigo-600 font-medium text-sm"
                         >
                           {t('account.signOut')}
                         </button>
@@ -195,7 +195,7 @@ export default function Navbar() {
                             </div>
                             <div className="text-slate-900 font-medium"><Translated text={user?.firstName || 'Account'} /></div>
                           </div>
-                          <button onClick={() => signOut()} className="text-rose-600 hover:text-rose-700 text-sm font-medium uppercase tracking-wider">{t('account.signOut')}</button>
+                          <button onClick={() => signOut()} className="text-indigo-600 hover:text-indigo-700 text-sm font-medium uppercase tracking-wider">{t('account.signOut')}</button>
                         </div>
                       </div>
                     </SignedIn>

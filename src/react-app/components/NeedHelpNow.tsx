@@ -15,7 +15,7 @@ export default function NeedHelpNow() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-20 left-4 z-[60] bg-rose-600 hover:bg-rose-700 text-white shadow-rose-500/30 shadow-lg rounded-full px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 transition-colors duration-300"
+                className="fixed bottom-20 left-4 z-[60] bg-slate-900 hover:bg-slate-800 text-white shadow-slate-500/30 shadow-lg rounded-full px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 transition-colors duration-300"
             >
                 <AlertCircle className="w-6 h-6 animate-pulse" />
                 <span className="font-semibold hidden sm:inline-block">Need Help Now?</span>
@@ -36,20 +36,20 @@ export default function NeedHelpNow() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg relative z-[71] overflow-hidden border border-rose-100"
+                            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg relative z-[71] overflow-hidden border border-slate-200"
                         >
-                            <div className="bg-rose-600 p-6 flex justify-between items-center text-white">
+                            <div className="bg-slate-900 p-6 flex justify-between items-center text-white">
                                 <div className="flex items-center gap-3">
                                     <AlertCircle className="w-8 h-8" />
                                     <h2 className="text-2xl font-semibold">Immediate Access</h2>
                                 </div>
-                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-rose-700 rounded-full transition-colors">
+                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-slate-800 rounded-full transition-colors">
                                     <X className="w-6 h-6" />
                                 </button>
                             </div>
 
                             <div className="p-8 space-y-6">
-                                <p className="text-slate-600 font-bold">If you are in immediate physical danger, please call <strong className="text-rose-600">911</strong> immediately.</p>
+                                <p className="text-slate-600 font-bold">If you are in immediate physical danger, please call <strong className="text-slate-900">911</strong> immediately.</p>
 
                                 <div className="space-y-4">
                                     <a href="tel:988" className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-blue-50 hover:border-blue-200 transition-all group">
