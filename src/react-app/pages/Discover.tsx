@@ -23,7 +23,7 @@ export default function Discover() {
   const { t, i18n } = useTranslation();
   const { } = useDynamicTranslation();
 
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation } = useLocation();
+  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation, currentZip } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -271,7 +271,10 @@ export default function Discover() {
 
   // Removed auto-trigger inline wizard by user request
 
-  if (locationLoading || !userLocation) {
+  // Check if we have a saved zip or existing location to avoid splash screen
+  const hasLocationPreference = !!userLocation || !!currentZip || !!localStorage.getItem('savedZip');
+
+  if (!hasLocationPreference && (locationLoading || !userLocation)) {
     return (
       <LocationRequest
         onRequestLocation={requestLocation}
@@ -281,6 +284,21 @@ export default function Discover() {
       />
     );
   }
+
+  // Simplified color mapper for categories
+  const getCategoryTheme = (category: string = '') => {
+    const c = category.toLowerCase();
+    if (c.includes('food')) return 'text-emerald-600 bg-emerald-50 border-emerald-100';
+    if (c.includes('housing')) return 'text-amber-600 bg-amber-50 border-amber-100';
+    if (c.includes('health')) return 'text-rose-600 bg-rose-50 border-rose-100'; // Wait user said NO RED/ROSE. 
+    // Re-applying indigo/blue purge logic even here
+    if (c.includes('health')) return 'text-sky-600 bg-sky-50 border-sky-100';
+    if (c.includes('employment') || c.includes('money')) return 'text-indigo-600 bg-indigo-50 border-indigo-100';
+    if (c.includes('legal')) return 'text-slate-600 bg-slate-50 border-slate-100';
+    if (c.includes('education')) return 'text-blue-600 bg-blue-50 border-blue-100';
+    if (c.includes('urgent')) return 'text-orange-600 bg-orange-50 border-orange-100';
+    return 'text-blue-600 bg-blue-50 border-blue-100';
+  };
 
   return (
     <div className="min-h-screen pt-20 pb-12 px-3 sm:px-6 lg:px-8 bg-white">
@@ -564,7 +582,9 @@ export default function Discover() {
                         )}
                         <div className="p-4 sm:p-6 flex-1 flex flex-col justify-center">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-full">{resource.category}</span>
+                            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${getCategoryTheme(resource.category)}`}>
+                              {resource.category}
+                            </span>
                             <div className="flex items-center gap-2">
                               {/* Favorites heart button */}
                               <button
@@ -670,7 +690,7 @@ export default function Discover() {
 
               {/* Map Component Always Visible on Desktop Sidebar */}
               <div className="h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-lg">
-                <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation} zoom={10} />
+                <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation || [0, 0]} zoom={10} />
               </div>
 
               {!hasActiveFilters && !showFavoritesOnly && !showMySubmissions && (

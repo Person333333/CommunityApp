@@ -1,10 +1,8 @@
 import { motion } from 'framer-motion';
 import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import AnimatedCompass from '@/react-app/components/AnimatedCompass';
 import GlassButton from '@/react-app/components/GlassButton';
 import GlassCard from '@/react-app/components/GlassCard';
-import FlipCard from '@/react-app/components/FlipCard';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
 import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
@@ -51,7 +49,7 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation } = useLocation();
+  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation, currentZip } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
@@ -140,7 +138,10 @@ export default function Home() {
     return featuredResources.slice(0, 5);
   }, [featuredResources]);
 
-  if (locationLoading || !userLocation) {
+  // Check if we have a saved zip or existing location to avoid splash screen
+  const hasLocationPreference = !!userLocation || !!currentZip || !!localStorage.getItem('savedZip');
+
+  if (!hasLocationPreference && (locationLoading || !userLocation)) {
     return (
       <LocationRequest
         onRequestLocation={requestLocation}
@@ -151,31 +152,40 @@ export default function Home() {
     );
   }
 
+  if (locationLoading && !userLocation) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] sm:min-h-[85vh] flex items-center justify-center overflow-hidden pt-12 pb-8">
-        {/* Animated gradient mesh background */}
-        <div className="absolute inset-0 hero-gradient-mesh" />
-        <div className="absolute inset-0 dot-grid-pattern" />
-        {/* Subtle top gradient */}
-        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-slate-900/10 to-transparent pointer-events-none z-[1]" />
-        {/* Floating blobs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="animate-blob-1 absolute top-[10%] left-[15%] w-72 h-72 rounded-full bg-blue-200/30 blur-3xl" />
-          <div className="animate-blob-2 absolute top-[50%] right-[10%] w-96 h-96 rounded-full bg-indigo-200/25 blur-3xl" />
-          <div className="animate-blob-3 absolute bottom-[10%] left-[40%] w-80 h-80 rounded-full bg-cyan-200/20 blur-3xl" />
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image with White/Soft Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=2000"
+            alt="Community Members Together"
+            className="w-full h-full object-cover scale-110 opacity-[0.3]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/40 to-white z-10" />
+          <div className="absolute inset-0 bg-slate-900/5 mix-blend-overlay z-10" />
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 pt-10 sm:pt-20">
           <div className="max-w-6xl mx-auto text-center">
             <motion.div
-              initial={{ scale: 0, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-1 sm:mb-3 transform scale-75 sm:scale-90"
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="mb-4 sm:mb-8"
             >
-              <AnimatedCompass />
+              <div className="inline-block px-5 py-2 bg-blue-100/50 backdrop-blur-sm border border-blue-200 rounded-full text-blue-800 text-[10px] sm:text-xs font-black uppercase tracking-[0.4em] mb-4 shadow-sm">
+                Connecting Neighbors Everywhere
+              </div>
             </motion.div>
 
             <motion.div
@@ -184,12 +194,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="space-y-3 sm:space-y-4"
             >
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-slate-900">
-                <span className="block mb-1 sm:mb-1">{t('home.hero.title1')}</span>
-                <span className="block w-fit mx-auto pb-1 tracking-tight">{t('home.hero.title2')}</span>
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter text-slate-900 uppercase">
+                <span className="block mb-2">{t('home.hero.title1')}</span>
+                <span className="block w-fit mx-auto pb-2 text-blue-600">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-xs sm:text-sm lg:text-base text-slate-600 max-w-xl mx-auto font-medium leading-normal">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto font-bold leading-relaxed italic opacity-80">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -237,20 +247,20 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                className="flex justify-center mt-2 sm:mt-0"
+                className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6 sm:mt-8"
               >
                 <GlassButton
                   variant="secondary"
                   size="lg"
-                  className="bg-slate-50 border-slate-200 text-slate-700 font-bold px-8 py-4 !rounded-2xl flex items-center gap-3 hover:bg-slate-100 transition-all shadow-md group border"
+                  className="bg-white border-blue-200 text-slate-700 font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-blue-50 transition-all shadow-xl group border-2 scale-105"
                   onClick={() => navigate('/discover?wizard=true')}
                 >
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Compass className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <Compass className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="text-left">
-                    <div className="text-[9px] uppercase tracking-widest font-black text-slate-800">Not sure where to start?</div>
-                    <div className="text-sm sm:text-base text-slate-900 font-extrabold">Need help finding a resource?</div>
+                    <div className="text-[10px] uppercase tracking-widest font-black text-blue-600 mb-0.5">Not sure where to start?</div>
+                    <div className="text-base sm:text-lg text-slate-900 font-black uppercase tracking-tight">Need help finding help?</div>
                   </div>
                 </GlassButton>
               </motion.div>
@@ -437,26 +447,30 @@ export default function Home() {
                 theme: "emerald"
               }
             ].map((step, idx) => (
-              <FlipCard
+              <motion.div
                 key={idx}
-                heightClass="h-[320px]"
-                front={
-                  <div className={`bg-white rounded-xl p-8 border border-slate-200 shadow-sm text-center transform hover:-translate-y-1 transition-transform h-full flex flex-col items-center justify-center group`}>
-                    <div className={`w-16 h-16 ${step.iconBg} rounded-xl flex items-center justify-center mx-auto mb-6`}>
-                      {step.icon}
-                    </div>
-                    <h3 className="text-xl font-semibold text-slate-900 mb-2">{step.title}</h3>
-                    <p className={`text-sm font-medium text-slate-600 mb-4 px-2`}>{step.frontText}</p>
-                    <p className={`mt-auto pt-2 font-semibold text-[11px] uppercase tracking-wider opacity-100 transition-opacity text-slate-400`}>Tap to Reveal</p>
+                initial={{ opacity: 0, y: 100, rotateZ: -10, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, rotateZ: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{
+                  duration: 1.2,
+                  delay: idx * 0.2,
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 15
+                }}
+                className="h-full"
+              >
+                <div className={`bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-xl text-center h-full flex flex-col items-center justify-center group hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500`}>
+                  <div className={`w-20 h-20 ${step.iconBg} rounded-[1.5rem] flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg`}>
+                    {step.icon}
                   </div>
-                }
-                back={
-                  <div className={`bg-white rounded-xl p-8 border border-slate-200 shadow-sm text-center h-full flex flex-col items-center justify-center`}>
-                    <h3 className="text-xl font-semibold text-slate-900 mb-4">{step.title}</h3>
-                    <p className="font-medium text-slate-600 leading-relaxed">{step.desc}</p>
-                  </div>
-                }
-              />
+                  <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tighter">{step.title}</h3>
+                  <p className={`text-base font-bold text-slate-600 mb-4 px-2 italic opacity-80`}>{step.frontText}</p>
+                  <div className="w-12 h-1 bg-slate-100 mb-6 group-hover:w-24 group-hover:bg-blue-300 transition-all" />
+                  <p className="text-sm font-medium text-slate-500 leading-relaxed">{step.desc}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
