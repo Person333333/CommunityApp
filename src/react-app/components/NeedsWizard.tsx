@@ -45,7 +45,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
   };
 
   const urgencyOptions = [
-    { value: 'immediate', label: 'Right now', desc: 'I need help today', color: 'rose' },
+    { value: 'immediate', label: 'Right now', desc: 'I need help today', color: 'indigo' },
     { value: 'week', label: 'This week', desc: 'Within the next few days', color: 'amber' },
     { value: 'browsing', label: 'Just exploring', desc: 'Looking for future reference', color: 'blue' },
   ];
@@ -100,11 +100,10 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                           <button
                             key={cat}
                             onClick={() => toggleCategory(cat)}
-                            className={`flex items-center gap-3 p-3 rounded-xl text-left text-sm font-semibold transition-all ${
-                              selectedCategories.includes(cat)
+                            className={`flex items-center gap-3 p-3 rounded-xl text-left text-sm font-semibold transition-all ${selectedCategories.includes(cat)
                                 ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-2 border-blue-300 dark:border-blue-600'
                                 : 'bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-2 border-transparent hover:border-slate-200'
-                            }`}
+                              }`}
                           >
                             <span className={`p-1.5 rounded-lg ${selectedCategories.includes(cat) ? 'bg-blue-100 dark:bg-blue-800' : 'bg-slate-200 dark:bg-slate-600'}`}>
                               {CATEGORY_ICONS[cat] || <Zap className="w-5 h-5" />}
@@ -135,15 +134,13 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                           <button
                             key={opt.value}
                             onClick={() => setUrgency(opt.value)}
-                            className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all ${
-                              urgency === opt.value
+                            className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all ${urgency === opt.value
                                 ? `bg-${opt.color}-50 border-2 border-${opt.color}-300 text-${opt.color}-700`
                                 : 'bg-slate-50 dark:bg-slate-700 border-2 border-transparent text-slate-700 dark:text-slate-300 hover:border-slate-200'
-                            }`}
+                              }`}
                           >
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                              urgency === opt.value ? `border-${opt.color}-500 bg-${opt.color}-500` : 'border-slate-300'
-                            }`}>
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${urgency === opt.value ? `border-${opt.color}-500 bg-${opt.color}-500` : 'border-slate-300'
+                              }`}>
                               {urgency === opt.value && <CheckCircle2 className="w-4 h-4 text-white" />}
                             </div>
                             <div>
@@ -191,8 +188,8 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                         ))}
                       </div>
                       {urgency === 'immediate' && (
-                        <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl mb-4 text-center">
-                          <p className="text-xs font-bold text-rose-700">⚠️ If you are in immediate danger, please call <strong>911</strong> or the Crisis Lifeline at <strong>988</strong></p>
+                        <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl mb-4 text-center">
+                          <p className="text-xs font-bold text-indigo-700">⚠️ If you are in immediate danger, please call <strong>911</strong> or the Crisis Lifeline at <strong>988</strong></p>
                         </div>
                       )}
                       <button

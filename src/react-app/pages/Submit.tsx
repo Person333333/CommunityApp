@@ -280,7 +280,7 @@ export default function Submit() {
                         <option value="" disabled>Select a category...</option>
                         {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                       </select>
-                      {errors.category && <p className="mt-2 text-xs text-rose-500 font-bold">{errors.category}</p>}
+                      {errors.category && <p className="mt-2 text-xs text-indigo-600 font-bold">{errors.category}</p>}
                     </div>
                     <FormField label="Specific Schedule" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every 2nd Tuesday at 5pm..." />
                   </div>
@@ -506,7 +506,7 @@ export default function Submit() {
                           </div>
                           <button
                             onClick={() => setFormData(prev => ({ ...prev, action_urls: prev.action_urls.filter((_, i) => i !== idx) }))}
-                            className="bg-white border border-slate-200 p-2 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors self-end"
+                            className="bg-white border border-slate-200 p-2 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors self-end"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -596,7 +596,7 @@ export default function Submit() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className={`p-5 rounded-2xl text-sm font-bold flex gap-4 cursor-pointer transition-all border ${errors.general.includes('AI Quality Check Failed')
-                        ? 'bg-rose-50 border-rose-200 text-rose-800 hover:bg-rose-100 shadow-lg shadow-rose-500/10'
+                        ? 'bg-indigo-50 border-indigo-200 text-indigo-800 hover:bg-indigo-100 shadow-lg shadow-indigo-500/10'
                         : 'bg-slate-50 border-slate-200 text-slate-700'
                         }`}
                       onClick={() => {
@@ -613,7 +613,7 @@ export default function Submit() {
                         <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">Verification Report</p>
                         <p className="leading-relaxed">{errors.general}</p>
                         {errors.general.includes('AI Quality Check Failed') && (
-                          <p className="mt-2 text-rose-600 text-[10px] uppercase font-black flex items-center gap-1">
+                          <p className="mt-2 text-indigo-600 text-[10px] uppercase font-black flex items-center gap-1">
                             Click to see full reasoning <ChevronRight className="w-3 h-3" />
                           </p>
                         )}
