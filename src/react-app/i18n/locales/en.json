@@ -110,6 +110,7 @@
     "title": "Find Your Path",
     "subtitle": "Discover local resources, connect with support services, and find the help you need—all in one place",
     "searchResources": "Search for food banks, housing, healthcare, and more...",
+    "searchPlaceholder": "Search for food banks, housing, healthcare, and more...",
     "showingLocal": "Showing local resources only (within ~200 miles)",
     "ofResources": "of",
     "resourcesInArea": "resources in your area",
@@ -144,7 +145,8 @@
     "confirmDelete": "Are you sure you want to delete this resource? This action cannot be undone.",
     "deleteError": "Could not delete resource. Please try again later.",
     "resourceDeleted": "Resource deleted successfully.",
-    "exploreByCategory": "Explore by Category"
+    "exploreByCategory": "Explore by Category",
+    "selectCategoryExplore": "Not sure where to start? Select a category to explore local resources."
   },
   "about": {
     "title": "About Community Compass",

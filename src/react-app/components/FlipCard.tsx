@@ -15,8 +15,6 @@ export default function FlipCard({ front, back, heightClass = "h-[400px]" }: Fli
             className={`w-full ${heightClass} cursor-pointer group`}
             style={{ perspective: 1000 }}
             onClick={() => setIsFlipped(!isFlipped)}
-            onMouseEnter={() => setIsFlipped(true)}
-            onMouseLeave={() => setIsFlipped(false)}
         >
             <motion.div
                 className="w-full h-full relative"

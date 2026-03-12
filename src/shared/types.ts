@@ -16,8 +16,10 @@ export const ResourceSchema = z.object({
   website: z.string().nullable(),
   hours: z.string().nullable(),
   schedule: z.string().nullable().optional(),
+  rating: z.number().min(1).max(5).optional().nullable(),
+  review_count: z.number().optional().nullable(),
   action_urls: z.array(z.object({
-    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer"]),
+    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer", "Apply Now", "Get Help"]),
     url: z.string().url()
   })).max(2).optional().nullable(),
   audience: z.string().nullable(),
@@ -49,7 +51,7 @@ export const ResourceSubmissionSchema = z.object({
   state: z.string().optional(),
   schedule: z.string().optional(),
   action_urls: z.array(z.object({
-    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer"]),
+    label: z.enum(["Register", "Learn More", "Visit Website", "Donate", "Volunteer", "Apply Now", "Get Help"]),
     url: z.string().url()
   })).max(2).optional(),
 });

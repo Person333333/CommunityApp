@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, MapPinned, Compass, X, Trash2, ChevronDown, Calendar, ExternalLink } from 'lucide-react';
+import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, MapPinned, Compass, X, Trash2, ChevronDown, Calendar, ExternalLink, ChevronRight } from 'lucide-react';
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -15,6 +15,8 @@ import MapComponent from '@/react-app/components/MapComponent';
 import { useTranslation } from 'react-i18next';
 import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
+import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
+import LocationBar from '@/react-app/components/LocationBar';
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
@@ -38,7 +40,8 @@ export default function Discover() {
   const [selectedTag, setSelectedTag] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [showLocalOnly, setShowLocalOnly] = useState(true);
+  const [showLocalOnly, setShowLocalOnly] = useState(false);
+  const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
   const LOCAL_RADIUS_KM = 300;
 
   // Local favorites state (togglable per card)
@@ -60,6 +63,17 @@ export default function Discover() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, selectedCategories, selectedCost, selectedTag, showFavoritesOnly, showMySubmissions, showLocalOnly]);
+
+  // Auto-open questionnaire if wizard=true in URL
+  useEffect(() => {
+    if (searchParams.get('wizard') === 'true') {
+      setIsQuestionnaireOpen(true);
+      // Clean up the URL parameter
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('wizard');
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [searchParams]);
 
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
@@ -211,6 +225,18 @@ export default function Discover() {
     }
   };
 
+  const recentlyAddedResources = useMemo(() => {
+    return [...allResources]
+      .sort((a, b) => (b.id || 0) - (a.id || 0))
+      .slice(0, 3);
+  }, [allResources]);
+
+  const popularResources = useMemo(() => {
+    return [...allResources]
+      .sort((a, b) => (b.click_count || 0) - (a.click_count || 0))
+      .slice(0, 3);
+  }, [allResources]);
+
   const handleSearch = (queryOverride?: string, categoryOverride?: string[]) => {
     const params = new URLSearchParams();
     const q = queryOverride !== undefined ? queryOverride : searchTerm;
@@ -227,6 +253,17 @@ export default function Discover() {
     setSelectedCost('');
     setSelectedTag('');
     setSearchParams(new URLSearchParams());
+  };
+
+  const handleQuestionnaireComplete = (filters: { searchTerm?: string; categories: string[]; tag?: string }) => {
+    if (filters.searchTerm) setSearchTerm(filters.searchTerm);
+    if (filters.categories.length > 0) setSelectedCategories(filters.categories);
+    if (filters.tag) setSelectedTag(filters.tag);
+
+    const params = new URLSearchParams();
+    if (filters.searchTerm) params.append('q', filters.searchTerm);
+    if (filters.categories.length > 0) params.append('category', filters.categories.join(','));
+    setSearchParams(params);
   };
 
   const hasActiveFilters = searchTerm || selectedCategories.length > 0 || selectedCost || selectedTag;
@@ -298,82 +335,104 @@ export default function Discover() {
         )}
 
         {/* Search and Explorer Card */}
-        <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
+          <GlassButton
+            variant="secondary"
+            size="lg"
+            className="w-full bg-slate-900 border-slate-800 text-white font-black px-8 py-5 !rounded-[2rem] flex items-center justify-center gap-4 hover:bg-slate-800 transition-all shadow-2xl group relative overflow-hidden"
+            onClick={() => setIsQuestionnaireOpen(true)}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+              <Compass className="w-7 h-7 text-white" />
+            </div>
+            <div className="text-left">
+              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-blue-400 mb-0.5">Not sure where to start?</div>
+              <div className="text-xl sm:text-2xl tracking-tighter uppercase leading-none">Need help finding a resource?</div>
+            </div>
+            <ChevronRight className="w-6 h-6 text-blue-400 group-hover:translate-x-1 transition-transform ml-auto hidden sm:block" />
+          </GlassButton>
+
           <GlassCard variant="strong">
             <div className="space-y-6">
-              {/* Search input and Dropdowns */}
-              <div className="flex flex-col gap-4">
-                <div className="w-full flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 rounded-full px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm hover:border-slate-300 transition-colors">
-                  <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 flex-shrink-0" />
+              {/* Search input and Location Bar */}
+              <div className="flex flex-col lg:flex-row gap-4 items-center">
+                <div className="relative flex-1 group w-full">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                  {searchTerm && (
+                    <button
+                      onClick={() => { setSearchTerm(''); handleSearch(''); }}
+                      className="absolute left-11 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 p-1"
+                      title="Clear Search"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                   <input
                     type="text"
-                    placeholder={t('discover.searchResources')}
                     value={searchTerm}
                     onChange={(e) => {
                       const val = e.target.value;
                       setSearchTerm(val);
                       handleSearch(val);
                     }}
-                    className="flex-1 bg-transparent border-none outline-none text-slate-900 placeholder-slate-400 font-medium text-sm sm:text-base"
+                    placeholder={t('discover.searchPlaceholder')}
+                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-4 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
                   />
-                  {searchTerm && (
-                    <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600">
-                      <X className="w-5 h-5" />
-                    </button>
-                  )}
                 </div>
+                <LocationBar variant="prominent" className="w-full lg:w-auto" />
+              </div>
 
-                {/* Filter dropdowns row */}
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {/* Category */}
-                  <div className="relative">
-                    <select
-                      value={selectedCategories[0] || ''}
-                      onChange={e => { const v = e.target.value; const cats = v ? [v] : []; setSelectedCategories(cats); handleSearch(searchTerm, cats); }}
-                      className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
-                    >
-                      <option value="">All Categories</option>
-                      {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label}>{cat.label}</option>)}
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                  </div>
-                  {/* Cost */}
-                  <div className="relative">
-                    <select
-                      value={selectedCost}
-                      onChange={e => setSelectedCost(e.target.value)}
-                      className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
-                    >
-                      <option value="">Any Cost</option>
-                      <option value="free">Free</option>
-                      <option value="sliding">Sliding Scale</option>
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                  </div>
-                  {/* Tags */}
-                  <div className="relative">
-                    <select
-                      value={selectedTag}
-                      onChange={e => setSelectedTag(e.target.value)}
-                      className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
-                    >
-                      <option value="">All Tags</option>
-                      <option value="senior">Senior</option>
-                      <option value="family">Family</option>
-                      <option value="child">Child / Youth</option>
-                      <option value="veteran">Veteran</option>
-                      <option value="student">Student</option>
-                      <option value="finance">Finance</option>
-                      <option value="energy">Energy</option>
-                      <option value="rent">Rent</option>
-                      <option value="food">Food</option>
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                  </div>
-                  {hasActiveFilters && (
-                    <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">Clear All</button>
-                  )}
+              {/* Filter dropdowns row */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {/* Category */}
+                <div className="relative">
+                  <select
+                    value={selectedCategories[0] || ''}
+                    onChange={e => { const v = e.target.value; const cats = v ? [v] : []; setSelectedCategories(cats); handleSearch(searchTerm, cats); }}
+                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                  >
+                    <option value="">All Categories</option>
+                    {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label}>{cat.label}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
+                {/* Cost */}
+                <div className="relative">
+                  <select
+                    value={selectedCost}
+                    onChange={e => setSelectedCost(e.target.value)}
+                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                  >
+                    <option value="">Any Cost</option>
+                    <option value="free">Free</option>
+                    <option value="sliding">Sliding Scale</option>
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
+                {/* Tags */}
+                <div className="relative">
+                  <select
+                    value={selectedTag}
+                    onChange={e => setSelectedTag(e.target.value)}
+                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                  >
+                    <option value="">All Tags</option>
+                    <option value="senior">Senior</option>
+                    <option value="family">Family</option>
+                    <option value="child">Child / Youth</option>
+                    <option value="veteran">Veteran</option>
+                    <option value="student">Student</option>
+                    <option value="finance">Finance</option>
+                    <option value="energy">Energy</option>
+                    <option value="rent">Rent</option>
+                    <option value="food">Food</option>
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
+                {hasActiveFilters && (
+                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">Clear All</button>
+                )}
               </div>
 
               {/* Favorites / Submissions toggle */}
@@ -449,27 +508,23 @@ export default function Discover() {
 
             <div className="relative min-h-[400px]">
               {paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
-                <div className="bg-slate-50/50 rounded-3xl border border-slate-200 p-8 sm:p-12 mb-8 text-center flex flex-col items-center justify-center min-h-[300px]">
-                  <Compass className="w-16 h-16 text-slate-400 mb-6 opacity-80" />
-                  <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tight">Community Hub Ready</h2>
-                  <p className="text-slate-600 font-bold max-w-lg mx-auto">Search for resources above or use the filters to find what you need.</p>
+                <div className="bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-200 p-8 sm:p-16 mb-8 text-center flex flex-col items-center justify-center min-h-[400px] group">
+                  <div className="w-20 h-20 rounded-3xl bg-slate-100 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                    <Compass className="w-10 h-10 text-slate-400 opacity-80" />
+                  </div>
+                  <h2 className="text-4xl font-black text-slate-900 mb-4 uppercase tracking-tighter leading-none">Community Hub <br /><span className="text-blue-600">Ready</span></h2>
+                  <p className="text-slate-500 font-bold max-w-sm mx-auto mb-10 italic">Search above, use filters, or let our guide help you find exactly what you need.</p>
+                  <GlassButton
+                    variant="primary"
+                    size="lg"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-4 !rounded-2xl shadow-xl shadow-blue-500/20 flex items-center gap-3"
+                    onClick={() => setIsQuestionnaireOpen(true)}
+                  >
+                    Start Helper Guide <Sparkles className="w-5 h-5" />
+                  </GlassButton>
                 </div>
               ) : null}
 
-              {hasActiveFilters && (
-                <div className="flex items-center gap-2 flex-wrap mb-6">
-                  <span className="text-xs text-slate-500 font-black uppercase tracking-widest">Filters:</span>
-                  {searchTerm && <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">"{searchTerm}"</span>}
-                  {selectedCost && <span className="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Cost: {selectedCost} <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedCost('')} /></span>}
-                  {selectedTag && <span className="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">Tag: {selectedTag} <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedTag('')} /></span>}
-                  {selectedCategories.map((cat: string) => (
-                    <span key={cat} className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                      {cat} <X className="w-3 h-3 cursor-pointer" onClick={() => { const newCats = selectedCategories.filter((c: string) => c !== cat); setSelectedCategories(newCats); handleSearch(searchTerm, newCats); }} />
-                    </span>
-                  ))}
-                  <button onClick={clearFilters} className="text-sm text-slate-500 font-medium hover:text-slate-900 ml-2 transition-colors">Clear All</button>
-                </div>
-              )}
 
               {loading ? (
                 <div className="flex justify-center py-20">
@@ -615,6 +670,50 @@ export default function Discover() {
                   <div className="bg-slate-50 border border-slate-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 italic text-slate-400 text-sm">
                     {t('discover.selectCategoryExplore')}
                   </div>
+
+                  {/* Recently Added resources list */}
+                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Recently Added</h3>
+                    <div className="space-y-2">
+                      {recentlyAddedResources.map(res => (
+                        <button
+                          key={res.id}
+                          onClick={() => setSelectedResource(res)}
+                          className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left group"
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <MapPin className="w-5 h-5 text-slate-300 m-auto mt-2.5" />}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors uppercase tracking-tight">{res.title}</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase">{res.category}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Popular resources list */}
+                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Popular Nearby</h3>
+                    <div className="space-y-2">
+                      {popularResources.map(res => (
+                        <button
+                          key={res.id}
+                          onClick={() => setSelectedResource(res)}
+                          className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left group"
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <Clock className="w-5 h-5 text-slate-300 m-auto mt-2.5" />}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors uppercase tracking-tight">{res.title}</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase">{res.category}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </>
               )}
             </div>
@@ -623,7 +722,8 @@ export default function Discover() {
       </div>
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
+      <QuestionnaireModal isOpen={isQuestionnaireOpen} onClose={() => setIsQuestionnaireOpen(false)} onComplete={handleQuestionnaireComplete} />
       <GuestAuthModal isOpen={authModal.isOpen} onClose={() => setAuthModal((prev: any) => ({ ...prev, isOpen: false }))} title={authModal.title} message={authModal.message} type={authModal.type} />
-    </div>
+    </div >
   );
 }

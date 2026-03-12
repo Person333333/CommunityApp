@@ -36,6 +36,8 @@ export default function Submit() {
     longitude: '',
     auto_assign_tags: false,
     action_urls: [] as { label: string, url: string }[],
+    donation_url: '',
+    website_action_label: 'Visit Website',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -280,29 +282,81 @@ export default function Submit() {
                       </select>
                       {errors.category && <p className="mt-2 text-xs text-rose-500 font-bold">{errors.category}</p>}
                     </div>
-                    <FormField label="Website (Optional)" name="website" value={formData.website} onChange={handleChange} placeholder="https://..." />
+                    <FormField label="Specific Schedule" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every 2nd Tuesday at 5pm..." />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <FormField label="Specific Schedule (Weekly/Monthly)" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every 2nd Tuesday at 5pm..." />
-                    <div className="flex flex-col justify-center">
-                      <label className="flex items-center gap-3 cursor-pointer group">
-                        <div className="relative">
-                          <input
-                            type="checkbox"
-                            className="sr-only p-4"
-                            checked={formData.auto_assign_tags}
-                            onChange={(e) => setFormData(prev => ({ ...prev, auto_assign_tags: e.target.checked }))}
-                          />
-                          <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-slate-200'}`} />
-                          <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-black text-slate-800 uppercase tracking-tight">Auto-assign Smart Tags</p>
-                          <p className="text-[10px] font-bold text-slate-500 uppercase">AI will suggest tags based on your description</p>
-                        </div>
-                      </label>
+                    <div>
+                      <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">Website Action Button</label>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
+                      <div className="flex gap-2">
+                        <select
+                          value={(formData as any).website_action_label || 'Visit Website'}
+                          onChange={(e) => setFormData(prev => ({ ...prev, website_action_label: e.target.value }))}
+                          className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
+                        >
+                          <option value="Visit Website">Visit Website</option>
+                          <option value="Register">Register</option>
+                          <option value="Learn More">Learn More</option>
+                          <option value="Donate">Donate</option>
+                          <option value="Volunteer">Volunteer</option>
+                          <option value="Apply Now">Apply Now</option>
+                          <option value="Get Help">Get Help</option>
+                        </select>
+                        <input
+                          type="url"
+                          name="website"
+                          value={formData.website}
+                          onChange={handleChange}
+                          placeholder="https://..."
+                          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
                     </div>
+                    <div>
+                      <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">Donation Link (Optional)</label>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Shows as a "Donate" button on your resource</p>
+                      <input
+                        type="url"
+                        name="donation_url"
+                        value={formData.donation_url}
+                        onChange={handleChange}
+                        placeholder="https://donate..."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {!formData.auto_assign_tags && (
+                    <div className="space-y-4">
+                      <FormField
+                        label="Additional Tags / Keywords"
+                        name="tags"
+                        value={formData.tags}
+                        onChange={handleChange}
+                        placeholder="e.g. wheelchair-accessible, pets-welcome, free-parking..."
+                      />
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Separate tags with commas</p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col justify-center py-4 border-y border-slate-50">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only p-4"
+                          checked={formData.auto_assign_tags}
+                          onChange={(e) => setFormData(prev => ({ ...prev, auto_assign_tags: e.target.checked }))}
+                        />
+                        <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-slate-200'}`} />
+                        <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black text-slate-800 uppercase tracking-tight">Auto-assign Smart Tags</p>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase">AI will suggest tags based on your description</p>
+                      </div>
+                    </label>
                   </div>
 
                   {/* Image Drag/Drop */}
@@ -346,8 +400,8 @@ export default function Submit() {
               </GlassCard>
 
               <div className="flex justify-end">
-                <GlassButton variant="primary" onClick={nextStep} className="px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group">
-                  Next: Contact Info <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <GlassButton variant="primary" onClick={nextStep} className="px-8 sm:px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group whitespace-nowrap">
+                  <span className="flex items-center gap-2">Next: Contact Info <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" /></span>
                 </GlassButton>
               </div>
             </motion.div>
@@ -385,6 +439,22 @@ export default function Submit() {
                       <button onClick={handleGetLocation} className="text-[10px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors flex items-center gap-2">
                         {locating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
                         Use My Current Lat/Long
+                      </button>
+                      <button
+                        onClick={async () => {
+                          setLocating(true);
+                          const coords = await geocodeAddress(formData.address, formData.city, formData.state, formData.zip);
+                          if (coords) {
+                            setFormData(prev => ({ ...prev, latitude: coords.lat.toString(), longitude: coords.lon.toString() }));
+                            alert("Location verified and coordinates captured!");
+                          } else {
+                            alert("Could not verify this address. Please check and try again.");
+                          }
+                          setLocating(false);
+                        }}
+                        className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition-colors flex items-center gap-2"
+                      >
+                        <ShieldCheck className="w-3 h-3" /> Verify Address
                       </button>
                     </div>
                     <FormField label="Street Address" name="address" value={formData.address} onChange={handleChange} placeholder="123 Community St." />

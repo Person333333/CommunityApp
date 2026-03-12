@@ -15,8 +15,8 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className = "" }) => {
     const mouseXSpring = useSpring(x);
     const mouseYSpring = useSpring(y);
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["20deg", "-20deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-20deg", "20deg"]);
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return;

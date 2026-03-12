@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink } from 'lucide-react';
+import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -16,6 +16,9 @@ interface ResourceDetailModalProps {
 export default function ResourceDetailModal({ resource, isOpen, onClose }: ResourceDetailModalProps) {
   const { t } = useTranslation();
   const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
+  const [userRating, setUserRating] = useState<number>(0);
+  const [hoverRating, setHoverRating] = useState<number>(0);
+  const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
 
   // Donation States
   const [showDonationForm, setShowDonationForm] = useState(false);
@@ -29,6 +32,12 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   useEffect(() => {
     setReportState('idle');
     setShowDonationForm(false);
+    setRatingSubmitted(false);
+    setUserRating(0);
+    if (resource) {
+      const saved = localStorage.getItem(`rating_${resource.id}`);
+      if (saved) { setUserRating(Number(saved)); setRatingSubmitted(true); }
+    }
 
     // Check for saved donor profile
     const savedProfile = localStorage.getItem('community_donor_profile');
@@ -105,9 +114,10 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 glass-strong p-2 rounded-full hover:glass-strong transition-all z-10"
+                    className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md p-2.5 rounded-full hover:bg-slate-900 transition-all z-50 shadow-xl border border-white/20"
+                    aria-label="Close modal"
                   >
-                    <X className="w-6 h-6 text-slate-100" />
+                    <X className="w-6 h-6 text-white" />
                   </button>
 
                   <div className={`p-6 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
@@ -159,6 +169,52 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     <p className="text-slate-900 leading-relaxed font-bold opacity-90">
                       {resource.description}
                     </p>
+                  </div>
+
+                  {/* Star Rating */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <p className="text-xs font-black uppercase tracking-widest text-slate-700">Community Rating</p>
+                        {resource.review_count != null && (
+                          <p className="text-[11px] text-slate-400 font-bold mt-0.5">{resource.review_count} reviews</p>
+                        )}
+                      </div>
+                      {/* Show aggregate */}
+                      {resource.rating != null && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-2xl font-black text-slate-800">{resource.rating.toFixed(1)}</span>
+                          <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                        </div>
+                      )}
+                    </div>
+                    {/* Display aggregate stars */}
+                    {resource.rating != null && (
+                      <div className="flex gap-1 mb-4">
+                        {[1, 2, 3, 4, 5].map(s => (
+                          <Star key={s} className={`w-5 h-5 ${s <= Math.round(resource.rating!) ? 'fill-amber-400 text-amber-400' : 'text-slate-200 fill-slate-200'}`} />
+                        ))}
+                      </div>
+                    )}
+                    {/* User rating */}
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                      {ratingSubmitted ? 'Your Rating' : 'Rate This Resource'}
+                    </p>
+                    <div className="flex gap-1.5">
+                      {[1, 2, 3, 4, 5].map(s => (
+                        <button
+                          key={s}
+                          disabled={ratingSubmitted}
+                          onClick={() => { if (!ratingSubmitted) { setUserRating(s); setRatingSubmitted(true); localStorage.setItem(`rating_${resource.id}`, String(s)); } }}
+                          onMouseEnter={() => !ratingSubmitted && setHoverRating(s)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          className="transition-transform hover:scale-125 disabled:cursor-default"
+                        >
+                          <Star className={`w-7 h-7 transition-colors ${s <= (hoverRating || userRating) ? 'fill-amber-400 text-amber-400' : 'text-slate-300 fill-slate-100'}`} />
+                        </button>
+                      ))}
+                      {ratingSubmitted && <span className="ml-2 text-xs font-black text-emerald-600 uppercase tracking-widest self-center">✓ Saved</span>}
+                    </div>
                   </div>
 
                   {/* Contact Information */}

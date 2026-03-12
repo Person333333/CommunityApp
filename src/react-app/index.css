@@ -11,37 +11,37 @@
   --bg-secondary: #f9fafb;
   /* Gray 50 */
 
-  --primary: #1e40af;
-  /* Deep Matte Blue */
-  --primary-light: #eff6ff;
-  --primary-hover: #1e3a8a;
+  --primary: #272c4a;
+  /* Deep Muted Navy */
+  --primary-light: #f1f5f9;
+  --primary-hover: #1e293b;
 
-  --secondary: #3730a3;
-  /* Deep Indigo */
-  --secondary-light: #e0e7ff;
-  --secondary-hover: #312e81;
+  --secondary: #334155;
+  /* Slate Slate */
+  --secondary-light: #f8fafc;
+  --secondary-hover: #1e293b;
 
-  --accent: #d97706;
-  /* More matte amber */
+  --accent: #92400e;
+  /* Deeper Amber */
   --accent-light: #fef3c7;
 
   /* Darkened for better contrast/accessibility */
   --text-primary: #0f172a;
-  --text-secondary: #1e293b;
-  --text-muted: #475569;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
 
   /* Light Mode Glassmorphism */
   --glass-white: rgba(255, 255, 255, 0.75);
   --glass-white-strong: rgba(255, 255, 255, 0.92);
-  --glass-blue: rgba(30, 64, 175, 0.03);
-  --glass-green: rgba(55, 48, 163, 0.03);
+  --glass-blue: rgba(39, 44, 74, 0.03);
+  --glass-green: rgba(51, 65, 85, 0.03);
   --glass-border: rgba(148, 163, 184, 0.25);
   --glass-border-strong: rgba(100, 116, 139, 0.4);
 
   /* Gradients - More subtle and professional */
-  --gradient-trust: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
-  --gradient-warm: linear-gradient(135deg, #d97706 0%, #b91c1c 100%);
-  --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+  --gradient-trust: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  --gradient-warm: linear-gradient(135deg, #92400e 0%, #7c2d12 100%);
+  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 * {

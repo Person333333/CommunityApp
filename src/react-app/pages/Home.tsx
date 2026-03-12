@@ -119,18 +119,24 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Removed busy animated background orbs for a cleaner, minimalist aesthetic */}
+      <section className="relative min-h-[85vh] sm:min-h-[700px] max-h-[900px] flex items-center justify-center overflow-hidden py-10 sm:py-6">
+        {/* Subtle background image with light overlay */}
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1600"
+            alt=""
+            className="w-full h-full object-cover opacity-[0.42]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/40 to-white/90" />
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16">
           <div className="max-w-6xl mx-auto text-center">
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-6 sm:mb-12"
+              className="mb-1 sm:mb-3 transform scale-75 sm:scale-90"
             >
               <AnimatedCompass />
             </motion.div>
@@ -139,14 +145,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="space-y-6"
+              className="space-y-3 sm:space-y-4"
             >
-              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight text-slate-900">
-                <span className="block mb-2 font-semibold">{t('home.hero.title1')}</span>
-                <span className="block w-fit mx-auto pb-2 font-bold tracking-tight">{t('home.hero.title2')}</span>
+              <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold leading-tight tracking-tight text-slate-900">
+                <span className="block mb-1 sm:mb-1">{t('home.hero.title1')}</span>
+                <span className="block w-fit mx-auto pb-1 tracking-tight">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-slate-600 max-w-2xl mx-auto font-medium leading-normal">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -154,7 +160,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="max-w-2xl mx-auto mt-8"
+                className="max-w-xl mx-auto mt-3 sm:mt-5 transform scale-95"
               >
                 <div className="bg-white rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-sm border border-slate-200">
                   <div className="flex items-center gap-2 w-full flex-1">
@@ -197,19 +203,19 @@ export default function Home() {
                   variant="secondary"
                   size="lg"
                   className="bg-slate-50 border-slate-200 text-slate-700 font-bold px-8 py-4 !rounded-2xl flex items-center gap-3 hover:bg-slate-100 transition-all shadow-md group"
-                  onClick={() => navigate('/discover')}
+                  onClick={() => navigate('/discover?wizard=true')}
                 >
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Compass className="w-6 h-6 text-blue-600" />
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <Compass className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="text-left">
-                    <div className="text-[10px] uppercase tracking-widest font-black opacity-60">Not sure where to start?</div>
-                    <div className="text-lg">Need help finding a resource?</div>
+                    <div className="text-[9px] uppercase tracking-widest font-black text-slate-800">Not sure where to start?</div>
+                    <div className="text-sm sm:text-base text-slate-900 font-extrabold">Need help finding a resource?</div>
                   </div>
                 </GlassButton>
               </motion.div>
 
-              <div className="flex justify-center flex-wrap gap-4 sm:gap-8 mt-8 sm:mt-12 text-xs sm:text-sm text-slate-600 font-semibold uppercase tracking-wider">
+              <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-3 sm:mt-6 text-[10px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 flex items-center justify-center">
                     <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
@@ -238,10 +244,10 @@ export default function Home() {
                   scale: { duration: 0.5, delay: 1.2 },
                   y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }
                 }}
-                className="flex justify-center mt-12 sm:mt-24"
+                className="flex justify-center mt-3 sm:mt-6"
               >
                 <div
-                  className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
+                  className="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
                   onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
                 >
                   <ChevronDown className="w-6 h-6 text-slate-400" />
@@ -400,7 +406,7 @@ export default function Home() {
                     </div>
                     <h3 className="text-xl font-semibold text-slate-900 mb-2">{step.title}</h3>
                     <p className={`text-sm font-medium text-slate-600 mb-4 px-2`}>{step.frontText}</p>
-                    <p className={`mt-auto pt-2 font-semibold text-[11px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity text-slate-400`}>Tap to Reveal</p>
+                    <p className={`mt-auto pt-2 font-semibold text-[11px] uppercase tracking-wider opacity-100 transition-opacity text-slate-400`}>Tap to Reveal</p>
                   </div>
                 }
                 back={

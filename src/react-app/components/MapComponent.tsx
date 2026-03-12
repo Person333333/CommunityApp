@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -45,12 +45,21 @@ const categoryIcons = {
   'Default': createCustomIcon('bg-teal-500'),
 };
 
-// Component to center map on location
+// Component to center map on location only when it explicitly changes
 function MapCenter({ center, zoom }: { center: [number, number]; zoom: number }) {
   const map = useMap();
+  const prevCenterRef = useRef<[number, number]>(center);
+  const prevZoomRef = useRef<number>(zoom);
 
   useEffect(() => {
-    map.setView(center, zoom);
+    const centerChanged = prevCenterRef.current[0] !== center[0] || prevCenterRef.current[1] !== center[1];
+    const zoomChanged = prevZoomRef.current !== zoom;
+
+    if (centerChanged || zoomChanged) {
+      map.setView(center, zoom);
+      prevCenterRef.current = center;
+      prevZoomRef.current = zoom;
+    }
   }, [center, zoom, map]);
 
   return null;
