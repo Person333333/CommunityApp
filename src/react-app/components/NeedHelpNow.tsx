@@ -15,7 +15,7 @@ export default function NeedHelpNow() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 left-6 z-[60] bg-rose-600 hover:bg-rose-700 text-white shadow-rose-500/30 shadow-lg rounded-full p-4 flex items-center gap-3 transition-colors duration-300"
+                className="fixed bottom-20 left-4 z-[60] bg-rose-600 hover:bg-rose-700 text-white shadow-rose-500/30 shadow-lg rounded-full px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3 transition-colors duration-300"
             >
                 <AlertCircle className="w-6 h-6 animate-pulse" />
                 <span className="font-semibold hidden sm:inline-block">Need Help Now?</span>

@@ -17,6 +17,7 @@ import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
 import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
 import LocationBar from '@/react-app/components/LocationBar';
+import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
@@ -379,6 +380,12 @@ export default function Discover() {
                     placeholder={t('discover.searchPlaceholder')}
                     className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-4 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
                   />
+                  {searchTerm && (
+                    <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600">
+                      <X className="w-5 h-5" />
+                    </button>
+                  )}
+                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-9 h-9" />
                 </div>
                 <LocationBar variant="prominent" className="w-full lg:w-auto" />
               </div>

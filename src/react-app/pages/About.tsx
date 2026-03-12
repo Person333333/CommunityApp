@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { Heart, Users, Leaf, Lightbulb, Compass, Quote, ChevronDown } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
+import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
 
 export default function About() {
@@ -69,7 +70,7 @@ export default function About() {
         </div>
       </section>
 
-      <div className="container mx-auto max-w-6xl py-24 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
 
         {/* Our Vision & Mission - Clean Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
@@ -119,7 +120,8 @@ export default function About() {
         </div>
 
         {/* Research & Community Need Section */}
-        <section className="mb-32">
+        <div className="section-divider mx-auto max-w-md mb-12" />
+        <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -317,18 +319,29 @@ function ValueCard({ value }: { value: any }) {
       }}
       className="relative z-10"
     >
-      <GlassCard variant="strong" className={`p-10 h-full text-center flex flex-col items-center justify-center border-${value.color}-200 shadow-2xl relative overflow-hidden bg-white`}>
-        <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-500`} />
-        <div className="mb-6 transform hover:scale-110 transition-transform duration-500">
-          {value.icon}
-        </div>
-        <h3 className={`text-3xl font-black mb-4 uppercase tracking-tighter text-slate-900`}>
-          {value.title}
-        </h3>
-        <p className={`text-lg font-bold text-slate-600 italic leading-relaxed`}>
-          {value.text}
-        </p>
-      </GlassCard>
+      <FlipCard
+        heightClass="h-[360px]"
+        front={
+          <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-200 shadow-2xl relative overflow-hidden bg-white/90 backdrop-blur-md group-hover:bg-white transition-colors`}>
+            <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-500`} />
+            <div className="mb-6 transform hover:scale-110 transition-transform duration-500">
+              {value.icon}
+            </div>
+            <h3 className={`text-3xl font-black uppercase tracking-tighter text-slate-900 group-hover:text-${value.color}-600 transition-colors`}>
+              {value.title}
+            </h3>
+            <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-slate-400 group-hover:text-slate-600 transition-colors">Tap to Reveal</p>
+          </GlassCard>
+        }
+        back={
+          <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-500 shadow-2xl relative overflow-hidden bg-slate-900 border-2`}>
+            <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-500`} />
+            <p className={`text-xl font-bold text-white italic leading-relaxed`}>
+              "{value.text}"
+            </p>
+          </GlassCard>
+        }
+      />
     </motion.div>
   );
 }

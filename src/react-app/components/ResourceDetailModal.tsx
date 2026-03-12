@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star } from 'lucide-react';
+import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download, Volume2, VolumeX } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
@@ -19,6 +19,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
+  const [shareToast, setShareToast] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [feedback, setFeedback] = useState<'up' | 'down' | null>(() => {
+    if (!resource) return null;
+    const saved = localStorage.getItem(`resource-feedback-${resource.id}`);
+    return saved as 'up' | 'down' | null;
+  });
 
   // Donation States
   const [showDonationForm, setShowDonationForm] = useState(false);
@@ -34,9 +42,17 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     setShowDonationForm(false);
     setRatingSubmitted(false);
     setUserRating(0);
+    setShowQR(false);
+    setShareToast(false);
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+
     if (resource) {
-      const saved = localStorage.getItem(`rating_${resource.id}`);
-      if (saved) { setUserRating(Number(saved)); setRatingSubmitted(true); }
+      const savedRating = localStorage.getItem(`rating_${resource.id}`);
+      if (savedRating) { setUserRating(Number(savedRating)); setRatingSubmitted(true); }
+
+      const savedFeedback = localStorage.getItem(`resource-feedback-${resource.id}`);
+      setFeedback(savedFeedback as 'up' | 'down' | null);
     }
 
     // Check for saved donor profile
@@ -75,6 +91,56 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
   };
 
   if (!resource) return null;
+
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/discover?resource=${resource.id}`;
+    const shareData = { title: resource.title, text: `Check out ${resource.title} on Community Compass`, url: shareUrl };
+    try {
+      if (navigator.share) { await navigator.share(shareData); }
+      else { await navigator.clipboard.writeText(shareUrl); setShareToast(true); setTimeout(() => setShareToast(false), 2000); }
+    } catch (e) {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareToast(true);
+      setTimeout(() => setShareToast(false), 2000);
+    }
+  };
+
+  const handlePrint = () => window.print();
+
+  const handleFeedback = (type: 'up' | 'down') => {
+    const newVal = feedback === type ? null : type;
+    setFeedback(newVal);
+    if (newVal) localStorage.setItem(`resource-feedback-${resource.id}`, newVal);
+    else localStorage.removeItem(`resource-feedback-${resource.id}`);
+    // Update aggregate counts
+    const key = `resource-feedback-agg-${resource.id}`;
+    const agg = JSON.parse(localStorage.getItem(key) || '{"up":0,"down":0}');
+    if (newVal === 'up') agg.up++;
+    else if (newVal === 'down') agg.down++;
+    localStorage.setItem(key, JSON.stringify(agg));
+  };
+
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/discover?resource=${resource.id}`)}`;
+
+  const handleReadAloud = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const parts = [
+      resource.title,
+      resource.description || '',
+      resource.address ? `Located at ${resource.address}` : '',
+      resource.hours ? `Open ${resource.hours}` : '',
+    ].filter(Boolean);
+    const utterance = new SpeechSynthesisUtterance(parts.join('. '));
+    utterance.rate = 0.95;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
 
   return (
     <AnimatePresence>
@@ -419,6 +485,61 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           Reported to Mods
                         </motion.span>
                       )}
+                    </div>
+
+                    {/* Utility Actions: Share / Print / QR / Read Aloud */}
+                    <div className="flex flex-wrap gap-2 relative">
+                      <button onClick={handleShare} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
+                        <Share2 className="w-3.5 h-3.5" /> Share
+                      </button>
+                      <button onClick={handlePrint} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
+                        <Printer className="w-3.5 h-3.5" /> Print
+                      </button>
+                      <button onClick={() => setShowQR(!showQR)} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
+                        <QrCode className="w-3.5 h-3.5" /> QR Code
+                      </button>
+                      <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-xs font-bold transition-colors uppercase tracking-widest border px-3 py-2 rounded-lg ${isSpeaking ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-slate-500 hover:text-blue-600 bg-slate-50 border-slate-200'
+                        }`}>
+                        {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        {isSpeaking ? 'Stop' : 'Read Aloud'}
+                      </button>
+                      {shareToast && (
+                        <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-0 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">
+                          Link copied!
+                        </motion.span>
+                      )}
+                    </div>
+
+                    {/* QR Code Display */}
+                    {showQR && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="flex flex-col items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
+                        <img src={qrUrl} alt="QR Code" className="w-48 h-48 rounded-lg" />
+                        <p className="text-xs text-slate-500 font-medium text-center">Scan to view this resource on any device</p>
+                        <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700">
+                          <Download className="w-3.5 h-3.5" /> Download QR Code
+                        </a>
+                      </motion.div>
+                    )}
+
+                    {/* Was This Helpful? */}
+                    <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="text-sm font-semibold text-slate-700">Was this resource helpful?</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleFeedback('up')}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${feedback === 'up' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-emerald-50'
+                            }`}
+                        >
+                          <ThumbsUp className="w-4 h-4" /> Yes
+                        </button>
+                        <button
+                          onClick={() => handleFeedback('down')}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${feedback === 'down' ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-rose-50'
+                            }`}
+                        >
+                          <ThumbsDown className="w-4 h-4" /> No
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
