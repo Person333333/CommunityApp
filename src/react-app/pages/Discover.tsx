@@ -448,9 +448,9 @@ export default function Discover() {
                     variant="secondary"
                     size="sm"
                     onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
-                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-rose-600 border-2 border-rose-500 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-rose-600 border-2 border-rose-500 shadow-sm' : 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30 hover:bg-rose-600'}`}
                   >
-                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} /> My Favorites
+                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-rose-500 text-rose-500' : 'fill-white text-white'}`} /> My Favorites
                   </GlassButton>
                   <GlassButton
                     variant="secondary"
@@ -462,9 +462,9 @@ export default function Discover() {
                       }
                       setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
                     }}
-                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showMySubmissions ? 'bg-white !text-indigo-600 border-2 border-indigo-500 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showMySubmissions ? 'bg-white !text-indigo-600 border-2 border-indigo-500 shadow-sm' : 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30 hover:bg-indigo-700'}`}
                   >
-                    <User className={`w-4 h-4 mr-2 ${showMySubmissions ? 'fill-indigo-600 text-indigo-600' : 'text-slate-400'}`} /> {t('discover.mySubmissions')}
+                    <User className={`w-4 h-4 mr-2 ${showMySubmissions ? 'fill-indigo-600 text-indigo-600' : 'text-white'}`} /> {t('discover.mySubmissions')}
                   </GlassButton>
                 </div>
               </div>
