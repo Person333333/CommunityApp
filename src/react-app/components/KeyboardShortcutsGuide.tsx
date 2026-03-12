@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Command, ArrowUp, ArrowDown, CornerDownLeft, Search, Moon, Eye, Type, Zap, HelpCircle } from 'lucide-react';
+import { X, Command, ArrowUp, CornerDownLeft, Search, Moon, Eye, Type, Zap, HelpCircle } from 'lucide-react';
 
 export default function KeyboardShortcutsGuide() {
   const [isOpen, setIsOpen] = useState(false);

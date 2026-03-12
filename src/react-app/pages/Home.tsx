@@ -9,7 +9,7 @@ import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
 import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
-import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
@@ -33,7 +33,6 @@ function useCountUp(target: number, duration = 2000, startOnView = true) {
 
   useEffect(() => {
     if (!hasStarted) return;
-    let start = 0;
     const startTime = performance.now();
     const animate = (now: number) => {
       const elapsed = now - startTime;
