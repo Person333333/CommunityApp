@@ -4,7 +4,6 @@ import { Compass, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
-import LocationBar from './LocationBar';
 import LocationSelector from './LocationSelector';
 import ThemeToggle from './ThemeToggle';
 import { useTranslation } from 'react-i18next';
