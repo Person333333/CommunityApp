@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 import ScrollProgress from './ScrollProgress';
 
+// Main Navigation Component
 export default function Navbar() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
