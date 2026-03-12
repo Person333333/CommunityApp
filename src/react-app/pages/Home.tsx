@@ -200,14 +200,14 @@ export default function Home() {
                 className="max-w-md mx-auto mt-2 sm:mt-4 transform scale-90"
               >
                 <div className="bg-white rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-sm border border-slate-200">
-                  <div className="flex items-center gap-2 w-full flex-1">
-                    <Search className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 ml-3 sm:ml-4" />
+                  <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
+                    <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-focus-within:text-blue-500 transition-colors pointer-events-none" />
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 px-3 sm:px-4 py-2.5 sm:py-3 w-full font-medium text-sm sm:text-base"
+                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
@@ -215,8 +215,10 @@ export default function Home() {
                         }
                       }}
                     />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-500" />
+                    </div>
                   </div>
-                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-10 h-10" />
                   <GlassButton
                     variant="primary"
                     size="md"

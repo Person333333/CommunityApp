@@ -378,14 +378,16 @@ export default function Discover() {
                       handleSearch(val);
                     }}
                     placeholder={t('discover.searchPlaceholder')}
-                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-4 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
+                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-12 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
                   />
-                  {searchTerm && (
-                    <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600">
-                      <X className="w-5 h-5" />
-                    </button>
-                  )}
-                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-9 h-9" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                    {searchTerm && (
+                      <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600 p-1">
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                    <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-8 h-8 border-none shadow-none bg-transparent hover:bg-slate-200 text-slate-400 hover:text-blue-500" />
+                  </div>
                 </div>
                 <LocationBar variant="prominent" className="w-full lg:w-auto" />
               </div>
@@ -440,32 +442,31 @@ export default function Discover() {
                 {hasActiveFilters && (
                   <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-rose-600 border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">Clear All</button>
                 )}
-              </div>
 
-              {/* Favorites / Submissions toggle */}
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide pt-2 border-t border-slate-100">
-                <GlassButton
-                  variant={showFavoritesOnly ? 'primary' : 'secondary'}
-                  size="sm"
-                  onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
-                  className={`${showFavoritesOnly ? 'bg-rose-500 !text-white border-rose-600 shadow-rose-500/30' : ''} font-medium`}
-                >
-                  <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-white' : ''}`} /> My Favorites
-                </GlassButton>
-                <GlassButton
-                  variant={showMySubmissions ? 'primary' : 'secondary'}
-                  size="sm"
-                  onClick={() => {
-                    if (!user && !guestEmail) {
-                      setShowEmailPrompt(true);
-                      return;
-                    }
-                    setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
-                  }}
-                  className={`${showMySubmissions ? 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30' : ''} font-medium`}
-                >
-                  <User className="w-4 h-4 mr-2" /> {t('discover.mySubmissions')}
-                </GlassButton>
+                <div className="flex gap-2 items-center ml-auto">
+                  <GlassButton
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-rose-600 border-2 border-rose-500 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                  >
+                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} /> My Favorites
+                  </GlassButton>
+                  <GlassButton
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      if (!user && !guestEmail) {
+                        setShowEmailPrompt(true);
+                        return;
+                      }
+                      setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
+                    }}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showMySubmissions ? 'bg-white !text-indigo-600 border-2 border-indigo-500 shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                  >
+                    <User className={`w-4 h-4 mr-2 ${showMySubmissions ? 'fill-indigo-600 text-indigo-600' : 'text-slate-400'}`} /> {t('discover.mySubmissions')}
+                  </GlassButton>
+                </div>
               </div>
 
               {/* Guest email prompt */}

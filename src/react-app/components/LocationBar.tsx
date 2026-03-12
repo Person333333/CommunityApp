@@ -39,10 +39,10 @@ export default function LocationBar({ variant = 'compact', className = '' }: Loc
         <div className={`relative flex items-center gap-2 ${className}`}>
             <div
                 className={`flex items-center transition-all duration-300 overflow-hidden ${isEditing
-                    ? 'w-48 sm:w-64 bg-white border-blue-500 ring-2 ring-blue-500/20'
+                    ? 'w-48 sm:w-56 bg-white border-blue-500 ring-2 ring-blue-500/20'
                     : isCompact
                         ? 'w-32 bg-slate-50/50 border-slate-200 hover:bg-white'
-                        : 'w-full sm:w-80 bg-slate-50 border-slate-200'
+                        : 'w-full sm:w-56 bg-slate-50 border-slate-200'
                     } rounded-2xl border px-3 h-12 relative group`}
             >
                 <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors ${isEditing ? 'text-blue-600' : 'text-slate-400'}`} />
