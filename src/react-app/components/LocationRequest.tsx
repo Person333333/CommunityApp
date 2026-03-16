@@ -101,7 +101,7 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 bg-rose-50 border border-rose-300 rounded-lg text-rose-900 text-sm font-black"
+            className="mb-6 p-4 bg-blue-50 border border-blue-300 rounded-lg text-blue-900 text-sm font-black"
           >
             {error}
           </motion.div>

@@ -41,9 +41,9 @@ export default function Discover() {
   const [selectedTag, setSelectedTag] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [showLocalOnly, setShowLocalOnly] = useState(false);
+  const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
-  const LOCAL_RADIUS_KM = 300;
+  const LOCAL_RADIUS_KM = 50;
 
   // Local favorites state (togglable per card)
   const [favoriteIds, setFavoriteIds] = useState<number[]>(() => {
@@ -118,8 +118,13 @@ export default function Discover() {
     const fetchResources = async () => {
       setLoading(true);
       try {
+        const q = searchParams.get('q') || '';
+        const isZip = /^\d{5}$/.test(q);
+
         const data = await unifiedResourceService.fetchAllResources({
-          keyword: searchParams.get('q') || undefined,
+          keyword: isZip ? undefined : q || undefined,
+          location: isZip ? q : undefined,
+          distance: LOCAL_RADIUS_KM,
           category: searchParams.get('category') || undefined,
           includeUserSubmitted: true,
           userId: user?.id
@@ -324,34 +329,6 @@ export default function Discover() {
           </div>
         </motion.div>
 
-        {/* Local Filter Notice */}
-        {showLocalOnly && allResources.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <GlassCard variant="teal" className="p-4 bg-teal-50 border-teal-100 shadow-sm">
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                <div className="flex items-center gap-3">
-                  <MapPinned className="w-5 h-5 text-teal-600 flex-shrink-0" />
-                  <div>
-                    <p className="text-teal-900 font-medium text-sm">
-                      {t('discover.showingLocal')}
-                    </p>
-                    <p className="text-xs text-teal-700 font-normal mt-0.5">
-                      {resources.length} {t('discover.ofResources')} {allResources.length} {t('discover.resourcesInArea')}
-                    </p>
-                  </div>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowLocalOnly(false)}
-                  className="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white text-sm font-medium transition-all flex-shrink-0 shadow-sm"
-                >
-                  {t('discover.showAll')}
-                </motion.button>
-              </div>
-            </GlassCard>
-          </motion.div>
-        )}
 
         {/* Search and Explorer Card */}
         <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
@@ -396,14 +373,21 @@ export default function Discover() {
                       handleSearch(val);
                     }}
                     placeholder={t('discover.searchPlaceholder')}
-                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-12 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
+                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-32 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
                   />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                    {searchTerm && (
-                      <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600 p-1">
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowLocalOnly(!showLocalOnly)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all border ${showLocalOnly
+                        ? 'bg-blue-600 border-blue-700 text-white shadow-lg shadow-blue-500/20'
+                        : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'}`}
+                      title={showLocalOnly ? "Showing Local Only" : "Showing All Results"}
+                    >
+                      <MapPin className={`w-3 h-3 ${showLocalOnly ? 'fill-white' : ''}`} />
+                      <span className="hidden sm:inline">{showLocalOnly ? "Local Only" : "Local Off"}</span>
+                    </motion.button>
                     <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-8 h-8 border-none shadow-none bg-transparent hover:bg-slate-200 text-slate-400 hover:text-blue-500" />
                   </div>
                 </div>

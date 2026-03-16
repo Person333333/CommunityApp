@@ -115,7 +115,7 @@ export default function Home() {
     translateExisting();
   }, [i18n.language]);
 
-  const LOCAL_RADIUS_KM = 300;
+  const LOCAL_RADIUS_KM = 50;
   const featuredResources = useMemo(() => {
     if (!userLocation || allFeaturedResources.length === 0) {
       return [];
@@ -207,17 +207,17 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="max-w-md mx-auto mt-2 sm:mt-4 transform scale-90"
+                className="max-w-3xl mx-auto mt-4 sm:mt-6 transform"
               >
-                <div className="bg-white rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-sm border border-slate-200">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-3 flex flex-col sm:flex-row items-center gap-3 shadow-xl border border-slate-200">
                   <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
-                    <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-focus-within:text-blue-500 transition-colors pointer-events-none" />
+                    <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 text-slate-400 group-focus-within:text-blue-500 transition-colors pointer-events-none" />
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
+                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 pl-12 sm:pl-16 pr-12 w-full font-bold text-base sm:text-lg py-4 sm:py-5"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
@@ -225,14 +225,14 @@ export default function Home() {
                         }
                       }}
                     />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-500" />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-10 h-10 sm:w-12 sm:h-12 border-none shadow-none text-slate-400 hover:text-blue-500" />
                     </div>
                   </div>
                   <GlassButton
                     variant="primary"
-                    size="md"
-                    className="w-full sm:w-auto"
+                    size="lg"
+                    className="w-full sm:w-auto px-10 py-5 rounded-2xl font-black uppercase tracking-widest"
                     onClick={() => {
                       if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
                       else navigate('/discover');

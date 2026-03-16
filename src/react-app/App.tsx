@@ -17,7 +17,6 @@ import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
 import NeedHelpNow from "@/react-app/components/NeedHelpNow";
-import AccessibilityWidget from "@/react-app/components/AccessibilityWidget";
 import CommandPalette from "@/react-app/components/CommandPalette";
 import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
@@ -67,21 +66,21 @@ export default function App() {
       <ScrollToTop />
       <Navbar />
       <main id="main-content">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/discover" element={<DiscoverPage />} />
-        <Route path="/submit" element={<SubmitPage />} />
-        <Route path="/references" element={<ReferencesPage />} />
-        <Route path="/about" element={<AboutPage />} />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/submit" element={<SubmitPage />} />
+          <Route path="/references" element={<ReferencesPage />} />
+          <Route path="/about" element={<AboutPage />} />
 
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/my-submissions" element={<MySubmissionsPage />} />
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/my-submissions" element={<MySubmissionsPage />} />
 
-        {/* Catch-all Route for 404 Page Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          {/* Catch-all Route for 404 Page Not Found */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </main>
       <Footer />
       <UserTour
@@ -90,7 +89,6 @@ export default function App() {
         onComplete={() => setShowTour(false)}
       />
       <NeedHelpNow />
-      <AccessibilityWidget />
       <CommandPalette />
       <KeyboardShortcutsGuide />
       <HelperButton onShowTour={() => setShowTour(true)} />
