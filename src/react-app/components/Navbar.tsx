@@ -56,9 +56,9 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 group">
               <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
-                <Compass className={`w-8 h-8 transition-colors duration-300 text-blue-400`} />
+                <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
               </motion.div>
-              <span className={`text-xl font-bold transition-colors duration-300 text-white`}>Community Compass</span>
+              <span className={`text-xl font-bold transition-colors duration-300 text-white tracking-tighter uppercase font-black`}>Community Compass</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -73,13 +73,13 @@ export default function Navbar() {
                 <SignedOut>
                   <Link
                     to="/sign-in"
-                    className="text-white/70 hover:text-blue-400 transition-colors duration-200 font-semibold"
+                    className="text-white/70 hover:text-emerald-400 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
                   >
                     {t('nav.signIn')}
                   </Link>
                   <Link
                     to="/sign-up"
-                    className="glass-layer px-4 py-2 rounded-lg text-white hover:bg-white/10 transition-all font-semibold shadow-md"
+                    className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm"
                   >
                     {t('nav.signUp')}
                   </Link>
@@ -108,7 +108,7 @@ export default function Navbar() {
                         <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('discover.mySubmissions')}</Link>
                         <button
                           onClick={() => signOut()}
-                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-blue-400 font-medium text-sm transition-colors"
+                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-emerald-400 font-medium text-sm transition-colors"
                         >
                           {t('account.signOut')}
                         </button>
@@ -124,9 +124,9 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setShowAccessibility(!showAccessibility)}
-                    className={`p-2 rounded-xl transition-all flex items-center gap-1 ${showAccessibility
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shadow-sm'
+                    className={`p-2 rounded-none transition-all flex items-center gap-1 ${showAccessibility
+                      ? 'bg-emerald-500 text-black shadow-lg'
+                      : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 shadow-sm'
                       }`}
                     title="Accessibility Options"
                   >
@@ -279,7 +279,7 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
       {isActive && (
         <motion.div
           layoutId="navbar-indicator"
-          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"
+          className="absolute -bottom-1 left-0 right-0 h-0.5 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       )}
@@ -295,8 +295,8 @@ function MobileNavLink({ to, children, onClick }: { to: string; children: React.
     <Link
       to={to}
       onClick={onClick}
-      className={`block px-4 py-3 rounded-lg text-base font-bold uppercase tracking-wider transition-colors duration-200 ${isActive
-        ? 'bg-white/10 text-white border-l-4 border-blue-400'
+      className={`block px-4 py-3 rounded-none text-base font-bold uppercase tracking-wider transition-colors duration-200 ${isActive
+        ? 'bg-white/10 text-white border-l-4 border-emerald-500'
         : 'text-white/70 hover:bg-white/5 hover:text-white'
         }`}
     >

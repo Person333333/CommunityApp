@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Sparkles, MapPin, Loader2, Upload, Image as ImageIcon, ChevronRight, ChevronLeft, Eye, CheckCircle2, ShieldCheck, User as UserIcon, Compass, X } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
 
-import GlassCard from '@/react-app/components/GlassCard';
-import GlassButton from '@/react-app/components/GlassButton';
+import { Card, CardContent } from '@/react-app/components/ui/card';
+import { Button } from '@/react-app/components/ui/button';
+import { Input } from '@/react-app/components/ui/input';
+import { Textarea } from '../components/ui/textarea';
 import { categories } from '@/shared/types';
 
 import { useTranslation } from 'react-i18next';
@@ -184,38 +186,39 @@ export default function Submit() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 bg-transparent">
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", duration: 0.6 }}
           className="max-w-2xl w-full"
         >
-          <GlassCard variant="strong" className="text-center p-12 shadow-[0_0_30px_rgba(16,185,129,0.15)] border-white/10 rounded-chromic-card">
+          <Card className="text-center p-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent opacity-50" />
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
+              className="w-24 h-24 mx-auto mb-8 rounded-none bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.3)] relative z-10"
             >
               <Sparkles className="w-12 h-12" />
             </motion.div>
-
-            <h2 className="text-4xl font-black text-white mb-4 drop-shadow-md">
+Page
+            <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter relative z-10">
               {t('submit.success.title')}
             </h2>
 
-            <p className="text-xl text-slate-300 mb-10 font-bold">
+            <p className="text-xl text-slate-400 mb-10 font-bold uppercase tracking-widest text-xs relative z-10">
               {t('submit.success.text')}
             </p>
 
-            <div className="flex gap-4 justify-center flex-wrap">
-              <GlassButton variant="primary" onClick={() => setSuccess(false)} className="px-8 h-14 bg-white/10 border-white/20 hover:bg-white/20 focus:ring-white/30 text-white rounded-chromic-pill">
+            <div className="flex gap-4 justify-center flex-wrap relative z-10">
+              <Button onClick={() => setSuccess(false)} className="px-10 py-7 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest rounded-none shadow-xl shadow-emerald-500/20">
                 {t('submit.success.submitAnother')}
-              </GlassButton>
-              <GlassButton variant="secondary" onClick={() => window.location.href = '/discover'} className="px-8 h-14 bg-transparent border-white/10 text-slate-300 hover:text-white rounded-chromic-pill">
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/discover'} className="px-10 py-7 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-none uppercase font-black tracking-widest">
                 {t('submit.success.browse')}
-              </GlassButton>
+              </Button>
             </div>
-          </GlassCard>
+          </Card>
         </motion.div>
       </div>
     );
@@ -239,20 +242,20 @@ export default function Submit() {
             {[1, 2, 3].map(s => (
               <div
                 key={s}
-                className={`flex-1 rounded-full transition-all duration-500 ${currentStep >= s ? 'bg-blue-600 shadow-lg shadow-blue-500/30' : 'bg-slate-100'
+                className={`flex-1 rounded-none transition-all duration-500 ${currentStep >= s ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-white/10'
                   }`}
               />
             ))}
           </div>
 
           <div className="flex justify-between mt-4">
-            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 1 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 1 ? 'text-emerald-400' : 'text-slate-500'}`}>
               <ImageIcon className="w-4 h-4" /> Resource Info
             </div>
-            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 2 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 2 ? 'text-emerald-400' : 'text-slate-500'}`}>
               <UserIcon className="w-4 h-4" /> Your Info
             </div>
-            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 3 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 3 ? 'text-emerald-400' : 'text-slate-500'}`}>
               <Eye className="w-4 h-4" /> Review
             </div>
           </div>
@@ -267,9 +270,9 @@ export default function Submit() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <GlassCard variant="strong" className="shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 overflow-hidden p-0 rounded-chromic-card">
-                <div className="bg-slate-900/80 p-6 flex items-center gap-4 text-white backdrop-blur-md border-b border-white/10">
-                  <ImageIcon className="w-6 h-6 text-blue-400" />
+              <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
+                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
+                  <ImageIcon className="w-6 h-6 text-emerald-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 1: Resource Core Details</p>
                 </div>
                 <div className="p-8 space-y-8">
@@ -280,11 +283,11 @@ export default function Submit() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                       <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Category *</label>
-                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer">
-                        <option value="" disabled className="bg-slate-800 text-slate-400">Select a category...</option>
-                        {categories.map(cat => <option key={cat} value={cat} className="bg-slate-800 text-white">{cat}</option>)}
+                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer">
+                        <option value="" disabled className="bg-black text-slate-400">Select a category...</option>
+                        {categories.map(cat => <option key={cat} value={cat} className="bg-black text-white">{cat}</option>)}
                       </select>
-                      {errors.category && <p className="mt-2 text-xs text-indigo-600 font-bold">{errors.category}</p>}
+                      {errors.category && <p className="mt-2 text-xs text-emerald-500 font-bold">{errors.category}</p>}
                     </div>
                     <FormField label="Specific Schedule" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every 2nd Tuesday at 5pm..." />
                   </div>
@@ -297,23 +300,23 @@ export default function Submit() {
                         <select
                           value={(formData as any).website_action_label || 'Visit Website'}
                           onChange={(e) => setFormData(prev => ({ ...prev, website_action_label: e.target.value }))}
-                          className="bg-white/5 border border-white/10 rounded-xl px-3 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
+                          className="bg-white/5 border border-white/10 rounded-none px-3 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
                         >
-                          <option value="Visit Website" className="bg-slate-800 text-white">Visit Website</option>
-                          <option value="Register" className="bg-slate-800 text-white">Register</option>
-                          <option value="Learn More" className="bg-slate-800 text-white">Learn More</option>
-                          <option value="Donate" className="bg-slate-800 text-white">Donate</option>
-                          <option value="Volunteer" className="bg-slate-800 text-white">Volunteer</option>
-                          <option value="Apply Now" className="bg-slate-800 text-white">Apply Now</option>
-                          <option value="Get Help" className="bg-slate-800 text-white">Get Help</option>
+                          <option value="Visit Website" className="bg-black text-white">Visit Website</option>
+                          <option value="Register" className="bg-black text-white">Register</option>
+                          <option value="Learn More" className="bg-black text-white">Learn More</option>
+                          <option value="Donate" className="bg-black text-white">Donate</option>
+                          <option value="Volunteer" className="bg-black text-white">Volunteer</option>
+                          <option value="Apply Now" className="bg-black text-white">Apply Now</option>
+                          <option value="Get Help" className="bg-black text-white">Get Help</option>
                         </select>
-                        <input
+                        <Input
                           type="url"
                           name="website"
                           value={formData.website}
                           onChange={handleChange}
                           placeholder="https://..."
-                          className={`flex-1 bg-white/5 border ${errors.website ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-white/10'} rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                          className={`flex-1 bg-white/5 border ${errors.website ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-white/10'} rounded-none px-4 py-7 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all`}
                         />
                       </div>
                     </div>
@@ -460,12 +463,12 @@ export default function Submit() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
 
               <div className="flex justify-end">
-                <GlassButton variant="primary" onClick={nextStep} className="px-8 sm:px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group whitespace-nowrap">
-                  <span className="flex items-center gap-2">Next: Contact Info <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" /></span>
-                </GlassButton>
+                <Button onClick={nextStep} className="px-10 py-8 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest rounded-none shadow-xl shadow-emerald-500/20 group">
+                  <span className="flex items-center gap-2">Next: Contact Info <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></span>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -478,9 +481,9 @@ export default function Submit() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <GlassCard variant="strong" className="shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 overflow-hidden p-0 rounded-chromic-card">
-                <div className="bg-slate-900/80 p-6 flex items-center gap-4 text-white backdrop-blur-md border-b border-white/10">
-                  <UserIcon className="w-6 h-6 text-indigo-400" />
+              <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
+                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
+                  <UserIcon className="w-6 h-6 text-emerald-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 2: Your & Location Details</p>
                 </div>
                 <div className="p-8 space-y-10">
@@ -499,11 +502,11 @@ export default function Submit() {
                       <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
                         <MapPin className="w-4 h-4 text-blue-400" /> Physical Address (Required)
                       </h4>
-                      <button onClick={handleGetLocation} className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-full hover:bg-blue-500/20 transition-colors flex items-center gap-2">
+                      <Button onClick={handleGetLocation} variant="outline" className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/5 border-emerald-500/20 px-3 py-1 rounded-none hover:bg-emerald-500/10 hover:text-emerald-300 transition-all h-auto flex items-center gap-2">
                         {locating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
                         Use GPS Coordinates
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={async () => {
                           setLocating(true);
                           const coords = await geocodeAddress(formData.address, formData.city, formData.state, formData.zip);
@@ -515,10 +518,11 @@ export default function Submit() {
                           }
                           setLocating(false);
                         }}
-                        className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full hover:bg-emerald-500/20 transition-colors flex items-center gap-2"
+                        variant="outline"
+                        className="text-[10px] font-black uppercase text-cyan-400 bg-cyan-500/5 border-cyan-500/20 px-3 py-1 rounded-none hover:bg-cyan-500/10 hover:text-cyan-300 transition-all h-auto flex items-center gap-2"
                       >
                         <ShieldCheck className="w-3 h-3" /> Verify Address
-                      </button>
+                      </Button>
                     </div>
                     <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">We use the address to accurately place your resource on the map.</p>
                     <FormField label="Street Address" name="address" value={formData.address} onChange={handleChange} required placeholder="123 Community St." error={errors.address} />
@@ -531,15 +535,15 @@ export default function Submit() {
 
 
                 </div>
-              </GlassCard>
+              </Card>
 
               <div className="flex justify-between">
-                <button onClick={prevStep} className="px-8 font-black uppercase text-sm text-slate-400 hover:text-white flex items-center gap-2">
+                <button onClick={prevStep} className="px-8 font-black uppercase text-xs text-slate-500 hover:text-white flex items-center gap-2 transition-colors">
                   <ChevronLeft className="w-4 h-4" /> Back
                 </button>
-                <GlassButton variant="primary" onClick={nextStep} className="px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group text-white">
+                <Button onClick={nextStep} className="px-10 py-8 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest rounded-none shadow-xl shadow-emerald-500/20 group">
                   Final Review <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </GlassButton>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -555,32 +559,32 @@ export default function Submit() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Preview Card */}
                 <div className="space-y-4">
-                  <p className="font-black uppercase tracking-widest text-xs text-slate-400 ml-2">How it will look</p>
-                  <GlassCard variant="strong" className="p-0 overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 rounded-chromic-card">
+                  <p className="font-black uppercase tracking-widest text-[10px] text-emerald-500 ml-2">How it will look</p>
+                  <Card className="p-0 overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl group/preview">
                     <div className="h-48 bg-slate-950 relative">
                       {formData.image_url ? (
                         <img src={formData.image_url} className="w-full h-full object-cover opacity-80" alt="Preview" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-slate-400" /></div>
                       )}
-                      <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-blue-300 border border-white/20 uppercase tracking-widest shadow-md">
+                      <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-none text-[10px] font-black text-emerald-400 border border-emerald-500/20 uppercase tracking-widest shadow-xl">
                         {formData.category || 'Category'}
                       </div>
                     </div>
-                    <div className="p-6 space-y-3 bg-slate-900/40">
-                      <h3 className="text-2xl font-black text-white uppercase tracking-tight line-clamp-1 drop-shadow-sm">{formData.title || 'Untitled Resource'}</h3>
-                      <p className="text-sm text-slate-300 font-bold line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
-                      <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10 text-[10px] font-black text-slate-400 uppercase">
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-lg"><MapPin className="w-3.5 h-3.5 text-blue-400" /> {formData.city || 'Remote'}</div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-lg"><UserIcon className="w-3.5 h-3.5 text-blue-400" /> {formData.audience || 'Everyone'}</div>
+                    <CardContent className="p-6 space-y-3">
+                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter line-clamp-1 group-hover/preview:text-emerald-400 transition-colors">{formData.title || 'Untitled Resource'}</h3>
+                      <p className="text-sm text-slate-400 font-medium line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
+                      <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.city || 'Remote'}</span></div>
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><UserIcon className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.audience || 'Everyone'}</span></div>
                       </div>
-                    </div>
-                  </GlassCard>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Final Verification Details */}
                 <div className="space-y-6">
-                  <GlassCard variant="strong" className="bg-white/5 border-white/10 rounded-chromic-card">
+                  <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-6 shadow-2xl">
                     <h4 className="font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2 drop-shadow-sm">
                       <ShieldCheck className="w-5 h-5 text-emerald-400" /> Submission Policy
                     </h4>
@@ -596,15 +600,15 @@ export default function Submit() {
                         </li>
                       ))}
                     </ul>
-                  </GlassCard>
+                  </Card>
 
                   {errors.general && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className={`p-5 rounded-2xl text-sm font-bold flex gap-4 cursor-pointer transition-all border ${errors.general.includes('AI Quality Check Failed')
-                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-300 hover:bg-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
-                        : 'bg-white/5 border-white/10 text-slate-300'
+                      className={`p-5 rounded-none text-sm font-bold flex gap-4 cursor-pointer transition-all border ${errors.general.includes('AI Quality Check Failed')
+                        ? 'bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
+                        : 'bg-white/5 border-white/10 text-slate-400'
                         }`}
                       onClick={() => {
                         if (errors.general.includes('AI Quality Check Failed')) {
@@ -612,16 +616,16 @@ export default function Submit() {
                         }
                       }}
                     >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${errors.general.includes('AI Quality Check Failed') ? 'bg-rose-500/20 text-rose-400' : 'bg-white/10 text-slate-400'
+                      <div className={`w-10 h-10 rounded-none flex items-center justify-center flex-shrink-0 ${errors.general.includes('AI Quality Check Failed') ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-slate-500'
                         }`}>
                         <Sparkles className="w-5 h-5" />
                       </div>
                       <div>
                         <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">Verification Report</p>
-                        <p className="leading-relaxed">{errors.general}</p>
+                        <p className="leading-relaxed font-black uppercase text-[11px] tracking-tight">{errors.general}</p>
                         {errors.general.includes('AI Quality Check Failed') && (
-                          <p className="mt-2 text-rose-400 text-[10px] uppercase font-black flex items-center gap-1">
-                            Click to see full reasoning <ChevronRight className="w-3 h-3" />
+                          <p className="mt-2 text-red-400 text-[10px] uppercase font-black flex items-center gap-1 tracking-widest">
+                            Review detailed reasoning <ChevronRight className="w-3 h-3" />
                           </p>
                         )}
                       </div>
@@ -629,33 +633,32 @@ export default function Submit() {
                   )}
 
                   <div className="space-y-4">
-                    <GlassButton
-                      variant="primary"
+                    <Button
                       onClick={handleSubmit}
                       disabled={submitting || validating}
-                      className="w-full h-20 text-xl rounded-2xl shadow-2xl shadow-blue-600/30 font-black uppercase tracking-widest relative overflow-hidden"
+                      className="w-full h-20 text-xl bg-emerald-500 hover:bg-emerald-400 text-black rounded-none shadow-2xl shadow-emerald-500/20 font-black uppercase tracking-[0.2em] relative overflow-hidden"
                     >
                       {validating ? (
                         <div className="flex flex-col items-center">
                           <div className="flex items-center gap-3">
                             <Loader2 className="w-6 h-6 animate-spin" />
-                            <span>AI Reviewing...</span>
+                            <span>AI Auditing...</span>
                           </div>
-                          <span className="text-[10px] mt-1 opacity-60">🤖 Processing quality check</span>
+                          <span className="text-[10px] mt-1 opacity-60">🤖 Quality Control in progress</span>
                         </div>
                       ) : submitting ? (
                         <div className="flex items-center gap-3">
                           <Loader2 className="w-6 h-6 animate-spin" />
-                          <span>Finalizing...</span>
+                          <span>Deploying...</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-3">
                           <CheckCircle2 className="w-6 h-6" />
-                          Submit for Review
+                          Submit to Network
                         </div>
                       )}
-                    </GlassButton>
-                    <button onClick={prevStep} className="w-full py-4 text-xs font-black uppercase text-slate-400 hover:text-white transition-colors">
+                    </Button>
+                    <button onClick={prevStep} className="w-full py-4 text-[10px] font-black uppercase text-slate-500 hover:text-white transition-colors tracking-widest">
                       Need to edit something? Go back
                     </button>
                   </div>
@@ -699,11 +702,11 @@ function FormField({
 
   return (
     <div className="space-y-3">
-      <label className={`block text-sm font-black uppercase tracking-widest transition-colors ${focused ? 'text-blue-400' : 'text-slate-300'}`}>
-        {label} {required && <span className="text-red-500">*</span>}
+      <label className={`block text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${focused ? 'text-emerald-400' : 'text-slate-500'}`}>
+        {label} {required && <span className="text-emerald-500">*</span>}
       </label>
       {multiline ? (
-        <textarea
+        <Textarea
           name={name}
           value={value}
           onChange={onChange}
@@ -712,10 +715,10 @@ function FormField({
           required={required}
           rows={rows}
           placeholder={placeholder}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
+          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-slate-600 min-h-[120px]"
         />
       ) : (
-        <input
+        <Input
           type={type}
           name={name}
           value={value}
@@ -725,14 +728,14 @@ function FormField({
           required={required}
           placeholder={placeholder}
           step={step}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
+          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-7 text-white outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-slate-600 h-auto"
         />
       )}
       {error && (
         <motion.p
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 text-sm text-red-500 font-bold"
+          className="mt-2 text-[10px] text-emerald-500 font-black uppercase tracking-widest"
         >
           {error}
         </motion.p>

@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, Quote, Clock, Users, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity } from 'lucide-react';
+import { Search, MapPin, Heart, ArrowRight, Compass, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity, Users, Clock, Quote } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import GlassButton from '@/react-app/components/GlassButton';
-import GlassCard from '@/react-app/components/GlassCard';
+import { Button } from '@/react-app/components/ui/button';
+import { Input } from '@/react-app/components/ui/input';
+import { Card, CardContent } from '@/react-app/components/ui/card';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import LocationRequest from '@/react-app/components/LocationRequest';
 import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
@@ -157,111 +158,99 @@ export default function Home() {
   if (locationLoading && !userLocation) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-transparent">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full" />
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full shadow-[0_0_15px_rgba(16,185,129,0.3)]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-black">
       {/* Geometric Hero Section */}
       <HeroGeometric 
-        badge="Connecting Neighbors Everywhere"
+        badge="PRECISION RESOURCE MAPPING"
         title1={t('home.hero.title1')}
         title2={t('home.hero.title2')}
       >
         <div className="max-w-3xl mx-auto">
-          <p className="text-base sm:text-lg lg:text-xl text-slate-300 mx-auto font-bold leading-relaxed italic opacity-80 mb-8">
+          <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
             {t('home.hero.subtitle')}
           </p>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/20">
-            <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
-              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('home.hero.searchPlaceholder')}
-                className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-400 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                    else navigate('/discover');
-                  }
-                }}
-              />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-400 bg-transparent" />
+          <div className="relative max-w-2xl mx-auto mb-12">
+            <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
+              <div className="flex items-center gap-2 w-full flex-1 relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
+                <Input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={t('home.hero.searchPlaceholder')}
+                  className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                      else navigate('/discover');
+                    }
+                  }}
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
+                </div>
               </div>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
+                onClick={() => {
+                  if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                  else navigate('/discover');
+                }}
+              >
+                {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
             </div>
-            <GlassButton
-              variant="primary"
-              size="md"
-              className="w-full sm:w-auto text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-blue-400/50 bg-blue-600/80 hover:bg-blue-500"
-              onClick={() => {
-                if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                else navigate('/discover');
-              }}
-            >
-              {t('home.hero.explore')}
-            </GlassButton>
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
-            <GlassButton
-              variant="secondary"
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
+            <Button
+              variant="outline"
               size="lg"
-              className="bg-white/5 border border-white/20 text-white font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-all shadow-[0_0_30px_rgba(255,255,255,0.05)] group scale-105"
+              className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
               onClick={() => navigate('/discover?wizard=true')}
             >
-              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
-                <Compass className="w-6 h-6 text-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.5)] rounded-full" />
-              </div>
+              <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
               <div className="text-left">
-                <div className="text-[10px] uppercase tracking-widest font-black text-blue-300 mb-0.5">Not sure where to start?</div>
-                <div className="text-base sm:text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
+                <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
               </div>
-            </GlassButton>
+            </Button>
           </div>
 
-          <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-10 text-[10px] sm:text-xs text-slate-300 font-semibold uppercase tracking-wider drop-shadow-sm">
+          <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
-              </div>
-              <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
+              <span className="text-white">{stats.totalResources}+</span>
+              <span>{t('home.stats.resources')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                <Compass className="w-4 h-4 text-blue-400" />
-              </div>
-              <span>12+ {t('home.stats.categories')}</span>
+              <span className="text-white">12+</span>
+              <span>{t('home.stats.categories')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-indigo-400" />
-              </div>
+              <span className="text-white">LIVE</span>
               <span>{t('home.stats.localSupport')}</span>
             </div>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1, y: [0, 10, 0] }}
-            transition={{
-              opacity: { duration: 0.5, delay: 1.5 },
-              scale: { duration: 0.5, delay: 1.5 },
-              y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }
-            }}
-            className="flex justify-center mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }}
+            className="flex justify-center mt-12"
           >
-            <div
-              className="w-10 h-10 rounded-full bg-white/10 border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all hover:scale-110"
+            <ChevronDown 
+              className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
               onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
-            >
-              <ChevronDown className="w-6 h-6 text-white" />
-            </div>
+            />
           </motion.div>
         </div>
       </HeroGeometric>
@@ -313,9 +302,9 @@ export default function Home() {
               </motion.div>
 
           {displaySpotlights.length === 0 ? (
-            <GlassCard variant="strong" className="text-center py-12 bg-white/5 border border-white/10 rounded-chromic-card">
+            <Card className="text-center py-12 bg-white/5 border border-white/10 rounded-none">
               <p className="text-xl text-slate-300 font-bold">{t('home.spotlight.noResources')}</p>
-            </GlassCard>
+            </Card>
           ) : (
             <div
               className="relative px-4 sm:px-12 group"
@@ -331,12 +320,11 @@ export default function Home() {
                       key={`${resource.id}-${index}`}
                       className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
                     >
-                      <GlassCard
-                        variant="strong"
-                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] rounded-chromic-card hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all backdrop-blur-xl"
+                      <Card
+                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-2xl rounded-none hover:border-emerald-500/50 transition-all backdrop-blur-xl group/card"
                         onClick={() => setSelectedResource(resource)}
                       >
-                        <div className="space-y-4">
+                        <CardContent className="p-6 space-y-4">
                           {resource.image_url && (
                             <div className="aspect-video rounded-xl overflow-hidden relative shadow-md">
                               <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
@@ -353,8 +341,8 @@ export default function Home() {
                               Explore Details <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           </div>
-                        </div>
-                      </GlassCard>
+                        </CardContent>
+                      </Card>
                     </div>
                   ))}
                 </motion.div>
@@ -441,14 +429,15 @@ export default function Home() {
                 }}
                 className="h-full"
               >
-                <div className={`glass-layer rounded-[2.5rem] p-10 border border-white/10 shadow-xl text-center h-full flex flex-col items-center justify-center group hover:border-white/30 hover:shadow-chromic-hover transition-all duration-500`}>
-                  <div className={`w-20 h-20 ${step.iconBg} rounded-[1.5rem] flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg`}>
+                <div className="bg-black/40 backdrop-blur-xl p-10 border border-white/10 shadow-2xl text-center h-full flex flex-col items-center justify-center group hover:border-emerald-500/50 transition-all duration-500 rounded-none relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`w-20 h-20 ${step.iconBg} flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg relative z-10`}>
                     {step.icon}
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">{step.title}</h3>
-                  <p className={`text-base font-bold text-blue-200 mb-4 px-2 italic opacity-80`}>{step.frontText}</p>
-                  <div className="w-12 h-1 bg-white/20 mb-6 group-hover:w-24 group-hover:bg-blue-400 transition-all" />
-                  <p className="text-sm font-medium text-slate-300 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter relative z-10">{step.title}</h3>
+                  <p className={`text-base font-bold text-emerald-400 mb-4 px-2 italic opacity-80 relative z-10`}>{step.frontText}</p>
+                  <div className="w-12 h-1 bg-white/10 mb-6 group-hover:w-24 group-hover:bg-emerald-500 transition-all relative z-10" />
+                  <p className="text-sm font-medium text-slate-400 leading-relaxed relative z-10">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -497,7 +486,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="flex items-start gap-4 p-4 rounded-xl glass-layer border border-white/10 hover:border-blue-400/50 hover:bg-white/10 transition-all cursor-pointer group"
+                className="flex items-start gap-4 p-4 glass-panel hover:border-emerald-500/50 hover:bg-white/5 transition-all cursor-pointer group rounded-none"
                 onClick={() => navigate(`/discover?category=${encodeURIComponent(resource.category || '')}`)}
               >
                 <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20" />
@@ -535,21 +524,21 @@ export default function Home() {
               animate={{ x: [0, -1200, 0] }}
               transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
             >
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
-                <Quote className="w-8 h-8 text-white/20 mb-4" />
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none">
+                <Quote className="w-8 h-8 text-emerald-500/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white font-semibold text-sm border border-white/10">MS</div>
                   <div>
                     <div className="font-semibold text-white">Maria Sanchez</div>
-                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
+                    <div className="text-xs font-medium text-emerald-400 uppercase tracking-widest">Northgate Neighbor</div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
@@ -561,9 +550,9 @@ export default function Home() {
                     <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Community Organizer</div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
@@ -575,10 +564,10 @@ export default function Home() {
                     <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Single Parent &amp; Educator</div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
 
               {/* Duplicate for seamless loop */}
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
@@ -590,7 +579,7 @@ export default function Home() {
                     <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
             </motion.div>
           </div>
         </div>
@@ -604,7 +593,7 @@ export default function Home() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="glass-layer rounded-2xl p-8 sm:p-12 border border-white/10 shadow-sm"
+            className="bg-black/40 backdrop-blur-xl rounded-none p-8 sm:p-12 border border-white/10 shadow-2xl"
           >
             <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
               <Mail className="w-6 h-6 text-blue-300" />
@@ -640,9 +629,9 @@ export default function Home() {
                   onChange={(e) => setSubscribeEmail(e.target.value)}
                   className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-500 text-sm"
                 />
-                <GlassButton variant="primary" size="md" className="!rounded-xl shadow-sm flex items-center justify-center gap-2">
+                <Button className="rounded-none bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest flex items-center justify-center gap-2">
                   Subscribe <Send className="w-3.5 h-3.5" />
-                </GlassButton>
+                </Button>
               </form>
             )}
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mt-4">No spam. Unsubscribe anytime.</p>
@@ -685,20 +674,20 @@ function StatCard({ icon, target, suffix, label, color, staticText }: {
   icon: React.ReactNode; target: number; suffix: string; label: string; color: string; staticText?: string;
 }) {
   const { count, ref } = useCountUp(target, 2000);
-  const borderColor = { blue: 'border-l-blue-400', indigo: 'border-l-indigo-400', teal: 'border-l-teal-400', amber: 'border-l-amber-400' }[color] || 'border-l-blue-400';
+  const borderColor = { blue: 'border-l-emerald-400', indigo: 'border-l-cyan-400', teal: 'border-l-teal-400', amber: 'border-l-amber-400' }[color] || 'border-l-emerald-400';
 
   return (
     <motion.div
       ref={ref}
       whileHover={{ scale: 1.03, y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className={`glass-layer p-5 sm:p-6 rounded-xl border border-white/10 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:shadow-chromic-hover transition-shadow`}
+      className={`bg-black/40 backdrop-blur-xl p-5 sm:p-6 rounded-none border border-white/10 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:border-emerald-500/50 transition-all`}
     >
       <div className="absolute -right-4 -bottom-4 opacity-20 group-hover:opacity-40 transition-opacity">{icon}</div>
       <div className="text-2xl sm:text-3xl font-bold text-white mb-1 tabular-nums relative z-10">
         {staticText || <>{count.toLocaleString()}{suffix}</>}
       </div>
-      <div className="text-blue-200 text-[10px] sm:text-xs font-semibold uppercase tracking-wider relative z-10">{label}</div>
+      <div className="text-emerald-400/80 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] relative z-10">{label}</div>
     </motion.div>
   );
 }

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download, Volume2, VolumeX } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
-import GlassCard from '@/react-app/components/GlassCard';
-import GlassButton from '@/react-app/components/GlassButton';
+import { Card } from '@/react-app/components/ui/card';
+import { Button } from '@/react-app/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { LocationMap } from './ui/expand-map';
 import { Heart } from 'lucide-react';
@@ -164,8 +164,8 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
             transition={{ type: "spring", duration: 0.5 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto" onClick={(e) => e.stopPropagation()}>
-              <GlassCard variant="strong" className="p-0 overflow-hidden">
+            <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <Card className="p-0 overflow-hidden bg-black/60 backdrop-blur-2xl border border-white/10 rounded-none relative">
                 {/* Header */}
                 <div className="relative">
                   {resource.image_url && (
@@ -181,24 +181,24 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md p-2.5 rounded-full hover:bg-slate-900 transition-all z-50 shadow-xl border border-white/20"
+                    className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2.5 rounded-none hover:bg-emerald-500 hover:text-black transition-all z-50 shadow-xl border border-white/10 group"
                     aria-label="Close modal"
                   >
-                    <X className="w-6 h-6 text-white" />
+                    <X className="w-6 h-6 text-white group-hover:rotate-90 transition-transform" />
                   </button>
 
-                  <div className={`p-6 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
-                    <div className="flex items-start gap-3 mb-2">
-                      <span className="inline-block text-xs font-semibold text-blue-300 uppercase tracking-wide px-3 py-1 bg-white/10 backdrop-blur rounded-full border border-white/20">
+                  <div className={`p-8 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
+                    <div className="flex items-start gap-3 mb-4">
+                      <span className="inline-block text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] px-3 py-1 bg-emerald-500/10 backdrop-blur rounded-none border border-emerald-500/20">
                         {resource.category}
                       </span>
                       {resource.is_featured && (
-                        <span className="inline-block text-xs font-semibold text-amber-300 uppercase tracking-wide px-3 py-1 bg-amber-500/20 rounded-full border border-amber-500/30">
+                        <span className="inline-block text-[10px] font-black text-cyan-400 uppercase tracking-[0.2em] px-3 py-1 bg-cyan-500/10 rounded-none border border-cyan-500/20">
                           {t('resource.featured')}
                         </span>
                       )}
                     </div>
-                    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 pb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                    <h2 className="text-4xl sm:text-6xl font-black text-white mb-2 uppercase tracking-tighter drop-shadow-2xl">
                       {resource.title}
                     </h2>
                   </div>
@@ -217,13 +217,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           rel="noopener noreferrer"
                           whileHover={{ scale: 1.02, y: -2 }}
                           whileTap={{ scale: 0.98 }}
-                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-lg backdrop-blur ${action.label === 'Donate' ? 'bg-rose-500/20 border border-rose-500/50 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:bg-rose-500/30' :
-                            action.label === 'Volunteer' ? 'bg-indigo-500/20 border border-indigo-400/50 text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30' :
-                              'glass-layer text-white hover:bg-white/10'
+                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-none font-black uppercase tracking-widest text-xs transition-all shadow-xl backdrop-blur-xl border ${action.label === 'Donate' ? 'bg-emerald-500 border-emerald-600 text-black shadow-emerald-500/20 hover:bg-emerald-400' :
+                            action.label === 'Volunteer' ? 'bg-cyan-500 border-cyan-600 text-black shadow-cyan-500/20 hover:bg-cyan-400' :
+                              'bg-white/5 border-white/10 text-white hover:bg-white/10'
                             }`}
                         >
-                          {action.label === 'Donate' ? <Heart className="w-5 h-5" /> :
-                            action.label === 'Volunteer' ? <Users className="w-5 h-5" /> :
+                          {action.label === 'Donate' ? <Heart className="w-5 h-5 fill-black" /> :
+                            action.label === 'Volunteer' ? <Users className="w-5 h-5 fill-black" /> :
                               <ExternalLink className="w-5 h-5" />}
                           {action.label}
                         </motion.a>
@@ -232,42 +232,34 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   )}
                   {/* Description */}
                   <div>
-                    <h3 className="text-lg font-black text-blue-300 mb-2 uppercase tracking-tight">{t('resource.description')}</h3>
-                    <p className="text-slate-300 leading-relaxed font-bold opacity-90">
+                    <h3 className="text-[10px] font-black text-emerald-500 mb-2 uppercase tracking-[0.2em]">{t('resource.description')}</h3>
+                    <p className="text-slate-400 leading-relaxed font-medium">
                       {resource.description}
                     </p>
                   </div>
 
                   {/* Star Rating */}
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur">
-                    <div className="flex items-center justify-between mb-3">
+                  <div className="bg-black/40 border border-white/10 rounded-none p-6 backdrop-blur-xl">
+                    <div className="flex items-center justify-between mb-4">
                       <div>
-                        <p className="text-xs font-black uppercase tracking-widest text-slate-400">Community Rating</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Community Rating</p>
                         {resource.review_count != null && (
-                          <p className="text-[11px] text-slate-500 font-bold mt-0.5">{resource.review_count} reviews</p>
+                          <p className="text-[10px] text-slate-600 font-black uppercase mt-0.5">{resource.review_count} reviews</p>
                         )}
                       </div>
                       {/* Show aggregate */}
                       {resource.rating != null && (
-                        <div className="flex items-center gap-1.5">
-                           <span className="text-2xl font-black text-white">{resource.rating.toFixed(1)}</span>
-                          <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                        <div className="flex items-center gap-2">
+                           <span className="text-3xl font-black text-white leading-none">{resource.rating.toFixed(1)}</span>
+                          <Star className="w-6 h-6 fill-emerald-500 text-emerald-500" />
                         </div>
                       )}
                     </div>
-                    {/* Display aggregate stars */}
-                    {resource.rating != null && (
-                      <div className="flex gap-1 mb-4">
-                        {[1, 2, 3, 4, 5].map(s => (
-                          <Star key={s} className={`w-5 h-5 ${s <= Math.round(resource.rating!) ? 'fill-amber-400 text-amber-400' : 'text-slate-400 fill-slate-500'}`} />
-                        ))}
-                      </div>
-                    )}
                     {/* User rating */}
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-3">
                       {ratingSubmitted ? 'Your Rating' : 'Rate This Resource'}
                     </p>
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map(s => (
                         <button
                           key={s}
@@ -275,49 +267,49 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           onClick={() => { if (!ratingSubmitted) { setUserRating(s); setRatingSubmitted(true); localStorage.setItem(`rating_${resource.id}`, String(s)); } }}
                           onMouseEnter={() => !ratingSubmitted && setHoverRating(s)}
                           onMouseLeave={() => setHoverRating(0)}
-                          className="transition-transform hover:scale-125 disabled:cursor-default"
+                          className="transition-all hover:scale-110 disabled:cursor-default"
                         >
-                          <Star className={`w-7 h-7 transition-colors ${s <= (hoverRating || userRating) ? 'fill-amber-400 text-amber-400' : 'text-slate-400 fill-slate-500'}`} />
+                          <Star className={`w-8 h-8 transition-colors ${s <= (hoverRating || userRating) ? 'fill-emerald-500 text-emerald-500' : 'text-slate-700 fill-slate-800'}`} />
                         </button>
                       ))}
-                      {ratingSubmitted && <span className="ml-2 text-xs font-black text-emerald-400 uppercase tracking-widest self-center">✓ Saved</span>}
+                      {ratingSubmitted && <span className="ml-4 text-[10px] font-black text-emerald-400 uppercase tracking-widest self-center border border-emerald-500/20 px-2 py-1 bg-emerald-500/5">✓ Network Verified</span>}
                     </div>
                   </div>
 
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex flex-col gap-4 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm overflow-hidden">
-                        <div className="flex items-start gap-3">
-                          <MapPin className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex flex-col gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl overflow-hidden relative group/map">
+                        <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover/map:opacity-100 transition-opacity" />
+                        <div className="flex items-start gap-4 relative z-10">
+                          <MapPin className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
-                            <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1">{t('resource.address')}</p>
-                            <p className="text-white font-black text-lg leading-tight">
+                            <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.address')}</p>
+                            <p className="text-white font-black text-xl leading-tight uppercase tracking-tighter">
                               {resource.address}
-                              {resource.city && <span className="block text-sm text-slate-300 font-medium mt-1">{resource.city}, {resource.state} {resource.zip}</span>}
+                              {resource.city && <span className="block text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">{resource.city}, {resource.state} {resource.zip}</span>}
                             </p>
                           </div>
                         </div>
 
                         {/* Premium Stylized Map Preview */}
-                        <div className="flex justify-center pt-2 pb-4">
+                        <div className="flex justify-center pt-2 pb-2 relative z-10">
                           <LocationMap 
                             location={resource.city || resource.address} 
                             coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
-                            className="w-full max-w-[240px]"
+                            className="w-full grayscale brightness-75 contrast-125 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
                           />
                         </div>
                       </div>
                     )}
-
                     {resource.phone && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Phone className="w-6 h-6 text-indigo-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Phone className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-1">{t('resource.phone')}</p>
+                          <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.phone')}</p>
                           <a
                             href={`tel:${resource.phone}`}
-                            className="text-white font-black text-xl hover:text-indigo-300 transition-colors"
+                            className="text-white font-black text-2xl hover:text-emerald-400 transition-colors uppercase tracking-tighter"
                           >
                             {resource.phone}
                           </a>
@@ -326,13 +318,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.email && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Mail className="w-6 h-6 text-slate-300 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Mail className="w-6 h-6 text-slate-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('resource.email')}</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{t('resource.email')}</p>
                           <a
                             href={`mailto:${resource.email}`}
-                            className="text-white font-black hover:text-blue-300 transition-colors break-all"
+                            className="text-white font-black hover:text-emerald-400 transition-colors break-all text-sm uppercase tracking-tight"
                           >
                             {resource.email}
                           </a>
@@ -341,15 +333,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.website && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Globe className="w-6 h-6 text-sky-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Globe className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-sky-300 uppercase tracking-widest mb-1">{t('resource.website')}</p>
+                          <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">{t('resource.website')}</p>
                           <a
                             href={resource.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white font-black hover:text-sky-300 transition-colors break-all underline decoration-white/20"
+                            className="text-white font-black hover:text-cyan-400 transition-colors break-all underline decoration-white/10 uppercase tracking-widest text-[10px]"
                           >
                             {t('resource.visitWebsite')}
                           </a>
@@ -358,30 +350,30 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.hours && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Clock className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Clock className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-amber-300 uppercase tracking-widest mb-1">{t('resource.hours')}</p>
-                          <p className="text-white font-black">{resource.hours}</p>
+                          <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.hours')}</p>
+                          <p className="text-white font-black uppercase tracking-tighter text-lg">{resource.hours}</p>
                         </div>
                       </div>
                     )}
                     {resource.schedule && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Calendar className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Calendar className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1">Specific Schedule</p>
-                          <p className="text-white font-black leading-relaxed">{resource.schedule}</p>
+                          <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">Specific Schedule</p>
+                          <p className="text-white font-black leading-relaxed uppercase tracking-tighter text-sm">{resource.schedule}</p>
                         </div>
                       </div>
                     )}
 
                     {resource.audience && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <Users className="w-6 h-6 text-rose-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                        <Users className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-rose-300 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
-                          <p className="text-white font-black">{resource.audience}</p>
+                          <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.audience')}</p>
+                          <p className="text-white font-black uppercase tracking-tighter">{resource.audience}</p>
                         </div>
                       </div>
                     )}
@@ -390,15 +382,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Services */}
                   {resource.services && (
                     <div className="pt-4">
-                      <h3 className="text-sm font-black text-indigo-300 mb-3 flex items-center gap-2 uppercase tracking-widest">
-                        <Tag className="w-4 h-4 text-indigo-400" />
+                      <h3 className="text-[10px] font-black text-emerald-500 mb-4 flex items-center gap-2 uppercase tracking-[0.2em]">
+                        <Tag className="w-4 h-4 text-emerald-500" />
                         {t('resource.services')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.services.split(',').map((service, i) => (
                           <span
                             key={i}
-                            className="text-xs px-4 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-xl text-indigo-200 font-black backdrop-blur-sm shadow-[0_0_10px_rgba(99,102,241,0.1)]"
+                            className="text-[10px] px-4 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-none text-emerald-400 font-black uppercase tracking-widest backdrop-blur-sm"
                           >
                             {service.trim()}
                           </span>
@@ -409,16 +401,16 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   {/* Tags */}
                   {resource.tags && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200 mb-3 flex items-center gap-2">
-                        <Tag className="w-5 h-5 text-teal-400" />
+                    <div className="pt-4">
+                      <h3 className="text-[10px] font-black text-slate-500 mb-4 flex items-center gap-2 uppercase tracking-[0.2em]">
+                        <Tag className="w-4 h-4 text-slate-500" />
                         {t('resource.tags')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.tags.split(',').map((tag, i) => (
                           <span
                             key={i}
-                            className="text-sm px-3 py-1.5 glass-teal rounded-full text-slate-300"
+                            className="text-[10px] px-3 py-1.5 bg-white/5 border border-white/10 rounded-none text-slate-400 font-black uppercase tracking-widest"
                           >
                             {tag.trim()}
                           </span>
@@ -436,36 +428,36 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <GlassButton variant="primary" className="shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                          <Button className="bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none shadow-xl shadow-emerald-500/20">
                             <Globe className="w-4 h-4 mr-2" />
                             {t('resource.visitWebsite')}
-                          </GlassButton>
+                          </Button>
                         </a>
                       )}
                       {resource.phone && (
                         <a href={`tel:${resource.phone}`}>
-                          <GlassButton variant="secondary" className="glass-layer text-white hover:bg-white/10">
+                          <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none transition-all">
                             <Phone className="w-4 h-4 mr-2" />
                             {t('resource.callNow')}
-                          </GlassButton>
+                          </Button>
                         </a>
                       )}
                       {resource.email && (
                         <a href={`mailto:${resource.email}`}>
-                          <GlassButton variant="secondary" className="glass-layer text-white hover:bg-white/10">
+                          <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none transition-all">
                             <Mail className="w-4 h-4 mr-2" />
                             {t('resource.sendEmail')}
-                          </GlassButton>
+                          </Button>
                         </a>
                       )}
 
-                      <button
+                      <Button
                         onClick={() => setShowDonationForm(true)}
-                        className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-xl shadow-[0_0_15px_rgba(225,29,72,0.4)] flex items-center transition-colors uppercase tracking-widest text-sm backdrop-blur"
+                        className="bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6"
                       >
-                        <Heart className="w-4 h-4 mr-2" />
+                        <Heart className="w-4 h-4 mr-2 fill-black" />
                         Donate Now
-                      </button>
+                      </Button>
                     </div>
 
                     <div className="text-right">
@@ -475,89 +467,88 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             setReportState('reporting');
                             setTimeout(() => setReportState('success'), 800);
                           }}
-                          className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-rose-400 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
+                          className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 hover:text-emerald-400 transition-colors uppercase tracking-[0.2em] mt-2 sm:mt-0"
                         >
-                          <AlertTriangle className="w-3.5 h-3.5" />
-                          Report Issue
+                          <AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} />
+                          Report Data Issue
                         </button>
                       ) : reportState === 'reporting' ? (
-                        <span className="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-widest mt-2 sm:mt-0">
+                        <span className="flex items-center justify-end gap-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2 sm:mt-0">
                           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
-                            <Compass className="w-3.5 h-3.5" />
+                            <Compass className="w-3.5 h-3.5 text-emerald-500" />
                           </motion.div>
-                          Submitting...
+                          Auditing...
                         </span>
                       ) : (
                         <motion.span
                           initial={{ opacity: 0, y: 5 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-end gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-widest mt-2 sm:mt-0"
+                          className="flex items-center justify-end gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest mt-2 sm:mt-0"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          Reported to Mods
+                          Report Logged
                         </motion.span>
                       )}
                     </div>
 
-                    {/* Utility Actions: Share / Print / QR / Read Aloud */}
-                    <div className="flex flex-wrap gap-2 relative mt-4 w-full">
-                      <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
-                        <Share2 className="w-3 h-3" /> Share
-                      </button>
-                      <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
-                        <Printer className="w-3 h-3" /> Print
-                      </button>
-                      <button onClick={() => setShowQR(!showQR)} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
-                        <QrCode className="w-3 h-3" /> QR Code
-                      </button>
-                      <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] font-black transition-colors uppercase tracking-widest border px-3 py-2 rounded-lg backdrop-blur shadow-sm ${isSpeaking ? 'text-sky-300 bg-sky-500/20 border-sky-400/50 shadow-[0_0_10px_rgba(14,165,233,0.3)]' : 'text-slate-300 hover:text-white bg-white/5 border-white/10 hover:bg-white/10'
-                        }`}>
-                        {isSpeaking ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-                        {isSpeaking ? 'Stop' : 'Read Aloud'}
-                      </button>
-                      {shareToast && (
-                        <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-0 bg-emerald-500/90 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-                          Link copied!
-                        </motion.span>
-                      )}
-                    </div>
+                  {/* Utility Actions: Share / Print / QR / Read Aloud */}
+                  <div className="flex flex-wrap gap-2 relative mt-8 w-full font-black uppercase tracking-widest">
+                    <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
+                      <Share2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Share
+                    </button>
+                    <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
+                      <Printer className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Print
+                    </button>
+                    <button onClick={() => setShowQR(!showQR)} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${showQR ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
+                      <QrCode className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> QR Protocol
+                    </button>
+                    <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${isSpeaking ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
+                      {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" />}
+                      {isSpeaking ? 'Terminate' : 'Audio Feed'}
+                    </button>
+                    {shareToast && (
+                      <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-10 left-0 bg-emerald-500 text-black text-[10px] px-3 py-1.5 rounded-none font-black uppercase tracking-[0.2em] shadow-2xl">
+                        Handshake Copied
+                      </motion.span>
+                    )}
+                  </div>
 
                     {/* QR Code Display */}
                     {showQR && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md w-full mt-2">
-                        <div className="bg-white p-2 rounded-lg">
-                          <img src={qrUrl} alt="QR Code" className="w-48 h-48" />
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="flex flex-col items-center gap-4 p-8 bg-black/40 border border-white/10 rounded-none backdrop-blur-3xl w-full mt-4">
+                        <div className="bg-white p-4 rounded-none">
+                          <img src={qrUrl} alt="QR Code" className="w-48 h-48 grayscale contrast-125" />
                         </div>
-                        <p className="text-xs text-slate-300 font-bold text-center">Scan to view this resource on any device</p>
-                        <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest">
-                          <Download className="w-3.5 h-3.5" /> Download QR Code
+                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] text-center">Scan to interface on external node</p>
+                        <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-[10px] font-black text-emerald-500 hover:text-emerald-400 uppercase tracking-widest border border-emerald-500/20 px-4 py-2 bg-emerald-500/5">
+                          <Download className="w-3.5 h-3.5" /> Download Key
                         </a>
                       </motion.div>
                     )}
 
                     {/* Was This Helpful? */}
-                    <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl w-full mt-2 backdrop-blur">
-                      <span className="text-xs font-black uppercase tracking-widest text-slate-300">Was this resource helpful?</span>
-                      <div className="flex gap-2">
+                    <div className="flex items-center justify-between p-6 bg-black/40 border border-white/10 rounded-none w-full mt-4 backdrop-blur-3xl">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Resource effectiveness index?</span>
+                      <div className="flex gap-3">
                         <button
                           onClick={() => handleFeedback('up')}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${feedback === 'up' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
+                          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'up' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-xl shadow-emerald-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsUp className="w-3.5 h-3.5" /> Yes
+                          <ThumbsUp className="w-3.5 h-3.5" /> Affirmative
                         </button>
                         <button
                           onClick={() => handleFeedback('down')}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${feedback === 'down' ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
+                          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'down' ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 shadow-xl shadow-rose-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsDown className="w-3.5 h-3.5" /> No
+                          <ThumbsDown className="w-3.5 h-3.5" /> Negative
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
             </div>
           </motion.div>
 
@@ -570,82 +561,85 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setShowDonationForm(false)}
-                  className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                  className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                 />
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-slate-900/80 rounded-[2rem] shadow-[0_0_50px_rgba(255,255,255,0.1)] w-full max-w-md relative z-[61] overflow-hidden border border-white/20 backdrop-blur-xl"
+                  className="bg-black border border-white/10 rounded-none shadow-2xl w-full max-w-md relative z-[61] overflow-hidden backdrop-blur-3xl"
                 >
                   <div className="p-8 space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-black text-white uppercase tracking-tight">Support {resource.title}</h3>
-                      <button onClick={() => setShowDonationForm(false)} className="text-slate-400 hover:text-white transition-colors">
-                        <X className="w-5 h-5" />
+                    <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-2">
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
+                        <Heart className="w-5 h-5 text-emerald-500 fill-emerald-500/20" />
+                        Support {resource.title}
+                      </h3>
+                      <button onClick={() => setShowDonationForm(false)} className="text-slate-500 hover:text-white transition-all group">
+                        <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                       </button>
                     </div>
 
                     {hasSavedProfile && (
-                      <div className="bg-emerald-500/20 border border-emerald-400/50 p-3 rounded-xl flex items-center gap-2 text-emerald-300 font-bold text-sm shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                      <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-none flex items-center gap-2 text-emerald-400 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/5">
                         <CheckCircle2 className="w-4 h-4" />
-                        Using your saved Donor Profile
+                        Network Profile Active
                       </div>
                     )}
 
-                    <form onSubmit={handleDonateSubmit} className="space-y-4">
-                      <div>
-                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Full Name</label>
+                    <form onSubmit={handleDonateSubmit} className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Full Name</label>
                         <input
                           type="text"
                           required
                           value={donorName}
                           onChange={(e) => setDonorName(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
+                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
                           placeholder="Jane Doe"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Email Address</label>
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Email Address</label>
                         <input
                           type="email"
                           required
                           value={donorEmail}
                           onChange={(e) => setDonorEmail(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
+                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
                           placeholder="jane@example.com"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">ZIP Code</label>
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">ZIP Code</label>
                         <input
                           type="text"
                           required
                           value={donorZip}
                           onChange={(e) => setDonorZip(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
+                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
                           placeholder="98000"
                         />
                       </div>
 
-                      <button
+                      <Button
                         type="submit"
                         disabled={processingDonation}
-                        className="w-full mt-4 bg-rose-600 hover:bg-rose-500 disabled:bg-rose-500/50 disabled:border-rose-500/30 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(225,29,72,0.4)]"
+                        className="w-full mt-4 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-black font-black py-8 rounded-none uppercase tracking-[0.2em] transition-all flex justify-center items-center gap-3 shadow-xl shadow-emerald-500/20"
                       >
                         {processingDonation ? (
                           <>
                             <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
                               <Compass className="w-5 h-5" />
                             </motion.div>
-                            Connecting...
+                            Processing...
                           </>
                         ) : (
-                          "Proceed to Agency"
+                          "Handover to Agency"
                         )}
-                      </button>
-                      <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
-                        Your basic info will be passed securely to the agency to speed up your donation.
+                      </Button>
+                      <p className="text-center text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mt-2 leading-relaxed">
+                        Secure industrial handover protocol active. Your identity will be transmitted to the agency portal.
                       </p>
                     </form>
                   </div>
