@@ -80,6 +80,10 @@ export default function Submit() {
     } else if (currentStep === 2) {
       if (!formData.contact_name) stepErrors.contact_name = "Contact name is required";
       if (!formData.contact_email) stepErrors.contact_email = "Email is required";
+      if (!formData.address) stepErrors.address = "Address is required";
+      if (!formData.city) stepErrors.city = "City is required";
+      if (!formData.state) stepErrors.state = "State is required";
+      if (!formData.zip) stepErrors.zip = "ZIP code is required";
     }
 
     if (Object.keys(stepErrors).length > 0) {
@@ -309,7 +313,7 @@ export default function Submit() {
                           value={formData.website}
                           onChange={handleChange}
                           placeholder="https://..."
-                          className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          className={`flex-1 bg-white/5 border ${errors.website ? 'border-indigo-500 ring-1 ring-indigo-500' : 'border-white/10'} rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                         />
                       </div>
                     </div>
@@ -324,6 +328,65 @@ export default function Submit() {
                         placeholder="https://donate..."
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                       />
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 pt-6 border-t border-white/10">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
+                        <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
+                      </h4>
+                      <div className="text-[10px] font-black uppercase text-slate-400">Max 2 custom actions</div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {formData.action_urls.map((action, idx) => (
+                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 relative group">
+                          <div className="flex-1">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Action Type</label>
+                            <select
+                              value={action.label}
+                              onChange={(e) => {
+                                const next = [...formData.action_urls];
+                                next[idx].label = e.target.value;
+                                setFormData(prev => ({ ...prev, action_urls: next }));
+                              }}
+                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
+                            >
+                              {["Register", "Learn More", "Visit Website", "Donate", "Volunteer"].map(l => <option key={l} value={l}>{l}</option>)}
+                            </select>
+                          </div>
+                          <div className="flex-[2]">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Destination URL</label>
+                            <input
+                              type="url"
+                              placeholder="https://..."
+                              value={action.url}
+                              onChange={(e) => {
+                                const next = [...formData.action_urls];
+                                next[idx].url = e.target.value;
+                                setFormData(prev => ({ ...prev, action_urls: next }));
+                              }}
+                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
+                            />
+                          </div>
+                          <button
+                            onClick={() => setFormData(prev => ({ ...prev, action_urls: prev.action_urls.filter((_, i) => i !== idx) }))}
+                            className="bg-red-500/10 border border-red-500/20 p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors self-end"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+
+                      {formData.action_urls.length < 2 && (
+                        <button
+                          onClick={() => setFormData(prev => ({ ...prev, action_urls: [...prev.action_urls, { label: 'Learn More', url: '' }] }))}
+                          className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-slate-400 font-black uppercase tracking-widest text-xs hover:border-blue-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Sparkles className="w-4 h-4" /> Add Action Button
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -434,11 +497,11 @@ export default function Submit() {
                   <div className="space-y-6 pt-6 border-t border-white/10">
                     <div className="flex justify-between items-center">
                       <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
-                        <MapPin className="w-4 h-4 text-blue-400" /> Physical Address
+                        <MapPin className="w-4 h-4 text-blue-400" /> Physical Address (Required)
                       </h4>
                       <button onClick={handleGetLocation} className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-full hover:bg-blue-500/20 transition-colors flex items-center gap-2">
                         {locating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
-                        Use My Current Lat/Long
+                        Use GPS Coordinates
                       </button>
                       <button
                         onClick={async () => {
@@ -457,72 +520,16 @@ export default function Submit() {
                         <ShieldCheck className="w-3 h-3" /> Verify Address
                       </button>
                     </div>
-                    <FormField label="Street Address" name="address" value={formData.address} onChange={handleChange} placeholder="123 Community St." />
+                    <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">We use the address to accurately place your resource on the map.</p>
+                    <FormField label="Street Address" name="address" value={formData.address} onChange={handleChange} required placeholder="123 Community St." error={errors.address} />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <FormField label="City" name="city" value={formData.city} onChange={handleChange} />
-                      <FormField label="State" name="state" value={formData.state} onChange={handleChange} />
-                      <FormField label="ZIP" name="zip" value={formData.zip} onChange={handleChange} />
+                      <FormField label="City" name="city" value={formData.city} onChange={handleChange} required error={errors.city} />
+                      <FormField label="State" name="state" value={formData.state} onChange={handleChange} required error={errors.state} />
+                      <FormField label="ZIP" name="zip" value={formData.zip} onChange={handleChange} required error={errors.zip} />
                     </div>
                   </div>
 
-                  <div className="space-y-6 pt-6 border-t border-white/10">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
-                        <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
-                      </h4>
-                      <div className="text-[10px] font-black uppercase text-slate-400">Max 2 custom actions</div>
-                    </div>
 
-                    <div className="space-y-4">
-                      {formData.action_urls.map((action, idx) => (
-                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 relative group">
-                          <div className="flex-1">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Action Type</label>
-                            <select
-                              value={action.label}
-                              onChange={(e) => {
-                                const next = [...formData.action_urls];
-                                next[idx].label = e.target.value;
-                                setFormData(prev => ({ ...prev, action_urls: next }));
-                              }}
-                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
-                            >
-                              {["Register", "Learn More", "Visit Website", "Donate", "Volunteer"].map(l => <option key={l} value={l}>{l}</option>)}
-                            </select>
-                          </div>
-                          <div className="flex-[2]">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Destination URL</label>
-                            <input
-                              type="url"
-                              placeholder="https://..."
-                              value={action.url}
-                              onChange={(e) => {
-                                const next = [...formData.action_urls];
-                                next[idx].url = e.target.value;
-                                setFormData(prev => ({ ...prev, action_urls: next }));
-                              }}
-                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
-                            />
-                          </div>
-                          <button
-                            onClick={() => setFormData(prev => ({ ...prev, action_urls: prev.action_urls.filter((_, i) => i !== idx) }))}
-                            className="bg-red-500/10 border border-red-500/20 p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors self-end"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-
-                      {formData.action_urls.length < 2 && (
-                        <button
-                          onClick={() => setFormData(prev => ({ ...prev, action_urls: [...prev.action_urls, { label: 'Learn More', url: '' }] }))}
-                          className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-slate-400 font-black uppercase tracking-widest text-xs hover:border-blue-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all flex items-center justify-center gap-2"
-                        >
-                          <Sparkles className="w-4 h-4" /> Add Action Button
-                        </button>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </GlassCard>
 

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, ChevronLeft, Sparkles, Compass, CheckCircle2, Circle } from 'lucide-react';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
+import { useLocation } from '@/react-app/hooks/useLocation';
 
 interface QuestionnaireModalProps {
     isOpen: boolean;
@@ -23,6 +24,13 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
     const [selectedDemographic, setSelectedDemographic] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+    const { currentZip, location: userLocation } = useLocation();
+
+    useEffect(() => {
+        if (isOpen && (currentZip || userLocation)) {
+            setStep(2); // Skip zip step if we already have it
+        }
+    }, [isOpen, currentZip, userLocation]);
 
     const reset = () => {
         setStep(1);

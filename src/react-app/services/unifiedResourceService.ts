@@ -107,19 +107,69 @@ export class UnifiedResourceService {
   }
 
   /**
-   * Filter resources by location (simplified implementation)
+   * Filter resources by location (improved implementation)
    */
-  private filterByLocation(resources: ResourceType[], location: string, _distance: number): ResourceType[] {
-    // For now, just filter by state/city containing the location string
-    // In a real implementation, you'd use geospatial calculations
+  private filterByLocation(resources: ResourceType[], location: string, distance: number = 25): ResourceType[] {
     const locationLower = location.toLowerCase();
+    const isZip = /^\d{5}$/.test(location);
 
-    return resources.filter(resource =>
-      (resource.city && resource.city.toLowerCase().includes(locationLower)) ||
-      (resource.state && resource.state.toLowerCase().includes(locationLower)) ||
-      (resource.zip && resource.zip.includes(location))
-    );
+    // ZIP Coordinate Mapping (Simplified for common use cases/demo)
+    // In a production app, this would query a geocoding API.
+    const zipCoords: Record<string, [number, number]> = {
+      '02108': [42.3588, -71.0638], // Boston Center
+      '02138': [42.3736, -71.1097], // Cambridge
+      '90210': [34.0736, -118.4004], // Beverly Hills
+      '10001': [40.7501, -73.9979], // NYC
+      '30303': [33.7490, -84.3880], // Atlanta
+    };
+
+    const searchCoords = isZip ? zipCoords[location] : null;
+
+    return resources.filter(resource => {
+      // 1. If we have coordinates for the search location and the resource, use strict radius
+      if (searchCoords && resource.latitude && resource.longitude) {
+        const d = this.calculateDistance(
+          searchCoords[0], searchCoords[1],
+          resource.latitude, resource.longitude
+        );
+        return d <= distance;
+      }
+
+      // 2. Fallback to strict ZIP match if input is ZIP
+      if (isZip) {
+        return resource.zip === location;
+      }
+
+      // 3. City/State/Address match
+      return (
+        (resource.city && resource.city.toLowerCase().includes(locationLower)) ||
+        (resource.state && resource.state.toLowerCase().includes(locationLower)) ||
+        (resource.address && resource.address.toLowerCase().includes(locationLower)) ||
+        (resource.zip && resource.zip.includes(locationLower))
+      );
+    });
   }
+
+  /**
+   * Calculate distance between two points in km
+   */
+  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
+    return d;
+  }
+
+  private deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+
 
   /**
    * Get user's saved resources

@@ -1,13 +1,14 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router';
-import { Compass, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
 import LocationSelector from './LocationSelector';
 import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 import ScrollProgress from './ScrollProgress';
+import ThemeToggle from './ThemeToggle';
 
 // Main Navigation Component
 export default function Navbar() {
@@ -15,6 +16,26 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { user } = useUser();
+  const [showAccessibility, setShowAccessibility] = useState(false);
+  const [highContrast, setHighContrast] = useState(() => localStorage.getItem('a11y-high-contrast') === 'true');
+  const [largeText, setLargeText] = useState(() => localStorage.getItem('a11y-large-text') === 'true');
+  const [reduceMotion, setReduceMotion] = useState(() => localStorage.getItem('a11y-reduce-motion') === 'true');
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('high-contrast', highContrast);
+    localStorage.setItem('a11y-high-contrast', String(highContrast));
+  }, [highContrast]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('large-text', largeText);
+    localStorage.setItem('a11y-large-text', String(largeText));
+  }, [largeText]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('reduce-motion', reduceMotion);
+    localStorage.setItem('a11y-reduce-motion', String(reduceMotion));
+  }, [reduceMotion]);
+
   const { signOut } = useClerk();
   const { scrollY } = useScroll();
 
@@ -99,7 +120,65 @@ export default function Navbar() {
                 {/* Location Selector */}
                 <LocationSelector />
 
-                {/* Language Selector */}
+                {/* Accessibility Menu */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowAccessibility(!showAccessibility)}
+                    className={`p-2 rounded-xl transition-all flex items-center gap-1 ${showAccessibility
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 shadow-sm'
+                      }`}
+                    title="Accessibility Options"
+                  >
+                    <Accessibility className="w-5 h-5" />
+                  </button>
+
+                  <AnimatePresence>
+                    {showAccessibility && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute right-0 mt-3 p-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 min-w-[200px]"
+                      >
+                        <div className="p-3 border-b border-slate-100 dark:border-slate-800 mb-2">
+                          <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Accessibility</p>
+                        </div>
+
+                        <div className="flex items-center justify-between p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Display Theme</span>
+                          <ThemeToggle />
+                        </div>
+
+                        <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+
+                        {[
+                          { label: 'High Contrast', icon: <Eye className="w-4 h-4" />, active: highContrast, toggle: () => setHighContrast(!highContrast) },
+                          { label: 'Large Text', icon: <Type className="w-4 h-4" />, active: largeText, toggle: () => setLargeText(!largeText) },
+                          { label: 'Reduce Motion', icon: <Zap className="w-4 h-4" />, active: reduceMotion, toggle: () => setReduceMotion(!reduceMotion) },
+                        ].map((t) => (
+                          <button
+                            key={t.label}
+                            onClick={t.toggle}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${t.active
+                              ? 'bg-blue-50 text-blue-700'
+                              : 'text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                              }`}
+                          >
+                            <span className={`p-1.5 rounded-lg ${t.active ? 'bg-blue-100' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                              {t.icon}
+                            </span>
+                            <span className="flex-1 text-left font-bold">{t.label}</span>
+                            <div className={`w-8 h-4.5 rounded-full transition-colors relative ${t.active ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
+                              <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${t.active ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                            </div>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
                 <div data-tour="language-selector">
                   <LanguageSelector />
                 </div>

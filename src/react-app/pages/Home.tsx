@@ -115,7 +115,7 @@ export default function Home() {
     translateExisting();
   }, [i18n.language]);
 
-  const LOCAL_RADIUS_KM = 300;
+  const LOCAL_RADIUS_KM = 50;
   const featuredResources = useMemo(() => {
     if (!userLocation || allFeaturedResources.length === 0) {
       return [];
@@ -201,7 +201,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="max-w-md mx-auto mt-2 sm:mt-4 transform scale-90"
+                className="max-w-3xl mx-auto mt-4 sm:mt-6 transform"
               >
                 <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/20">
                   <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">

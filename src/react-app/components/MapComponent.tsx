@@ -173,18 +173,46 @@ export default function MapComponent({
           </Circle>
         ))}
 
-        {/* Resource markers */}
         {!showHeatmap && resources.map(resource => {
           const coords = getResourceCoordinates(resource);
           if (!coords) return null as any;
 
-          const icon = categoryIcons[(resource.category_raw || resource.category) as keyof typeof categoryIcons] || categoryIcons.Default;
+          const category = (resource.category_raw || resource.category) as any;
 
           return (
             <Marker
               key={resource.id}
               position={coords}
-              icon={icon}
+              icon={L.divIcon({
+                className: 'custom-div-icon',
+                html: `
+                  <div class="marker-container" 
+                       style="background-color: ${category === 'Housing' ? '#3B82F6' :
+                    category === 'Food' || category === 'Food Assistance' ? '#10B981' :
+                      category === 'Healthcare' ? '#EF4444' :
+                        category === 'Employment' ? '#A855F7' :
+                          category === 'Education' ? '#EAB308' :
+                            category === 'Transportation' ? '#6366F1' :
+                              category === 'Mental Health' ? '#EC4899' :
+                                '#F97316'
+                  };">
+                    <div class="marker-inner">
+                      📍
+                    </div>
+                    <div class="marker-pulse" style="background-color: ${category === 'Housing' ? '#3B82F6' :
+                    category === 'Food' || category === 'Food Assistance' ? '#10B981' :
+                      category === 'Healthcare' ? '#EF4444' :
+                        category === 'Employment' ? '#A855F7' :
+                          category === 'Education' ? '#EAB308' :
+                            category === 'Transportation' ? '#6366F1' :
+                              category === 'Mental Health' ? '#EC4899' :
+                                '#F97316'
+                  };"></div>
+                  </div>
+                `,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+              })}
               eventHandlers={{
                 click: () => {
                   onResourceClick(resource);

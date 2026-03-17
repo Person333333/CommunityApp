@@ -17,7 +17,6 @@ import Footer from "@/react-app/components/Footer";
 import UserTour from "@/react-app/components/UserTour";
 import HelperButton from "@/react-app/components/HelperButton";
 import NeedHelpNow from "@/react-app/components/NeedHelpNow";
-import AccessibilityWidget from "@/react-app/components/AccessibilityWidget";
 import CommandPalette from "@/react-app/components/CommandPalette";
 import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
@@ -102,7 +101,6 @@ export default function App() {
             onComplete={() => setShowTour(false)}
           />
           <NeedHelpNow />
-          <AccessibilityWidget />
           <CommandPalette />
           <KeyboardShortcutsGuide />
           <HelperButton onShowTour={() => setShowTour(true)} />

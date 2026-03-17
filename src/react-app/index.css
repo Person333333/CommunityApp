@@ -344,6 +344,50 @@ html {
   }
 }
 
+/* Marker Styles */
+.marker-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.marker-inner {
+  font-size: 20px;
+  z-index: 3;
+}
+
+.marker-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: marker-pulse-anim 2s ease-out infinite;
+  z-index: 1;
+}
+
+@keyframes marker-pulse-anim {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+
 img {
   max-width: 100%;
   height: auto;
