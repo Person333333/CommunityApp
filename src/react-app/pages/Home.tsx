@@ -12,6 +12,8 @@ import { ResourceType } from '@/shared/types';
 import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { useTranslation } from 'react-i18next';
+import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
+import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -162,166 +164,153 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Remove Local Background Image overlay in favor of global APP wrapper blobs */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-transparent z-10" />
-        </div>
+      {/* Geometric Hero Section */}
+      <HeroGeometric 
+        badge="Connecting Neighbors Everywhere"
+        title1={t('home.hero.title1')}
+        title2={t('home.hero.title2')}
+      >
+        <div className="max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-slate-300 mx-auto font-bold leading-relaxed italic opacity-80 mb-8">
+            {t('home.hero.subtitle')}
+          </p>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 pt-10 sm:pt-20">
-          <div className="max-w-6xl mx-auto text-center">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="mb-4 sm:mb-8"
-            >
-              <div className="inline-block px-5 py-2 bg-blue-100/50 backdrop-blur-sm border border-blue-200 rounded-full text-blue-800 text-[10px] sm:text-xs font-black uppercase tracking-[0.4em] mb-4 shadow-sm">
-                Connecting Neighbors Everywhere
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="space-y-3 sm:space-y-4"
-            >
-              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter text-white uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                <span className="block mb-2">{t('home.hero.title1')}</span>
-                <span className="block w-fit mx-auto pb-2 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">{t('home.hero.title2')}</span>
-              </h1>
-
-              <p className="text-base sm:text-lg lg:text-xl text-slate-300 max-w-2xl mx-auto font-bold leading-relaxed italic opacity-80">
-                {t('home.hero.subtitle')}
-              </p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="max-w-3xl mx-auto mt-4 sm:mt-6 transform"
-              >
-                <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/20">
-                  <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
-                    <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-400 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                          else navigate('/discover');
-                        }
-                      }}
-                    />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-400 bg-transparent" />
-                    </div>
-                  </div>
-                  <GlassButton
-                    variant="primary"
-                    size="md"
-                    className="w-full sm:w-auto text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-blue-400/50 bg-blue-600/80 hover:bg-blue-500"
-                    onClick={() => {
-                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                      else navigate('/discover');
-                    }}
-                  >
-                    {t('home.hero.explore')}
-                  </GlassButton>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
-                className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6 sm:mt-8"
-              >
-                <GlassButton
-                  variant="secondary"
-                  size="lg"
-                  className="bg-white/5 border border-white/20 text-white font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-all shadow-[0_0_30px_rgba(255,255,255,0.05)] group scale-105"
-                  onClick={() => navigate('/discover?wizard=true')}
-                >
-                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
-                    <Compass className="w-6 h-6 text-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.5)] rounded-full" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-[10px] uppercase tracking-widest font-black text-blue-300 mb-0.5">Not sure where to start?</div>
-                    <div className="text-base sm:text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
-                  </div>
-                </GlassButton>
-              </motion.div>
-
-              <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-2 sm:mt-3 text-[10px] sm:text-xs text-slate-300 font-semibold uppercase tracking-wider drop-shadow-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
-                  </div>
-                  <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                    <Compass className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <span>12+ {t('home.stats.categories')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-indigo-400" />
-                  </div>
-                  <span>{t('home.stats.localSupport')}</span>
-                </div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1, y: [0, 10, 0] }}
-                transition={{
-                  opacity: { duration: 0.5, delay: 1.2 },
-                  scale: { duration: 0.5, delay: 1.2 },
-                  y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }
+          <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/20">
+            <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={t('home.hero.searchPlaceholder')}
+                className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-400 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                    else navigate('/discover');
+                  }
                 }}
-                className="flex justify-center mt-2 sm:mt-4"
-              >
-                <div
-                  className="w-10 h-10 rounded-full bg-white/10 border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all hover:scale-110"
-                  onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
-                >
-                  <ChevronDown className="w-6 h-6 text-white" />
-                </div>
-              </motion.div>
-            </motion.div>
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-400 bg-transparent" />
+              </div>
+            </div>
+            <GlassButton
+              variant="primary"
+              size="md"
+              className="w-full sm:w-auto text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-blue-400/50 bg-blue-600/80 hover:bg-blue-500"
+              onClick={() => {
+                if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                else navigate('/discover');
+              }}
+            >
+              {t('home.hero.explore')}
+            </GlassButton>
           </div>
-        </div>
-      </section>
 
-      {/* Spotlight Carousel */}
-      <div className="section-divider mx-auto max-w-4xl opacity-30" />
-      <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-7xl">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+            <GlassButton
+              variant="secondary"
+              size="lg"
+              className="bg-white/5 border border-white/20 text-white font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-all shadow-[0_0_30px_rgba(255,255,255,0.05)] group scale-105"
+              onClick={() => navigate('/discover?wizard=true')}
+            >
+              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
+                <Compass className="w-6 h-6 text-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.5)] rounded-full" />
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] uppercase tracking-widest font-black text-blue-300 mb-0.5">Not sure where to start?</div>
+                <div className="text-base sm:text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
+              </div>
+            </GlassButton>
+          </div>
+
+          <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-10 text-[10px] sm:text-xs text-slate-300 font-semibold uppercase tracking-wider drop-shadow-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
+              </div>
+              <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                <Compass className="w-4 h-4 text-blue-400" />
+              </div>
+              <span>12+ {t('home.stats.categories')}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-indigo-400" />
+              </div>
+              <span>{t('home.stats.localSupport')}</span>
+            </div>
+          </div>
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-16 flex flex-col items-center"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1, y: [0, 10, 0] }}
+            transition={{
+              opacity: { duration: 0.5, delay: 1.5 },
+              scale: { duration: 0.5, delay: 1.5 },
+              y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }
+            }}
+            className="flex justify-center mt-8"
           >
-            <span className="text-blue-400 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider">
-              Community Resource Highlights
-            </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-white mb-3 sm:mb-4">
-              {t('home.spotlight.title')}
-            </h2>
-            <p className="text-lg text-slate-300 font-medium">
-              {t('home.spotlight.subtitle')}
-            </p>
+            <div
+              className="w-10 h-10 rounded-full bg-white/10 border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all hover:scale-110"
+              onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
+            >
+              <ChevronDown className="w-6 h-6 text-white" />
+            </div>
           </motion.div>
+        </div>
+      </HeroGeometric>
+
+      {/* Sections below Hero with Shooting Stars */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,64,175,0.15)_0%,rgba(0,0,0,0)_80%)]" />
+          <div className="home-starfield absolute inset-0" />
+          
+          <ShootingStars
+            starColor="#60a5fa"
+            trailColor="#1e40af"
+            minSpeed={15}
+            maxSpeed={35}
+            minDelay={1000}
+            maxDelay={3000}
+          />
+          <ShootingStars
+            starColor="#93c5fd"
+            trailColor="#3b82f6"
+            minSpeed={10}
+            maxSpeed={25}
+            minDelay={2000}
+            maxDelay={4000}
+          />
+        </div>
+
+        <div className="relative z-10">
+          {/* Spotlight Carousel */}
+          <div className="section-divider mx-auto max-w-4xl opacity-30" />
+          <section className="py-20 px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto max-w-7xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-8 sm:mb-16 flex flex-col items-center"
+              >
+                <span className="text-blue-400 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider backdrop-blur-sm bg-white/5 border border-white/10 rounded-full">
+                  Community Resource Highlights
+                </span>
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4 uppercase tracking-tighter">
+                  {t('home.spotlight.title')}
+                </h2>
+                <p className="text-lg text-slate-300 font-bold italic opacity-80">
+                  {t('home.spotlight.subtitle')}
+                </p>
+              </motion.div>
 
           {displaySpotlights.length === 0 ? (
             <GlassCard variant="strong" className="text-center py-12 bg-white/5 border border-white/10 rounded-chromic-card">
@@ -331,7 +320,7 @@ export default function Home() {
             <div
               className="relative px-4 sm:px-12 group"
             >
-              <div className="overflow-hidden">
+              <div className="overflow-hidden p-4">
                 <motion.div
                   className="flex"
                   animate={{ x: `-${(carouselIndex * 100) / 3}%` }}
@@ -344,7 +333,7 @@ export default function Home() {
                     >
                       <GlassCard
                         variant="strong"
-                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] rounded-chromic-card hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all"
+                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] rounded-chromic-card hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all backdrop-blur-xl"
                         onClick={() => setSelectedResource(resource)}
                       >
                         <div className="space-y-4">
@@ -376,13 +365,13 @@ export default function Home() {
                 <>
                   <button
                     onClick={() => { setCarouselIndex(prev => (prev === 0 ? displaySpotlights.length - 1 : prev - 1)); setAutoPlay(false); }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-10 hidden sm:flex"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
                   >
                     <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
                     onClick={() => { setCarouselIndex(prev => (prev >= displaySpotlights.length - 1 ? 0 : prev + 1)); setAutoPlay(false); }}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-10 hidden sm:flex"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
                   >
                     <ChevronRight className="w-6 h-6" />
                   </button>
@@ -660,9 +649,33 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      </div>
+    </div>
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
+
+      <style>{`
+        .home-starfield {
+          background-image: 
+            radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+          background-repeat: repeat;
+          background-size: 200px 200px;
+          animation: home-twinkle 5s ease-in-out infinite;
+          opacity: 0.3;
+        }
+
+        @keyframes home-twinkle {
+          0% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+          100% { opacity: 0.3; }
+        }
+      `}</style>
     </div >
   );
 }

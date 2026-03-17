@@ -1,71 +1,27 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router';
-import { Heart, Users, Leaf, Lightbulb, Compass, Quote, ChevronDown } from 'lucide-react';
+import { Heart, Users, Leaf, Lightbulb, Compass, Quote } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
+import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 
 export default function About() {
   const { t } = useTranslation();
-  const { scrollY } = useScroll();
-
-  const textColor = useTransform(scrollY, [0, 500], ['#f8fafc', '#f8fafc']); // Slate 50
-  const accentColor = useTransform(scrollY, [0, 500], ['#60a5fa', '#60a5fa']); // Blue 400
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-transparent">
       {/* Full-Screen Hero Section */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Background Image with Dark Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=1600"
-            alt="Community Connection"
-            className="w-full h-full object-cover scale-105 opacity-[0.15] mix-blend-luminosity"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/95 to-slate-950 z-10" />
-        </div>
-
-        <div className="container mx-auto max-w-6xl px-4 relative z-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="space-y-6"
-            style={{ color: textColor }}
-          >
-            <span className="inline-block px-4 py-2 bg-blue-500/10 backdrop-blur-md border border-blue-400/30 rounded-full text-blue-300 text-xs font-black uppercase tracking-[0.3em] mb-4 shadow-[0_0_15px_rgba(96,165,250,0.2)]">
-              Our Story & Mission
-            </span>
-            <motion.h1
-              className="text-6xl sm:text-7xl lg:text-9xl font-black mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] tracking-tighter uppercase leading-[0.9] text-white"
-            >
-              Community <br />
-              <motion.span style={{ color: accentColor }} className="drop-shadow-[0_0_20px_rgba(96,165,250,0.4)]">Compass</motion.span>
-            </motion.h1>
-            <motion.p
-              className="text-xl sm:text-2xl max-w-3xl mx-auto leading-relaxed italic font-bold drop-shadow-lg opacity-90 text-slate-300"
-            >
-              "From a simple idea to a neighborhood movement."
-            </motion.p>
-          </motion.div>
-
-          {/* Scroll Down Button */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 1 }}
-            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 group cursor-pointer"
-          >
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">Scroll Down</span>
-            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md bg-white/5 hover:bg-white/20 transition-all animate-bounce-slow shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-              <ChevronDown className="w-5 h-5 text-white" />
-            </div>
-          </motion.button>
-        </div>
+      <section className="relative h-screen w-full overflow-hidden">
+        <BackgroundPaths 
+          title="Community Compass" 
+          subtitle="Our Story & Mission"
+          onCtaClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        />
+        
+        {/* Additional "Scroll Down" hint if desired, or just use the button in BackgroundPaths */}
       </section>
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">

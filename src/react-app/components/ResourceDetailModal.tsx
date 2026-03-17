@@ -5,6 +5,7 @@ import { ResourceType } from '@/shared/types';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import { useTranslation } from 'react-i18next';
+import { LocationMap } from './ui/expand-map';
 import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
@@ -286,14 +287,25 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                        <MapPin className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1">{t('resource.address')}</p>
-                          <p className="text-white font-black text-lg leading-tight">
-                            {resource.address}
-                            {resource.city && <span className="block text-sm text-slate-300 font-medium mt-1">{resource.city}, {resource.state} {resource.zip}</span>}
-                          </p>
+                      <div className="flex flex-col gap-4 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm overflow-hidden">
+                        <div className="flex items-start gap-3">
+                          <MapPin className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1">{t('resource.address')}</p>
+                            <p className="text-white font-black text-lg leading-tight">
+                              {resource.address}
+                              {resource.city && <span className="block text-sm text-slate-300 font-medium mt-1">{resource.city}, {resource.state} {resource.zip}</span>}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Premium Stylized Map Preview */}
+                        <div className="flex justify-center pt-2 pb-4">
+                          <LocationMap 
+                            location={resource.city || resource.address} 
+                            coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
+                            className="w-full max-w-[240px]"
+                          />
                         </div>
                       </div>
                     )}
