@@ -21,7 +21,7 @@ import CommandPalette from "@/react-app/components/CommandPalette";
 import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
 import CinematicIntro from "@/react-app/components/CinematicIntro";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 
 function ScrollToTop() {
@@ -30,6 +30,38 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
+}
+
+function AppRoutes() {
+  const location = useRouterLocation();
+  
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <Routes location={location}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/submit" element={<SubmitPage />} />
+          <Route path="/references" element={<ReferencesPage />} />
+          <Route path="/about" element={<AboutPage />} />
+
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/my-submissions" element={<MySubmissionsPage />} />
+
+          {/* Catch-all Route for 404 Page Not Found */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
 }
 
 export default function App() {
@@ -99,21 +131,7 @@ export default function App() {
           <ScrollToTop />
           <Navbar />
           <main id="main-content" className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/discover" element={<DiscoverPage />} />
-            <Route path="/submit" element={<SubmitPage />} />
-            <Route path="/references" element={<ReferencesPage />} />
-            <Route path="/about" element={<AboutPage />} />
-
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/sign-up" element={<SignUpPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/my-submissions" element={<MySubmissionsPage />} />
-
-            {/* Catch-all Route for 404 Page Not Found */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+            <AppRoutes />
           </main>
           <Footer />
           <UserTour
