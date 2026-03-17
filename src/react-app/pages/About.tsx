@@ -11,12 +11,11 @@ export default function About() {
   const { t } = useTranslation();
   const { scrollY } = useScroll();
 
-  const textColor = useTransform(scrollY, [0, 500], ['#0f172a', '#0f172a']); // Slate 900
-  const subTextColor = useTransform(scrollY, [0, 500], ['#475569', '#64748b']); // Slate 600 -> 500
-  const accentColor = useTransform(scrollY, [0, 500], ['#2563eb', '#2563eb']); // Blue 600
+  const textColor = useTransform(scrollY, [0, 500], ['#f8fafc', '#f8fafc']); // Slate 50
+  const accentColor = useTransform(scrollY, [0, 500], ['#60a5fa', '#60a5fa']); // Blue 400
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white">
+    <div className="min-h-screen overflow-x-hidden bg-transparent">
       {/* Full-Screen Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Background Image with Dark Overlay */}
@@ -24,9 +23,9 @@ export default function About() {
           <img
             src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=1600"
             alt="Community Connection"
-            className="w-full h-full object-cover scale-105 opacity-[0.4]"
+            className="w-full h-full object-cover scale-105 opacity-[0.15] mix-blend-luminosity"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/50 to-white z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/95 to-slate-950 z-10" />
         </div>
 
         <div className="container mx-auto max-w-6xl px-4 relative z-20 text-center">
@@ -37,18 +36,17 @@ export default function About() {
             className="space-y-6"
             style={{ color: textColor }}
           >
-            <span className="inline-block px-4 py-2 bg-blue-100/80 backdrop-blur-md border border-blue-200 rounded-full text-blue-800 text-xs font-black uppercase tracking-[0.3em] mb-4 shadow-sm">
+            <span className="inline-block px-4 py-2 bg-blue-500/10 backdrop-blur-md border border-blue-400/30 rounded-full text-blue-300 text-xs font-black uppercase tracking-[0.3em] mb-4 shadow-[0_0_15px_rgba(96,165,250,0.2)]">
               Our Story & Mission
             </span>
             <motion.h1
-              className="text-6xl sm:text-7xl lg:text-9xl font-black mb-6 drop-shadow-2xl tracking-tighter uppercase leading-[0.9]"
+              className="text-6xl sm:text-7xl lg:text-9xl font-black mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] tracking-tighter uppercase leading-[0.9] text-white"
             >
               Community <br />
-              <motion.span style={{ color: accentColor }}>Compass</motion.span>
+              <motion.span style={{ color: accentColor }} className="drop-shadow-[0_0_20px_rgba(96,165,250,0.4)]">Compass</motion.span>
             </motion.h1>
             <motion.p
-              className="text-xl sm:text-2xl max-w-3xl mx-auto leading-relaxed italic font-bold drop-shadow-lg opacity-90"
-              style={{ color: subTextColor }}
+              className="text-xl sm:text-2xl max-w-3xl mx-auto leading-relaxed italic font-bold drop-shadow-lg opacity-90 text-slate-300"
             >
               "From a simple idea to a neighborhood movement."
             </motion.p>
@@ -60,11 +58,11 @@ export default function About() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
             onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-800 group cursor-pointer"
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 group cursor-pointer"
           >
             <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">Scroll Down</span>
-            <div className="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center backdrop-blur-sm group-hover:bg-slate-100 transition-all animate-bounce-slow shadow-sm">
-              <ChevronDown className="w-5 h-5 text-slate-700" />
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md bg-white/5 hover:bg-white/20 transition-all animate-bounce-slow shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+              <ChevronDown className="w-5 h-5 text-white" />
             </div>
           </motion.button>
         </div>
@@ -80,16 +78,16 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-2xl border-blue-200/50 group">
+            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(37,99,235,0.15)] border-white/10 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800"
                 alt="Vision"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-blue-900/60 p-8 flex flex-col justify-end text-white">
-                <Compass className="w-12 h-12 text-blue-300 mb-4" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2">{t('about.vision')}</h2>
-                <p className="text-xs sm:text-sm text-blue-100 font-bold leading-relaxed line-clamp-2">
+              <div className="absolute inset-0 bg-slate-900/60 p-8 flex flex-col justify-end text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
+                <Compass className="w-12 h-12 text-blue-400 mb-4 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-md">{t('about.vision')}</h2>
+                <p className="text-xs sm:text-sm text-slate-300 font-bold leading-relaxed line-clamp-2">
                   {t('about.visionText')}
                 </p>
               </div>
@@ -102,16 +100,16 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-2xl border-emerald-200/50 group">
+            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(16,185,129,0.15)] border-white/10 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
                 alt="Mission"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-emerald-900/60 p-8 flex flex-col justify-end text-white">
-                <Heart className="w-12 h-12 text-emerald-300 mb-4" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2">{t('about.mission')}</h2>
-                <p className="text-xs sm:text-sm text-emerald-100 font-bold leading-relaxed line-clamp-2">
+              <div className="absolute inset-0 bg-slate-900/60 p-8 flex flex-col justify-end text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
+                <Heart className="w-12 h-12 text-emerald-400 mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-md">{t('about.mission')}</h2>
+                <p className="text-xs sm:text-sm text-slate-300 font-bold leading-relaxed line-clamp-2">
                   {t('about.missionText')}
                 </p>
               </div>
@@ -120,7 +118,7 @@ export default function About() {
         </div>
 
         {/* Research & Community Need Section */}
-        <div className="section-divider mx-auto max-w-md mb-12" />
+        <div className="section-divider mx-auto max-w-md mb-12 opacity-20" />
         <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -129,9 +127,9 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase">{t('home.impact.title')} & Research</h2>
-            <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-6" />
-            <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">Data-driven approach to solving local challenges</p>
+            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('home.impact.title')} & Research</h2>
+            <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
+            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Data-driven approach to solving local challenges</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -157,19 +155,20 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: idx * 0.1 }}
+                className="h-full"
               >
-                <GlassCard variant="strong" className={`p-10 h-full bg-white border-${item.color}-100 shadow-xl group hover:border-${item.color}-300 transition-colors`}>
+                <GlassCard variant="strong" className={`p-10 h-full backdrop-blur-md bg-white/5 border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.03)] group transition-all rounded-chromic-card ${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.15)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.15)] hover:border-indigo-400/30'}`}>
                   <div className="flex items-start gap-6">
-                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-${item.color}-600 text-white flex items-center justify-center text-xl font-black shadow-lg shadow-${item.color}-500/20`}>
+                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur border border-white/20 text-white flex items-center justify-center text-xl font-black shadow-lg ${item.color === 'blue' ? 'shadow-blue-500/20 text-blue-300' : 'shadow-indigo-500/20 text-indigo-300'}`}>
                       {item.step}
                     </div>
                     <div>
-                      <h3 className={`text-2xl font-black text-${item.color}-900 mb-4 tracking-tight`}>
+                      <h3 className={`text-2xl font-black mb-4 tracking-tight ${item.color === 'blue' ? 'text-blue-300' : 'text-indigo-300'}`}>
                         {item.title}
                       </h3>
-                      <div className="space-y-4 text-slate-700 font-bold leading-relaxed">
+                      <div className="space-y-4 text-slate-300 font-bold leading-relaxed">
                         <p>{item.text}</p>
-                        <p className="text-sm opacity-70 italic">{item.subtext}</p>
+                        <p className="text-sm opacity-60 italic">{item.subtext}</p>
                       </div>
                     </div>
                   </div>
@@ -187,28 +186,28 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase">Our Core Values</h2>
-            <div className="w-20 h-1 bg-slate-900 mx-auto mb-6" />
-            <p className="text-slate-500 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
+            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
+            <div className="w-20 h-1 bg-white/20 mx-auto mb-6" />
+            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 perspective-lg">
             {[
               {
                 title: "Sustainability",
-                icon: <Leaf className="w-16 h-16 text-emerald-500" />,
+                icon: <Leaf className="w-16 h-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]" />,
                 text: t('about.sustainabilityText'),
                 color: "emerald"
               },
               {
                 title: "Community",
-                icon: <Users className="w-16 h-16 text-blue-500" />,
+                icon: <Users className="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]" />,
                 text: t('about.communityText'),
                 color: "blue"
               },
               {
                 title: "Innovation",
-                icon: <Lightbulb className="w-16 h-16 text-amber-500" />,
+                icon: <Lightbulb className="w-16 h-16 text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />,
                 text: t('about.innovationText'),
                 color: "amber"
               }
@@ -226,31 +225,31 @@ export default function About() {
           transition={{ duration: 1 }}
           className="mb-32"
         >
-          <GlassCard variant="strong" className="p-0 overflow-hidden bg-white border border-slate-200 shadow-2xl rounded-[3rem]">
+          <GlassCard variant="strong" className="p-0 overflow-hidden bg-transparent border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.05)] rounded-[3rem] backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2 relative bg-slate-900 overflow-hidden group">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
                   alt="Founder Alex Rivera"
-                  className="w-full h-full object-cover min-h-[500px] grayscale group-hover:grayscale-0 transition-all duration-1000"
+                  className="w-full h-full object-cover min-h-[500px] grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/20 to-transparent" />
-                <div className="absolute bottom-8 left-8 p-8 glass-strong backdrop-blur-xl rounded-[2rem] border border-white/30 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
+                <div className="absolute bottom-8 left-8 p-8 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                   <div className="flex items-center gap-4 mb-2">
-                    <div className="w-1 h-8 bg-blue-500 rounded-full" />
-                    <h4 className="text-2xl font-black text-slate-900 tracking-widest uppercase">ALEX RIVERA</h4>
+                    <div className="w-1 h-8 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
+                    <h4 className="text-2xl font-black text-white tracking-widest uppercase">ALEX RIVERA</h4>
                   </div>
                   <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & Neighbor</p>
                 </div>
               </div>
-              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-slate-50">
-                <Quote className="w-16 h-16 text-blue-600 mb-8 opacity-10" />
-                <h3 className="text-4xl sm:text-5xl font-black text-slate-900 mb-8 leading-tight tracking-tighter uppercase italic">Inspired by Tradition,<br />Driven by Need</h3>
-                <div className="space-y-6 text-slate-700 leading-relaxed text-xl font-bold italic">
-                  <p>
+              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-white/5 backdrop-blur-md border-l border-white/10">
+                <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
+                <h3 className="text-4xl sm:text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
+                <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
+                  <p className="drop-shadow-sm">
                     "Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner."
                   </p>
-                  <p className="text-lg font-bold text-slate-600 not-italic">
+                  <p className="text-lg font-bold text-slate-400 not-italic">
                     I grew up believing that a community is only as strong as its most vulnerable member. After seeing the power of teamwork during local projects, I knew we needed a digital "compass" to point people toward support.
                   </p>
                 </div>
@@ -267,19 +266,20 @@ export default function About() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="bg-blue-600 rounded-[3rem] p-12 sm:p-20 shadow-2xl shadow-blue-500/20 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
-              <Compass className="w-64 h-64 text-white" />
+          <div className="bg-slate-900/60 backdrop-blur-xl border border-blue-500/30 rounded-[3rem] p-12 sm:p-20 shadow-[0_0_50px_rgba(59,130,246,0.15)] relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 pointer-events-none" />
+            <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
+              <Compass className="w-64 h-64 text-blue-300" />
             </div>
-            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-white uppercase tracking-tighter">
+            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-white uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
               Build the Future<br />Together
             </h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-100 font-bold italic">
+            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">
               Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center relative z-10">
               <Link to="/submit">
-                <GlassButton variant="primary" className="bg-white !text-slate-900 font-black uppercase tracking-widest px-12 h-16 rounded-2xl hover:bg-white hover:scale-105 transition-all shadow-xl">
+                <GlassButton variant="primary" className="bg-blue-600/80 backdrop-blur border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.5)] !text-white font-black uppercase tracking-widest px-12 h-16 rounded-chromic-pill hover:bg-blue-500 hover:scale-105 transition-all">
                   {t('about.submitResource')}
                 </GlassButton>
               </Link>
@@ -322,21 +322,21 @@ function ValueCard({ value }: { value: any }) {
       <FlipCard
         heightClass="h-[360px]"
         front={
-          <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-200 shadow-2xl relative overflow-hidden bg-white/90 backdrop-blur-md group-hover:bg-white transition-colors`}>
-            <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-500`} />
+          <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-500/30 shadow-[0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden bg-slate-900/80 backdrop-blur-md group-hover:bg-slate-800/90 transition-colors rounded-chromic-card`}>
+            <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
             <div className="mb-6 transform hover:scale-110 transition-transform duration-500">
               {value.icon}
             </div>
-            <h3 className={`text-3xl font-black uppercase tracking-tighter text-slate-900 group-hover:text-${value.color}-600 transition-colors`}>
+            <h3 className={`text-3xl font-black uppercase tracking-tighter text-white group-hover:text-${value.color}-300 transition-colors drop-shadow-md`}>
               {value.title}
             </h3>
-            <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-slate-400 group-hover:text-slate-600 transition-colors">Tap to Reveal</p>
+            <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-slate-500 group-hover:text-slate-300 transition-colors">Tap to Reveal</p>
           </GlassCard>
         }
         back={
-          <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-500 shadow-2xl relative overflow-hidden bg-slate-900 border-2`}>
-            <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-500`} />
-            <p className={`text-xl font-bold text-white italic leading-relaxed`}>
+          <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-400/50 shadow-[0_0_40px_rgba(var(--color-${value.color}-500),0.2)] relative overflow-hidden bg-slate-950/90 backdrop-blur-xl border-2 rounded-chromic-card`}>
+            <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
+            <p className={`text-xl font-bold text-${value.color}-100 italic leading-relaxed drop-shadow-sm`}>
               "{value.text}"
             </p>
           </GlassCard>

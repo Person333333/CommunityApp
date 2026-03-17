@@ -41,18 +41,18 @@ export default function GuestAuthModal({ isOpen, onClose, title, message, type }
                             </button>
 
                             <div className="flex flex-col items-center text-center">
-                                <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 border border-blue-100">
+                                <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 border border-blue-400/30">
                                     {type === 'favorite' ? (
-                                        <FolderHeart className="w-8 h-8 text-blue-600" />
+                                        <FolderHeart className="w-8 h-8 text-blue-400" />
                                     ) : (
-                                        <Heart className="w-8 h-8 text-indigo-600" />
+                                        <Heart className="w-8 h-8 text-indigo-400" />
                                     )}
                                 </div>
 
-                                <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                                <h3 className="text-xl font-semibold text-white mb-3">
                                     {title}
                                 </h3>
-                                <p className="text-slate-600 mb-8 leading-relaxed font-medium">
+                                <p className="text-slate-300 mb-8 leading-relaxed font-medium">
                                     {message}
                                 </p>
 
@@ -66,14 +66,14 @@ export default function GuestAuthModal({ isOpen, onClose, title, message, type }
                                     </Link>
                                     <Link
                                         to="/sign-up"
-                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-xl font-semibold text-sm transition-colors shadow-sm"
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-blue-400 rounded-xl font-semibold text-sm transition-colors shadow-sm"
                                     >
                                         <UserPlus className="w-5 h-5" />
                                         {t('auth.signUpButton')}
                                     </Link>
                                     <button
                                         onClick={onClose}
-                                        className="mt-2 text-sm text-slate-500 hover:text-slate-800 transition-colors font-medium"
+                                        className="mt-2 text-sm text-slate-400 hover:text-white transition-colors font-medium"
                                     >
                                         {t('common.close')}
                                     </button>

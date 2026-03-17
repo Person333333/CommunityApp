@@ -205,8 +205,8 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 text-sm">{t('helper.title')}</h3>
-                  <p className="text-xs text-slate-500 font-medium">{t('helper.subtitle')}</p>
+                  <h3 className="font-semibold text-white drop-shadow-sm text-sm">{t('helper.title')}</h3>
+                  <p className="text-xs text-slate-400 font-medium">{t('helper.subtitle')}</p>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={action.action}
-                      className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-blue-50 border border-slate-200 rounded-lg text-xs text-slate-800 font-bold transition-all shadow-sm"
+                      className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs text-slate-300 font-bold transition-all shadow-sm"
                     >
                       {action.icon}
                       <span>{action.label}</span>
@@ -241,7 +241,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     <div
                       className={`max-w-[85%] p-4 rounded-xl text-sm shadow-sm ${msg.role === 'user'
                         ? 'bg-blue-600 text-white rounded-tr-none'
-                        : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none font-medium'
+                        : 'bg-white/5 border border-white/10 text-slate-300 rounded-tl-none font-medium'
                         }`}
                     >
                       {msg.content.split('\n').map((line, i) => (
@@ -267,7 +267,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex justify-start"
                   >
-                    <div className="bg-slate-50 border border-slate-100 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                    <div className="bg-white/5 border border-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm">
                       <div className="flex gap-1.5">
                         <div className="w-2.5 h-2.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <div className="w-2.5 h-2.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -287,7 +287,7 @@ export default function HelperButton({ onShowTour }: HelperButtonProps) {
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder={t('helper.inputPlaceholder')}
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold transition-all"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 font-bold transition-all"
                   />
                   <motion.button
                     whileHover={{ scale: 1.05 }}

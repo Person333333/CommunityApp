@@ -35,16 +35,16 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
             transition={{ duration: 2, repeat: loading ? Infinity : 0, ease: "linear" }}
             className="inline-block mb-6"
           >
-            <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center shadow-inner">
-              <MapPin className="w-10 h-10 text-blue-600" />
+            <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center shadow-inner border border-blue-400/30">
+              <MapPin className="w-10 h-10 text-blue-400" />
             </div>
           </motion.div>
 
-          <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-widest">
+          <h2 className="text-3xl font-black text-white drop-shadow-sm mb-4 uppercase tracking-widest">
             {t('location.title')}
           </h2>
 
-          <p className="text-slate-900 mb-8 font-black leading-relaxed">
+          <p className="text-slate-300 mb-8 font-bold leading-relaxed">
             {t('location.description')}
           </p>
 
@@ -53,14 +53,14 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
             <div className="flex gap-2 mb-6">
               <button
                 onClick={() => setUseZip(false)}
-                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${!useZip ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${!useZip ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10'
                   }`}
               >
                 {t('location.useMyLocation')}
               </button>
               <button
                 onClick={() => setUseZip(true)}
-                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${useZip ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                className={`flex-1 py-3 px-4 rounded-xl transition-all font-bold text-sm shadow-sm ${useZip ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10'
                   }`}
               >
                 {t('location.useZipCode')}
@@ -74,7 +74,7 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   placeholder={t('location.zipPlaceholder')}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 focus:border-blue-500/50 focus:outline-none text-black placeholder-slate-600 shadow-sm font-black"
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-blue-400/50 focus:bg-white/10 focus:outline-none text-white placeholder-slate-400 font-bold tracking-wide"
                   maxLength={10}
                 />
                 <GlassButton
@@ -101,7 +101,7 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 bg-rose-50 border border-rose-300 rounded-lg text-rose-900 text-sm font-black"
+            className={`mb-6 p-4 bg-rose-500/10 border border-rose-500/30 rounded-lg text-rose-300 text-sm font-bold tracking-wide ${error ? 'block' : 'hidden'}`}
           >
             {error}
           </motion.div>
@@ -126,7 +126,7 @@ export default function LocationRequest({ onRequestLocation, onZipCodeSearch, lo
             )}
           </GlassButton>
 
-          <p className="text-xs text-slate-800 mt-6 font-black uppercase tracking-widest">
+          <p className="text-xs text-slate-500 mt-6 font-bold uppercase tracking-widest">
             {t('location.hint')}
           </p>
         </GlassCard>

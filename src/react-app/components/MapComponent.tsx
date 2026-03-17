@@ -165,7 +165,7 @@ export default function MapComponent({
           >
             <Popup>
               <div className="p-2">
-                <p className="text-sm font-medium text-slate-800">
+                <p className="text-sm font-medium text-slate-300">
                   {heat.count} resource{heat.count !== 1 ? 's' : ''} in this area
                 </p>
               </div>
@@ -197,7 +197,7 @@ export default function MapComponent({
                     <h3 className="font-semibold text-lg text-slate-900 mb-1">
                       {resource.title}
                     </h3>
-                    <p className="text-sm text-slate-600 font-medium">
+                    <p className="text-sm text-slate-300 font-medium">
                       {resource.description}
                     </p>
                   </div>
@@ -290,7 +290,7 @@ export default function MapComponent({
                     <h3 className="font-semibold text-lg text-slate-900 mb-1">
                       {heat.count} Resource{heat.count !== 1 ? 's' : ''} in Area
                     </h3>
-                    <p className="text-sm text-slate-600 font-medium mb-2">
+                    <p className="text-sm text-slate-300 font-medium mb-2">
                       {mainResource.title} and {heat.count - 1} other{heat.count - 1 !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -315,14 +315,14 @@ export default function MapComponent({
       </MapContainer>
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-lg border border-white/20 max-w-xs">
-        <h4 className="text-sm font-semibold text-gray-800 mb-2">
+      <div className="absolute bottom-4 left-4 z-20 bg-slate-900/90 backdrop-blur-md p-3 rounded-xl shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/10 max-w-xs">
+        <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-3 drop-shadow-sm">
           {showHeatmap ? t('map.densityView') : t('map.categories')}
         </h4>
         {showHeatmap ? (
-          <div className="space-y-2 text-xs text-gray-700">
+          <div className="space-y-2 text-xs text-slate-300 font-medium">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-teal-500/60" />
+              <div className="w-4 h-4 rounded-full bg-teal-500/60 shadow-[0_0_10px_rgba(20,184,166,0.6)]" />
               <span>{t('map.highDensity')}</span>
             </div>
             <div className="flex items-center gap-2">
@@ -335,19 +335,19 @@ export default function MapComponent({
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="grid grid-cols-2 gap-3 text-xs font-medium">
             {Object.entries(categoryIcons).slice(0, -1).map(([category, _]) => (
               <div key={category} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${category === 'Housing' ? 'bg-blue-500' :
-                  category === 'Food' || category === 'Food Assistance' ? 'bg-green-500' :
-                    category === 'Healthcare' ? 'bg-red-500' :
-                      category === 'Employment' ? 'bg-purple-500' :
-                        category === 'Education' ? 'bg-yellow-500' :
-                          category === 'Transportation' ? 'bg-indigo-500' :
-                            category === 'Mental Health' ? 'bg-pink-500' :
-                              'bg-orange-500'
+                <div className={`w-3 h-3 rounded-full shadow-sm ${category === 'Housing' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]' :
+                  category === 'Food' || category === 'Food Assistance' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' :
+                    category === 'Healthcare' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' :
+                      category === 'Employment' ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]' :
+                        category === 'Education' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.8)]' :
+                          category === 'Transportation' ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]' :
+                            category === 'Mental Health' ? 'bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]' :
+                              'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]'
                   }`} />
-                <span className="text-gray-700 truncate">{t(`categories.${category}`, category)}</span>
+                <span className="text-slate-300 truncate tracking-wide">{t(`categories.${category}`, category)}</span>
               </div>
             ))}
           </div>

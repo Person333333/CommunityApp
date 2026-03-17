@@ -178,36 +178,36 @@ export default function Submit() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 bg-white">
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 bg-transparent">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", duration: 0.6 }}
           className="max-w-2xl w-full"
         >
-          <GlassCard className="text-center p-12 bg-white border border-slate-100 shadow-2xl">
+          <GlassCard variant="strong" className="text-center p-12 shadow-[0_0_30px_rgba(16,185,129,0.15)] border-white/10 rounded-chromic-card">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-lg"
+              className="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
             >
               <Sparkles className="w-12 h-12" />
             </motion.div>
 
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">
+            <h2 className="text-4xl font-black text-white mb-4 drop-shadow-md">
               {t('submit.success.title')}
             </h2>
 
-            <p className="text-xl text-slate-700 mb-10 font-bold">
+            <p className="text-xl text-slate-300 mb-10 font-bold">
               {t('submit.success.text')}
             </p>
 
             <div className="flex gap-4 justify-center flex-wrap">
-              <GlassButton variant="primary" onClick={() => setSuccess(false)} className="px-8 h-14">
+              <GlassButton variant="primary" onClick={() => setSuccess(false)} className="px-8 h-14 bg-white/10 border-white/20 hover:bg-white/20 focus:ring-white/30 text-white rounded-chromic-pill">
                 {t('submit.success.submitAnother')}
               </GlassButton>
-              <GlassButton variant="secondary" onClick={() => window.location.href = '/discover'} className="px-8 h-14">
+              <GlassButton variant="secondary" onClick={() => window.location.href = '/discover'} className="px-8 h-14 bg-transparent border-white/10 text-slate-300 hover:text-white rounded-chromic-pill">
                 {t('submit.success.browse')}
               </GlassButton>
             </div>
@@ -218,12 +218,12 @@ export default function Submit() {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-transparent overflow-hidden">
       <div className="container mx-auto max-w-4xl">
         {/* Progress Header */}
         <div className="mb-12">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-800 uppercase tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               {t('submit.title')}
             </h1>
             <div className="text-sm font-black text-slate-400 uppercase tracking-widest">
@@ -263,9 +263,9 @@ export default function Submit() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <GlassCard className="bg-white border-slate-100 shadow-xl overflow-hidden p-0">
-                <div className="bg-slate-800 p-6 flex items-center gap-4 text-white">
-                  <ImageIcon className="w-6 h-6" />
+              <GlassCard variant="strong" className="shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 overflow-hidden p-0 rounded-chromic-card">
+                <div className="bg-slate-900/80 p-6 flex items-center gap-4 text-white backdrop-blur-md border-b border-white/10">
+                  <ImageIcon className="w-6 h-6 text-blue-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 1: Resource Core Details</p>
                 </div>
                 <div className="p-8 space-y-8">
@@ -275,10 +275,10 @@ export default function Submit() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">Category *</label>
-                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer">
-                        <option value="" disabled>Select a category...</option>
-                        {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Category *</label>
+                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer">
+                        <option value="" disabled className="bg-slate-800 text-slate-400">Select a category...</option>
+                        {categories.map(cat => <option key={cat} value={cat} className="bg-slate-800 text-white">{cat}</option>)}
                       </select>
                       {errors.category && <p className="mt-2 text-xs text-indigo-600 font-bold">{errors.category}</p>}
                     </div>
@@ -287,21 +287,21 @@ export default function Submit() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">Website Action Button</label>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
+                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Website Action Button</label>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
                       <div className="flex gap-2">
                         <select
                           value={(formData as any).website_action_label || 'Visit Website'}
                           onChange={(e) => setFormData(prev => ({ ...prev, website_action_label: e.target.value }))}
-                          className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
+                          className="bg-white/5 border border-white/10 rounded-xl px-3 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
                         >
-                          <option value="Visit Website">Visit Website</option>
-                          <option value="Register">Register</option>
-                          <option value="Learn More">Learn More</option>
-                          <option value="Donate">Donate</option>
-                          <option value="Volunteer">Volunteer</option>
-                          <option value="Apply Now">Apply Now</option>
-                          <option value="Get Help">Get Help</option>
+                          <option value="Visit Website" className="bg-slate-800 text-white">Visit Website</option>
+                          <option value="Register" className="bg-slate-800 text-white">Register</option>
+                          <option value="Learn More" className="bg-slate-800 text-white">Learn More</option>
+                          <option value="Donate" className="bg-slate-800 text-white">Donate</option>
+                          <option value="Volunteer" className="bg-slate-800 text-white">Volunteer</option>
+                          <option value="Apply Now" className="bg-slate-800 text-white">Apply Now</option>
+                          <option value="Get Help" className="bg-slate-800 text-white">Get Help</option>
                         </select>
                         <input
                           type="url"
@@ -309,20 +309,20 @@ export default function Submit() {
                           value={formData.website}
                           onChange={handleChange}
                           placeholder="https://..."
-                          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-black text-slate-800 mb-3 uppercase tracking-widest">Donation Link (Optional)</label>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Shows as a "Donate" button on your resource</p>
+                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Donation Link (Optional)</label>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Shows as a "Donate" button on your resource</p>
                       <input
                         type="url"
                         name="donation_url"
                         value={formData.donation_url}
                         onChange={handleChange}
                         placeholder="https://donate..."
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                       />
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function Submit() {
                     </div>
                   )}
 
-                  <div className="flex flex-col justify-center py-4 border-y border-slate-50">
+                  <div className="flex flex-col justify-center py-4 border-y border-white/10">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <div className="relative">
                         <input
@@ -349,11 +349,11 @@ export default function Submit() {
                           checked={formData.auto_assign_tags}
                           onChange={(e) => setFormData(prev => ({ ...prev, auto_assign_tags: e.target.checked }))}
                         />
-                        <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-slate-200'}`} />
+                        <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-white/10 border border-white/20'}`} />
                         <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-black text-slate-800 uppercase tracking-tight">Auto-assign Smart Tags</p>
+                        <p className="text-sm font-black text-white uppercase tracking-tight">Auto-assign Smart Tags</p>
                         <p className="text-[10px] font-bold text-slate-500 uppercase">AI will suggest tags based on your description</p>
                       </div>
                     </label>
@@ -361,13 +361,13 @@ export default function Submit() {
 
                   {/* Image Drag/Drop */}
                   <div className="space-y-3">
-                    <label className="block text-sm font-black text-slate-800 uppercase tracking-widest">Resource Image</label>
+                    <label className="block text-sm font-black text-slate-300 uppercase tracking-widest">Resource Image</label>
                     <div
                       onDragOver={onDragOver}
                       onDragLeave={onDragLeave}
                       onDrop={onDrop}
                       onClick={() => document.getElementById('fileInput')?.click()}
-                      className={`relative border-2 border-dashed rounded-[2rem] p-10 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-slate-50 hover:border-blue-300'
+                      className={`relative border-2 border-dashed rounded-chromic-card p-10 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 ${isDragging ? 'border-blue-500 bg-blue-500/10' : 'border-white/20 bg-white/5 hover:border-blue-400'
                         } ${formData.image_url ? 'bg-slate-900 border-none' : ''}`}
                     >
                       <input id="fileInput" type="file" accept="image/*" className="hidden" onChange={(e) => {
@@ -377,20 +377,20 @@ export default function Submit() {
 
                       {formData.image_url ? (
                         <>
-                          <img src={formData.image_url} className="absolute inset-0 w-full h-full object-cover opacity-60 rounded-[2rem]" alt="Preview" />
+                          <img src={formData.image_url} className="absolute inset-0 w-full h-full object-cover opacity-60 rounded-chromic-card" alt="Preview" />
                           <div className="relative z-10 text-white flex flex-col items-center gap-2">
                             <Upload className="w-10 h-10" />
-                            <p className="font-black uppercase tracking-widest text-xs">Click or drag to change image</p>
+                            <p className="font-black uppercase tracking-widest text-xs shadow-md">Click or drag to change image</p>
                           </div>
                         </>
                       ) : (
                         <>
-                          <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm">
+                          <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-slate-300 shadow-sm backdrop-blur-sm">
                             <Upload className="w-8 h-8" />
                           </div>
                           <div className="text-center">
-                            <p className="font-black text-slate-900 uppercase tracking-tight text-lg">Drop your image here</p>
-                            <p className="text-slate-500 font-bold text-sm">or click to browse local files</p>
+                            <p className="font-black text-white uppercase tracking-tight text-lg drop-shadow-md">Drop your image here</p>
+                            <p className="text-slate-400 font-bold text-sm">or click to browse local files</p>
                           </div>
                         </>
                       )}
@@ -415,9 +415,9 @@ export default function Submit() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <GlassCard className="bg-white border-slate-100 shadow-xl overflow-hidden p-0">
-                <div className="bg-indigo-700 p-6 flex items-center gap-4 text-white">
-                  <UserIcon className="w-6 h-6" />
+              <GlassCard variant="strong" className="shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 overflow-hidden p-0 rounded-chromic-card">
+                <div className="bg-slate-900/80 p-6 flex items-center gap-4 text-white backdrop-blur-md border-b border-white/10">
+                  <UserIcon className="w-6 h-6 text-indigo-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 2: Your & Location Details</p>
                 </div>
                 <div className="p-8 space-y-10">
@@ -431,12 +431,12 @@ export default function Submit() {
                     <FormField label="Target Audience" name="audience" value={formData.audience} onChange={handleChange} placeholder="e.g. Seniors, Families, Veterans..." />
                   </div>
 
-                  <div className="space-y-6 pt-6 border-t border-slate-100">
+                  <div className="space-y-6 pt-6 border-t border-white/10">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-black text-slate-900 uppercase tracking-widest text-sm flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-blue-600" /> Physical Address
+                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
+                        <MapPin className="w-4 h-4 text-blue-400" /> Physical Address
                       </h4>
-                      <button onClick={handleGetLocation} className="text-[10px] font-black uppercase text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors flex items-center gap-2">
+                      <button onClick={handleGetLocation} className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1.5 rounded-full hover:bg-blue-500/20 transition-colors flex items-center gap-2">
                         {locating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
                         Use My Current Lat/Long
                       </button>
@@ -452,7 +452,7 @@ export default function Submit() {
                           }
                           setLocating(false);
                         }}
-                        className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full hover:bg-emerald-100 transition-colors flex items-center gap-2"
+                        className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full hover:bg-emerald-500/20 transition-colors flex items-center gap-2"
                       >
                         <ShieldCheck className="w-3 h-3" /> Verify Address
                       </button>
@@ -465,19 +465,19 @@ export default function Submit() {
                     </div>
                   </div>
 
-                  <div className="space-y-6 pt-6 border-t border-slate-100">
+                  <div className="space-y-6 pt-6 border-t border-white/10">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-black text-slate-900 uppercase tracking-widest text-sm flex items-center gap-2">
-                        <Compass className="w-4 h-4 text-indigo-600" /> Additional Action Buttons
+                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
+                        <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
                       </h4>
                       <div className="text-[10px] font-black uppercase text-slate-400">Max 2 custom actions</div>
                     </div>
 
                     <div className="space-y-4">
                       {formData.action_urls.map((action, idx) => (
-                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 relative group">
+                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 relative group">
                           <div className="flex-1">
-                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Action Type</label>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Action Type</label>
                             <select
                               value={action.label}
                               onChange={(e) => {
@@ -485,13 +485,13 @@ export default function Submit() {
                                 next[idx].label = e.target.value;
                                 setFormData(prev => ({ ...prev, action_urls: next }));
                               }}
-                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold outline-none"
+                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
                             >
                               {["Register", "Learn More", "Visit Website", "Donate", "Volunteer"].map(l => <option key={l} value={l}>{l}</option>)}
                             </select>
                           </div>
                           <div className="flex-[2]">
-                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Destination URL</label>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Destination URL</label>
                             <input
                               type="url"
                               placeholder="https://..."
@@ -501,12 +501,12 @@ export default function Submit() {
                                 next[idx].url = e.target.value;
                                 setFormData(prev => ({ ...prev, action_urls: next }));
                               }}
-                              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold outline-none"
+                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
                             />
                           </div>
                           <button
                             onClick={() => setFormData(prev => ({ ...prev, action_urls: prev.action_urls.filter((_, i) => i !== idx) }))}
-                            className="bg-white border border-slate-200 p-2 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors self-end"
+                            className="bg-red-500/10 border border-red-500/20 p-2 rounded-lg text-red-400 hover:bg-red-500/20 transition-colors self-end"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -516,7 +516,7 @@ export default function Submit() {
                       {formData.action_urls.length < 2 && (
                         <button
                           onClick={() => setFormData(prev => ({ ...prev, action_urls: [...prev.action_urls, { label: 'Learn More', url: '' }] }))}
-                          className="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-black uppercase tracking-widest text-xs hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50/30 transition-all flex items-center justify-center gap-2"
+                          className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-slate-400 font-black uppercase tracking-widest text-xs hover:border-blue-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all flex items-center justify-center gap-2"
                         >
                           <Sparkles className="w-4 h-4" /> Add Action Button
                         </button>
@@ -527,10 +527,10 @@ export default function Submit() {
               </GlassCard>
 
               <div className="flex justify-between">
-                <button onClick={prevStep} className="px-8 font-black uppercase text-sm text-slate-500 hover:text-slate-900 flex items-center gap-2">
+                <button onClick={prevStep} className="px-8 font-black uppercase text-sm text-slate-400 hover:text-white flex items-center gap-2">
                   <ChevronLeft className="w-4 h-4" /> Back
                 </button>
-                <GlassButton variant="primary" onClick={nextStep} className="px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group">
+                <GlassButton variant="primary" onClick={nextStep} className="px-12 h-16 rounded-2xl shadow-xl shadow-blue-500/20 group text-white">
                   Final Review <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </GlassButton>
               </div>
@@ -549,23 +549,23 @@ export default function Submit() {
                 {/* Preview Card */}
                 <div className="space-y-4">
                   <p className="font-black uppercase tracking-widest text-xs text-slate-400 ml-2">How it will look</p>
-                  <GlassCard className="p-0 overflow-hidden shadow-2xl border-none">
-                    <div className="h-48 bg-slate-900 relative">
+                  <GlassCard variant="strong" className="p-0 overflow-hidden shadow-[0_0_30px_rgba(255,255,255,0.05)] border-white/10 rounded-chromic-card">
+                    <div className="h-48 bg-slate-950 relative">
                       {formData.image_url ? (
                         <img src={formData.image_url} className="w-full h-full object-cover opacity-80" alt="Preview" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-slate-700" /></div>
+                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-slate-400" /></div>
                       )}
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-blue-600 uppercase tracking-widest">
+                      <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-blue-300 border border-white/20 uppercase tracking-widest shadow-md">
                         {formData.category || 'Category'}
                       </div>
                     </div>
-                    <div className="p-6 space-y-3">
-                      <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight line-clamp-1">{formData.title || 'Untitled Resource'}</h3>
-                      <p className="text-sm text-slate-600 font-bold line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
-                      <div className="flex flex-wrap gap-4 pt-4 border-t border-slate-100 text-[10px] font-black text-slate-400 uppercase">
-                        <div className="flex items-center gap-2 px-2 py-1 bg-slate-50 rounded-lg"><MapPin className="w-3.5 h-3.5 text-blue-600" /> {formData.city || 'Remote'}</div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-slate-50 rounded-lg"><UserIcon className="w-3.5 h-3.5 text-blue-600" /> {formData.audience || 'Everyone'}</div>
+                    <div className="p-6 space-y-3 bg-slate-900/40">
+                      <h3 className="text-2xl font-black text-white uppercase tracking-tight line-clamp-1 drop-shadow-sm">{formData.title || 'Untitled Resource'}</h3>
+                      <p className="text-sm text-slate-300 font-bold line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
+                      <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10 text-[10px] font-black text-slate-400 uppercase">
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-lg"><MapPin className="w-3.5 h-3.5 text-blue-400" /> {formData.city || 'Remote'}</div>
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-lg"><UserIcon className="w-3.5 h-3.5 text-blue-400" /> {formData.audience || 'Everyone'}</div>
                       </div>
                     </div>
                   </GlassCard>
@@ -573,9 +573,9 @@ export default function Submit() {
 
                 {/* Final Verification Details */}
                 <div className="space-y-6">
-                  <GlassCard className="bg-slate-50 border-slate-200">
-                    <h4 className="font-black text-slate-900 uppercase tracking-tight mb-4 flex items-center gap-2">
-                      <ShieldCheck className="w-5 h-5 text-emerald-600" /> Submission Policy
+                  <GlassCard variant="strong" className="bg-white/5 border-white/10 rounded-chromic-card">
+                    <h4 className="font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2 drop-shadow-sm">
+                      <ShieldCheck className="w-5 h-5 text-emerald-400" /> Submission Policy
                     </h4>
                     <ul className="space-y-4">
                       {[
@@ -583,8 +583,8 @@ export default function Submit() {
                         "AI analysis for quality and helpfulness check.",
                         "Instantly live after passing automated review."
                       ].map((text, i) => (
-                        <li key={i} className="flex gap-3 text-sm font-bold text-slate-600">
-                          <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                        <li key={i} className="flex gap-3 text-sm font-bold text-slate-300">
+                          <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                           {text}
                         </li>
                       ))}
@@ -596,8 +596,8 @@ export default function Submit() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className={`p-5 rounded-2xl text-sm font-bold flex gap-4 cursor-pointer transition-all border ${errors.general.includes('AI Quality Check Failed')
-                        ? 'bg-indigo-50 border-indigo-200 text-indigo-800 hover:bg-indigo-100 shadow-lg shadow-indigo-500/10'
-                        : 'bg-slate-50 border-slate-200 text-slate-700'
+                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-300 hover:bg-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
+                        : 'bg-white/5 border-white/10 text-slate-300'
                         }`}
                       onClick={() => {
                         if (errors.general.includes('AI Quality Check Failed')) {
@@ -605,7 +605,7 @@ export default function Submit() {
                         }
                       }}
                     >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${errors.general.includes('AI Quality Check Failed') ? 'bg-rose-200 text-rose-600' : 'bg-slate-200 text-slate-500'
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${errors.general.includes('AI Quality Check Failed') ? 'bg-rose-500/20 text-rose-400' : 'bg-white/10 text-slate-400'
                         }`}>
                         <Sparkles className="w-5 h-5" />
                       </div>
@@ -613,7 +613,7 @@ export default function Submit() {
                         <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">Verification Report</p>
                         <p className="leading-relaxed">{errors.general}</p>
                         {errors.general.includes('AI Quality Check Failed') && (
-                          <p className="mt-2 text-indigo-600 text-[10px] uppercase font-black flex items-center gap-1">
+                          <p className="mt-2 text-rose-400 text-[10px] uppercase font-black flex items-center gap-1">
                             Click to see full reasoning <ChevronRight className="w-3 h-3" />
                           </p>
                         )}
@@ -648,7 +648,7 @@ export default function Submit() {
                         </div>
                       )}
                     </GlassButton>
-                    <button onClick={prevStep} className="w-full py-4 text-xs font-black uppercase text-slate-400 hover:text-slate-600 transition-colors">
+                    <button onClick={prevStep} className="w-full py-4 text-xs font-black uppercase text-slate-400 hover:text-white transition-colors">
                       Need to edit something? Go back
                     </button>
                   </div>
@@ -692,8 +692,8 @@ function FormField({
 
   return (
     <div className="space-y-3">
-      <label className={`block text-sm font-black uppercase tracking-widest transition-colors ${focused ? 'text-blue-600' : 'text-slate-800'}`}>
-        {label} {required && <span className="text-red-600">*</span>}
+      <label className={`block text-sm font-black uppercase tracking-widest transition-colors ${focused ? 'text-blue-400' : 'text-slate-300'}`}>
+        {label} {required && <span className="text-red-500">*</span>}
       </label>
       {multiline ? (
         <textarea
@@ -705,7 +705,7 @@ function FormField({
           required={required}
           rows={rows}
           placeholder={placeholder}
-          className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-4 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
         />
       ) : (
         <input
@@ -718,7 +718,7 @@ function FormField({
           required={required}
           placeholder={placeholder}
           step={step}
-          className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-4 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold placeholder:text-slate-500"
         />
       )}
       {error && (

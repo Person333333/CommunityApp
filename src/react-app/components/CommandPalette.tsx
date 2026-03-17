@@ -119,9 +119,9 @@ export default function CommandPalette() {
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className="fixed top-[20%] left-1/2 -translate-x-1/2 w-full max-w-lg z-[101]"
           >
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="glass-layer rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/10 overflow-hidden">
               {/* Search Input */}
-              <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
                 <Search className="w-5 h-5 text-slate-400" />
                 <input
                   autoFocus
@@ -129,9 +129,9 @@ export default function CommandPalette() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Type a command or search..."
-                  className="flex-1 bg-transparent outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 text-sm font-medium"
+                  className="flex-1 bg-transparent outline-none text-white placeholder-slate-400 text-sm font-medium"
                 />
-                <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 bg-white/10 rounded text-[10px] font-bold text-slate-400">
                   ESC
                 </kbd>
               </div>
@@ -148,13 +148,13 @@ export default function CommandPalette() {
                       key={cmd.id}
                       onClick={cmd.action}
                       onMouseEnter={() => setSelectedIndex(i)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors border border-transparent ${
                         i === selectedIndex
-                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                          ? 'bg-white/10 border-blue-400/30 shadow-[0_0_15px_rgba(59,130,246,0.1)] text-blue-300'
+                          : 'text-slate-300 hover:bg-white/5 hover:border-white/5'
                       }`}
                     >
-                      <span className={`p-2 rounded-lg ${i === selectedIndex ? 'bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}`}>
+                      <span className={`p-2 rounded-lg ${i === selectedIndex ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-slate-400'}`}>
                         {cmd.icon}
                       </span>
                       <div className="flex-1 min-w-0">
@@ -168,7 +168,7 @@ export default function CommandPalette() {
               </div>
 
               {/* Footer hint */}
-              <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100 dark:border-slate-700 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="flex items-center justify-between px-5 py-3 border-t border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 <span>↑↓ Navigate</span>
                 <span>↵ Select</span>
                 <span>ESC Close</span>

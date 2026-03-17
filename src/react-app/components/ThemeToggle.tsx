@@ -33,7 +33,7 @@ export default function ThemeToggle() {
         {dark ? (
           <Moon className="w-5 h-5 text-amber-400" />
         ) : (
-          <Sun className="w-5 h-5 text-slate-600" />
+          <Sun className="w-5 h-5 text-slate-300" />
         )}
       </motion.div>
     </motion.button>

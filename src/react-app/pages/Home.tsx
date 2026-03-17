@@ -154,25 +154,19 @@ export default function Home() {
 
   if (locationLoading && !userLocation) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image with White/Soft Overlay */}
+        {/* Remove Local Background Image overlay in favor of global APP wrapper blobs */}
         <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=2000"
-            alt="Community Members Together"
-            className="w-full h-full object-cover scale-110 opacity-[0.3]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/40 to-white z-10" />
-          <div className="absolute inset-0 bg-slate-900/5 mix-blend-overlay z-10" />
+          <div className="absolute inset-0 bg-transparent z-10" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 pt-10 sm:pt-20">
@@ -194,12 +188,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="space-y-3 sm:space-y-4"
             >
-              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter text-slate-900 uppercase">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter text-white uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 <span className="block mb-2">{t('home.hero.title1')}</span>
-                <span className="block w-fit mx-auto pb-2 text-blue-600">{t('home.hero.title2')}</span>
+                <span className="block w-fit mx-auto pb-2 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">{t('home.hero.title2')}</span>
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto font-bold leading-relaxed italic opacity-80">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 max-w-2xl mx-auto font-bold leading-relaxed italic opacity-80">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -209,15 +203,15 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="max-w-md mx-auto mt-2 sm:mt-4 transform scale-90"
               >
-                <div className="bg-white rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-sm border border-slate-200">
+                <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/20">
                   <div className="flex items-center gap-2 w-full flex-1 relative group bg-transparent">
-                    <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-focus-within:text-blue-500 transition-colors pointer-events-none" />
+                    <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-focus-within:text-blue-400 transition-colors pointer-events-none" />
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-slate-800 placeholder-slate-500 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
+                      className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-400 pl-10 sm:pl-12 pr-12 w-full font-medium text-sm sm:text-base py-2.5 sm:py-3"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
@@ -226,13 +220,13 @@ export default function Home() {
                       }}
                     />
                     <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-500" />
+                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-400 hover:text-blue-400 bg-transparent" />
                     </div>
                   </div>
                   <GlassButton
                     variant="primary"
                     size="md"
-                    className="w-full sm:w-auto"
+                    className="w-full sm:w-auto text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-blue-400/50 bg-blue-600/80 hover:bg-blue-500"
                     onClick={() => {
                       if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
                       else navigate('/discover');
@@ -252,35 +246,35 @@ export default function Home() {
                 <GlassButton
                   variant="secondary"
                   size="lg"
-                  className="bg-white border-blue-200 text-slate-700 font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-blue-50 transition-all shadow-xl group border-2 scale-105"
+                  className="bg-white/5 border border-white/20 text-white font-bold px-8 py-5 !rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-all shadow-[0_0_30px_rgba(255,255,255,0.05)] group scale-105"
                   onClick={() => navigate('/discover?wizard=true')}
                 >
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Compass className="w-6 h-6 text-blue-600" />
+                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
+                    <Compass className="w-6 h-6 text-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.5)] rounded-full" />
                   </div>
                   <div className="text-left">
-                    <div className="text-[10px] uppercase tracking-widest font-black text-blue-600 mb-0.5">Not sure where to start?</div>
-                    <div className="text-base sm:text-lg text-slate-900 font-black uppercase tracking-tight">Need help finding help?</div>
+                    <div className="text-[10px] uppercase tracking-widest font-black text-blue-300 mb-0.5">Not sure where to start?</div>
+                    <div className="text-base sm:text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
                   </div>
                 </GlassButton>
               </motion.div>
 
-              <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-2 sm:mt-3 text-[10px] sm:text-xs text-slate-600 font-semibold uppercase tracking-wider">
+              <div className="flex justify-center flex-wrap gap-3 sm:gap-6 mt-2 sm:mt-3 text-[10px] sm:text-xs text-slate-300 font-semibold uppercase tracking-wider drop-shadow-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
                   </div>
                   <span>{stats.totalResources}+ {t('home.stats.resources')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                    <Compass className="w-4 h-4 text-slate-400" />
+                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                    <Compass className="w-4 h-4 text-blue-400" />
                   </div>
                   <span>12+ {t('home.stats.categories')}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-slate-500" />
+                  <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-indigo-400" />
                   </div>
                   <span>{t('home.stats.localSupport')}</span>
                 </div>
@@ -297,10 +291,10 @@ export default function Home() {
                 className="flex justify-center mt-2 sm:mt-4"
               >
                 <div
-                  className="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-all hover:scale-110"
+                  className="w-10 h-10 rounded-full bg-white/10 border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all hover:scale-110"
                   onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
                 >
-                  <ChevronDown className="w-6 h-6 text-slate-400" />
+                  <ChevronDown className="w-6 h-6 text-white" />
                 </div>
               </motion.div>
             </motion.div>
@@ -309,8 +303,8 @@ export default function Home() {
       </section>
 
       {/* Spotlight Carousel */}
-      <div className="section-divider mx-auto max-w-4xl" />
-      <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8 bg-slate-50/50">
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -318,20 +312,20 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-16 flex flex-col items-center"
           >
-            <span className="text-slate-500 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider">
+            <span className="text-blue-400 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider">
               Community Resource Highlights
             </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 mb-3 sm:mb-4">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-white mb-3 sm:mb-4">
               {t('home.spotlight.title')}
             </h2>
-            <p className="text-lg text-slate-600 font-medium">
+            <p className="text-lg text-slate-300 font-medium">
               {t('home.spotlight.subtitle')}
             </p>
           </motion.div>
 
           {displaySpotlights.length === 0 ? (
-            <GlassCard className="text-center py-12">
-              <p className="text-xl text-slate-700 font-bold">{t('home.spotlight.noResources')}</p>
+            <GlassCard variant="strong" className="text-center py-12 bg-white/5 border border-white/10 rounded-chromic-card">
+              <p className="text-xl text-slate-300 font-bold">{t('home.spotlight.noResources')}</p>
             </GlassCard>
           ) : (
             <div
@@ -349,24 +343,24 @@ export default function Home() {
                       className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
                     >
                       <GlassCard
-                        hover
-                        className="h-full cursor-pointer bg-white border border-slate-100 shadow-sm"
+                        variant="strong"
+                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] rounded-chromic-card hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all"
                         onClick={() => setSelectedResource(resource)}
                       >
                         <div className="space-y-4">
                           {resource.image_url && (
-                            <div className="aspect-video rounded-lg overflow-hidden relative">
+                            <div className="aspect-video rounded-xl overflow-hidden relative shadow-md">
                               <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
-                              <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full">Featured</div>
+                              <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold rounded-full border border-white/20 shadow-sm">Featured</div>
                             </div>
                           )}
                           <div>
-                            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{resource.category}</span>
-                            <h3 className="text-lg font-semibold text-slate-900 mt-2 line-clamp-1">{resource.title}</h3>
+                            <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">{resource.category}</span>
+                            <h3 className="text-lg font-black text-white mt-1 line-clamp-1 drop-shadow-sm">{resource.title}</h3>
                           </div>
-                          <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">{resource.description}</p>
-                          <div className="flex items-center justify-between pt-2">
-                            <button className="text-slate-500 font-semibold text-xs flex items-center gap-2 hover:text-slate-800 transition-colors">
+                          <p className="text-slate-300 text-sm font-semibold line-clamp-2 leading-relaxed">{resource.description}</p>
+                          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                            <button className="text-blue-400 font-black tracking-widest uppercase text-[10px] flex items-center gap-2 hover:text-blue-300 transition-colors">
                               Explore Details <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           </div>
@@ -382,13 +376,13 @@ export default function Home() {
                 <>
                   <button
                     onClick={() => { setCarouselIndex(prev => (prev === 0 ? displaySpotlights.length - 1 : prev - 1)); setAutoPlay(false); }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all z-10 hidden sm:flex"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-10 hidden sm:flex"
                   >
                     <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
                     onClick={() => { setCarouselIndex(prev => (prev >= displaySpotlights.length - 1 ? 0 : prev + 1)); setAutoPlay(false); }}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-slate-200 shadow-xl flex items-center justify-center text-slate-600 hover:text-blue-600 hover:scale-110 transition-all z-10 hidden sm:flex"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-10 hidden sm:flex"
                   >
                     <ChevronRight className="w-6 h-6" />
                   </button>
@@ -412,39 +406,36 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      {/* How It Works Section */}
-      <section className="py-10 sm:py-16 bg-slate-50/50 border-t border-slate-100">
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-10 sm:py-16">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
           <div className="text-center mb-10 sm:mb-16">
-            <h2 className="text-2xl sm:text-4xl font-bold text-blue-900 mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto font-bold">{t('home.howItWorks.subtitle', 'Your hub for finding and sharing crucial local resources.')}</p>
+            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
+            <p className="text-blue-200 max-w-2xl mx-auto font-bold">{t('home.howItWorks.subtitle', 'Your hub for finding and sharing crucial local resources.')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: t('home.howItWorks.step1.title', '1. Discover'),
-                icon: <Search className="w-8 h-8 text-blue-600" />,
-                iconBg: "bg-blue-50",
+                icon: <Search className="w-8 h-8 text-blue-400" />,
+                iconBg: "bg-blue-500/10 border border-blue-500/20",
                 frontText: "Find what you need.",
                 desc: t('home.howItWorks.step1.desc', 'Search our interactive directory or talk to our AI assistant to find exactly what you need in your area.'),
-                theme: "blue"
               },
               {
                 title: t('home.howItWorks.step2.title', '2. Connect'),
-                icon: <Heart className="w-8 h-8 text-indigo-600" />,
-                iconBg: "bg-indigo-50",
+                icon: <Heart className="w-8 h-8 text-purple-400" />,
+                iconBg: "bg-purple-500/10 border border-purple-500/20",
                 frontText: "Reach out to local heroes.",
                 desc: t('home.howItWorks.step2.desc', 'Get immediate access to contact info, hours, directions, and services for local organizations.'),
-                theme: "indigo"
               },
               {
                 title: t('home.howItWorks.step3.title', '3. Contribute'),
-                icon: <Users className="w-8 h-8 text-emerald-600" />,
-                iconBg: "bg-emerald-50",
+                icon: <Users className="w-8 h-8 text-pink-400" />,
+                iconBg: "bg-pink-500/10 border border-pink-500/20",
                 frontText: "Grow the community hub.",
                 desc: t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.'),
-                theme: "emerald"
               }
             ].map((step, idx) => (
               <motion.div
@@ -461,14 +452,14 @@ export default function Home() {
                 }}
                 className="h-full"
               >
-                <div className={`bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-xl text-center h-full flex flex-col items-center justify-center group hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500`}>
+                <div className={`glass-layer rounded-[2.5rem] p-10 border border-white/10 shadow-xl text-center h-full flex flex-col items-center justify-center group hover:border-white/30 hover:shadow-chromic-hover transition-all duration-500`}>
                   <div className={`w-20 h-20 ${step.iconBg} rounded-[1.5rem] flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg`}>
                     {step.icon}
                   </div>
-                  <h3 className="text-2xl font-black text-slate-900 mb-4 uppercase tracking-tighter">{step.title}</h3>
-                  <p className={`text-base font-bold text-slate-600 mb-4 px-2 italic opacity-80`}>{step.frontText}</p>
-                  <div className="w-12 h-1 bg-slate-100 mb-6 group-hover:w-24 group-hover:bg-blue-300 transition-all" />
-                  <p className="text-sm font-medium text-slate-500 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">{step.title}</h3>
+                  <p className={`text-base font-bold text-blue-200 mb-4 px-2 italic opacity-80`}>{step.frontText}</p>
+                  <div className="w-12 h-1 bg-white/20 mb-6 group-hover:w-24 group-hover:bg-blue-400 transition-all" />
+                  <p className="text-sm font-medium text-slate-300 leading-relaxed">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -477,36 +468,36 @@ export default function Home() {
       </section>
 
       {/* Impact Stats */}
-      <div className="section-divider mx-auto max-w-4xl" />
-      <section className="py-16 sm:py-20 bg-white">
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 max-w-6xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 flex flex-col items-center">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-4">
               <Compass className="w-10 h-10 text-blue-400 opacity-40" />
             </motion.div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-3">{t('home.impact.title')}</h2>
-            <p className="text-base text-slate-500 font-medium">{t('home.impact.subtitle')}</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">{t('home.impact.title')}</h2>
+            <p className="text-base text-slate-300 font-medium">{t('home.impact.subtitle')}</p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            <StatCard icon={<Users className="w-20 h-20" />} target={1247} suffix="+" label={t('home.impact.neighborsHelped')} color="blue" />
-            <StatCard icon={<Search className="w-20 h-20" />} target={stats.totalResources} suffix="+" label={t('home.impact.localOrgs')} color="indigo" />
-            <StatCard icon={<MapPin className="w-20 h-20" />} target={12} suffix="+" label={t('home.impact.neighborhoods')} color="teal" />
-            <StatCard icon={<Clock className="w-20 h-20" />} target={0} suffix="" label="Community Care" color="amber" staticText="24/7" />
+            <StatCard icon={<Users className="w-20 h-20 text-white/5" />} target={1247} suffix="+" label={t('home.impact.neighborsHelped')} color="blue" />
+            <StatCard icon={<Search className="w-20 h-20 text-white/5" />} target={stats.totalResources} suffix="+" label={t('home.impact.localOrgs')} color="indigo" />
+            <StatCard icon={<MapPin className="w-20 h-20 text-white/5" />} target={12} suffix="+" label={t('home.impact.neighborhoods')} color="teal" />
+            <StatCard icon={<Clock className="w-20 h-20 text-white/5" />} target={0} suffix="" label="Community Care" color="amber" staticText="24/7" />
           </div>
         </div>
       </section>
 
       {/* Recent Community Activity */}
-      <div className="section-divider mx-auto max-w-4xl" />
-      <section className="py-14 sm:py-18 bg-white">
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-14 sm:py-18">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
             <div className="flex items-center justify-center gap-2 mb-3">
-              <Activity className="w-5 h-5 text-emerald-500" />
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Live</span>
+              <Activity className="w-5 h-5 text-emerald-400" />
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Live</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Recent Community Activity</h2>
-            <p className="text-sm text-slate-500 font-medium">See the latest resources added by your neighbors</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Recent Community Activity</h2>
+            <p className="text-sm text-slate-300 font-medium">See the latest resources added by your neighbors</p>
           </motion.div>
 
           <div className="space-y-4">
@@ -517,24 +508,24 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer group"
+                className="flex items-start gap-4 p-4 rounded-xl glass-layer border border-white/10 hover:border-blue-400/50 hover:bg-white/10 transition-all cursor-pointer group"
                 onClick={() => navigate(`/discover?category=${encodeURIComponent(resource.category || '')}`)}
               >
-                <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400 ring-4 ring-emerald-100" />
+                <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-slate-900 text-sm group-hover:text-blue-700 transition-colors truncate">{resource.title}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">{resource.category}</span>
+                    <span className="font-semibold text-white text-sm group-hover:text-blue-300 transition-colors truncate">{resource.title}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">{resource.category}</span>
                   </div>
-                  <p className="text-xs text-slate-500 font-medium mt-1 truncate">{resource.description?.slice(0, 100)}{resource.description && resource.description.length > 100 ? '...' : ''}</p>
+                  <p className="text-xs text-slate-400 font-medium mt-1 truncate">{resource.description?.slice(0, 100)}{resource.description && resource.description.length > 100 ? '...' : ''}</p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors flex-shrink-0 mt-1" />
+                <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1" />
               </motion.div>
             ))}
           </div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-8">
-            <button onClick={() => navigate('/discover')} className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+            <button onClick={() => navigate('/discover')} className="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors">
               View all resources →
             </button>
           </motion.div>
@@ -542,12 +533,12 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <div className="section-divider mx-auto max-w-4xl" />
-      <section className="py-14 sm:py-20 bg-white">
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-14 sm:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-blue-900 mb-4">{t('home.stories.title')}</h2>
-            <p className="text-xl text-slate-900 font-black">{t('home.stories.subtitle')}</p>
+            <h2 className="text-4xl font-bold text-white mb-4">{t('home.stories.title')}</h2>
+            <p className="text-xl text-blue-200 font-black">{t('home.stories.subtitle')}</p>
           </motion.div>
           <div className="relative overflow-hidden px-4 carousel-fade-edges">
             <motion.div
@@ -555,59 +546,59 @@ export default function Home() {
               animate={{ x: [0, -1200, 0] }}
               transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
             >
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
-                <Quote className="w-8 h-8 text-slate-300 mb-4" />
-                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+                <Quote className="w-8 h-8 text-white/20 mb-4" />
+                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">MS</div>
                   <div>
-                    <div className="font-semibold text-slate-900">Maria Sanchez</div>
-                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Northgate Neighbor</div>
+                    <div className="font-semibold text-white">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
-                <Quote className="w-8 h-8 text-slate-300 mb-4" />
-                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+                <Quote className="w-8 h-8 text-white/20 mb-4" />
+                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">JT</div>
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">JT</div>
                   <div>
-                    <div className="font-semibold text-slate-900">James Thompson</div>
-                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Community Organizer</div>
+                    <div className="font-semibold text-white">James Thompson</div>
+                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Community Organizer</div>
                   </div>
                 </div>
               </GlassCard>
 
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
-                <Quote className="w-8 h-8 text-slate-300 mb-4" />
-                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+                <Quote className="w-8 h-8 text-white/20 mb-4" />
+                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">LW</div>
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">LW</div>
                   <div>
-                    <div className="font-semibold text-slate-900">Linda Wright</div>
-                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Single Parent &amp; Educator</div>
+                    <div className="font-semibold text-white">Linda Wright</div>
+                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Single Parent &amp; Educator</div>
                   </div>
                 </div>
               </GlassCard>
 
               {/* Duplicate for seamless loop */}
-              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 bg-white border border-slate-200 shadow-sm">
-                <Quote className="w-8 h-8 text-slate-300 mb-4" />
-                <blockquote className="text-lg text-slate-700 font-medium italic mb-6 leading-relaxed">
+              <GlassCard className="w-full md:w-[600px] flex-shrink-0 p-8 glass-layer border border-white/10 shadow-sm">
+                <Quote className="w-8 h-8 text-white/20 mb-4" />
+                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-sm border border-slate-200">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">MS</div>
                   <div>
-                    <div className="font-semibold text-slate-900">Maria Sanchez</div>
-                    <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Northgate Neighbor</div>
+                    <div className="font-semibold text-white">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
               </GlassCard>
@@ -617,29 +608,29 @@ export default function Home() {
       </section>
 
       {/* Newsletter - toned down */}
-      <section className="py-16 bg-slate-50 border-t border-slate-100">
+      <section className="py-16 border-t border-white/10">
         <div className="container mx-auto max-w-2xl px-4 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-2xl p-8 sm:p-12 border border-slate-150 shadow-sm"
+            className="glass-layer rounded-2xl p-8 sm:p-12 border border-white/10 shadow-sm"
           >
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-6 h-6 text-slate-500" />
+            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
+              <Mail className="w-6 h-6 text-blue-300" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tight mb-2">Stay in the Loop</h2>
-            <p className="text-slate-500 font-medium mb-6 text-sm">
+            <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-2">Stay in the Loop</h2>
+            <p className="text-slate-300 font-medium mb-6 text-sm">
               Weekly updates on new resources, volunteer opportunities, and community events.
             </p>
             {emailSubscribed ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-green-50 text-green-700 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 border border-green-100"
+                className="bg-green-500/10 text-emerald-400 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 border border-emerald-500/20"
               >
-                <Heart className="w-4 h-4 text-green-600 fill-green-600" /> You're on the list!
+                <Heart className="w-4 h-4 text-emerald-400 fill-emerald-400" /> You're on the list!
               </motion.div>
             ) : (
               <form
@@ -658,19 +649,17 @@ export default function Home() {
                   placeholder="Your email address..."
                   value={subscribeEmail}
                   onChange={(e) => setSubscribeEmail(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-medium outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 transition-all placeholder:text-slate-400 text-sm"
+                  className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-500 text-sm"
                 />
                 <GlassButton variant="primary" size="md" className="!rounded-xl shadow-sm flex items-center justify-center gap-2">
                   Subscribe <Send className="w-3.5 h-3.5" />
                 </GlassButton>
               </form>
             )}
-            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mt-4">No spam. Unsubscribe anytime.</p>
+            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mt-4">No spam. Unsubscribe anytime.</p>
           </motion.div>
         </div>
       </section>
-
-
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
@@ -683,20 +672,20 @@ function StatCard({ icon, target, suffix, label, color, staticText }: {
   icon: React.ReactNode; target: number; suffix: string; label: string; color: string; staticText?: string;
 }) {
   const { count, ref } = useCountUp(target, 2000);
-  const borderColor = { blue: 'border-l-blue-500', indigo: 'border-l-indigo-500', teal: 'border-l-teal-500', amber: 'border-l-amber-500' }[color] || 'border-l-blue-500';
+  const borderColor = { blue: 'border-l-blue-400', indigo: 'border-l-indigo-400', teal: 'border-l-teal-400', amber: 'border-l-amber-400' }[color] || 'border-l-blue-400';
 
   return (
     <motion.div
       ref={ref}
       whileHover={{ scale: 1.03, y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className={`bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:shadow-xl transition-shadow`}
+      className={`glass-layer p-5 sm:p-6 rounded-xl border border-white/10 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:shadow-chromic-hover transition-shadow`}
     >
-      <div className="absolute -right-4 -bottom-4 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity">{icon}</div>
-      <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1 tabular-nums relative z-10">
+      <div className="absolute -right-4 -bottom-4 opacity-20 group-hover:opacity-40 transition-opacity">{icon}</div>
+      <div className="text-2xl sm:text-3xl font-bold text-white mb-1 tabular-nums relative z-10">
         {staticText || <>{count.toLocaleString()}{suffix}</>}
       </div>
-      <div className="text-slate-500 text-[10px] sm:text-xs font-semibold uppercase tracking-wider relative z-10">{label}</div>
+      <div className="text-blue-200 text-[10px] sm:text-xs font-semibold uppercase tracking-wider relative z-10">{label}</div>
     </motion.div>
   );
 }

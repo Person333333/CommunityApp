@@ -60,10 +60,10 @@ export default function References() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12 text-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-white drop-shadow-sm mb-4">
             {t('references.title')}
           </h1>
-          <p className="text-xl text-slate-800 font-bold">
+          <p className="text-xl text-blue-200 font-bold">
             {t('references.subtitle')}
           </p>
         </motion.div>
@@ -71,27 +71,27 @@ export default function References() {
         <div className="space-y-12">
           {/* Professional Documents Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-blue-50 border-blue-100 shadow-xl">
-              <FileText className="w-12 h-12 text-blue-600 mb-4" />
-              <h2 className="text-xl font-bold text-blue-900 mb-4">{t('references.workLog')}</h2>
+            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-blue-500/10 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+              <FileText className="w-12 h-12 text-blue-400 mb-4" />
+              <h2 className="text-xl font-bold text-white drop-shadow-sm mb-4">{t('references.workLog')}</h2>
               <a
                 href="/documents/work-log.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 bg-white hover:bg-slate-50 border border-blue-200 rounded-xl text-blue-700 transition-all font-bold shadow-sm"
+                className="w-full py-3 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 rounded-xl text-white transition-all font-bold shadow-sm"
               >
                 View PDF Work Log
               </a>
             </GlassCard>
 
-            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-amber-50 border-amber-100 shadow-xl">
-              <Download className="w-12 h-12 text-amber-600 mb-4" />
-              <h2 className="text-xl font-bold text-amber-900 mb-4">{t('references.copyright')}</h2>
+            <GlassCard hover className="flex flex-col items-center text-center p-8 bg-amber-500/10 border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.1)]">
+              <Download className="w-12 h-12 text-amber-500 mb-4" />
+              <h2 className="text-xl font-bold text-white drop-shadow-sm mb-4">{t('references.copyright')}</h2>
               <a
                 href="/documents/copyright-checklist.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 bg-white hover:bg-slate-50 border border-amber-200 rounded-xl text-amber-700 transition-all font-bold shadow-sm"
+                className="w-full py-3 bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/30 rounded-xl text-white transition-all font-bold shadow-sm"
               >
                 View PDF Checklist
               </a>
@@ -99,29 +99,29 @@ export default function References() {
           </section>
 
           {/* Clean Lists */}
-          <GlassCard className="p-8 space-y-10 bg-white border-slate-100 shadow-2xl">
+          <GlassCard className="p-8 space-y-10 glass-layer border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
             {/* Project Information */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-2 uppercase tracking-widest">
-                <Info className="w-6 h-6 text-blue-500" /> Project Information
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 flex items-center gap-2 border-b border-white/10 pb-2 uppercase tracking-widest">
+                <Info className="w-6 h-6 text-blue-400" /> Project Information
               </h2>
-              <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-700">
+              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-300">
                   <div>
-                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Event</h3>
-                    <p className="font-bold text-lg">Washington TSA Webmaster (HS)</p>
+                    <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Event</h3>
+                    <p className="font-bold text-lg text-white">Washington TSA Webmaster (HS)</p>
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Chapter</h3>
-                    <p className="font-bold text-lg">2139 (Inglemoor High School)</p>
+                    <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Chapter</h3>
+                    <p className="font-bold text-lg text-white">2139 (Inglemoor High School)</p>
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Theme</h3>
-                    <p className="font-bold text-lg">Community Resource Hub</p>
+                    <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Theme</h3>
+                    <p className="font-bold text-lg text-white">Community Resource Hub</p>
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Team Members</h3>
-                    <ul className="list-disc pl-5 font-bold space-y-1 mt-1">
+                    <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Team Members</h3>
+                    <ul className="list-disc pl-5 font-bold space-y-1 mt-1 text-white">
                       <li>Nathan Choy</li>
                       <li>Nikhil Vincent</li>
                       <li>George Xu</li>
@@ -133,12 +133,12 @@ export default function References() {
 
             {/* Tech Stack */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Tech Stack</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Tech Stack</h2>
               <ul className="space-y-3">
                 {techStack.map((item, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-700">
-                    <span className="text-slate-900 font-bold">{item.category}</span>
-                    <span className="text-sm italic font-bold text-indigo-700">{item.tech}</span>
+                  <li key={i} className="flex justify-between items-center text-slate-300">
+                    <span className="text-white font-bold">{item.category}</span>
+                    <span className="text-sm italic font-bold text-indigo-300">{item.tech}</span>
                   </li>
                 ))}
               </ul>
@@ -146,11 +146,11 @@ export default function References() {
 
             {/* Libraries */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Additional Libraries</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Additional Libraries</h2>
               <ul className="space-y-3">
                 {additionalLibraries.map((lib, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-700">
-                    <span className="text-indigo-900 font-mono text-sm font-bold">{lib.name}</span>
+                  <li key={i} className="flex justify-between items-center text-slate-300">
+                    <span className="text-indigo-300 font-mono text-sm font-bold">{lib.name}</span>
                     <span className="text-sm italic font-bold text-right">{lib.purpose}</span>
                   </li>
                 ))}
@@ -159,16 +159,16 @@ export default function References() {
 
             {/* Organization Links */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Inspiration & Organizations</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Inspiration & Organizations</h2>
               <ul className="space-y-3">
                 {resourceLinks.map((org, i) => (
                   <li key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 overflow-hidden">
-                    <span className="text-slate-900 text-sm font-bold whitespace-nowrap">{org.title}</span>
+                    <span className="text-white text-sm font-bold whitespace-nowrap">{org.title}</span>
                     <a
                       href={org.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:text-blue-800 transition-colors truncate sm:max-w-[60%] font-bold"
+                      className="text-xs text-blue-400 hover:text-blue-300 transition-colors truncate sm:max-w-[60%] font-bold"
                     >
                       {org.url}
                     </a>
@@ -179,16 +179,16 @@ export default function References() {
 
             {/* Research Links */}
             <div>
-              <h2 className="text-2xl font-black text-blue-900 mb-6 border-b border-slate-100 pb-2 uppercase tracking-widest">Research & Documentation</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Research & Documentation</h2>
               <ul className="space-y-3">
                 {researchLinks.map((link, i) => (
-                  <li key={i} className="flex justify-between items-center">
-                    <span className="text-slate-900 text-sm font-bold">{link.title}</span>
+                  <li key={i} className="flex justify-between items-center text-slate-300">
+                    <span className="text-white text-sm font-bold">{link.title}</span>
                     <a
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 font-bold"
+                      className="text-blue-400 hover:text-blue-300 font-bold"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </a>

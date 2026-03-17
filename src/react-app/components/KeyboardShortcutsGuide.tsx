@@ -53,13 +53,13 @@ export default function KeyboardShortcutsGuide() {
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-md z-[101]"
           >
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+            <div className="glass-layer rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-white/10 overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Command className="w-5 h-5 text-blue-600" />
-                  <h2 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Keyboard Shortcuts</h2>
+                  <Command className="w-5 h-5 text-blue-400" />
+                  <h2 className="font-bold text-white drop-shadow-sm text-sm uppercase tracking-widest">Keyboard Shortcuts</h2>
                 </div>
-                <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white transition-colors">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -70,13 +70,13 @@ export default function KeyboardShortcutsGuide() {
                   <div className="space-y-2">
                     {shortcuts.map((s, i) => (
                       <div key={i} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-2 text-sm text-white font-medium">
                           {s.icon}
-                          <span className="font-medium">{s.label}</span>
+                          <span>{s.label}</span>
                         </div>
                         <div className="flex gap-1">
                           {s.keys.map((key, j) => (
-                            <kbd key={j} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] font-bold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 min-w-[24px] text-center">
+                            <kbd key={j} className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold text-blue-300 border border-white/20 min-w-[24px] text-center shadow-inner">
                               {key}
                             </kbd>
                           ))}
@@ -86,15 +86,15 @@ export default function KeyboardShortcutsGuide() {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-100 dark:border-slate-700 pt-4">
+                <div className="border-t border-white/10 pt-4">
                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Accessibility Features</h3>
                   <div className="space-y-2">
                     {features.map((f, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <span className="p-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">{f.icon}</span>
+                        <span className="p-1 rounded bg-white/5 border border-white/10 text-blue-400 shadow-inner">{f.icon}</span>
                         <div>
-                          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{f.label}</span>
-                          <span className="text-xs text-slate-400 ml-2">{f.desc}</span>
+                          <span className="text-sm font-bold text-white tracking-wide">{f.label}</span>
+                          <span className="text-xs text-slate-400 ml-2 font-medium">{f.desc}</span>
                         </div>
                       </div>
                     ))}
@@ -102,7 +102,7 @@ export default function KeyboardShortcutsGuide() {
                 </div>
               </div>
 
-              <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-700 text-center">
+              <div className="px-5 py-3 border-t border-white/10 text-center bg-white/5">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Press ? to toggle this guide</span>
               </div>
             </div>

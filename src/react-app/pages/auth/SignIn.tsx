@@ -97,10 +97,10 @@ export default function SignInPage() {
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 mb-2 uppercase tracking-widest">
+          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.welcomeBack')}
           </h1>
-          <p className="text-lg text-slate-800 font-bold">
+          <p className="text-lg text-slate-300 font-bold">
             {t('auth.signInSubtitle')}
           </p>
         </motion.div>
@@ -114,21 +114,21 @@ export default function SignInPage() {
             {pendingCode ? (
               <form onSubmit={handleVerify} className="space-y-6">
                 <div className="text-center">
-                  <CheckCircle className="w-12 h-12 text-blue-600 mx-auto mb-2" />
-                  <p className="text-slate-800 font-bold text-sm">{t('auth.emailCodeSent', { email: emailAddress })}</p>
+                  <CheckCircle className="w-12 h-12 text-blue-400 mx-auto mb-2" />
+                  <p className="text-white font-bold text-sm block drop-shadow-sm">{t('auth.emailCodeSent', { email: emailAddress })}</p>
                 </div>
                 {error && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="glass-ochre border border-amber-400/30 rounded-lg p-4 flex items-start gap-3"
+                    className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 flex items-start gap-3"
                   >
                     <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-amber-300">{error}</p>
                   </motion.div>
                 )}
                 <div className="space-y-2">
-                  <label htmlFor="code" className="block text-sm font-bold text-slate-700 uppercase tracking-widest">
+                  <label htmlFor="code" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
                     {t('auth.verificationCode')}
                   </label>
                   <input
@@ -139,10 +139,10 @@ export default function SignInPage() {
                     placeholder={t('auth.codePlaceholder')}
                     required
                     maxLength={6}
-                    className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
                   />
                 </div>
-                <GlassButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading || !isLoaded}>
+                <GlassButton type="submit" variant="primary" size="lg" className="w-full text-white" disabled={loading || !isLoaded}>
                   {loading ? t('auth.verifying') : t('auth.verify')}
                 </GlassButton>
                 <button
@@ -159,7 +159,7 @@ export default function SignInPage() {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="glass-ochre border border-amber-400/30 rounded-lg p-4 flex items-start gap-3"
+                    className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 flex items-start gap-3"
                   >
                     <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-amber-300">{error}</p>
@@ -168,11 +168,11 @@ export default function SignInPage() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-bold text-slate-700 uppercase tracking-widest">
+                  <label htmlFor="email" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
                     <input
                       id="email"
                       type="email"
@@ -180,18 +180,18 @@ export default function SignInPage() {
                       onChange={(e) => setEmailAddress(e.target.value)}
                       placeholder={t('auth.emailPlaceholder')}
                       required
-                      className="w-full bg-white border border-slate-200 rounded-lg px-12 py-3 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Password Input */}
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-bold text-slate-700 uppercase tracking-widest">
+                  <label htmlFor="password" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
@@ -199,7 +199,7 @@ export default function SignInPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('auth.passwordPlaceholder')}
                       required
-                      className="w-full bg-white border border-slate-200 rounded-lg px-12 py-3 pr-12 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                     <button
                       type="button"

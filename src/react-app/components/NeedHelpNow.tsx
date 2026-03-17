@@ -36,49 +36,49 @@ export default function NeedHelpNow() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg relative z-[71] overflow-hidden border border-slate-200"
+                            className="glass-layer rounded-[2rem] shadow-[0_0_30px_rgba(255,255,255,0.05)] w-full max-w-lg relative z-[71] overflow-hidden border border-white/10"
                         >
-                            <div className="bg-slate-900 p-6 flex justify-between items-center text-white">
+                            <div className="bg-white/5 border-b border-white/10 p-6 flex justify-between items-center text-white">
                                 <div className="flex items-center gap-3">
-                                    <AlertCircle className="w-8 h-8" />
-                                    <h2 className="text-2xl font-semibold">Immediate Access</h2>
+                                    <AlertCircle className="w-8 h-8 text-rose-400" />
+                                    <h2 className="text-xl font-bold uppercase tracking-widest drop-shadow-sm">Immediate Access</h2>
                                 </div>
-                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-slate-800 rounded-full transition-colors">
-                                    <X className="w-6 h-6" />
+                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                                    <X className="w-5 h-5 text-slate-300" />
                                 </button>
                             </div>
 
                             <div className="p-8 space-y-6">
-                                <p className="text-slate-600 font-bold">If you are in immediate physical danger, please call <strong className="text-slate-900">911</strong> immediately.</p>
+                                <p className="text-slate-300 font-medium">If you are in immediate physical danger, please call <strong className="text-rose-400 font-black tracking-widest text-lg">911</strong> immediately.</p>
 
                                 <div className="space-y-4">
-                                    <a href="tel:988" className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-blue-50 hover:border-blue-200 transition-all group">
-                                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                    <a href="tel:988" className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-blue-500/10 hover:border-blue-400/30 transition-all group">
+                                        <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors border border-blue-400/20">
                                             <Phone className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 text-sm">Crisis Lifeline</h3>
-                                            <p className="text-slate-500 text-xs font-medium">Call or Text 988 (Available 24/7)</p>
+                                            <h3 className="font-bold text-white text-sm tracking-wide">Crisis Lifeline</h3>
+                                            <p className="text-blue-200 text-xs font-medium">Call or Text 988 (Available 24/7)</p>
                                         </div>
                                     </a>
 
-                                    <a href="/discover?category=Housing%20%26%20Utilities" className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 hover:bg-amber-50 hover:border-amber-200 transition-all group shadow-sm">
-                                        <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                                    <a href="/discover?category=Housing%20%26%20Utilities" className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-amber-500/10 hover:border-amber-400/30 transition-all group shadow-sm">
+                                        <div className="w-12 h-12 bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-colors border border-amber-400/20">
                                             <Home className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 text-sm">Emergency Housing</h3>
-                                            <p className="text-slate-500 text-xs font-medium">Find shelters open right now</p>
+                                            <h3 className="font-bold text-white text-sm tracking-wide">Emergency Housing</h3>
+                                            <p className="text-amber-200 text-xs font-medium">Find shelters open right now</p>
                                         </div>
                                     </a>
 
-                                    <a href="/discover?category=Food%20Assistance" className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 hover:bg-emerald-50 hover:border-emerald-200 transition-all group shadow-sm">
-                                        <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                    <a href="/discover?category=Food%20Assistance" className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500/10 hover:border-emerald-400/30 transition-all group shadow-sm">
+                                        <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors border border-emerald-400/20">
                                             <Utensils className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 text-sm">Food Banks Today</h3>
-                                            <p className="text-slate-500 text-xs font-medium">Hot meals and emergency pantries</p>
+                                            <h3 className="font-bold text-white text-sm tracking-wide">Food Banks Today</h3>
+                                            <p className="text-emerald-200 text-xs font-medium">Hot meals and emergency pantries</p>
                                         </div>
                                     </a>
                                 </div>

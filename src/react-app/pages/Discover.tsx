@@ -294,14 +294,14 @@ export default function Discover() {
     // Re-applying indigo/blue purge logic even here
     if (c.includes('health')) return 'text-sky-600 bg-sky-50 border-sky-100';
     if (c.includes('employment') || c.includes('money')) return 'text-indigo-600 bg-indigo-50 border-indigo-100';
-    if (c.includes('legal')) return 'text-slate-600 bg-slate-50 border-slate-100';
+    if (c.includes('legal')) return 'text-slate-300 bg-white/5 border-white/10';
     if (c.includes('education')) return 'text-blue-600 bg-blue-50 border-blue-100';
     if (c.includes('urgent')) return 'text-orange-600 bg-orange-50 border-orange-100';
     return 'text-blue-600 bg-blue-50 border-blue-100';
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12 px-3 sm:px-6 lg:px-8 bg-white">
+    <div className="min-h-screen pt-20 pb-12 px-3 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <motion.div
@@ -309,16 +309,16 @@ export default function Discover() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 mb-2 sm:mb-4">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-white mb-2 sm:mb-4">
             {t('discover.title')}
           </h1>
-          <p className="text-base sm:text-xl text-slate-600 font-medium mb-4 sm:mb-8">
+          <p className="text-base sm:text-xl text-slate-300 font-medium mb-4 sm:mb-8">
             {t('discover.subtitle')}
           </p>
 
           <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
-            <div className="hidden sm:flex items-center gap-2 text-slate-600 font-medium text-xs bg-white/70 px-4 py-2 rounded-full border border-slate-200 shadow-sm">
-              <Sparkles className="w-4 h-4 text-blue-500" />
+            <div className="hidden sm:flex items-center gap-2 text-white font-medium text-xs glass-layer px-4 py-2 rounded-full border border-white/20 shadow-sm">
+              <Sparkles className="w-4 h-4 text-blue-400" />
               <span>{resources.length} verified results</span>
             </div>
           </div>
@@ -358,30 +358,30 @@ export default function Discover() {
           <GlassButton
             variant="secondary"
             size="lg"
-            className="w-full bg-slate-900 border-slate-800 text-white font-black px-8 py-5 !rounded-[2rem] flex items-center justify-center gap-4 hover:bg-slate-800 transition-all shadow-2xl group relative overflow-hidden"
+            className="w-full bg-slate-900/40 backdrop-blur-md border border-white/10 text-white font-black px-8 py-5 !rounded-[2rem] flex items-center justify-center gap-4 hover:bg-slate-800/60 transition-all shadow-2xl group relative overflow-hidden"
             onClick={() => setIsQuestionnaireOpen(true)}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 w-[200%] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="w-12 h-12 rounded-2xl bg-blue-500/80 backdrop-blur-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
               <Compass className="w-7 h-7 text-white" />
             </div>
-            <div className="text-left">
-              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-blue-400 mb-0.5">Not sure where to start?</div>
+            <div className="text-left relative z-10">
+              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-blue-300 mb-0.5">Not sure where to start?</div>
               <div className="text-xl sm:text-2xl tracking-tighter uppercase leading-none">Need help finding a resource?</div>
             </div>
-            <ChevronRight className="w-6 h-6 text-blue-400 group-hover:translate-x-1 transition-transform ml-auto hidden sm:block" />
+            <ChevronRight className="w-6 h-6 text-blue-300 group-hover:translate-x-1 transition-transform ml-auto hidden sm:block relative z-10" />
           </GlassButton>
 
-          <GlassCard variant="strong">
+          <GlassCard className="glass-layer border border-white/10 !rounded-chromic-card">
             <div className="space-y-6">
               {/* Search input and Location Bar */}
               <div className="flex flex-col lg:flex-row gap-4 items-center">
                 <div className="relative flex-1 group w-full">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-400 transition-colors" />
                   {searchTerm && (
                     <button
                       onClick={() => { setSearchTerm(''); handleSearch(''); }}
-                      className="absolute left-11 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 p-1"
+                      className="absolute left-11 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white z-10 p-1"
                       title="Clear Search"
                     >
                       <X className="w-4 h-4" />
@@ -396,44 +396,42 @@ export default function Discover() {
                       handleSearch(val);
                     }}
                     placeholder={t('discover.searchPlaceholder')}
-                    className={`w-full bg-slate-50 border border-slate-200 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-12 py-4 font-black text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-bold`}
+                    className={`w-full bg-white/5 border border-white/10 rounded-2xl ${searchTerm ? 'pl-20' : 'pl-12'} pr-12 py-4 font-black text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all font-bold backdrop-blur`}
                   />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                    {searchTerm && (
-                      <button onClick={() => { setSearchTerm(''); handleSearch(''); }} className="text-slate-400 hover:text-slate-600 p-1">
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
-                    <VoiceSearchButton onResult={(text) => { setSearchTerm(text); handleSearch(text); }} className="w-8 h-8 border-none shadow-none bg-transparent hover:bg-slate-200 text-slate-400 hover:text-blue-500" />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex items-center">
+                    <VoiceSearchButton 
+                      onResult={(text) => { setSearchTerm(text); handleSearch(text); }} 
+                      className="w-8 h-8 border border-white/10 shadow-none bg-black/20 hover:bg-white/10 text-slate-300 hover:text-white" 
+                    />
                   </div>
                 </div>
                 <LocationBar variant="prominent" className="w-full lg:w-auto" />
               </div>
 
               {/* Filter dropdowns row */}
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-3 mt-2">
                 {/* Category */}
                 <div className="relative">
                   <select
                     value={selectedCategories[0] || ''}
                     onChange={e => { const v = e.target.value; const cats = v ? [v] : []; setSelectedCategories(cats); handleSearch(searchTerm, cats); }}
-                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                    className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 cursor-pointer backdrop-blur transition-all disabled:opacity-50"
                   >
-                    <option value="">All Categories</option>
-                    {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label}>{cat.label}</option>)}
+                    <option value="" className="bg-slate-900">All Categories</option>
+                    {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label} className="bg-slate-900">{cat.label}</option>)}
                   </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
                 {/* Cost */}
                 <div className="relative">
                   <select
                     value={selectedCost}
                     onChange={e => setSelectedCost(e.target.value)}
-                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                    className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 cursor-pointer backdrop-blur transition-all"
                   >
-                    <option value="">Any Cost</option>
-                    <option value="free">Free</option>
-                    <option value="sliding">Sliding Scale</option>
+                    <option value="" className="bg-slate-900">Any Cost</option>
+                    <option value="free" className="bg-slate-900">Free</option>
+                    <option value="sliding" className="bg-slate-900">Sliding Scale</option>
                   </select>
                   <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
@@ -442,23 +440,23 @@ export default function Discover() {
                   <select
                     value={selectedTag}
                     onChange={e => setSelectedTag(e.target.value)}
-                    className="appearance-none pl-3 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                    className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 cursor-pointer backdrop-blur transition-all"
                   >
-                    <option value="">All Tags</option>
-                    <option value="senior">Senior</option>
-                    <option value="family">Family</option>
-                    <option value="child">Child / Youth</option>
-                    <option value="veteran">Veteran</option>
-                    <option value="student">Student</option>
-                    <option value="finance">Finance</option>
-                    <option value="energy">Energy</option>
-                    <option value="rent">Rent</option>
-                    <option value="food">Food</option>
+                    <option value="" className="bg-slate-900">All Tags</option>
+                    <option value="senior" className="bg-slate-900">Senior</option>
+                    <option value="family" className="bg-slate-900">Family</option>
+                    <option value="child" className="bg-slate-900">Child / Youth</option>
+                    <option value="veteran" className="bg-slate-900">Veteran</option>
+                    <option value="student" className="bg-slate-900">Student</option>
+                    <option value="finance" className="bg-slate-900">Finance</option>
+                    <option value="energy" className="bg-slate-900">Energy</option>
+                    <option value="rent" className="bg-slate-900">Rent</option>
+                    <option value="food" className="bg-slate-900">Food</option>
                   </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
                 {hasActiveFilters && (
-                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-indigo-600 border border-indigo-200 rounded-xl hover:bg-indigo-50 transition-colors">Clear All</button>
+                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/10 transition-colors">Clear All</button>
                 )}
 
                 <div className="flex gap-2 items-center ml-auto">
@@ -466,9 +464,9 @@ export default function Discover() {
                     variant="secondary"
                     size="sm"
                     onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
-                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-white !text-sky-600 border-2 border-sky-500 shadow-sm' : 'bg-sky-500 !text-white border-sky-600 shadow-sky-500/30 hover:bg-sky-600'}`}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showFavoritesOnly ? 'bg-sky-500/20 !text-sky-300 border border-sky-400/50 shadow-[0_0_10px_rgba(14,165,233,0.3)]' : 'glass-layer !text-white hover:bg-white/10'}`}
                   >
-                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-sky-500 text-sky-500' : 'fill-white text-white'}`} /> My Favorites
+                    <Heart className={`w-4 h-4 mr-2 ${showFavoritesOnly ? 'fill-sky-400 text-sky-400' : 'text-slate-300'}`} /> My Favorites
                   </GlassButton>
                   <GlassButton
                     variant="secondary"
@@ -480,24 +478,24 @@ export default function Discover() {
                       }
                       setShowMySubmissions(!showMySubmissions); setShowFavoritesOnly(false);
                     }}
-                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showMySubmissions ? 'bg-white !text-indigo-600 border-2 border-indigo-500 shadow-sm' : 'bg-indigo-600 !text-white border-indigo-700 shadow-indigo-600/30 hover:bg-indigo-700'}`}
+                    className={`!rounded-xl px-3 py-2 font-medium transition-all ${showMySubmissions ? 'bg-indigo-500/20 !text-indigo-300 border border-indigo-400/50 shadow-[0_0_10px_rgba(99,102,241,0.3)]' : 'glass-layer !text-white hover:bg-white/10'}`}
                   >
-                    <User className={`w-4 h-4 mr-2 ${showMySubmissions ? 'fill-indigo-600 text-indigo-600' : 'text-white'}`} /> {t('discover.mySubmissions')}
+                    <User className={`w-4 h-4 mr-2 ${showMySubmissions ? 'fill-indigo-400 text-indigo-400' : 'text-slate-300'}`} /> {t('discover.mySubmissions')}
                   </GlassButton>
                 </div>
               </div>
 
               {/* Guest email prompt */}
               {showEmailPrompt && !user && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
-                  <p className="text-sm font-bold text-slate-800">Enter the email you used when submitting to find your resources:</p>
+                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 space-y-3">
+                  <p className="text-sm font-bold text-blue-200">Enter the email you used when submitting to find your resources:</p>
                   <div className="flex gap-2">
                     <input
                       type="email"
                       placeholder="your@email.com"
                       value={guestEmail}
                       onChange={(e) => setGuestEmail(e.target.value)}
-                      className="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500 font-bold"
                     />
                     <button
                       onClick={() => {
@@ -514,7 +512,7 @@ export default function Discover() {
                     </button>
                     <button
                       onClick={() => setShowEmailPrompt(false)}
-                      className="text-slate-500 hover:text-slate-700 text-sm font-bold"
+                      className="text-slate-400 hover:text-white text-sm font-bold"
                     >
                       Cancel
                     </button>
@@ -534,16 +532,16 @@ export default function Discover() {
 
             <div className="relative min-h-[400px]">
               {paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
-                <div className="bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-200 p-8 sm:p-16 mb-8 text-center flex flex-col items-center justify-center min-h-[400px] group">
-                  <div className="w-20 h-20 rounded-3xl bg-slate-100 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                    <Compass className="w-10 h-10 text-slate-400 opacity-80" />
+                <div className="glass-layer border border-white/10 rounded-[3rem] p-8 sm:p-16 mb-8 text-center flex flex-col items-center justify-center min-h-[400px] group backdrop-blur">
+                  <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                    <Compass className="w-10 h-10 text-slate-300 opacity-80" />
                   </div>
-                  <h2 className="text-4xl font-black text-slate-900 mb-4 uppercase tracking-tighter leading-none">Community Hub <br /><span className="text-blue-600">Ready</span></h2>
-                  <p className="text-slate-500 font-bold max-w-sm mx-auto mb-10 italic">Search above, use filters, or let our guide help you find exactly what you need.</p>
+                  <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter leading-none">Community Hub <br /><span className="text-blue-400">Ready</span></h2>
+                  <p className="text-slate-300 font-bold max-w-sm mx-auto mb-10 italic">Search above, use filters, or let our guide help you find exactly what you need.</p>
                   <GlassButton
                     variant="primary"
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-4 !rounded-2xl shadow-xl shadow-blue-500/20 flex items-center gap-3"
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-black px-10 py-4 !rounded-2xl shadow-xl shadow-blue-500/20 flex items-center gap-3 transition-colors"
                     onClick={() => setIsQuestionnaireOpen(true)}
                   >
                     Start Helper Guide <Sparkles className="w-5 h-5" />
@@ -570,14 +568,14 @@ export default function Discover() {
                       viewport={{ once: true, margin: "-50px" }}
                       transition={{ delay: idx * 0.05, type: "spring", stiffness: 100 }}
                     >
-                      <GlassCard hover className="flex flex-col sm:flex-row p-0 overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all h-auto" onClick={() => handleResourceClick(resource)}>
+                      <GlassCard hover className="flex flex-col sm:flex-row p-0 overflow-hidden cursor-pointer shadow-none border border-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all h-auto bg-white/5 backdrop-blur-md rounded-chromic-card" onClick={() => handleResourceClick(resource)}>
                         {resource.image_url ? (
-                          <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto overflow-hidden flex-shrink-0">
+                          <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto overflow-hidden flex-shrink-0 border-r border-white/10">
                             <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                           </div>
                         ) : (
-                          <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto bg-slate-50 flex items-center justify-center flex-shrink-0">
-                            <Compass className="w-8 h-8 sm:w-12 sm:h-12 text-slate-200" />
+                          <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto bg-white/5 flex items-center justify-center flex-shrink-0 border-r border-white/10">
+                            <Compass className="w-8 h-8 sm:w-12 sm:h-12 text-slate-500 opacity-50" />
                           </div>
                         )}
                         <div className="p-4 sm:p-6 flex-1 flex flex-col justify-center">
@@ -590,17 +588,17 @@ export default function Discover() {
                               <button
                                 onClick={(e) => toggleFavorite(e, resource.id)}
                                 className={`p-1.5 rounded-lg transition-colors border shadow-sm ${favoriteIds.includes(resource.id)
-                                  ? 'bg-rose-500 border-rose-600 text-white'
-                                  : 'bg-white border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200'
+                                  ? 'bg-rose-500/20 border-rose-500/50 text-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.3)]'
+                                  : 'bg-white/5 border-white/10 text-slate-400 hover:text-rose-400 hover:border-rose-400/50 hover:bg-rose-500/10'
                                   }`}
                                 title={favoriteIds.includes(resource.id) ? 'Remove from Favorites' : 'Add to Favorites'}
                               >
-                                <Heart className={`w-4 h-4 ${favoriteIds.includes(resource.id) ? 'fill-white' : ''}`} />
+                                <Heart className={`w-4 h-4 ${favoriteIds.includes(resource.id) ? 'fill-rose-400' : ''}`} />
                               </button>
                               {showMySubmissions && (user?.id === resource.user_id || (guestEmail && resource.contact_email?.toLowerCase() === guestEmail.toLowerCase())) && (
                                 <button
                                   onClick={(e) => { e.stopPropagation(); handleDelete(resource); }}
-                                  className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors border border-rose-100 shadow-sm"
+                                  className="p-1.5 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors border border-red-500/30 shadow-sm"
                                   title="Delete your submission"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -608,22 +606,22 @@ export default function Discover() {
                               )}
                             </div>
                           </div>
-                          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">{resource.title}</h3>
-                          <p className="text-sm text-slate-600 font-normal line-clamp-2 leading-relaxed mb-4 max-w-2xl">{resource.description}</p>
-                          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium text-slate-500">
+                          <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{resource.title}</h3>
+                          <p className="text-sm text-slate-300 font-normal line-clamp-2 leading-relaxed mb-4 max-w-2xl">{resource.description}</p>
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium text-slate-400">
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-3.5 h-3.5 text-blue-600" /> {resource.address || resource.city || 'Remote Service'}
+                              <MapPin className="w-3.5 h-3.5 text-blue-400" /> {resource.address || resource.city || 'Remote Service'}
                             </div>
                             {resource.phone && (
                               <div className="flex items-center gap-2">
-                                <Phone className="w-3.5 h-3.5 text-blue-600" /> {resource.phone}
+                                <Phone className="w-3.5 h-3.5 text-blue-400" /> {resource.phone}
                               </div>
                             )}
                             <div className="flex items-center gap-2">
-                              <Clock className="w-3.5 h-3.5 text-indigo-500" /> Added {resource.created_at ? new Date(resource.created_at).toLocaleDateString() : 'Recently'}
+                              <Clock className="w-3.5 h-3.5 text-indigo-400" /> Added {resource.created_at ? new Date(resource.created_at).toLocaleDateString() : 'Recently'}
                             </div>
                             {resource.schedule && (
-                              <div className="flex items-center gap-2 text-indigo-600">
+                              <div className="flex items-center gap-2 text-indigo-400">
                                 <Calendar className="w-3.5 h-3.5" /> <span className="truncate max-w-[150px]">{resource.schedule}</span>
                               </div>
                             )}
@@ -636,7 +634,7 @@ export default function Discover() {
                                 <button
                                   key={aidx}
                                   onClick={(e) => { e.stopPropagation(); window.open(action.url, '_blank'); }}
-                                  className="flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200 rounded-lg text-[10px] font-black text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+                                  className="flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-black text-slate-300 hover:bg-white/10 hover:text-white transition-all shadow-sm"
                                 >
                                   {action.label} <ExternalLink className="w-2.5 h-2.5" />
                                 </button>
@@ -645,9 +643,9 @@ export default function Discover() {
                           )}
 
                           {/* Mock Ratings block */}
-                          <div className="mt-4 flex items-center gap-1.5 bg-slate-50 self-start px-2 py-1 rounded-md border border-slate-200">
-                            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                            <span className="text-xs font-semibold text-slate-700">
+                          <div className="mt-4 flex items-center gap-1.5 bg-white/5 self-start px-2 py-1 rounded-md border border-white/10">
+                            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                            <span className="text-xs font-semibold text-slate-300">
                               {(4.0 + (String(resource.id).length % 10) / 10).toFixed(1)}/5
                             </span>
                             <span className="text-xs font-normal text-slate-500 ml-1">
@@ -659,21 +657,21 @@ export default function Discover() {
                     </motion.div>
                   ))}
                   {paginatedResources.length > 0 && totalPages > 1 && (
-                    <div className="flex justify-between items-center bg-slate-50 border border-slate-200 p-4 rounded-2xl mt-8 shadow-sm">
+                    <div className="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-2xl mt-8 shadow-sm backdrop-blur">
                       <button
                         onClick={() => setCurrentPage((prev: number) => Math.max(1, prev - 1))}
                         disabled={currentPage === 1}
-                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition-colors text-sm"
+                        className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl font-medium text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-25 transition-colors text-sm"
                       >
                         Previous
                       </button>
-                      <span className="text-sm font-medium text-slate-600">
+                      <span className="text-sm font-medium text-slate-400">
                         Page {currentPage} of {totalPages}
                       </span>
                       <button
                         onClick={() => setCurrentPage((prev: number) => Math.min(totalPages, prev + 1))}
                         disabled={currentPage >= totalPages}
-                        className="px-6 py-2 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition-colors text-sm"
+                        className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl font-medium text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-25 transition-colors text-sm"
                       >
                         Next
                       </button>
@@ -689,31 +687,32 @@ export default function Discover() {
             <div className="sticky top-32 space-y-6">
 
               {/* Map Component Always Visible on Desktop Sidebar */}
-              <div className="h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-lg">
+              <div className="h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden glass-layer border-white/10 shadow-lg relative">
+                <div className="absolute inset-0 bg-blue-500/10 pointer-events-none z-10 mix-blend-overlay"></div>
                 <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation || [0, 0]} zoom={10} />
               </div>
 
               {!hasActiveFilters && !showFavoritesOnly && !showMySubmissions && (
                 <>
-                  <div className="bg-slate-50 border border-slate-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 italic text-slate-400 text-sm">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 italic text-slate-300 text-sm backdrop-blur">
                     {t('discover.selectCategoryExplore')}
                   </div>
 
                   {/* Recently Added resources list */}
-                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                  <div className="space-y-4 pt-4 border-t border-white/10">
                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Recently Added</h3>
                     <div className="space-y-2">
                       {recentlyAddedResources.map(res => (
                         <button
                           key={res.id}
                           onClick={() => setSelectedResource(res)}
-                          className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left group"
+                          className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-left group backdrop-blur"
                         >
-                          <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
-                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <MapPin className="w-5 h-5 text-slate-300 m-auto mt-2.5" />}
+                          <div className="w-10 h-10 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden border border-white/5">
+                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <MapPin className="w-5 h-5 text-blue-400 m-auto mt-2.5" />}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors uppercase tracking-tight">{res.title}</p>
+                            <p className="text-sm font-bold text-white truncate group-hover:text-blue-400 transition-colors uppercase tracking-tight">{res.title}</p>
                             <p className="text-[10px] text-slate-400 font-bold uppercase">{res.category}</p>
                           </div>
                         </button>
@@ -722,20 +721,20 @@ export default function Discover() {
                   </div>
 
                   {/* Popular resources list */}
-                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                  <div className="space-y-4 pt-4 border-t border-white/10">
                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Popular Nearby</h3>
                     <div className="space-y-2">
                       {popularResources.map(res => (
                         <button
                           key={res.id}
                           onClick={() => setSelectedResource(res)}
-                          className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left group"
+                          className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-left group backdrop-blur"
                         >
-                          <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
-                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <Clock className="w-5 h-5 text-slate-300 m-auto mt-2.5" />}
+                          <div className="w-10 h-10 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden border border-white/5">
+                            {res.image_url ? <img src={res.image_url} className="w-full h-full object-cover" alt="" /> : <Clock className="w-5 h-5 text-indigo-400 m-auto mt-2.5" />}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors uppercase tracking-tight">{res.title}</p>
+                            <p className="text-sm font-bold text-white truncate group-hover:text-indigo-400 transition-colors uppercase tracking-tight">{res.title}</p>
                             <p className="text-[10px] text-slate-400 font-bold uppercase">{res.category}</p>
                           </div>
                         </button>

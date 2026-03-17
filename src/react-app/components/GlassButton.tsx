@@ -15,12 +15,12 @@ export default function GlassButton({
   className = '',
   ...props
 }: GlassButtonProps) {
-  const baseClass = `font-bold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${variant === 'ghost' ? 'glass' : ''}`;
+  const baseClass = `font-bold rounded-chromic-pill transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${variant === 'ghost' ? 'glass-layer' : ''}`;
 
   const variantClass = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl shadow-blue-500/10',
-    secondary: 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-xl shadow-indigo-500/10',
-    ghost: 'hover:bg-slate-100 text-slate-800',
+    primary: 'bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:shadow-chromic-hover shadow-chromic backdrop-blur-md',
+    secondary: 'glass-layer text-white hover:bg-white/10 hover:shadow-chromic-hover border border-white/10',
+    ghost: 'hover:bg-white/10 text-slate-300 hover:text-white border border-transparent',
   }[variant];
 
   const sizeClass = {

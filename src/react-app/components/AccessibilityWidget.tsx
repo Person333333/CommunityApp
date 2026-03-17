@@ -48,14 +48,14 @@ export default function AccessibilityWidget() {
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-            className="fixed bottom-[8.5rem] right-6 w-72 bg-white border border-slate-200 rounded-2xl shadow-2xl p-5 z-40"
+            className="fixed bottom-[8.5rem] right-6 w-72 glass-layer border border-white/10 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.05)] p-5 z-40"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Accessibility className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 text-sm">Accessibility</h3>
+                <Accessibility className="w-5 h-5 text-indigo-400" />
+                <h3 className="font-bold text-white text-sm drop-shadow-sm">Accessibility</h3>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -66,15 +66,15 @@ export default function AccessibilityWidget() {
                   key={t.label}
                   onClick={t.toggle}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${t.active
-                      ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
-                      : 'bg-slate-50 text-slate-700 border border-slate-100 hover:bg-slate-100'
+                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                      : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10'
                     }`}
                 >
-                  <span className={`p-1.5 rounded-lg ${t.active ? 'bg-indigo-200' : 'bg-slate-200'}`}>
+                  <span className={`p-1.5 rounded-lg ${t.active ? 'bg-indigo-500/30' : 'bg-white/10'}`}>
                     {t.icon}
                   </span>
                   <span className="flex-1 text-left">{t.label}</span>
-                  <div className={`w-10 h-6 rounded-full transition-colors relative ${t.active ? 'bg-indigo-600' : 'bg-slate-300'}`}>
+                  <div className={`w-10 h-6 rounded-full transition-colors relative ${t.active ? 'bg-indigo-500' : 'bg-slate-600'}`}>
                     <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${t.active ? 'translate-x-5' : 'translate-x-1'}`} />
                   </div>
                 </button>

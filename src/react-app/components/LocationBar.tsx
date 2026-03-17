@@ -39,19 +39,19 @@ export default function LocationBar({ variant = 'compact', className = '' }: Loc
         <div className={`relative flex items-center gap-2 ${className}`}>
             <div
                 className={`flex items-center transition-all duration-300 overflow-hidden ${isEditing
-                    ? 'w-48 sm:w-56 bg-white border-blue-500 ring-2 ring-blue-500/20'
+                    ? 'w-48 sm:w-56 bg-white/10 border-blue-400/50 ring-2 ring-blue-500/20'
                     : isCompact
-                        ? 'w-32 bg-slate-50/50 border-slate-200 hover:bg-white'
-                        : 'w-full sm:w-56 bg-slate-50 border-slate-200'
+                        ? 'w-32 bg-white/5 border-white/10 hover:bg-white/10'
+                        : 'w-full sm:w-56 bg-white/5 border-white/10 hover:bg-white/10'
                     } rounded-2xl border px-3 h-12 relative group`}
             >
-                <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors ${isEditing ? 'text-blue-600' : 'text-slate-400'}`} />
+                <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors ${isEditing ? 'text-blue-400' : 'text-slate-400'}`} />
 
                 <form onSubmit={handleSubmit} className="flex-1 flex items-center ml-2">
                     <input
                         ref={inputRef}
                         type="text"
-                        className="w-full bg-transparent border-none outline-none text-sm font-black text-slate-900 placeholder:text-slate-400"
+                        className="w-full bg-transparent border-none outline-none text-sm font-black text-white placeholder:text-slate-400"
                         placeholder={isEditing ? "Enter ZIP..." : "ZIP / City"}
                         value={zipInput}
                         onChange={(e) => setZipInput(e.target.value)}
@@ -95,8 +95,8 @@ export default function LocationBar({ variant = 'compact', className = '' }: Loc
                 onClick={handleGps}
                 disabled={loading}
                 className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${locationSource === 'gps'
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                    : 'bg-slate-50 border border-slate-200 text-slate-400 hover:text-blue-600 hover:bg-white'
+                    ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
+                    : 'bg-white/5 border border-white/10 text-slate-400 hover:text-blue-400 hover:bg-white/10'
                     }`}
                 title="Use Current Location (GPS)"
             >

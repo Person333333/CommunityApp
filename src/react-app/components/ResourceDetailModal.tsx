@@ -188,16 +188,16 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   <div className={`p-6 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
                     <div className="flex items-start gap-3 mb-2">
-                      <span className="inline-block text-xs font-semibold text-amber-400 uppercase tracking-wide px-3 py-1 glass-ochre rounded-full">
+                      <span className="inline-block text-xs font-semibold text-blue-300 uppercase tracking-wide px-3 py-1 bg-white/10 backdrop-blur rounded-full border border-white/20">
                         {resource.category}
                       </span>
                       {resource.is_featured && (
-                        <span className="inline-block text-xs font-semibold text-amber-300 uppercase tracking-wide px-3 py-1 bg-amber-500/20 rounded-full">
+                        <span className="inline-block text-xs font-semibold text-amber-300 uppercase tracking-wide px-3 py-1 bg-amber-500/20 rounded-full border border-amber-500/30">
                           {t('resource.featured')}
                         </span>
                       )}
                     </div>
-                    <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 mb-2">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 pb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                       {resource.title}
                     </h2>
                   </div>
@@ -216,9 +216,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           rel="noopener noreferrer"
                           whileHover={{ scale: 1.02, y: -2 }}
                           whileTap={{ scale: 0.98 }}
-                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-lg ${action.label === 'Donate' ? 'bg-indigo-600 text-white shadow-indigo-500/20 hover:bg-indigo-700' :
-                            action.label === 'Volunteer' ? 'bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700' :
-                              'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'
+                          className={`flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-lg backdrop-blur ${action.label === 'Donate' ? 'bg-rose-500/20 border border-rose-500/50 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:bg-rose-500/30' :
+                            action.label === 'Volunteer' ? 'bg-indigo-500/20 border border-indigo-400/50 text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30' :
+                              'glass-layer text-white hover:bg-white/10'
                             }`}
                         >
                           {action.label === 'Donate' ? <Heart className="w-5 h-5" /> :
@@ -231,25 +231,25 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   )}
                   {/* Description */}
                   <div>
-                    <h3 className="text-lg font-black text-indigo-950 mb-2 uppercase tracking-tight">{t('resource.description')}</h3>
-                    <p className="text-slate-900 leading-relaxed font-bold opacity-90">
+                    <h3 className="text-lg font-black text-blue-300 mb-2 uppercase tracking-tight">{t('resource.description')}</h3>
+                    <p className="text-slate-300 leading-relaxed font-bold opacity-90">
                       {resource.description}
                     </p>
                   </div>
 
                   {/* Star Rating */}
-                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur">
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <p className="text-xs font-black uppercase tracking-widest text-slate-700">Community Rating</p>
+                        <p className="text-xs font-black uppercase tracking-widest text-slate-400">Community Rating</p>
                         {resource.review_count != null && (
-                          <p className="text-[11px] text-slate-400 font-bold mt-0.5">{resource.review_count} reviews</p>
+                          <p className="text-[11px] text-slate-500 font-bold mt-0.5">{resource.review_count} reviews</p>
                         )}
                       </div>
                       {/* Show aggregate */}
                       {resource.rating != null && (
                         <div className="flex items-center gap-1.5">
-                          <span className="text-2xl font-black text-slate-800">{resource.rating.toFixed(1)}</span>
+                           <span className="text-2xl font-black text-white">{resource.rating.toFixed(1)}</span>
                           <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
                         </div>
                       )}
@@ -258,7 +258,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     {resource.rating != null && (
                       <div className="flex gap-1 mb-4">
                         {[1, 2, 3, 4, 5].map(s => (
-                          <Star key={s} className={`w-5 h-5 ${s <= Math.round(resource.rating!) ? 'fill-amber-400 text-amber-400' : 'text-slate-200 fill-slate-200'}`} />
+                          <Star key={s} className={`w-5 h-5 ${s <= Math.round(resource.rating!) ? 'fill-amber-400 text-amber-400' : 'text-slate-400 fill-slate-500'}`} />
                         ))}
                       </div>
                     )}
@@ -276,36 +276,36 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           onMouseLeave={() => setHoverRating(0)}
                           className="transition-transform hover:scale-125 disabled:cursor-default"
                         >
-                          <Star className={`w-7 h-7 transition-colors ${s <= (hoverRating || userRating) ? 'fill-amber-400 text-amber-400' : 'text-slate-300 fill-slate-100'}`} />
+                          <Star className={`w-7 h-7 transition-colors ${s <= (hoverRating || userRating) ? 'fill-amber-400 text-amber-400' : 'text-slate-400 fill-slate-500'}`} />
                         </button>
                       ))}
-                      {ratingSubmitted && <span className="ml-2 text-xs font-black text-emerald-600 uppercase tracking-widest self-center">✓ Saved</span>}
+                      {ratingSubmitted && <span className="ml-2 text-xs font-black text-emerald-400 uppercase tracking-widest self-center">✓ Saved</span>}
                     </div>
                   </div>
 
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 p-4 rounded-2xl">
-                        <MapPin className="w-6 h-6 text-blue-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <MapPin className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest mb-1">{t('resource.address')}</p>
-                          <p className="text-slate-950 font-black text-lg leading-tight">
+                          <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1">{t('resource.address')}</p>
+                          <p className="text-white font-black text-lg leading-tight">
                             {resource.address}
-                            {resource.city && <span className="block text-sm opacity-80">{resource.city}, {resource.state} {resource.zip}</span>}
+                            {resource.city && <span className="block text-sm text-slate-300 font-medium mt-1">{resource.city}, {resource.state} {resource.zip}</span>}
                           </p>
                         </div>
                       </div>
                     )}
 
                     {resource.phone && (
-                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
-                        <Phone className="w-6 h-6 text-indigo-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Phone className="w-6 h-6 text-indigo-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-indigo-900 uppercase tracking-widest mb-1">{t('resource.phone')}</p>
+                          <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-1">{t('resource.phone')}</p>
                           <a
                             href={`tel:${resource.phone}`}
-                            className="text-indigo-950 font-black text-xl hover:text-blue-700 transition-colors"
+                            className="text-white font-black text-xl hover:text-indigo-300 transition-colors"
                           >
                             {resource.phone}
                           </a>
@@ -314,13 +314,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.email && (
-                      <div className="flex items-start gap-3 bg-slate-100 border border-slate-200 p-4 rounded-2xl">
-                        <Mail className="w-6 h-6 text-slate-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Mail className="w-6 h-6 text-slate-300 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-1">{t('resource.email')}</p>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('resource.email')}</p>
                           <a
                             href={`mailto:${resource.email}`}
-                            className="text-slate-950 font-black hover:text-blue-700 transition-colors break-all"
+                            className="text-white font-black hover:text-blue-300 transition-colors break-all"
                           >
                             {resource.email}
                           </a>
@@ -329,15 +329,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.website && (
-                      <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 p-4 rounded-2xl">
-                        <Globe className="w-6 h-6 text-blue-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Globe className="w-6 h-6 text-sky-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest mb-1">{t('resource.website')}</p>
+                          <p className="text-[10px] font-black text-sky-300 uppercase tracking-widest mb-1">{t('resource.website')}</p>
                           <a
                             href={resource.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-950 font-black hover:text-blue-700 transition-colors break-all underline decoration-blue-200"
+                            className="text-white font-black hover:text-sky-300 transition-colors break-all underline decoration-white/20"
                           >
                             {t('resource.visitWebsite')}
                           </a>
@@ -346,30 +346,30 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.hours && (
-                      <div className="flex items-start gap-3 bg-amber-50 border border-amber-100 p-4 rounded-2xl">
-                        <Clock className="w-6 h-6 text-amber-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Clock className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-amber-900 uppercase tracking-widest mb-1">{t('resource.hours')}</p>
-                          <p className="text-amber-950 font-black">{resource.hours}</p>
+                          <p className="text-[10px] font-black text-amber-300 uppercase tracking-widest mb-1">{t('resource.hours')}</p>
+                          <p className="text-white font-black">{resource.hours}</p>
                         </div>
                       </div>
                     )}
                     {resource.schedule && (
-                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
-                        <Calendar className="w-6 h-6 text-indigo-700 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Calendar className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-indigo-900 uppercase tracking-widest mb-1">Specific Schedule</p>
-                          <p className="text-indigo-950 font-black leading-relaxed">{resource.schedule}</p>
+                          <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1">Specific Schedule</p>
+                          <p className="text-white font-black leading-relaxed">{resource.schedule}</p>
                         </div>
                       </div>
                     )}
 
                     {resource.audience && (
-                      <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
-                        <Users className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <Users className="w-6 h-6 text-rose-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
-                          <p className="text-slate-900 font-black">{resource.audience}</p>
+                          <p className="text-[10px] font-black text-rose-300 uppercase tracking-widest mb-1">{t('resource.audience')}</p>
+                          <p className="text-white font-black">{resource.audience}</p>
                         </div>
                       </div>
                     )}
@@ -378,15 +378,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Services */}
                   {resource.services && (
                     <div className="pt-4">
-                      <h3 className="text-sm font-black text-indigo-950 mb-3 flex items-center gap-2 uppercase tracking-widest">
-                        <Tag className="w-4 h-4 text-indigo-600" />
+                      <h3 className="text-sm font-black text-indigo-300 mb-3 flex items-center gap-2 uppercase tracking-widest">
+                        <Tag className="w-4 h-4 text-indigo-400" />
                         {t('resource.services')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {resource.services.split(',').map((service, i) => (
                           <span
                             key={i}
-                            className="text-xs px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-950 font-black"
+                            className="text-xs px-4 py-2 bg-indigo-500/20 border border-indigo-500/30 rounded-xl text-indigo-200 font-black backdrop-blur-sm shadow-[0_0_10px_rgba(99,102,241,0.1)]"
                           >
                             {service.trim()}
                           </span>
@@ -424,7 +424,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <GlassButton variant="primary">
+                          <GlassButton variant="primary" className="shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                             <Globe className="w-4 h-4 mr-2" />
                             {t('resource.visitWebsite')}
                           </GlassButton>
@@ -432,7 +432,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                       {resource.phone && (
                         <a href={`tel:${resource.phone}`}>
-                          <GlassButton variant="secondary">
+                          <GlassButton variant="secondary" className="glass-layer text-white hover:bg-white/10">
                             <Phone className="w-4 h-4 mr-2" />
                             {t('resource.callNow')}
                           </GlassButton>
@@ -440,7 +440,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                       {resource.email && (
                         <a href={`mailto:${resource.email}`}>
-                          <GlassButton variant="secondary">
+                          <GlassButton variant="secondary" className="glass-layer text-white hover:bg-white/10">
                             <Mail className="w-4 h-4 mr-2" />
                             {t('resource.sendEmail')}
                           </GlassButton>
@@ -449,7 +449,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                       <button
                         onClick={() => setShowDonationForm(true)}
-                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl shadow-indigo-500/30 flex items-center transition-colors uppercase tracking-widest text-sm"
+                        className="px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-xl shadow-[0_0_15px_rgba(225,29,72,0.4)] flex items-center transition-colors uppercase tracking-widest text-sm backdrop-blur"
                       >
                         <Heart className="w-4 h-4 mr-2" />
                         Donate Now
@@ -463,13 +463,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             setReportState('reporting');
                             setTimeout(() => setReportState('success'), 800);
                           }}
-                          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
+                          className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-rose-400 transition-colors uppercase tracking-widest mt-2 sm:mt-0"
                         >
                           <AlertTriangle className="w-3.5 h-3.5" />
                           Report Issue
                         </button>
                       ) : reportState === 'reporting' ? (
-                        <span className="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-widest mt-2 sm:mt-0">
+                        <span className="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-widest mt-2 sm:mt-0">
                           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
                             <Compass className="w-3.5 h-3.5" />
                           </motion.div>
@@ -479,7 +479,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         <motion.span
                           initial={{ opacity: 0, y: 5 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="flex items-center justify-end gap-1.5 text-xs font-bold text-emerald-600 uppercase tracking-widest mt-2 sm:mt-0"
+                          className="flex items-center justify-end gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-widest mt-2 sm:mt-0"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           Reported to Mods
@@ -488,23 +488,23 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     </div>
 
                     {/* Utility Actions: Share / Print / QR / Read Aloud */}
-                    <div className="flex flex-wrap gap-2 relative">
-                      <button onClick={handleShare} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
-                        <Share2 className="w-3.5 h-3.5" /> Share
+                    <div className="flex flex-wrap gap-2 relative mt-4 w-full">
+                      <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
+                        <Share2 className="w-3 h-3" /> Share
                       </button>
-                      <button onClick={handlePrint} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
-                        <Printer className="w-3.5 h-3.5" /> Print
+                      <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
+                        <Printer className="w-3 h-3" /> Print
                       </button>
-                      <button onClick={() => setShowQR(!showQR)} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-widest bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
-                        <QrCode className="w-3.5 h-3.5" /> QR Code
+                      <button onClick={() => setShowQR(!showQR)} className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest bg-white/5 border border-white/10 hover:bg-white/10 px-3 py-2 rounded-lg backdrop-blur shadow-sm">
+                        <QrCode className="w-3 h-3" /> QR Code
                       </button>
-                      <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-xs font-bold transition-colors uppercase tracking-widest border px-3 py-2 rounded-lg ${isSpeaking ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-slate-500 hover:text-blue-600 bg-slate-50 border-slate-200'
+                      <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] font-black transition-colors uppercase tracking-widest border px-3 py-2 rounded-lg backdrop-blur shadow-sm ${isSpeaking ? 'text-sky-300 bg-sky-500/20 border-sky-400/50 shadow-[0_0_10px_rgba(14,165,233,0.3)]' : 'text-slate-300 hover:text-white bg-white/5 border-white/10 hover:bg-white/10'
                         }`}>
-                        {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        {isSpeaking ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
                         {isSpeaking ? 'Stop' : 'Read Aloud'}
                       </button>
                       {shareToast && (
-                        <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-0 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">
+                        <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-0 bg-emerald-500/90 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
                           Link copied!
                         </motion.span>
                       )}
@@ -512,32 +512,34 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                     {/* QR Code Display */}
                     {showQR && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="flex flex-col items-center gap-3 p-4 bg-white border border-slate-200 rounded-xl">
-                        <img src={qrUrl} alt="QR Code" className="w-48 h-48 rounded-lg" />
-                        <p className="text-xs text-slate-500 font-medium text-center">Scan to view this resource on any device</p>
-                        <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700">
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md w-full mt-2">
+                        <div className="bg-white p-2 rounded-lg">
+                          <img src={qrUrl} alt="QR Code" className="w-48 h-48" />
+                        </div>
+                        <p className="text-xs text-slate-300 font-bold text-center">Scan to view this resource on any device</p>
+                        <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest">
                           <Download className="w-3.5 h-3.5" /> Download QR Code
                         </a>
                       </motion.div>
                     )}
 
                     {/* Was This Helpful? */}
-                    <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                      <span className="text-sm font-semibold text-slate-700">Was this resource helpful?</span>
+                    <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl w-full mt-2 backdrop-blur">
+                      <span className="text-xs font-black uppercase tracking-widest text-slate-300">Was this resource helpful?</span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleFeedback('up')}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${feedback === 'up' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-emerald-50'
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${feedback === 'up' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsUp className="w-4 h-4" /> Yes
+                          <ThumbsUp className="w-3.5 h-3.5" /> Yes
                         </button>
                         <button
                           onClick={() => handleFeedback('down')}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${feedback === 'down' ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-rose-50'
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${feedback === 'down' ? 'bg-rose-500/20 text-rose-300 border border-rose-400/50 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsDown className="w-4 h-4" /> No
+                          <ThumbsDown className="w-3.5 h-3.5" /> No
                         </button>
                       </div>
                     </div>
@@ -562,18 +564,18 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md relative z-[61] overflow-hidden border border-indigo-100"
+                  className="bg-slate-900/80 rounded-[2rem] shadow-[0_0_50px_rgba(255,255,255,0.1)] w-full max-w-md relative z-[61] overflow-hidden border border-white/20 backdrop-blur-xl"
                 >
                   <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Support {resource.title}</h3>
-                      <button onClick={() => setShowDonationForm(false)} className="text-slate-400 hover:text-slate-600">
+                      <h3 className="text-xl font-black text-white uppercase tracking-tight">Support {resource.title}</h3>
+                      <button onClick={() => setShowDonationForm(false)} className="text-slate-400 hover:text-white transition-colors">
                         <X className="w-5 h-5" />
                       </button>
                     </div>
 
                     {hasSavedProfile && (
-                      <div className="bg-emerald-50 border border-emerald-100 p-3 rounded-xl flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                      <div className="bg-emerald-500/20 border border-emerald-400/50 p-3 rounded-xl flex items-center gap-2 text-emerald-300 font-bold text-sm shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                         <CheckCircle2 className="w-4 h-4" />
                         Using your saved Donor Profile
                       </div>
@@ -581,35 +583,35 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                     <form onSubmit={handleDonateSubmit} className="space-y-4">
                       <div>
-                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Full Name</label>
+                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Full Name</label>
                         <input
                           type="text"
                           required
                           value={donorName}
                           onChange={(e) => setDonorName(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
                           placeholder="Jane Doe"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Email Address</label>
+                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Email Address</label>
                         <input
                           type="email"
                           required
                           value={donorEmail}
                           onChange={(e) => setDonorEmail(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
                           placeholder="jane@example.com"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-1">ZIP Code</label>
+                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">ZIP Code</label>
                         <input
                           type="text"
                           required
                           value={donorZip}
                           onChange={(e) => setDonorZip(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 font-bold outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition-all placeholder:text-slate-500 backdrop-blur"
                           placeholder="98000"
                         />
                       </div>
@@ -617,7 +619,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <button
                         type="submit"
                         disabled={processingDonation}
-                        className="w-full mt-4 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        className="w-full mt-4 bg-rose-600 hover:bg-rose-500 disabled:bg-rose-500/50 disabled:border-rose-500/30 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(225,29,72,0.4)]"
                       >
                         {processingDonation ? (
                           <>

@@ -63,37 +63,51 @@ export default function App() {
 
   return (
     <Router>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-      <ScrollToTop />
-      <Navbar />
-      <main id="main-content">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/discover" element={<DiscoverPage />} />
-        <Route path="/submit" element={<SubmitPage />} />
-        <Route path="/references" element={<ReferencesPage />} />
-        <Route path="/about" element={<AboutPage />} />
+      <div className="relative min-h-screen w-full overflow-hidden bg-deep text-core font-sans">
+        {/* Ambient Floating Gradient Blobs */}
+        <div className="pointer-events-none fixed inset-0 overflow-hidden mix-blend-screen opacity-15">
+          <div className="absolute top-[-10%] left-[-10%] h-[50vh] w-[50vh] rounded-full bg-blue-600 blur-[120px] animate-blob-1" />
+          <div className="absolute top-[20%] right-[-10%] h-[40vh] w-[40vh] rounded-full bg-purple-600 blur-[120px] animate-blob-2" />
+          <div className="absolute bottom-[-10%] left-[20%] h-[60vh] w-[60vh] rounded-full bg-pink-600 blur-[140px] animate-blob-3" />
+        </div>
 
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/my-submissions" element={<MySubmissionsPage />} />
+        {/* Base Grid Pattern */}
+        <div className="pointer-events-none fixed inset-0 opacity-[0.03] dot-grid-pattern" />
 
-        {/* Catch-all Route for 404 Page Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      </main>
-      <Footer />
-      <UserTour
-        isOpen={showTour}
-        onClose={() => setShowTour(false)}
-        onComplete={() => setShowTour(false)}
-      />
-      <NeedHelpNow />
-      <AccessibilityWidget />
-      <CommandPalette />
-      <KeyboardShortcutsGuide />
-      <HelperButton onShowTour={() => setShowTour(true)} />
+        <div className="relative z-10 flex flex-col min-h-screen">
+          <a href="#main-content" className="skip-link">Skip to main content</a>
+          <ScrollToTop />
+          <Navbar />
+          <main id="main-content" className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/discover" element={<DiscoverPage />} />
+            <Route path="/submit" element={<SubmitPage />} />
+            <Route path="/references" element={<ReferencesPage />} />
+            <Route path="/about" element={<AboutPage />} />
+
+            <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/sign-up" element={<SignUpPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/my-submissions" element={<MySubmissionsPage />} />
+
+            {/* Catch-all Route for 404 Page Not Found */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          </main>
+          <Footer />
+          <UserTour
+            isOpen={showTour}
+            onClose={() => setShowTour(false)}
+            onComplete={() => setShowTour(false)}
+          />
+          <NeedHelpNow />
+          <AccessibilityWidget />
+          <CommandPalette />
+          <KeyboardShortcutsGuide />
+          <HelperButton onShowTour={() => setShowTour(true)} />
+        </div>
+      </div>
     </Router>
   );
 }
