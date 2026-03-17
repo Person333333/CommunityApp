@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useAnimate, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useAnimate, useMotionValue, useSpring, useTransform, stagger } from 'framer-motion';
 
 interface CinematicIntroProps {
   onComplete: () => void;
@@ -58,7 +58,7 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete }) => {
       await animate(
         ".char",
         { y: [40, 0], opacity: [0, 1], rotateX: [20, 0] } as any,
-        { duration: 0.8, stagger: 0.05, ease: "easeOut" }
+        { duration: 0.8, delay: stagger(0.05), ease: "easeOut" }
       );
       
       await new Promise(resolve => setTimeout(resolve, 1000));
