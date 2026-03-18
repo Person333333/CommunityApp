@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
@@ -7,27 +7,18 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { ResourceType } from '@/shared/types';
-import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import GuestAuthModal from '@/react-app/components/GuestAuthModal';
-import { useTheme } from '@/react-app/hooks/useTheme';
 import { useLocation } from '@/react-app/hooks/useLocation';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { calculateDistance } from '@/react-app/hooks/useLocation';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
+import communityHomeImg from '@/react-app/assets/community-home-light.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, ease: "easeOut" }
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
 };
 
 // Animated count-up hook
@@ -75,13 +66,13 @@ export default function Home() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [showWizard, setShowWizard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // For overall page fade-in
 
   // 3D Scroll Perspective Logic
-  const { scrollYProgress } = useScroll();
-  const rotateX = useTransform(scrollYProgress, [0, 0.2], [0, 15]);
-  const translateZ = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
-  const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -118,7 +109,7 @@ export default function Home() {
     fetchData();
   }, [userLocation, i18n.language]);
 
-  // Carousel Auto-Play Logic — runs until user manually navigates, then stops for the session
+  // Carousel Auto-Play Logic
   useEffect(() => {
     if (!autoPlay) return;
     const interval = setInterval(() => {
@@ -139,11 +130,6 @@ export default function Home() {
     translateExisting();
   }, [i18n.language]);
 
-  // Page fade-in effect
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   const LOCAL_RADIUS_KM = 50;
   const featuredResources = useMemo(() => {
     if (!userLocation || allFeaturedResources.length === 0) {
@@ -163,10 +149,8 @@ export default function Home() {
   }, [allFeaturedResources, userLocation]);
 
   const displaySpotlights = useMemo(() => {
-    // Exactly 5 featured resources
     return featuredResources.slice(0, 5);
   }, [featuredResources]);
-
 
   if (locationLoading && !userLocation) {
     return (
