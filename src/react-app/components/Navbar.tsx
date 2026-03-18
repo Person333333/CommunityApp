@@ -1,6 +1,6 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router';
-import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
+import { Compass, Menu, X, Accessibility, Eye, Type, Zap, PlusCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';

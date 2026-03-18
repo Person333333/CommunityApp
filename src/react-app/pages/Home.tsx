@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
