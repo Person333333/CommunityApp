@@ -178,16 +178,31 @@ export default function Home() {
 
   return (
     <motion.div
-      initial="initial"
-      animate="animate"
-      variants={staggerContainer}
-      className={`min-h-screen bg-background font-sans selection:bg-primary/20 transition-colors duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
+      className={`min-h-screen bg-background font-sans selection:bg-primary/20 transition-colors duration-700`}
     >
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-20 overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div variants={fadeInUp} className="text-left space-y-10">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={communityHomeImg} 
+            alt="Community Compass" 
+            className="w-full h-full object-cover opacity-60 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background" />
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10 pt-20">
+          <div className="max-w-4xl">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
                 <Sparkles className="w-5 h-5 text-primary animate-pulse" />
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
@@ -210,65 +225,36 @@ export default function Home() {
                 >
                   {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <div className="flex -space-x-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-12 h-12 rounded-full border-4 border-background bg-card flex items-center justify-center overflow-hidden shadow-lg">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} alt="User" />
-                    </div>
-                  ))}
-                  <div className="w-12 h-12 rounded-full border-4 border-background bg-primary/10 backdrop-blur-md flex items-center justify-center text-[10px] font-black text-primary">
-                    +5k
+                
+                <div className="flex items-center gap-4 px-6 py-4 bg-card/30 backdrop-blur-md rounded-full border border-border/50">
+                  <div className="flex -space-x-4">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="w-10 h-10 rounded-full border-2 border-background bg-card flex items-center justify-center overflow-hidden shadow-lg">
+                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 15}`} alt="User" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-[10px] font-black text-foreground/70 uppercase tracking-widest">
+                    Joined by <span className="text-primary">5,000+</span> neighbors
                   </div>
                 </div>
-              </div>
-            </motion.div>
-            
-            <motion.div variants={fadeInUp} className="relative hidden lg:flex justify-center items-center">
-              <div className="relative w-[450px] h-[450px] xl:w-[550px] xl:h-[550px]">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-                  className="absolute inset-0 border-2 border-dashed border-primary/20 rounded-full"
-                />
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 30, ease: "linear", repeat: Infinity }}
-                  className="absolute inset-8 border-2 border-dashed border-primary-green/20 rounded-full"
-                />
-                
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/20 to-primary-green/20 backdrop-blur-md flex items-center justify-center shadow-2xl border border-primary/30">
-                    <Compass className="w-40 h-40 text-primary-green opacity-70" />
-                  </div>
-                </div>
-                
-                {/* Floating icons */}
-                <motion.div
-                  animate={{ y: [0, -20, 0], x: [0, 10, 0], rotate: [0, 5, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-1/4 left-0 p-3 bg-card rounded-full shadow-lg border border-border"
-                >
-                  <Users className="w-8 h-8 text-blue-400" />
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, 20, 0], x: [0, -10, 0], rotate: [0, -5, 0] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute bottom-1/4 right-0 p-3 bg-card rounded-full shadow-lg border border-border"
-                >
-                  <Heart className="w-8 h-8 text-red-400" />
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, -15, 0], x: [0, -5, 0], rotate: [0, 3, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="absolute top-1/2 left-1/4 p-3 bg-card rounded-full shadow-lg border border-border"
-                >
-                  <MapPin className="w-8 h-8 text-emerald-400" />
-                </motion.div>
               </div>
             </motion.div>
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Scroll</span>
+          <div className="w-1 h-12 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50" />
+        </motion.div>
       </section>
+
 
       {/* Morphing Community Images Section */}
       <CommunityMorpher />
@@ -716,7 +702,13 @@ export default function Home() {
       </section>
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
-      <GuestAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <GuestAuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+        title={t('auth.loginRequired')}
+        message={t('auth.loginToSave')}
+        type="favorite"
+      />
     </motion.div>
   );
 }
@@ -753,22 +745,25 @@ function CommunityMorpher() {
     }
   ];
 
-  // Map progress to scenes
-  const activeIndex = useTransform(scrollYProgress, [0, 0.45, 0.55, 1], [0, 0, 1, 2]);
+  // Map progress to scenes more evenly across a longer scroll
+  const activeIndex = useTransform(scrollYProgress, [0.1, 0.4, 0.7, 0.9], [0, 0, 1, 2]);
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  // Transform for Circle-to-Arc Morph
-  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "30%", "15%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.1, 0.95]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
-  const arcHeight = useTransform(scrollYProgress, [0, 0.5, 1], ["100%", "70%", "50%"]);
+  // Transform for Circle-to-Arc Morph - smoother transitions
+  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "25%", "10%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 0.95]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const arcHeight = useTransform(scrollYProgress, [0, 0.4, 0.8], ["100%", "85%", "65%"]);
   
   useEffect(() => {
-    return activeIndex.onChange(v => setCurrentIndex(Math.min(Math.max(Math.floor(v), 0), 2)));
-  }, [activeIndex]);
+    return activeIndex.onChange(v => {
+      const idx = Math.min(Math.max(Math.floor(v), 0), 2);
+      if (idx !== currentIndex) setCurrentIndex(idx);
+    });
+  }, [activeIndex, currentIndex]);
 
   return (
-    <section ref={containerRef} className="relative h-[250vh] w-full bg-background mt-40">
+    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40">
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Dynamic Canvas Background */}
         <motion.div 
