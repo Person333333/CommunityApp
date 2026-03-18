@@ -1,22 +1,37 @@
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity, Users, Clock, Quote, Circle } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
 import { Input } from '@/react-app/components/ui/input';
 import { Card, CardContent } from '@/react-app/components/ui/card';
-import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
-// Removed LocationRequest by user request
+import { useState, useMemo, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { unifiedResourceService, ResourceType } from '@/react-app/services/unifiedResourceService';
+import { QuestionnaireModal } from '@/react-app/components/QuestionnaireModal';
+import { ResourceDetailModal } from '@/react-app/components/ResourceDetailModal';
+import { GuestAuthModal } from '@/react-app/components/GuestAuthModal';
+import { useTheme } from '@/react-app/hooks/useTheme';
+import { useLocation } from '@/react-app/hooks/useLocation';
 import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
-import { useEffect, useState, useMemo, useRef } from 'react';
-import { ResourceType } from '@/shared/types';
-import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
-import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
-import { useTranslation } from 'react-i18next';
+import { calculateDistance } from '@/react-app/hooks/useLocation';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
 import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
-import { useTheme } from '@/react-app/hooks/useTheme';
 import communityHomeImg from '@/react-app/assets/community-home-light.png';
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, ease: "easeOut" }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -63,7 +78,9 @@ export default function Home() {
   const [emailSubscribed, setEmailSubscribed] = useState(false);
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [showWizard, setShowWizard] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { isLight } = useTheme();
+  const [isVisible, setIsVisible] = useState(false); // For overall page fade-in
 
   // 3D Scroll Perspective Logic
   const { scrollYProgress } = useScroll();
@@ -130,6 +147,11 @@ export default function Home() {
     translateExisting();
   }, [i18n.language]);
 
+  // Page fade-in effect
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   const LOCAL_RADIUS_KM = 50;
   const featuredResources = useMemo(() => {
     if (!userLocation || allFeaturedResources.length === 0) {
@@ -168,220 +190,99 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-transparent" style={{ perspective: "1500px" }}>
-      {/* Hero Section with Conditional Background */}
-      {isLight ? (
-        <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src={communityHomeImg} 
-              alt="Community" 
-              className="w-full h-full object-cover opacity-60"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
-            
-            {/* Animated Floating Icons */}
-            <motion.div 
-              animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-1/4 left-[10%] opacity-20 hidden md:block"
-            >
-              <Users className="w-16 h-16 text-primary-green" />
-            </motion.div>
-            <motion.div 
-              animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-1/4 right-[10%] opacity-20 hidden md:block"
-            >
-              <Heart className="w-16 h-16 text-primary" />
-            </motion.div>
-          </div>
-          <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-            <div className="max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                >
-                  <Compass className="h-4 w-4 text-primary" />
-                </motion.div>
-                <span className="text-xs text-primary font-black uppercase tracking-[0.2em]">
-                  PRECISION RESOURCE MAPPING
-                </span>
+    <motion.div
+      initial="initial"
+      animate="animate"
+      variants={staggerContainer}
+      className={`min-h-screen bg-background font-sans selection:bg-primary/20 transition-colors duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+    >
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-20 overflow-hidden">
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div variants={fadeInUp} className="text-left space-y-10">
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
+                <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+                <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
-                {t('home.hero.title1')}<br />
-                <span className="text-primary-green drop-shadow-sm">{t('home.hero.title2')}</span>
+              
+              <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6">
+                Community<br />
+                <span className="text-primary-green">Compass</span>
               </h1>
-              <div className="max-w-3xl mx-auto">
-                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-medium leading-relaxed mb-12">
-                  {t('home.hero.subtitle')}
-                </p>
-                <div className="relative max-w-2xl mx-auto mb-12">
-                  <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl bg-card/60 backdrop-blur-xl border-border/50 rounded-2xl">
-                    <div className="flex items-center gap-2 w-full flex-1 relative group">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-                      <Input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder={t('home.hero.searchPlaceholder')}
-                        className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground pl-12 pr-12 w-full font-bold text-sm sm:text-base py-6 focus-visible:ring-0"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                            else navigate('/discover');
-                          }
-                        }}
-                      />
-                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                        <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-muted-foreground hover:text-primary bg-transparent transition-colors" />
-                      </div>
-                    </div>
-                    <Button
-                      size="lg"
-                      className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest px-8 py-6 rounded-xl transition-all shadow-lg"
-                      onClick={() => {
-                        if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                        else navigate('/discover');
-                      }}
-                    >
-                      {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="bg-card/40 border-border text-foreground font-black px-8 py-7 rounded-2xl flex items-center gap-4 hover:bg-primary/5 transition-all group border-l-primary border-l-4 shadow-sm"
-                    onClick={() => navigate('/discover?wizard=true')}
-                  >
-                    <Compass className="w-6 h-6 text-primary group-hover:rotate-45 transition-transform" />
-                    <div className="text-left">
-                      <div className="text-[10px] uppercase tracking-[0.2em] font-black text-primary mb-0.5 opacity-80">Guided Search</div>
-                      <div className="text-lg text-foreground font-black uppercase tracking-tight">Need help finding help?</div>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">
-              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
-                <span className="text-primary font-bold">{stats.totalResources}+</span>
-                <span>{t('home.stats.resources')}</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
-                <span className="text-primary-green font-bold">12+</span>
-                <span>{t('home.stats.categories')}</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
-                <span className="text-emerald-500 font-bold">LIVE</span>
-                <span>{t('home.stats.localSupport')}</span>
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <motion.div
-          style={{
-            rotateX: smoothRotateX,
-            translateZ: smoothTranslateZ,
-            opacity,
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <HeroGeometric 
-            badge="PRECISION RESOURCE MAPPING"
-            title1={t('home.hero.title1')}
-            title2={t('home.hero.title2')}
-          >
-            <div className="max-w-3xl mx-auto" style={{ transform: "translateZ(50px)" }}>
-              <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
+              
+              <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-xl leading-relaxed">
                 {t('home.hero.subtitle')}
               </p>
-
-              <div className="relative max-w-2xl mx-auto mb-12">
-                <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
-                  <div className="flex items-center gap-2 w-full flex-1 relative group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
-                    <Input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder={t('home.hero.searchPlaceholder')}
-                      className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                          else navigate('/discover');
-                        }
-                      }}
-                    />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
-                    </div>
-                  </div>
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
-                    onClick={() => {
-                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                      else navigate('/discover');
-                    }}
-                  >
-                    {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </div>
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8" style={{ transform: "translateZ(30px)" }}>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
-                  onClick={() => navigate('/discover?wizard=true')}
+              
+              <div className="flex flex-wrap gap-6 pt-4">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate('/discover')}
+                  className="bg-primary hover:bg-primary/90 text-white font-black px-12 py-8 rounded-full shadow-2xl shadow-primary/30 flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
                 >
-                  <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
-                  <div className="text-left">
-                    <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
-                    <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
-                  </div>
+                  {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
+                <div className="flex -space-x-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-12 h-12 rounded-full border-4 border-background bg-card flex items-center justify-center overflow-hidden shadow-lg">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} alt="User" />
+                    </div>
+                  ))}
+                  <div className="w-12 h-12 rounded-full border-4 border-background bg-primary/10 backdrop-blur-md flex items-center justify-center text-[10px] font-black text-primary">
+                    +5k
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]" style={{ transform: "translateZ(20px)" }}>
-              <div className="flex items-center gap-2">
-                <span className="text-white">{stats.totalResources}+</span>
-                <span>{t('home.stats.resources')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-white">12+</span>
-                <span>{t('home.stats.categories')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-white">LIVE</span>
-                <span>{t('home.stats.localSupport')}</span>
-              </div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }}
-              className="flex justify-center mt-12"
-              style={{ transform: "translateZ(10px)" }}
-            >
-                <ChevronDown 
-                  className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
-                  onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
+            </motion.div>
+            
+            <motion.div variants={fadeInUp} className="relative hidden lg:flex justify-center items-center">
+              <div className="relative w-[450px] h-[450px] xl:w-[550px] xl:h-[550px]">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+                  className="absolute inset-0 border-2 border-dashed border-primary/20 rounded-full"
                 />
-              </motion.div>
-            </HeroGeometric>
-          </motion.div>
-        )}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 30, ease: "linear", repeat: Infinity }}
+                  className="absolute inset-8 border-2 border-dashed border-primary-green/20 rounded-full"
+                />
+                
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/20 to-primary-green/20 backdrop-blur-md flex items-center justify-center shadow-2xl border border-primary/30">
+                    <Compass className="w-40 h-40 text-primary-green opacity-70" />
+                  </div>
+                </div>
+                
+                {/* Floating icons */}
+                <motion.div
+                  animate={{ y: [0, -20, 0], x: [0, 10, 0], rotate: [0, 5, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-1/4 left-0 p-3 bg-card rounded-full shadow-lg border border-border"
+                >
+                  <Users className="w-8 h-8 text-blue-400" />
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, 20, 0], x: [0, -10, 0], rotate: [0, -5, 0] }}
+                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute bottom-1/4 right-0 p-3 bg-card rounded-full shadow-lg border border-border"
+                >
+                  <Heart className="w-8 h-8 text-red-400" />
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, -15, 0], x: [0, -5, 0], rotate: [0, 3, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  className="absolute top-1/2 left-1/4 p-3 bg-card rounded-full shadow-lg border border-border"
+                >
+                  <MapPin className="w-8 h-8 text-emerald-400" />
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Morphing Community Images Section */}
       <CommunityMorpher />
 
@@ -510,10 +411,10 @@ export default function Home() {
                   </div>
                 </>
               )}
-            </div>
-          )}
+        </div>
         </div>
       </section>
+      </div>
 
       {/* How It Works Section */}
       <div className="section-divider mx-auto max-w-4xl opacity-30" />
@@ -825,36 +726,13 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-    </div>
-  </div>
-
-  <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
-  <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
-
-  <style>{`
-    .home-starfield {
-      background-image: 
-        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
-      background-repeat: repeat;
-      background-size: 200px 200px;
-      animation: home-twinkle 5s ease-in-out infinite;
-      opacity: 0.3;
-    }
-
-    @keyframes home-twinkle {
-      0% { opacity: 0.3; }
-      50% { opacity: 0.6; }
-      100% { opacity: 0.3; }
-    }
-  `}</style>
-    </div>
+      <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
+      <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
+      <GuestAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+    </motion.div>
   );
 }
+
 
 function CommunityMorpher() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -865,115 +743,127 @@ function CommunityMorpher() {
 
   const scenes = [
     {
-      title: "Neighbors Helping Neighbors",
-      color: "bg-matte-blue",
-      svg: (
-        <svg viewBox="0 0 200 200" className="w-full h-full">
-          <motion.path
-            d="M50,100 Q75,50 100,100 T150,100"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            className="text-primary/40"
-          />
-          <circle cx="50" cy="100" r="10" className="fill-primary" />
-          <circle cx="150" cy="100" r="10" className="fill-primary-green" />
-        </svg>
-      )
+      title: "Navigation & Discovery",
+      desc: "Find verified local resources tailored to your exact needs.",
+      color: "var(--matte-blue)",
+      icon: <Compass className="w-16 h-16 text-primary" />,
+      image: "https://images.unsplash.com/photo-1577563906417-45a11b3f9f75?q=80&w=800&auto=format&fit=crop"
     },
     {
-      title: "Building Stronger Communities",
-      color: "bg-matte-green",
-      svg: (
-        <svg viewBox="0 0 200 200" className="w-full h-full">
-          <motion.circle
-            cx="100" cy="100" r="60"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-primary-green/40"
-          />
-          <Users className="x-1/2 y-1/2 w-20 h-20 text-primary-green translate-x-[60px] translate-y-[60px]" />
-        </svg>
-      )
+      title: "Stronger Connections",
+      desc: "Bridge the gap between residents and specialized support services.",
+      color: "var(--matte-green)",
+      icon: <Users className="w-16 h-16 text-primary-green" />,
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop"
     },
     {
-      title: "Connected Support Networks",
-      color: "bg-accent-peach/20",
-      svg: (
-         <svg viewBox="0 0 200 200" className="w-full h-full">
-          <motion.path
-            d="M20,20 L180,180 M180,20 L20,180"
-            stroke="currentColor"
-            strokeWidth="1"
-            className="text-orange-400/30"
-          />
-          <MapPin className="x-1/2 y-1/2 w-16 h-16 text-orange-500 translate-x-[70px] translate-y-[70px]" />
-        </svg>
-      )
-    },
-    {
-      title: "Your Community Compass",
-      color: "bg-matte-blue",
-      svg: (
-        <svg viewBox="0 0 200 200" className="w-full h-full">
-          <Compass className="w-32 h-32 text-primary translate-x-[34px] translate-y-[34px]" />
-        </svg>
-      )
+      title: "Community Resilience",
+      desc: "Building a neighborhood where everyone has what they need to thrive.",
+      color: "var(--accent-peach)",
+      icon: <Heart className="w-16 h-16 text-red-400" />,
+      image: "https://images.unsplash.com/photo-1469571483332-960416999908?q=80&w=800&auto=format&fit=crop"
     }
   ];
 
-  const activeIndex = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0, 0, 1, 2, 3]);
-  
-  // Create a selector for current scene index
+  // Map progress to scenes
+  const activeIndex = useTransform(scrollYProgress, [0, 0.45, 0.55, 1], [0, 0, 1, 2]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Transform for Circle-to-Arc Morph
+  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "30%", "15%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.1, 0.95]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  const arcHeight = useTransform(scrollYProgress, [0, 0.5, 1], ["100%", "70%", "50%"]);
+  
   useEffect(() => {
-    return activeIndex.onChange(v => setCurrentIndex(Math.min(Math.max(Math.floor(v), 0), 3)));
+    return activeIndex.onChange(v => setCurrentIndex(Math.min(Math.max(Math.floor(v), 0), 2)));
   }, [activeIndex]);
 
   return (
-    <section ref={containerRef} className="relative h-[300vh] w-full bg-background mt-20">
+    <section ref={containerRef} className="relative h-[250vh] w-full bg-background mt-40">
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Background Morphing Base */}
+        {/* Dynamic Canvas Background */}
         <motion.div 
-          className={`absolute inset-0 transition-colors duration-1000 opacity-30 ${scenes[currentIndex].color}`}
+          className="absolute inset-0 transition-colors duration-1000 opacity-20"
+          style={{ backgroundColor: scenes[currentIndex].color }}
         />
         
-        <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
-          <div className="order-2 lg:order-1">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-primary font-black uppercase tracking-[0.4em] text-xs mb-6 block">Our Impact</span>
-              <h2 className="text-5xl sm:text-7xl font-black text-foreground uppercase tracking-tighter leading-none mb-10">
-                {scenes[currentIndex].title}
-              </h2>
-              <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed mb-12">
-                We believe that every connection made is a step toward a more resilient neighborhood.
-              </p>
-              <Button onClick={() => window.scrollTo({ top: window.scrollY + 500, behavior: 'smooth' })} variant="outline" className="rounded-full border-primary/30 text-primary uppercase font-black tracking-widest px-8">
-                Explore More <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </motion.div>
+        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <div className="order-2 lg:order-1 space-y-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.6, ease: "circOut" }}
+                className="space-y-6"
+              >
+                <div className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
+                  <Sparkles className="w-3 h-3" /> Our Impact
+                </div>
+                <h2 className="text-5xl sm:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85]">
+                  {scenes[currentIndex].title.split(' ')[0]}<br/>
+                  <span className="text-primary-green">{scenes[currentIndex].title.split(' ').slice(1).join(' ')}</span>
+                </h2>
+                <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed">
+                  {scenes[currentIndex].desc}
+                </p>
+                <div className="pt-4">
+                  <Button variant="outline" className="rounded-full border-primary/20 hover:border-primary/50 text-foreground uppercase font-black tracking-widest px-8 transition-colors">
+                    Explore Our Mission <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
           
           <div className="order-1 lg:order-2 flex justify-center">
-            <div className="relative w-64 h-64 sm:w-96 sm:h-96">
+            <div className="relative w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]">
+              {/* The "Compass-to-Arc" Shape */}
               <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 1.2, rotate: 10 }}
-                transition={{ duration: 1 }}
-                className="w-full h-full flex items-center justify-center p-10 bg-card/40 backdrop-blur-xl border border-border/50 rounded-[3rem] shadow-2xl"
+                style={{ borderRadius, scale, height: arcHeight }}
+                className="relative w-full h-full bg-card border-[12px] border-primary/10 shadow-2xl overflow-hidden group"
               >
-                {scenes[currentIndex].svg}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0"
+                  >
+                    <img src={scenes[currentIndex].image} className="w-full h-full object-cover grayscale mix-blend-multiply opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Floating Icon in Morph Central */}
+                <motion.div 
+                  style={{ rotate }}
+                  className="absolute inset-0 flex items-center justify-center p-20 pointer-events-none"
+                >
+                  <div className="w-full h-full rounded-full border border-primary/10 flex items-center justify-center backdrop-blur-sm bg-white/5">
+                    <motion.div
+                      key={currentIndex}
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", damping: 12 }}
+                    >
+                      {scenes[currentIndex].icon}
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </motion.div>
+              
+
+              {/* Compass Needle Element */}
+              <motion.div 
+                style={{ rotate }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] opacity-20 pointer-events-none"
+              >
+                <div className="w-1 h-full bg-primary mx-auto rounded-full shadow-[0_0_20px_rgba(74,144,226,0.5)]" />
               </motion.div>
             </div>
           </div>
@@ -982,6 +872,7 @@ function CommunityMorpher() {
     </section>
   );
 }
+
 
 function StatCard({ icon, target, suffix, label, staticText }: { icon: any, target: number, suffix: string, label: string, color?: string, staticText?: string }) {
   const { count, ref } = useCountUp(target);

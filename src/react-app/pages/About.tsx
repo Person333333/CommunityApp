@@ -1,15 +1,28 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Heart, Users, Leaf, Lightbulb, Compass, Quote } from 'lucide-react';
+import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
 import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 import { useTheme } from '@/react-app/hooks/useTheme';
-import { Circle } from 'lucide-react';
 import communityAboutImg from '@/react-app/assets/community-about-light.png';
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, ease: "easeOut" }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function About() {
   const { t } = useTranslation();
@@ -21,9 +34,20 @@ export default function About() {
   const smoothRotateX = useSpring(rotateX, { stiffness: 100, damping: 30 });
   const smoothTranslateZ = useSpring(translateZ, { stiffness: 100, damping: 30 });
   const { isLight } = useTheme();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background" style={{ perspective: "1200px" }}>
+    <motion.div 
+      initial="initial"
+      animate="animate"
+      variants={staggerContainer}
+      className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`} 
+      style={{ perspective: "1200px" }}
+    >
       {/* Hero Section with Conditional Background */}
       {isLight ? (
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
@@ -36,19 +60,19 @@ export default function About() {
             <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
           </div>
           <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-            <div className="max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8 md:mb-12 shadow-sm">
-                <Circle className="h-2 w-2 fill-emerald-500/80" />
-                <span className="text-xs text-emerald-600 tracking-[0.2em] font-black uppercase">
+            <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
+                <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+                <span className="text-xs text-primary tracking-[0.2em] font-black uppercase">
                   OUR STORY & MISSION
                 </span>
               </div>
               <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
                 Community<br />
-                <span className="text-emerald-600 drop-shadow-sm">Compass</span>
+                <span className="text-primary-green drop-shadow-sm">Compass</span>
               </h1>
               <div className="max-w-3xl mx-auto">
-                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-medium leading-relaxed mb-12">
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-bold italic leading-relaxed mb-12">
                   Building a stronger, more connected neighborhood through shared resources and collective support.
                 </p>
                 <div className="flex justify-center">
@@ -62,12 +86,12 @@ export default function About() {
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       className="w-12 h-12 rounded-full border border-border flex items-center justify-center bg-background/50 backdrop-blur-md"
                     >
-                      <Compass className="w-6 h-6 text-emerald-500" />
+                      <Compass className="w-6 h-6 text-primary" />
                     </motion.div>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       ) : (
@@ -90,13 +114,8 @@ export default function About() {
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
 
         {/* Our Vision & Mission - Clean Scroll Reveal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-          >
+        <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
+          <div>
             <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(37,99,235,0.05)] border-border/50 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800"
@@ -111,14 +130,9 @@ export default function About() {
                 </p>
               </div>
             </GlassCard>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div>
             <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(16,185,129,0.05)] border-border/50 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
@@ -133,12 +147,12 @@ export default function About() {
                 </p>
               </div>
             </GlassCard>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
         {/* Research & Community Need Section */}
         <div className="section-divider mx-auto max-w-md mb-12 opacity-20" />
-        <section className="mb-20">
+        <motion.section variants={fadeInUp} className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -195,10 +209,10 @@ export default function About() {
               </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Our Values Section - 3D Reveal */}
-        <section className="mb-32">
+        <motion.section variants={fadeInUp} className="mb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -234,16 +248,10 @@ export default function About() {
               <ValueCard key={idx} value={value} />
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Founder's Story */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1 }}
-          className="mb-32"
-        >
+        <motion.section variants={fadeInUp} className="mb-32">
           <GlassCard variant="strong" className="p-0 overflow-hidden bg-card/40 border-border shadow-[0_0_50px_rgba(0,0,0,0.05)] rounded-[3rem] backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2 relative bg-background overflow-hidden group">
@@ -275,16 +283,10 @@ export default function About() {
               </div>
             </div>
           </GlassCard>
-        </motion.div>
+        </motion.section>
 
         {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
+        <motion.section variants={fadeInUp} className="text-center">
           <div className="bg-matte-green/40 dark:bg-emerald-500/5 backdrop-blur-xl border border-primary-green/30 rounded-[3rem] p-12 sm:p-20 shadow-2xl relative overflow-hidden text-foreground">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 pointer-events-none" />
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
@@ -304,9 +306,9 @@ export default function About() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </motion.section>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
