@@ -57,7 +57,7 @@ export default function Navbar() {
               <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
                 <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
               </motion.div>
-              <span className={`text-xl font-bold transition-colors duration-300 text-white tracking-tighter uppercase font-black`}>Community Compass</span>
+              <span className={`text-xl font-bold transition-colors duration-300 text-foreground tracking-tighter uppercase font-black`}>Community Compass</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -72,7 +72,7 @@ export default function Navbar() {
                 <SignedOut>
                   <Link
                     to="/sign-in"
-                    className="text-white/70 hover:text-emerald-400 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
+                    className="text-muted-foreground hover:text-emerald-400 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
                   >
                     {t('nav.signIn')}
                   </Link>
@@ -266,8 +266,8 @@ function NavLink({ to, children, ...props }: { to: string; children: React.React
       to={to}
       className={`relative py-2 text-sm font-bold uppercase tracking-widest transition-colors duration-300
         ${isActive
-          ? 'text-white'
-          : 'text-white/60 hover:text-white'
+          ? 'text-foreground'
+          : 'text-muted-foreground hover:text-foreground'
         }
       `}
       {...props}

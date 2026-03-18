@@ -5,7 +5,7 @@ import { Heart, Users, Leaf, Lightbulb, Compass, Quote } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react- i18next';
 import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 
 export default function About() {
@@ -81,7 +81,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('home.impact.title')} & Research</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('home.impact.title')} & Research</h2>
             <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
             <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Data-driven approach to solving local challenges</p>
           </motion.div>
@@ -140,7 +140,7 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
             <div className="w-20 h-1 bg-white/20 mx-auto mb-6" />
             <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
           </motion.div>
@@ -191,14 +191,14 @@ export default function About() {
                 <div className="absolute bottom-8 left-8 p-8 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="w-1 h-8 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                    <h4 className="text-2xl font-black text-white tracking-widest uppercase">ALEX RIVERA</h4>
+                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">ALEX RIVERA</h4>
                   </div>
                   <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & Neighbor</p>
                 </div>
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/50 backdrop-blur-md border-l border-border">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
-                <h3 className="text-4xl sm:text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
+                <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
                   <p className="drop-shadow-sm">
                     "Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner."
@@ -225,7 +225,7 @@ export default function About() {
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
             </div>
-            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-white uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
+            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
               Build the Future<br />Together
             </h2>
             <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">

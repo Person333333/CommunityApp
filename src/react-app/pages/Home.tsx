@@ -289,7 +289,7 @@ export default function Home() {
                 <span className="text-blue-400 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider backdrop-blur-sm bg-white/5 border border-white/10 rounded-full">
                   Community Resource Highlights
                 </span>
-                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4 uppercase tracking-tighter">
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-foreground mb-3 sm:mb-4 uppercase tracking-tighter">
                   {t('home.spotlight.title')}
                 </h2>
                 <p className="text-lg text-slate-300 font-bold italic opacity-80">
@@ -378,13 +378,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works Section - Clean */}
       <div className="section-divider mx-auto max-w-4xl opacity-30" />
       <section className="py-10 sm:py-16">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
           <div className="text-center mb-10 sm:mb-16">
-            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
-            <p className="text-blue-200 max-w-2xl mx-auto font-bold">{t('home.howItWorks.subtitle', 'Your hub for finding and sharing crucial local resources.')}</p>
+            <h2 className="text-2xl sm:text-4xl font-bold text-foreground mb-4">{t('home.howItWorks.title', 'How Community Compass Works')}</h2>
+            <p className="text-emerald-600 dark:text-emerald-400 max-w-2xl mx-auto font-bold">{t('home.howItWorks.subtitle', 'Your hub for finding and sharing crucial local resources.')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -449,8 +449,8 @@ export default function Home() {
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-4">
               <Compass className="w-10 h-10 text-blue-400 opacity-40" />
             </motion.div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">{t('home.impact.title')}</h2>
-            <p className="text-base text-slate-300 font-medium">{t('home.impact.subtitle')}</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">{t('home.impact.title')}</h2>
+            <p className="text-base text-muted-foreground font-medium">{t('home.impact.subtitle')}</p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             <StatCard icon={<Users className="w-20 h-20 text-white/5" />} target={1247} suffix="+" label={t('home.impact.neighborsHelped')} color="blue" />
@@ -470,8 +470,8 @@ export default function Home() {
               <Activity className="w-5 h-5 text-emerald-400" />
               <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Live</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Recent Community Activity</h2>
-            <p className="text-sm text-slate-300 font-medium">See the latest resources added by your neighbors</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Recent Community Activity</h2>
+            <p className="text-sm text-muted-foreground font-medium">See the latest resources added by your neighbors</p>
           </motion.div>
 
           <div className="space-y-4">
@@ -511,8 +511,8 @@ export default function Home() {
       <section className="py-14 sm:py-20">
         <div className="container mx-auto max-w-6xl px-4">
           <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">{t('home.stories.title')}</h2>
-            <p className="text-xl text-blue-200 font-black">{t('home.stories.subtitle')}</p>
+            <h2 className="text-4xl font-bold text-foreground mb-4">{t('home.stories.title')}</h2>
+            <p className="text-xl text-emerald-600 dark:text-emerald-400 font-black">{t('home.stories.subtitle')}</p>
           </motion.div>
           <div className="relative overflow-hidden px-4 carousel-fade-edges">
             <motion.div
