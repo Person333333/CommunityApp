@@ -47,15 +47,16 @@ export default function LocationSelector() {
             >
                 {loading ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />
-                ) : locationSource === 'zip' && currentZip ? (
-                    <>
-                        <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                        <span className="font-medium text-[10px]">{currentZip}</span>
-                    </>
                 ) : (
                     <>
-                        <Navigation className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />
-                        <span className="hidden sm:inline text-[10px] font-black tracking-tight uppercase">GPS</span>
+                        {locationSource === 'zip' ? (
+                            <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                        ) : (
+                            <Navigation className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />
+                        )}
+                        <span className="hidden sm:inline text-[10px] font-black tracking-tight uppercase">
+                            {locationSource === 'zip' ? 'Local' : 'GPS'}
+                        </span>
                     </>
                 )}
             </button>

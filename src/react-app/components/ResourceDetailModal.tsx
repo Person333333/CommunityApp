@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router';
 import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download, Volume2, VolumeX } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import { Card } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import { LocationMap } from './ui/expand-map';
+import { LocationMap } from '@/react-app/components/ui/expand-map';
 import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
@@ -16,6 +17,7 @@ interface ResourceDetailModalProps {
 
 export default function ResourceDetailModal({ resource, isOpen, onClose }: ResourceDetailModalProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
   const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
@@ -422,6 +424,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Actions & Report */}
                   <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 pt-4 border-t border-white/10">
                     <div className="flex flex-wrap gap-3">
+                      {resource.latitude && resource.longitude && (
+                        <Button 
+                          onClick={() => { navigate(`/discover?resource=${resource.id}`); onClose(); }}
+                          className="bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none shadow-xl shadow-emerald-500/20"
+                        >
+                          <MapPin className="w-4 h-4 mr-2" />
+                          Show on Map
+                        </Button>
+                      )}
                       {resource.website && (
                         <a
                           href={resource.website}

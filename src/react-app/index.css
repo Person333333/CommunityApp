@@ -102,6 +102,12 @@
   animation: fade-in 1s ease-out forwards;
 }
 
+/* Navigation Shortcut (Skip Link) */
+.skip-link-visible {
+  @apply fixed top-4 left-4 z-[60] px-3 py-1.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-none hover:bg-emerald-500 hover:text-black transition-all shadow-lg;
+  text-decoration: none;
+}
+
 /* Accessibility: Focus Ring */
 :focus-visible {
   @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;

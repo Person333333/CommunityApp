@@ -127,7 +127,7 @@ export default function App() {
         <div className="pointer-events-none fixed inset-0 opacity-[0.03] dot-grid-pattern" />
 
         <div className="relative z-10 flex flex-col min-h-screen">
-          <a href="#main-content" className="skip-link">Skip to main content</a>
+          <a href="#main-content" className="skip-link-visible">Skip to Navigation</a>
           <ScrollToTop />
           <Navbar />
           <main id="main-content" className="flex-grow">
