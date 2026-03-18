@@ -175,9 +175,6 @@ export default function Home() {
     return featuredResources.slice(0, 5);
   }, [featuredResources]);
 
-  // Removed auto-prompt LocationRequest by user request
-  // Component will now render directly even without location preference
-
 
   if (locationLoading && !userLocation) {
     return (
@@ -186,8 +183,6 @@ export default function Home() {
       </div>
     );
   }
-
-
 
   return (
     <motion.div
@@ -335,86 +330,87 @@ export default function Home() {
                 </p>
               </motion.div>
 
-          {displaySpotlights.length === 0 ? (
-            <Card className="text-center py-12 bg-card/40 border border-border rounded-none shadow-sm">
-              <p className="text-xl text-muted-foreground font-black italic">{t('home.spotlight.noResources')}</p>
-            </Card>
-          ) : (
-            <div
-              className="relative px-4 sm:px-12 group"
-            >
-              <div className="overflow-hidden p-4">
-                <motion.div
-                  className="flex"
-                  animate={{ x: `-${(carouselIndex * 100) / 3}%` }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                >
-                  {displaySpotlights.map((resource, index) => (
-                    <div
-                      key={`${resource.id}-${index}`}
-                      className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
+              {displaySpotlights.length === 0 ? (
+                <Card className="text-center py-12 bg-card/40 border border-border rounded-none shadow-sm">
+                  <p className="text-xl text-muted-foreground font-black italic">{t('home.spotlight.noResources')}</p>
+                </Card>
+              ) : (
+                <div className="relative px-4 sm:px-12 group">
+                  <div className="overflow-hidden p-4">
+                    <motion.div
+                      className="flex"
+                      animate={{ x: `-${(carouselIndex * 100) / 3}%` }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
                     >
-                      <Card
-                        className="h-full cursor-pointer bg-card/60 border border-border/50 shadow-2xl rounded-2xl hover:border-primary/50 transition-all backdrop-blur-xl group/card overflow-hidden"
-                        onClick={() => setSelectedResource(resource)}
-                      >
-                        <CardContent className="p-6 space-y-4">
-                          {resource.image_url && (
-                            <div className="aspect-video rounded-xl overflow-hidden relative shadow-md">
-                              <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
-                              <div className="absolute top-3 right-3 px-2 py-1 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-black rounded-full border border-white/20 shadow-sm uppercase tracking-widest">Featured</div>
-                            </div>
-                          )}
-                          <div>
-                            <span className="text-xs font-black text-primary uppercase tracking-[0.2em]">{resource.category}</span>
-                            <h3 className="text-lg font-black text-foreground mt-1 line-clamp-1 drop-shadow-sm uppercase tracking-tight">{resource.title}</h3>
-                          </div>
-                          <p className="text-muted-foreground text-sm font-bold line-clamp-2 leading-relaxed italic">{resource.description}</p>
-                          <div className="flex items-center justify-between pt-4 border-t border-border/30">
-                            <button className="text-primary font-black tracking-[0.2em] uppercase text-[10px] flex items-center gap-2 hover:text-primary/70 transition-colors">
-                              Explore Details <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-
-              {/* Controls */}
-              {displaySpotlights.length > 1 && (
-                <>
-                  <button
-                    onClick={() => { setCarouselIndex(prev => (prev === 0 ? displaySpotlights.length - 1 : prev - 1)); setAutoPlay(false); }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
-                  >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
-                  <button
-                    onClick={() => { setCarouselIndex(prev => (prev >= displaySpotlights.length - 1 ? 0 : prev + 1)); setAutoPlay(false); }}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-
-                  {/* Indicator Dots */}
-                  <div className="flex justify-center gap-2 mt-8">
-                    {displaySpotlights.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => { setCarouselIndex(i); setAutoPlay(false); }}
-                        className={`h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-primary shadow-sm shadow-primary/30' : 'w-2 bg-muted hover:bg-primary/40'}`}
-                        aria-label={`Go to slide ${i + 1}`}
-                      />
-                    ))}
+                      {displaySpotlights.map((resource, index) => (
+                        <div
+                          key={`${resource.id}-${index}`}
+                          className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
+                        >
+                          <Card
+                            className="h-full cursor-pointer bg-card/60 border border-border/50 shadow-2xl rounded-2xl hover:border-primary/50 transition-all backdrop-blur-xl group/card overflow-hidden"
+                            onClick={() => setSelectedResource(resource)}
+                          >
+                            <CardContent className="p-6 space-y-4">
+                              {resource.image_url && (
+                                <div className="aspect-video rounded-xl overflow-hidden relative shadow-md">
+                                  <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
+                                  <div className="absolute top-3 right-3 px-2 py-1 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-black rounded-full border border-white/20 shadow-sm uppercase tracking-widest">Featured</div>
+                                </div>
+                              )}
+                              <div>
+                                <span className="text-xs font-black text-primary uppercase tracking-[0.2em]">{resource.category}</span>
+                                <h3 className="text-lg font-black text-foreground mt-1 line-clamp-1 drop-shadow-sm uppercase tracking-tight">{resource.title}</h3>
+                              </div>
+                              <p className="text-muted-foreground text-sm font-bold line-clamp-2 leading-relaxed italic">{resource.description}</p>
+                              <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                                <button className="text-primary font-black tracking-[0.2em] uppercase text-[10px] flex items-center gap-2 hover:text-primary/70 transition-colors">
+                                  Explore Details <ArrowRight className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      ))}
+                    </motion.div>
                   </div>
-                </>
+
+                  {/* Controls */}
+                  {displaySpotlights.length > 1 && (
+                    <>
+                      <button
+                        onClick={() => { setCarouselIndex(prev => (prev === 0 ? displaySpotlights.length - 1 : prev - 1)); setAutoPlay(false); }}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
+                      >
+                        <ChevronLeft className="w-6 h-6" />
+                      </button>
+                      <button
+                        onClick={() => { setCarouselIndex(prev => (prev >= displaySpotlights.length - 1 ? 0 : prev + 1)); setAutoPlay(false); }}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)] flex items-center justify-center text-white hover:text-blue-400 hover:scale-110 transition-all z-20 hidden sm:flex"
+                      >
+                        <ChevronRight className="w-6 h-6" />
+                      </button>
+
+                      {/* Indicator Dots */}
+                      <div className="flex justify-center gap-2 mt-8">
+                        {displaySpotlights.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => { setCarouselIndex(i); setAutoPlay(false); }}
+                            className={`h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-primary shadow-sm shadow-primary/30' : 'w-2 bg-muted hover:bg-primary/40'}`}
+                            aria-label={`Go to slide ${i + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
               )}
+            </div>
+          </section>
         </div>
-        </div>
-      </section>
       </div>
+
 
       {/* How It Works Section */}
       <div className="section-divider mx-auto max-w-4xl opacity-30" />
