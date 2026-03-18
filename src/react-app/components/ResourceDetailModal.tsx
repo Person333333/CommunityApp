@@ -5,7 +5,6 @@ import { ResourceType } from '@/shared/types';
 import { Card } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import { LocationMap } from './ui/expand-map';
 import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
@@ -292,14 +291,6 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           </div>
                         </div>
 
-                        {/* Premium Stylized Map Preview */}
-                        <div className="flex justify-center pt-2 pb-2 relative z-10">
-                          <LocationMap 
-                            location={resource.city || resource.address} 
-                            coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
-                            className="w-full grayscale brightness-75 contrast-125 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
-                          />
-                        </div>
                       </div>
                     )}
                     {resource.phone && (

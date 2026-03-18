@@ -512,7 +512,7 @@ export default function Discover() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {paginatedResources.map((resource: ResourceType, idx: number) => (
+                  {paginatedResources.map((resource: ResourceType) => (
                     <div key={resource.id}>
                       <Card className="flex flex-col sm:flex-row p-0 overflow-hidden cursor-pointer shadow-none border border-white/10 hover:border-emerald-500/50 transition-all h-auto bg-black/44 backdrop-blur-xl rounded-none group/resource" onClick={() => handleResourceClick(resource)}>
                         {resource.image_url ? (

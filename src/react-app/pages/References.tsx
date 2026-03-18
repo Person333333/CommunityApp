@@ -1,7 +1,6 @@
 import { FileText, Download, Info } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import { useTranslation } from 'react-i18next';
-import { ContainerScroll } from '@/react-app/components/ui/container-scroll-animation';
 
 export default function References() {
   const { t } = useTranslation();
@@ -44,19 +43,17 @@ export default function References() {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <ContainerScroll
-        titleComponent={
-          <div className="mb-12 text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-sm mb-4 uppercase tracking-tighter">
-              {t('references.title')}
-            </h1>
-            <p className="text-xl text-blue-300 font-bold italic">
-              {t('references.subtitle')}
-            </p>
-          </div>
-        }
-      >
+    <div className="min-h-screen bg-transparent pt-24 pb-12 px-3 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-sm mb-4 uppercase tracking-tighter">
+            {t('references.title')}
+          </h1>
+          <p className="text-xl text-blue-300 font-bold italic">
+            {t('references.subtitle')}
+          </p>
+        </div>
+
         <div className="space-y-12 pb-10">
           {/* Professional Documents Section */}
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -165,7 +162,7 @@ export default function References() {
             </div>
           </div>
         </div>
-      </ContainerScroll>
+      </div>
     </div>
   );
 }
