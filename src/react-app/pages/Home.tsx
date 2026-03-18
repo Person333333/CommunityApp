@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion';
-import { Search, MapPin, Heart, ArrowRight, Compass, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity, Users, Clock, Quote } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { Search, MapPin, Heart, ArrowRight, Compass, ChevronDown, ChevronLeft, ChevronRight, Send, Mail, Activity, Users, Clock, Quote, Circle } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
 import { Input } from '@/react-app/components/ui/input';
 import { Card, CardContent } from '@/react-app/components/ui/card';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
-import LocationRequest from '@/react-app/components/LocationRequest';
+// Removed LocationRequest by user request
 import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { useEffect, useState, useMemo, useRef } from 'react';
@@ -14,6 +14,8 @@ import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { useTranslation } from 'react-i18next';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
+import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
+import { useTheme } from '@/react-app/hooks/useTheme';
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -51,7 +53,7 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation, currentZip } = useLocation();
+  const { location: userLocation, loading: locationLoading } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
@@ -60,6 +62,16 @@ export default function Home() {
   const [emailSubscribed, setEmailSubscribed] = useState(false);
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [showWizard, setShowWizard] = useState(false);
+  const { isLight } = useTheme();
+
+  // 3D Scroll Perspective Logic
+  const { scrollYProgress } = useScroll();
+  const rotateX = useTransform(scrollYProgress, [0, 0.2], [0, 15]);
+  const translateZ = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
+  const smoothRotateX = useSpring(rotateX, { stiffness: 100, damping: 30 });
+  const smoothTranslateZ = useSpring(translateZ, { stiffness: 100, damping: 30 });
+  const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -140,19 +152,9 @@ export default function Home() {
     return featuredResources.slice(0, 5);
   }, [featuredResources]);
 
-  // Check if we have a saved zip or existing location to avoid splash screen
-  const hasLocationPreference = !!userLocation || !!currentZip || !!localStorage.getItem('savedZip');
+  // Removed auto-prompt LocationRequest by user request
+  // Component will now render directly even without location preference
 
-  if (!hasLocationPreference && (locationLoading || !userLocation)) {
-    return (
-      <LocationRequest
-        onRequestLocation={requestLocation}
-        onZipCodeSearch={setZipCodeLocation}
-        loading={locationLoading}
-        error={locationError}
-      />
-    );
-  }
 
   if (locationLoading && !userLocation) {
     return (
@@ -163,105 +165,209 @@ export default function Home() {
   }
 
 
-  return (
-    <div className="min-h-screen bg-transparent">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-        <div className="container mx-auto max-w-7xl relative z-10 text-center">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-6 animate-fade-in uppercase tracking-widest font-black">
-              Precision Resource Mapping
-            </p>
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter uppercase italic leading-none">
-              {t('home.hero.title1')}<br />
-              <span className="text-emerald-400">{t('home.hero.title2')}</span>
-            </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
-              {t('home.hero.subtitle')}
-            </p>
 
-            <div className="relative max-w-2xl mx-auto mb-12">
-              <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
-                <div className="flex items-center gap-2 w-full flex-1 relative group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
-                  <Input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder={t('home.hero.searchPlaceholder')}
-                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+  return (
+    <div className="min-h-screen bg-transparent" style={{ perspective: "1500px" }}>
+      {/* Hero Section with Conditional Background */}
+      {isLight ? (
+        <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20">
+          <div className="absolute inset-0 z-0">
+            <img 
+              src="file:///Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_1773841972305.png" 
+              alt="Community" 
+              className="w-full h-full object-cover opacity-60"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
+          </div>
+          <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
+            <div className="max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8 md:mb-12 shadow-sm">
+                <Circle className="h-2 w-2 fill-emerald-500/80" />
+                <span className="text-xs text-emerald-600 tracking-[0.2em] font-black uppercase">
+                  PRECISION RESOURCE MAPPING
+                </span>
+              </div>
+              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
+                {t('home.hero.title1')}<br />
+                <span className="text-emerald-600 drop-shadow-sm">{t('home.hero.title2')}</span>
+              </h1>
+              <div className="max-w-3xl mx-auto">
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-medium leading-relaxed mb-12">
+                  {t('home.hero.subtitle')}
+                </p>
+                {/* Search Bar and Buttons reused below */}
+                <div className="relative max-w-2xl mx-auto mb-12">
+                  <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl bg-background/80 backdrop-blur-xl border-border">
+                    <div className="flex items-center gap-2 w-full flex-1 relative group">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-emerald-500 transition-colors pointer-events-none" />
+                      <Input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder={t('home.hero.searchPlaceholder')}
+                        className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                            else navigate('/discover');
+                          }
+                        }}
+                      />
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                        <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-muted-foreground hover:text-emerald-500 bg-transparent transition-colors" />
+                      </div>
+                    </div>
+                    <Button
+                      size="lg"
+                      className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-white font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
+                      onClick={() => {
                         if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
                         else navigate('/discover');
-                      }
-                    }}
-                  />
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
+                      }}
+                    >
+                      {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
+
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="bg-background/50 border-border text-foreground font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-emerald-500/10 transition-all group border-l-emerald-500 border-l-4"
+                    onClick={() => navigate('/discover?wizard=true')}
+                  >
+                    <Compass className="w-6 h-6 text-emerald-500 group-hover:rotate-45 transition-transform" />
+                    <div className="text-left">
+                      <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-600 mb-0.5 opacity-80">Guided Search</div>
+                      <div className="text-lg text-foreground font-black uppercase tracking-tight">Need help finding help?</div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-2">
+                <span className="text-foreground">{stats.totalResources}+</span>
+                <span>{t('home.stats.resources')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-foreground">12+</span>
+                <span>{t('home.stats.categories')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-foreground">LIVE</span>
+                <span>{t('home.stats.localSupport')}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <motion.div
+          style={{
+            rotateX: smoothRotateX,
+            translateZ: smoothTranslateZ,
+            opacity,
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <HeroGeometric 
+            badge="PRECISION RESOURCE MAPPING"
+            title1={t('home.hero.title1')}
+            title2={t('home.hero.title2')}
+          >
+            <div className="max-w-3xl mx-auto" style={{ transform: "translateZ(50px)" }}>
+              <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
+                {t('home.hero.subtitle')}
+              </p>
+
+              <div className="relative max-w-2xl mx-auto mb-12">
+                <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
+                  <div className="flex items-center gap-2 w-full flex-1 relative group">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
+                    <Input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder={t('home.hero.searchPlaceholder')}
+                      className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                          else navigate('/discover');
+                        }
+                      }}
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
+                    </div>
+                  </div>
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
+                    onClick={() => {
+                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                      else navigate('/discover');
+                    }}
+                  >
+                    {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
+              </div>
+
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8" style={{ transform: "translateZ(30px)" }}>
                 <Button
+                  variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
-                  onClick={() => {
-                    if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                    else navigate('/discover');
-                  }}
+                  className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
+                  onClick={() => navigate('/discover?wizard=true')}
                 >
-                  {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+                  <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
+                  <div className="text-left">
+                    <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
+                    <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
+                  </div>
                 </Button>
               </div>
-              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
+            </div>
+            <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]" style={{ transform: "translateZ(20px)" }}>
+              <div className="flex items-center gap-2">
+                <span className="text-white">{stats.totalResources}+</span>
+                <span>{t('home.stats.resources')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-white">12+</span>
+                <span>{t('home.stats.categories')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-white">LIVE</span>
+                <span>{t('home.stats.localSupport')}</span>
+              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
-              <Button
-                variant="outline"
-                size="lg"
-                className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
-                onClick={() => navigate('/discover?wizard=true')}
-              >
-                <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
-                <div className="text-left">
-                  <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
-                  <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
-                </div>
-              </Button>
-            </div>
-          </div>
-          <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
-            <div className="flex items-center gap-2">
-              <span className="text-white">{stats.totalResources}+</span>
-              <span>{t('home.stats.resources')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-white">12+</span>
-              <span>{t('home.stats.categories')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-white">LIVE</span>
-              <span>{t('home.stats.localSupport')}</span>
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }}
-            className="flex justify-center mt-12"
-          >
-            <ChevronDown 
-              className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
-              onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
-            />
-          </motion.div>
-        </div>
-      </section>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.8 }}
+              className="flex justify-center mt-12"
+              style={{ transform: "translateZ(10px)" }}
+            >
+              <ChevronDown 
+                className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
+                onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
+              />
+            </motion.div>
+          </HeroGeometric>
+        </motion.div>
+      )}
 
       {/* Sections below Hero with Shooting Stars */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <motion.div 
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{ y: starFieldY }}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,64,175,0.15)_0%,rgba(0,0,0,0)_80%)]" />
           <div className="home-starfield absolute inset-0" />
           
@@ -273,7 +379,15 @@ export default function Home() {
             minDelay={1000}
             maxDelay={3000}
           />
-        </div>
+          <ShootingStars
+            starColor="#93c5fd"
+            trailColor="#3b82f6"
+            minSpeed={10}
+            maxSpeed={25}
+            minDelay={2000}
+            maxDelay={4000}
+          />
+        </motion.div>
 
         <div className="relative z-10">
           {/* Spotlight Carousel */}
@@ -378,7 +492,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section - Clean */}
+      {/* How It Works Section */}
       <div className="section-divider mx-auto max-w-4xl opacity-30" />
       <section className="py-10 sm:py-16">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
@@ -425,15 +539,15 @@ export default function Home() {
                 }}
                 className="h-full"
               >
-                <div className="bg-black/40 backdrop-blur-xl p-10 border border-white/10 shadow-2xl text-center h-full flex flex-col items-center justify-center group hover:border-emerald-500/50 transition-all duration-500 rounded-none relative overflow-hidden">
+                <div className="bg-card backdrop-blur-xl p-10 border border-border shadow-2xl text-center h-full flex flex-col items-center justify-center group hover:border-emerald-500/50 transition-all duration-500 rounded-none relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className={`w-20 h-20 ${step.iconBg} flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg relative z-10`}>
                     {step.icon}
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter relative z-10">{step.title}</h3>
-                  <p className={`text-base font-bold text-emerald-400 mb-4 px-2 italic opacity-80 relative z-10`}>{step.frontText}</p>
-                  <div className="w-12 h-1 bg-white/10 mb-6 group-hover:w-24 group-hover:bg-emerald-500 transition-all relative z-10" />
-                  <p className="text-sm font-medium text-slate-400 leading-relaxed relative z-10">{step.desc}</p>
+                  <h3 className="text-2xl font-black text-foreground mb-4 uppercase tracking-tighter relative z-10">{step.title}</h3>
+                  <p className={`text-base font-bold text-emerald-600 dark:text-emerald-400 mb-4 px-2 italic opacity-80 relative z-10`}>{step.frontText}</p>
+                  <div className="w-12 h-1 bg-border mb-6 group-hover:w-24 group-hover:bg-emerald-500 transition-all relative z-10" />
+                  <p className="text-sm font-medium text-muted-foreground leading-relaxed relative z-10">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -482,16 +596,16 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="flex items-start gap-4 p-4 glass-panel hover:border-emerald-500/50 hover:bg-white/5 transition-all cursor-pointer group rounded-none"
+                className="flex items-start gap-4 p-4 bg-card hover:border-emerald-500/50 hover:bg-accent/10 transition-all cursor-pointer group rounded-none border border-border"
                 onClick={() => navigate(`/discover?category=${encodeURIComponent(resource.category || '')}`)}
               >
                 <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-white text-sm group-hover:text-blue-300 transition-colors truncate">{resource.title}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">{resource.category}</span>
+                    <span className="font-semibold text-foreground text-sm group-hover:text-emerald-600 dark:group-hover:text-blue-300 transition-colors truncate">{resource.title}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-200 bg-blue-500/10 dark:bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/20 dark:border-blue-500/30">{resource.category}</span>
                   </div>
-                  <p className="text-xs text-slate-400 font-medium mt-1 truncate">{resource.description?.slice(0, 100)}{resource.description && resource.description.length > 100 ? '...' : ''}</p>
+                  <p className="text-xs text-muted-foreground font-medium mt-1 truncate">{resource.description?.slice(0, 100)}{resource.description && resource.description.length > 100 ? '...' : ''}</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1" />
               </motion.div>
@@ -503,6 +617,60 @@ export default function Home() {
               View all resources →
             </button>
           </motion.div>
+        </div>
+      </section>
+      {/* FAQ Section */}
+      <div className="section-divider mx-auto max-w-4xl opacity-30" />
+      <section className="py-20 bg-background/30 transition-colors duration-300">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-black text-foreground mb-4 uppercase tracking-tighter">Frequently Asked Questions</h2>
+            <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+            <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.3em]">Insights for your community journey</p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "What is Community Compass?",
+                a: "Community Compass is a modern, interactive directory designed to help residents find local resources like food assistance, healthcare, and housing. We use AI and real-time mapping to ensure you get the help you need, when you need it."
+              },
+              {
+                q: "How can I submit a new resource?",
+                a: "Simply click the 'Submit Resource' button in the navigation or on the Home page. Fill out the details about the organization or service, and once verified by our team, it will appear for everyone in the community."
+              },
+              {
+                q: "Is my personal data safe?",
+                a: "Yes. We take privacy seriously. Most features can be used without an account. If you choose to sign up or submit a resource, we only use your information for verification and service communication."
+              },
+              {
+                q: "What does the 'Verified' badge mean?",
+                a: "The 'Verified' badge indicates that our team or a community moderator has confirmed the resource's details, ensuring the contact information, location, and services offered are accurate and up-to-date."
+              }
+            ].map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <details className="group bg-card border border-border hover:border-emerald-500/30 transition-all rounded-none overflow-hidden">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <h3 className="text-lg font-black text-foreground uppercase tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors pr-8">
+                      {faq.q}
+                    </h3>
+                    <div className="shrink-0 transition-transform duration-300 group-open:rotate-180 bg-emerald-500/10 p-2 border border-emerald-500/20">
+                      <ChevronDown className="w-5 h-5 text-emerald-500" />
+                    </div>
+                  </summary>
+                  <div className="px-6 pb-6 text-muted-foreground font-medium leading-relaxed border-t border-border pt-4">
+                    {faq.a}
+                  </div>
+                </details>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -520,59 +688,59 @@ export default function Home() {
               animate={{ x: [0, -1200, 0] }}
               transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
             >
-              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card border border-border rounded-none shadow-2xl">
                 <Quote className="w-8 h-8 text-emerald-500/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white font-semibold text-sm border border-white/10">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-background/50 flex items-center justify-center text-foreground font-semibold text-sm border border-border">MS</div>
                   <div>
-                    <div className="font-semibold text-white">Maria Sanchez</div>
-                    <div className="text-xs font-medium text-emerald-400 uppercase tracking-widest">Northgate Neighbor</div>
+                    <div className="font-semibold text-foreground">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Northgate Neighbor</div>
                   </div>
                 </div>
               </Card>
 
-              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">JT</div>
+                  <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground font-semibold text-sm border border-border">JT</div>
                   <div>
-                    <div className="font-semibold text-white">James Thompson</div>
-                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Community Organizer</div>
+                    <div className="font-semibold text-foreground">James Thompson</div>
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-300 uppercase tracking-wider">Community Organizer</div>
                   </div>
                 </div>
               </Card>
 
-              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
                 <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">LW</div>
+                  <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground font-semibold text-sm border border-border">LW</div>
                   <div>
-                    <div className="font-semibold text-white">Linda Wright</div>
-                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Single Parent &amp; Educator</div>
+                    <div className="font-semibold text-foreground">Linda Wright</div>
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-300 uppercase tracking-wider">Single Parent & Educator</div>
                   </div>
                 </div>
               </Card>
 
               {/* Duplicate for seamless loop */}
-              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-sm transition-all group/card">
-                <Quote className="w-8 h-8 text-white/20 mb-4" />
-                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
+              <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
+                <Quote className="w-8 h-8 text-foreground/10 mb-4" />
+                <blockquote className="text-lg text-muted-foreground font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold text-sm border border-white/20">MS</div>
+                  <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-foreground font-semibold text-sm border border-border">MS</div>
                   <div>
-                    <div className="font-semibold text-white">Maria Sanchez</div>
-                    <div className="text-xs font-medium text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
+                    <div className="font-semibold text-foreground">Maria Sanchez</div>
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-300 uppercase tracking-wider">Northgate Neighbor</div>
                   </div>
                 </div>
               </Card>
@@ -589,13 +757,13 @@ export default function Home() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-black/40 backdrop-blur-xl rounded-none p-8 sm:p-12 border border-white/10 shadow-2xl"
+            className="bg-card backdrop-blur-xl rounded-none p-8 sm:p-12 border border-border shadow-2xl"
           >
-            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
-              <Mail className="w-6 h-6 text-blue-300" />
+            <div className="w-12 h-12 bg-background rounded-full flex items-center justify-center mx-auto mb-4 border border-border">
+              <Mail className="w-6 h-6 text-emerald-500" />
             </div>
-            <h2 className="text-2xl font-black text-white uppercase tracking-tight mb-2">Stay in the Loop</h2>
-            <p className="text-slate-300 font-medium mb-6 text-sm">
+            <h2 className="text-2xl font-black text-foreground uppercase tracking-tight mb-2">Stay in the Loop</h2>
+            <p className="text-muted-foreground font-medium mb-6 text-sm">
               Weekly updates on new resources, volunteer opportunities, and community events.
             </p>
             {emailSubscribed ? (
@@ -623,7 +791,7 @@ export default function Home() {
                   placeholder="Your email address..."
                   value={subscribeEmail}
                   onChange={(e) => setSubscribeEmail(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-500 text-sm"
+                  className="flex-1 px-4 py-3 rounded-xl bg-background border border-border text-foreground font-medium outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-muted-foreground text-sm"
                 />
                 <Button className="rounded-none bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest flex items-center justify-center gap-2">
                   Subscribe <Send className="w-3.5 h-3.5" />
@@ -634,31 +802,33 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+    </div>
+  </div>
 
-      <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
-      <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
+  <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
+  <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
 
-      <style>{`
-        .home-starfield {
-          background-image: 
-            radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
-          background-repeat: repeat;
-          background-size: 200px 200px;
-          animation: home-twinkle 5s ease-in-out infinite;
-          opacity: 0.3;
-        }
+  <style>{`
+    .home-starfield {
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: home-twinkle 5s ease-in-out infinite;
+      opacity: 0.3;
+    }
 
-        @keyframes home-twinkle {
-          0% { opacity: 0.3; }
-          50% { opacity: 0.6; }
-          100% { opacity: 0.3; }
-        }
-      `}</style>
+    @keyframes home-twinkle {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+      100% { opacity: 0.3; }
+    }
+  `}</style>
     </div>
   );
 }
@@ -675,10 +845,10 @@ function StatCard({ icon, target, suffix, label, color, staticText }: {
       ref={ref}
       whileHover={{ scale: 1.03, y: -4 }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className={`bg-black/40 backdrop-blur-xl p-5 sm:p-6 rounded-none border border-white/10 shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:border-emerald-500/50 transition-all`}
+      className={`bg-card backdrop-blur-xl p-5 sm:p-6 rounded-none border border-border shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:border-emerald-500/50 transition-all`}
     >
       <div className="absolute -right-4 -bottom-4 opacity-20 group-hover:opacity-40 transition-opacity">{icon}</div>
-      <div className="text-2xl sm:text-3xl font-bold text-white mb-1 tabular-nums relative z-10">
+      <div className="text-2xl sm:text-3xl font-bold text-foreground mb-1 tabular-nums relative z-10">
         {staticText || <>{count.toLocaleString()}{suffix}</>}
       </div>
       <div className="text-emerald-400/80 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] relative z-10">{label}</div>

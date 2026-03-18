@@ -65,7 +65,7 @@ export default function LanguageSelector() {
         onClick={() => {
           setIsOpen(!isOpen);
         }}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg glass-layer hover:bg-white/10 transition-all shadow-sm font-bold text-white border border-white/10"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg glass-layer hover:bg-muted/80 transition-all shadow-sm font-bold text-foreground border border-border"
         disabled={isTranslating}
       >
         {isTranslating ? (
@@ -77,9 +77,9 @@ export default function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-72 glass-layer border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in backdrop-blur">
+        <div className="absolute top-full right-0 mt-2 w-72 glass-layer border border-border rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in backdrop-blur">
           {/* Search Header */}
-          <div className="p-3 border-b border-white/10 bg-white/5">
+          <div className="p-3 border-b border-border bg-muted/50">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
@@ -87,7 +87,7 @@ export default function LanguageSelector() {
                 placeholder="Search languages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+                className="w-full bg-muted/50 border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
                 autoFocus
               />
             </div>
@@ -100,7 +100,7 @@ export default function LanguageSelector() {
                 <button
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
-                  className={`w-full text-left px-5 py-3 text-sm transition-colors flex items-center justify-between font-bold ${i18n.language === lang.code ? 'bg-blue-600/30 text-white hover:bg-blue-600/40 border-l-2 border-blue-400' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                  className={`w-full text-left px-5 py-3 text-sm transition-colors flex items-center justify-between font-bold ${i18n.language === lang.code ? 'bg-emerald-600/30 text-foreground hover:bg-emerald-600/40 border-l-2 border-emerald-400' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     }`}
                 >
                   <span className="truncate">{lang.name}</span>

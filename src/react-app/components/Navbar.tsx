@@ -123,7 +123,7 @@ export default function Navbar() {
                     onClick={() => setShowAccessibility(!showAccessibility)}
                     className={`p-2 rounded-none transition-all flex items-center gap-1 ${showAccessibility
                       ? 'bg-emerald-500 text-black shadow-lg'
-                      : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 shadow-sm'
+                      : 'bg-muted text-foreground border border-border hover:bg-muted/80 shadow-sm'
                       }`}
                     title="Accessibility Options"
                   >

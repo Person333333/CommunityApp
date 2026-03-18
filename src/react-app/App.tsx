@@ -127,13 +127,14 @@ export default function App() {
         <div className="pointer-events-none fixed inset-0 opacity-[0.03] dot-grid-pattern" />
 
         <div className="relative z-10 flex flex-col min-h-screen">
-          <a href="#main-content" className="skip-link-visible">Skip to Navigation</a>
+
           <ScrollToTop />
           <Navbar />
           <main id="main-content" className="flex-grow">
             <AppRoutes />
           </main>
           <Footer />
+          <BackToTop />
           <UserTour
             isOpen={showTour}
             onClose={() => setShowTour(false)}
@@ -148,3 +149,32 @@ export default function App() {
     </Router>
   );
 }
+
+function BackToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className="fixed bottom-24 right-6 z-[60] p-3 rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 border border-emerald-400/50 hover:bg-emerald-400 hover:scale-110 transition-all flex items-center justify-center sm:p-4"
+      aria-label="Back to top"
+    >
+      <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6" />
+    </motion.button>
+  );
+}
+
+import { ArrowUp } from "lucide-react";

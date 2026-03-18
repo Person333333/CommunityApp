@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
-import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, Compass, X, Trash2, ChevronDown, ExternalLink, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, Compass, X, Trash2, ChevronDown, ExternalLink, ChevronRight, CheckCircle } from 'lucide-react';
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { Card, CardContent } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { Input } from '@/react-app/components/ui/input';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
-import LocationRequest from '@/react-app/components/LocationRequest';
+// Removed LocationRequest by user request
 import GuestAuthModal from '@/react-app/components/GuestAuthModal';
 import { ResourceType } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
@@ -17,13 +17,14 @@ import { useTranslation } from 'react-i18next';
 import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
 import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
-import LocationBar from '@/react-app/components/LocationBar';
+// Removed LocationBar import by user request
+
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
   const { } = useDynamicTranslation();
 
-  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation, currentZip } = useLocation();
+  const { location: userLocation } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -276,19 +277,9 @@ export default function Discover() {
 
   // Removed auto-trigger inline wizard by user request
 
-  // Check if we have a saved zip or existing location to avoid splash screen
-  const hasLocationPreference = !!userLocation || !!currentZip || !!localStorage.getItem('savedZip');
+  // Removed auto-prompt LocationRequest by user request
+  // Component will now render directly even without location preference
 
-  if (!hasLocationPreference && (locationLoading || !userLocation)) {
-    return (
-      <LocationRequest
-        onRequestLocation={requestLocation}
-        onZipCodeSearch={setZipCodeLocation}
-        loading={locationLoading}
-        error={locationError}
-      />
-    );
-  }
 
 
   return (
@@ -375,7 +366,7 @@ export default function Discover() {
                     </motion.button>
                   </div>
                 </div>
-                <LocationBar variant="prominent" className="w-full lg:w-auto" />
+                {/* Removed LocationBar by user request */}
               </div>
 
               {/* Filter dropdowns row */}
@@ -576,7 +567,16 @@ export default function Discover() {
                               )}
                             </div>
                           </div>
-                          <h3 className="text-lg sm:text-2xl font-black text-white mb-2 uppercase tracking-tighter group-hover/resource:text-emerald-400 transition-colors">{resource.title}</h3>
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-lg sm:text-2xl font-black text-white mb-0 uppercase tracking-tighter group-hover/resource:text-emerald-400 transition-colors flex items-center gap-2">
+                              {resource.title}
+                              {resource.is_approved && (
+                                <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                                  <CheckCircle className="w-3 h-3 fill-emerald-400 text-black" /> VERIFIED
+                                </span>
+                              )}
+                            </h3>
+                          </div>
                           <p className="text-sm text-slate-400 font-medium line-clamp-2 leading-relaxed mb-4 max-w-2xl">{resource.description}</p>
                           <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                             <div className="flex items-center gap-2">
