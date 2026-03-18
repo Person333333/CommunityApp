@@ -5,6 +5,7 @@ import { ResourceType } from '@/shared/types';
 import { Card } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { LocationMap } from './ui/expand-map';
 import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
@@ -85,7 +86,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     // Simulate redirect to agency
     setTimeout(() => {
       setProcessingDonation(false);
-      alert(t('resource.donation.redirectAlert', 'Redirecting {{name}} seamlessly to {{title}}\'s secure donation page...', { name: donorName, title: resource?.title }));
+      alert(`Redirecting ${donorName} seamlessly to ${resource?.title}'s secure donation page...`);
       setShowDonationForm(false);
     }, 1500);
   };
@@ -94,7 +95,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
   const handleShare = async () => {
     const shareUrl = `${window.location.origin}/discover?resource=${resource.id}`;
-    const shareData = { title: resource.title, text: t('resource.shareText', 'Check out {{title}} on Community Compass', { title: resource.title }), url: shareUrl };
+    const shareData = { title: resource.title, text: `Check out ${resource.title} on Community Compass`, url: shareUrl };
     try {
       if (navigator.share) { await navigator.share(shareData); }
       else { await navigator.clipboard.writeText(shareUrl); setShareToast(true); setTimeout(() => setShareToast(false), 2000); }
@@ -131,8 +132,8 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     const parts = [
       resource.title,
       resource.description || '',
-      resource.address ? t('resource.audio.locatedAt', 'Located at {{address}}', { address: resource.address }) : '',
-      resource.hours ? t('resource.audio.openAt', 'Open {{hours}}', { hours: resource.hours }) : '',
+      resource.address ? `Located at ${resource.address}` : '',
+      resource.hours ? `Open ${resource.hours}` : '',
     ].filter(Boolean);
     const utterance = new SpeechSynthesisUtterance(parts.join('. '));
     utterance.rate = 0.95;
@@ -241,9 +242,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   <div className="bg-black/40 border border-white/10 rounded-none p-6 backdrop-blur-xl">
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{t('resource.rating.communityTitle', 'Community Rating')}</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Community Rating</p>
                         {resource.review_count != null && (
-                          <p className="text-[10px] text-slate-600 font-black uppercase mt-0.5">{resource.review_count} {t('discover.reviews', 'reviews')}</p>
+                          <p className="text-[10px] text-slate-600 font-black uppercase mt-0.5">{resource.review_count} reviews</p>
                         )}
                       </div>
                       {/* Show aggregate */}
@@ -256,7 +257,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     </div>
                     {/* User rating */}
                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-3">
-                      {ratingSubmitted ? t('resource.rating.yourRating', 'Your Rating') : t('resource.rating.ratePrompt', 'Rate This Resource')}
+                      {ratingSubmitted ? 'Your Rating' : 'Rate This Resource'}
                     </p>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map(s => (
@@ -271,7 +272,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           <Star className={`w-8 h-8 transition-colors ${s <= (hoverRating || userRating) ? 'fill-emerald-500 text-emerald-500' : 'text-slate-700 fill-slate-800'}`} />
                         </button>
                       ))}
-                      {ratingSubmitted && <span className="ml-4 text-[10px] font-black text-emerald-400 uppercase tracking-widest self-center border border-emerald-500/20 px-2 py-1 bg-emerald-500/5">✓ {t('resource.rating.verified', 'Network Verified')}</span>}
+                      {ratingSubmitted && <span className="ml-4 text-[10px] font-black text-emerald-400 uppercase tracking-widest self-center border border-emerald-500/20 px-2 py-1 bg-emerald-500/5">✓ Network Verified</span>}
                     </div>
                   </div>
 
@@ -291,6 +292,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           </div>
                         </div>
 
+                        {/* Premium Stylized Map Preview */}
+                        <div className="flex justify-center pt-2 pb-2 relative z-10">
+                          <LocationMap 
+                            location={resource.city || resource.address} 
+                            coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
+                            className="w-full grayscale brightness-75 contrast-125 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
+                          />
+                        </div>
                       </div>
                     )}
                     {resource.phone && (
@@ -353,7 +362,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
                         <Calendar className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">{t('resource.specificSchedule', 'Specific Schedule')}</p>
+                          <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">Specific Schedule</p>
                           <p className="text-white font-black leading-relaxed uppercase tracking-tighter text-sm">{resource.schedule}</p>
                         </div>
                       </div>
@@ -447,7 +456,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         className="bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6"
                       >
                         <Heart className="w-4 h-4 mr-2 fill-black" />
-                        {t('resource.donateNow', 'Donate Now')}
+                        Donate Now
                       </Button>
                     </div>
 
@@ -461,14 +470,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 hover:text-emerald-400 transition-colors uppercase tracking-[0.2em] mt-2 sm:mt-0"
                         >
                           <AlertTriangle className="w-3.5 h-3.5" strokeWidth={3} />
-                          {t('resource.reportIssue', 'Report Data Issue')}
+                          Report Data Issue
                         </button>
                       ) : reportState === 'reporting' ? (
                         <span className="flex items-center justify-end gap-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2 sm:mt-0">
                           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
                             <Compass className="w-3.5 h-3.5 text-emerald-500" />
                           </motion.div>
-                          {t('resource.auditing', 'Auditing...')}
+                          Auditing...
                         </span>
                       ) : (
                         <motion.span
@@ -477,7 +486,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           className="flex items-center justify-end gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest mt-2 sm:mt-0"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          {t('resource.reportLogged', 'Report Logged')}
+                          Report Logged
                         </motion.span>
                       )}
                     </div>
@@ -485,21 +494,21 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Utility Actions: Share / Print / QR / Read Aloud */}
                   <div className="flex flex-wrap gap-2 relative mt-8 w-full font-black uppercase tracking-widest">
                     <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
-                      <Share2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> {t('common.share', 'Share')}
+                      <Share2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Share
                     </button>
                     <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
-                      <Printer className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> {t('common.print', 'Print')}
+                      <Printer className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Print
                     </button>
                     <button onClick={() => setShowQR(!showQR)} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${showQR ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
-                      <QrCode className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> {t('resource.qrProtocol', 'QR Protocol')}
+                      <QrCode className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> QR Protocol
                     </button>
                     <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${isSpeaking ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
                       {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" />}
-                      {isSpeaking ? t('common.terminate', 'Terminate') : t('resource.audioFeed', 'Audio Feed')}
+                      {isSpeaking ? 'Terminate' : 'Audio Feed'}
                     </button>
                     {shareToast && (
                       <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-10 left-0 bg-emerald-500 text-black text-[10px] px-3 py-1.5 rounded-none font-black uppercase tracking-[0.2em] shadow-2xl">
-                        {t('resource.handshakeCopied', 'Handshake Copied')}
+                        Handshake Copied
                       </motion.span>
                     )}
                   </div>
@@ -510,30 +519,30 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         <div className="bg-white p-4 rounded-none">
                           <img src={qrUrl} alt="QR Code" className="w-48 h-48 grayscale contrast-125" />
                         </div>
-                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] text-center">{t('resource.qrScanMessage', 'Scan to interface on external node')}</p>
+                        <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] text-center">Scan to interface on external node</p>
                         <a href={qrUrl} download={`${resource.title}-qr.png`} className="flex items-center gap-1.5 text-[10px] font-black text-emerald-500 hover:text-emerald-400 uppercase tracking-widest border border-emerald-500/20 px-4 py-2 bg-emerald-500/5">
-                          <Download className="w-3.5 h-3.5" /> {t('resource.downloadKey', 'Download Key')}
+                          <Download className="w-3.5 h-3.5" /> Download Key
                         </a>
                       </motion.div>
                     )}
 
                     {/* Was This Helpful? */}
                     <div className="flex items-center justify-between p-6 bg-black/40 border border-white/10 rounded-none w-full mt-4 backdrop-blur-3xl">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{t('resource.feedback.title', 'Resource effectiveness index?')}</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Resource effectiveness index?</span>
                       <div className="flex gap-3">
                         <button
                           onClick={() => handleFeedback('up')}
                           className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'up' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-xl shadow-emerald-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsUp className="w-3.5 h-3.5" /> {t('common.affirmative', 'Affirmative')}
+                          <ThumbsUp className="w-3.5 h-3.5" /> Affirmative
                         </button>
                         <button
                           onClick={() => handleFeedback('down')}
                           className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'down' ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 shadow-xl shadow-rose-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
                             }`}
                         >
-                          <ThumbsDown className="w-3.5 h-3.5" /> {t('common.negative', 'Negative')}
+                          <ThumbsDown className="w-3.5 h-3.5" /> Negative
                         </button>
                       </div>
                     </div>
@@ -564,7 +573,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-2">
                       <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
                         <Heart className="w-5 h-5 text-emerald-500 fill-emerald-500/20" />
-                        {t('resource.donation.title', 'Support {{title}}', { title: resource.title })}
+                        Support {resource.title}
                       </h3>
                       <button onClick={() => setShowDonationForm(false)} className="text-slate-500 hover:text-white transition-all group">
                         <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
@@ -574,35 +583,35 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     {hasSavedProfile && (
                       <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-none flex items-center gap-2 text-emerald-400 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/5">
                         <CheckCircle2 className="w-4 h-4" />
-                        {t('resource.donation.profileActive', 'Network Profile Active')}
+                        Network Profile Active
                       </div>
                     )}
 
                     <form onSubmit={handleDonateSubmit} className="space-y-6">
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{t('common.fullName', 'Full Name')}</label>
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Full Name</label>
                         <input
                           type="text"
                           required
                           value={donorName}
                           onChange={(e) => setDonorName(e.target.value)}
                           className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
-                          placeholder={t('common.fullNamePlaceholder', 'Jane Doe')}
+                          placeholder="Jane Doe"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{t('common.emailAddress', 'Email Address')}</label>
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Email Address</label>
                         <input
                           type="email"
                           required
                           value={donorEmail}
                           onChange={(e) => setDonorEmail(e.target.value)}
                           className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
-                          placeholder={t('common.emailPlaceholder', 'jane@example.com')}
+                          placeholder="jane@example.com"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{t('common.zipCode', 'ZIP Code')}</label>
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">ZIP Code</label>
                         <input
                           type="text"
                           required
@@ -623,14 +632,14 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
                               <Compass className="w-5 h-5" />
                             </motion.div>
-                            {t('resource.donation.processing', 'Processing...')}
+                            Processing...
                           </>
                         ) : (
-                          t('resource.donation.submitButton', 'Handover to Agency')
+                          "Handover to Agency"
                         )}
                       </Button>
                       <p className="text-center text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mt-2 leading-relaxed">
-                        {t('resource.donation.protocolMessage', 'Secure industrial handover protocol active. Your identity will be transmitted to the agency portal.')}
+                        Secure industrial handover protocol active. Your identity will be transmitted to the agency portal.
                       </p>
                     </form>
                   </div>

@@ -4,7 +4,7 @@ import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
-
+import LocationSelector from './LocationSelector';
 import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 import ScrollProgress from './ScrollProgress';
@@ -55,9 +55,9 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 group">
-              <div>
+              <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
                 <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
-              </div>
+              </motion.div>
               <span className={`text-xl font-bold transition-colors duration-300 text-white tracking-tighter uppercase font-black`}>Community Compass</span>
             </Link>
 
@@ -117,6 +117,8 @@ export default function Navbar() {
                   )}
                 </SignedIn>
 
+                {/* Location Selector */}
+                <LocationSelector />
 
                 {/* Accessibility Menu */}
                 <div className="relative">

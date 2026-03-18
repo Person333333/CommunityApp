@@ -39,7 +39,7 @@ export default function Submit() {
     auto_assign_tags: false,
     action_urls: [] as { label: string, url: string }[],
     donation_url: '',
-    website_action_label: t('submit.form.defaultActionLabel', 'Visit Website'),
+    website_action_label: 'Visit Website',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -250,13 +250,13 @@ Page
 
           <div className="flex justify-between mt-4">
             <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 1 ? 'text-emerald-400' : 'text-slate-500'}`}>
-              <ImageIcon className="w-4 h-4" /> {t('submit.steps.resourceInfo', 'Resource Info')}
+              <ImageIcon className="w-4 h-4" /> Resource Info
             </div>
             <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 2 ? 'text-emerald-400' : 'text-slate-500'}`}>
-              <UserIcon className="w-4 h-4" /> {t('submit.steps.yourInfo', 'Your Info')}
+              <UserIcon className="w-4 h-4" /> Your Info
             </div>
             <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentStep === 3 ? 'text-emerald-400' : 'text-slate-500'}`}>
-              <Eye className="w-4 h-4" /> {t('submit.steps.review', 'Review')}
+              <Eye className="w-4 h-4" /> Review
             </div>
           </div>
         </div>
@@ -273,42 +273,42 @@ Page
               <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
                 <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
                   <ImageIcon className="w-6 h-6 text-emerald-400" />
-                  <p className="font-black uppercase tracking-widest text-sm">{t('submit.step1.header', 'Step 1: Resource Core Details')}</p>
+                  <p className="font-black uppercase tracking-widest text-sm">Step 1: Resource Core Details</p>
                 </div>
                 <div className="p-8 space-y-8">
-                  <FormField label={t('submit.form.title', 'Resource Title')} name="title" value={formData.title} onChange={handleChange} error={errors.title} required placeholder={t('submit.form.titlePlaceholder', 'Name of organization or service...')} />
+                  <FormField label="Resource Title" name="title" value={formData.title} onChange={handleChange} error={errors.title} required placeholder="Name of organization or service..." />
 
-                  <FormField label={t('submit.form.description', 'Full Description')} name="description" value={formData.description} onChange={handleChange} error={errors.description} required multiline rows={4} placeholder={t('submit.form.descriptionPlaceholder', 'Describe the services and impact...')} />
+                  <FormField label="Full Description" name="description" value={formData.description} onChange={handleChange} error={errors.description} required multiline rows={4} placeholder="Describe the services and impact..." />
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">{t('submit.form.category', 'Category')} *</label>
+                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Category *</label>
                       <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer">
-                        <option value="" disabled className="bg-black text-slate-400">{t('submit.form.selectCategory', 'Select a category...')}</option>
-                        {categories.map(cat => <option key={cat} value={cat} className="bg-black text-white">{t(`category.${cat}`, cat)}</option>)}
+                        <option value="" disabled className="bg-black text-slate-400">Select a category...</option>
+                        {categories.map(cat => <option key={cat} value={cat} className="bg-black text-white">{cat}</option>)}
                       </select>
                       {errors.category && <p className="mt-2 text-xs text-emerald-500 font-bold">{errors.category}</p>}
                     </div>
-                    <FormField label={t('submit.form.schedule', 'Specific Schedule')} name="schedule" value={formData.schedule} onChange={handleChange} placeholder={t('submit.form.schedulePlaceholder', 'e.g. Every 2nd Tuesday at 5pm...')} />
+                    <FormField label="Specific Schedule" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every 2nd Tuesday at 5pm..." />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">{t('submit.form.websiteAction', 'Website Action Button')}</label>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">{t('submit.form.websiteActionHint', 'This will show as a button on your published resource')}</p>
+                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Website Action Button</label>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
                       <div className="flex gap-2">
                         <select
-                          value={(formData as any).website_action_label || t('submit.form.defaultActionLabel', 'Visit Website')}
+                          value={(formData as any).website_action_label || 'Visit Website'}
                           onChange={(e) => setFormData(prev => ({ ...prev, website_action_label: e.target.value }))}
                           className="bg-white/5 border border-white/10 rounded-none px-3 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
                         >
-                          <option value="Visit Website" className="bg-black text-white">{t('submit.action.visit', 'Visit Website')}</option>
-                          <option value="Register" className="bg-black text-white">{t('submit.action.register', 'Register')}</option>
-                          <option value="Learn More" className="bg-black text-white">{t('submit.action.learnMore', 'Learn More')}</option>
-                          <option value="Donate" className="bg-black text-white">{t('submit.action.donate', 'Donate')}</option>
-                          <option value="Volunteer" className="bg-black text-white">{t('submit.action.volunteer', 'Volunteer')}</option>
-                          <option value="Apply Now" className="bg-black text-white">{t('submit.action.applyNow', 'Apply Now')}</option>
-                          <option value="Get Help" className="bg-black text-white">{t('submit.action.getHelp', 'Get Help')}</option>
+                          <option value="Visit Website" className="bg-black text-white">Visit Website</option>
+                          <option value="Register" className="bg-black text-white">Register</option>
+                          <option value="Learn More" className="bg-black text-white">Learn More</option>
+                          <option value="Donate" className="bg-black text-white">Donate</option>
+                          <option value="Volunteer" className="bg-black text-white">Volunteer</option>
+                          <option value="Apply Now" className="bg-black text-white">Apply Now</option>
+                          <option value="Get Help" className="bg-black text-white">Get Help</option>
                         </select>
                         <Input
                           type="url"
@@ -337,9 +337,9 @@ Page
                   <div className="space-y-6 pt-6 border-t border-white/10">
                     <div className="flex justify-between items-center">
                       <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
-                        <Compass className="w-4 h-4 text-indigo-400" /> {t('submit.form.additionalActions', 'Additional Action Buttons')}
+                        <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
                       </h4>
-                      <div className="text-[10px] font-black uppercase text-slate-400">{t('submit.form.maxActions', 'Max 2 custom actions')}</div>
+                      <div className="text-[10px] font-black uppercase text-slate-400">Max 2 custom actions</div>
                     </div>
 
                     <div className="space-y-4">
@@ -387,7 +387,7 @@ Page
                           onClick={() => setFormData(prev => ({ ...prev, action_urls: [...prev.action_urls, { label: 'Learn More', url: '' }] }))}
                           className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-slate-400 font-black uppercase tracking-widest text-xs hover:border-blue-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all flex items-center justify-center gap-2"
                         >
-                          <Sparkles className="w-4 h-4" /> {t('submit.form.addAction', 'Add Action Button')}
+                          <Sparkles className="w-4 h-4" /> Add Action Button
                         </button>
                       )}
                     </div>
@@ -396,13 +396,13 @@ Page
                   {!formData.auto_assign_tags && (
                     <div className="space-y-4">
                       <FormField
-                        label={t('submit.form.tags', 'Additional Tags / Keywords')}
+                        label="Additional Tags / Keywords"
                         name="tags"
                         value={formData.tags}
                         onChange={handleChange}
-                        placeholder={t('submit.form.tagsPlaceholder', 'e.g. wheelchair-accessible, pets-welcome, free-parking...')}
+                        placeholder="e.g. wheelchair-accessible, pets-welcome, free-parking..."
                       />
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('submit.form.tagsHint', 'Separate tags with commas')}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Separate tags with commas</p>
                     </div>
                   )}
 
@@ -419,8 +419,8 @@ Page
                         <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-black text-white uppercase tracking-tight">{t('submit.form.autoTags', 'Auto-assign Smart Tags')}</p>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase">{t('submit.form.autoTagsHint', 'AI will suggest tags based on your description')}</p>
+                        <p className="text-sm font-black text-white uppercase tracking-tight">Auto-assign Smart Tags</p>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase">AI will suggest tags based on your description</p>
                       </div>
                     </label>
                   </div>
@@ -446,7 +446,7 @@ Page
                           <img src={formData.image_url} className="absolute inset-0 w-full h-full object-cover opacity-60 rounded-chromic-card" alt="Preview" />
                           <div className="relative z-10 text-white flex flex-col items-center gap-2">
                             <Upload className="w-10 h-10" />
-                            <p className="font-black uppercase tracking-widest text-xs shadow-md">{t('submit.form.changeImage', 'Click or drag to change image')}</p>
+                            <p className="font-black uppercase tracking-widest text-xs shadow-md">Click or drag to change image</p>
                           </div>
                         </>
                       ) : (
@@ -455,8 +455,8 @@ Page
                             <Upload className="w-8 h-8" />
                           </div>
                           <div className="text-center">
-                            <p className="font-black text-white uppercase tracking-tight text-lg drop-shadow-md">{t('submit.form.dropImage', 'Drop your image here')}</p>
-                            <p className="text-slate-400 font-bold text-sm">{t('submit.form.browseFiles', 'or click to browse local files')}</p>
+                            <p className="font-black text-white uppercase tracking-tight text-lg drop-shadow-md">Drop your image here</p>
+                            <p className="text-slate-400 font-bold text-sm">or click to browse local files</p>
                           </div>
                         </>
                       )}
@@ -467,7 +467,7 @@ Page
 
               <div className="flex justify-end">
                 <Button onClick={nextStep} className="px-10 py-8 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest rounded-none shadow-xl shadow-emerald-500/20 group">
-                  <span className="flex items-center gap-2">{t('submit.navigation.nextContact', 'Next: Contact Info')} <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></span>
+                  <span className="flex items-center gap-2">Next: Contact Info <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></span>
                 </Button>
               </div>
             </motion.div>
@@ -484,27 +484,27 @@ Page
               <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
                 <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
                   <UserIcon className="w-6 h-6 text-emerald-400" />
-                  <p className="font-black uppercase tracking-widest text-sm">{t('submit.step2.header', 'Step 2: Your & Location Details')}</p>
+                  <p className="font-black uppercase tracking-widest text-sm">Step 2: Your & Location Details</p>
                 </div>
                 <div className="p-8 space-y-10">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <FormField label={t('submit.form.contactName', 'Your Name / Org Contact')} name="contact_name" value={formData.contact_name} onChange={handleChange} required placeholder={t('submit.form.contactNamePlaceholder', 'Full name...')} />
-                    <FormField label={t('submit.form.contactEmail', 'Contact Email')} name="contact_email" type="email" value={formData.contact_email} onChange={handleChange} required placeholder={t('submit.form.contactEmailPlaceholder', 'For verification updates...')} />
+                    <FormField label="Your Name / Org Contact" name="contact_name" value={formData.contact_name} onChange={handleChange} required placeholder="Full name..." />
+                    <FormField label="Contact Email" name="contact_email" type="email" value={formData.contact_email} onChange={handleChange} required placeholder="For verification updates..." />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <FormField label={t('submit.form.phone', 'Phone Number')} name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" />
-                    <FormField label={t('submit.form.audience', 'Target Audience')} name="audience" value={formData.audience} onChange={handleChange} placeholder={t('submit.form.audiencePlaceholder', 'e.g. Seniors, Families, Veterans...')} />
+                    <FormField label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" />
+                    <FormField label="Target Audience" name="audience" value={formData.audience} onChange={handleChange} placeholder="e.g. Seniors, Families, Veterans..." />
                   </div>
 
                   <div className="space-y-6 pt-6 border-t border-white/10">
                     <div className="flex justify-between items-center">
                       <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
-                        <MapPin className="w-4 h-4 text-blue-400" /> {t('submit.form.addressTitle', 'Physical Address (Required)')}
+                        <MapPin className="w-4 h-4 text-blue-400" /> Physical Address (Required)
                       </h4>
                       <Button onClick={handleGetLocation} variant="outline" className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/5 border-emerald-500/20 px-3 py-1 rounded-none hover:bg-emerald-500/10 hover:text-emerald-300 transition-all h-auto flex items-center gap-2">
                         {locating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
-                        {t('submit.form.useGPS', 'Use GPS Coordinates')}
+                        Use GPS Coordinates
                       </Button>
                       <Button
                         onClick={async () => {
@@ -512,24 +512,24 @@ Page
                           const coords = await geocodeAddress(formData.address, formData.city, formData.state, formData.zip);
                           if (coords) {
                             setFormData(prev => ({ ...prev, latitude: coords.lat.toString(), longitude: coords.lon.toString() }));
-                            alert(t('submit.form.addressVerified', "Location verified and coordinates captured!"));
+                            alert("Location verified and coordinates captured!");
                           } else {
-                            alert(t('submit.form.addressVerifyFailed', "Could not verify this address. Please check and try again."));
+                            alert("Could not verify this address. Please check and try again.");
                           }
                           setLocating(false);
                         }}
                         variant="outline"
                         className="text-[10px] font-black uppercase text-cyan-400 bg-cyan-500/5 border-cyan-500/20 px-3 py-1 rounded-none hover:bg-cyan-500/10 hover:text-cyan-300 transition-all h-auto flex items-center gap-2"
                       >
-                        <ShieldCheck className="w-3 h-3" /> {t('submit.form.verifyAddress', 'Verify Address')}
+                        <ShieldCheck className="w-3 h-3" /> Verify Address
                       </Button>
                     </div>
-                    <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">{t('submit.form.addressHint', 'We use the address to accurately place your resource on the map.')}</p>
-                    <FormField label={t('submit.form.streetAddress', 'Street Address')} name="address" value={formData.address} onChange={handleChange} required placeholder="123 Community St." error={errors.address} />
+                    <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">We use the address to accurately place your resource on the map.</p>
+                    <FormField label="Street Address" name="address" value={formData.address} onChange={handleChange} required placeholder="123 Community St." error={errors.address} />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <FormField label={t('submit.form.city', 'City')} name="city" value={formData.city} onChange={handleChange} required error={errors.city} />
-                      <FormField label={t('submit.form.state', 'State')} name="state" value={formData.state} onChange={handleChange} required error={errors.state} />
-                      <FormField label={t('submit.form.zip', 'ZIP')} name="zip" value={formData.zip} onChange={handleChange} required error={errors.zip} />
+                      <FormField label="City" name="city" value={formData.city} onChange={handleChange} required error={errors.city} />
+                      <FormField label="State" name="state" value={formData.state} onChange={handleChange} required error={errors.state} />
+                      <FormField label="ZIP" name="zip" value={formData.zip} onChange={handleChange} required error={errors.zip} />
                     </div>
                   </div>
 
@@ -559,7 +559,7 @@ Page
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Preview Card */}
                 <div className="space-y-4">
-                  <p className="font-black uppercase tracking-widest text-[10px] text-emerald-500 ml-2">{t('submit.step3.previewHint', 'How it will look')}</p>
+                  <p className="font-black uppercase tracking-widest text-[10px] text-emerald-500 ml-2">How it will look</p>
                   <Card className="p-0 overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl group/preview">
                     <div className="h-48 bg-slate-950 relative">
                       {formData.image_url ? (
@@ -568,15 +568,15 @@ Page
                         <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-slate-400" /></div>
                       )}
                       <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-none text-[10px] font-black text-emerald-400 border border-emerald-500/20 uppercase tracking-widest shadow-xl">
-                        {t(`category.${formData.category}`, formData.category || 'Category')}
+                        {formData.category || 'Category'}
                       </div>
                     </div>
                     <CardContent className="p-6 space-y-3">
-                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter line-clamp-1 group-hover/preview:text-emerald-400 transition-colors">{formData.title || t('submit.preview.untitled', 'Untitled Resource')}</h3>
-                      <p className="text-sm text-slate-400 font-medium line-clamp-3 leading-relaxed">{formData.description || t('submit.preview.noDescription', 'No description provided yet...')}</p>
+                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter line-clamp-1 group-hover/preview:text-emerald-400 transition-colors">{formData.title || 'Untitled Resource'}</h3>
+                      <p className="text-sm text-slate-400 font-medium line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
                       <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10 text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.city || t('submit.preview.remote', 'Remote')}</span></div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><UserIcon className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.audience || t('submit.preview.everyone', 'Everyone')}</span></div>
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.city || 'Remote'}</span></div>
+                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><UserIcon className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.audience || 'Everyone'}</span></div>
                       </div>
                     </CardContent>
                   </Card>
@@ -586,13 +586,13 @@ Page
                 <div className="space-y-6">
                   <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-6 shadow-2xl">
                     <h4 className="font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2 drop-shadow-sm">
-                      <ShieldCheck className="w-5 h-5 text-emerald-400" /> {t('submit.policy.title', 'Submission Policy')}
+                      <ShieldCheck className="w-5 h-5 text-emerald-400" /> Submission Policy
                     </h4>
                     <ul className="space-y-4">
                       {[
-                        t('submit.policy.item1', 'Verified for accuracy by our community lead.'),
-                        t('submit.policy.item2', 'AI analysis for quality and helpfulness check.'),
-                        t('submit.policy.item3', 'Instantly live after passing automated review.')
+                        "Verified for accuracy by our community lead.",
+                        "AI analysis for quality and helpfulness check.",
+                        "Instantly live after passing automated review."
                       ].map((text, i) => (
                         <li key={i} className="flex gap-3 text-sm font-bold text-slate-300">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
@@ -621,11 +621,11 @@ Page
                         <Sparkles className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">{t('submit.error.verificationReport', 'Verification Report')}</p>
+                        <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">Verification Report</p>
                         <p className="leading-relaxed font-black uppercase text-[11px] tracking-tight">{errors.general}</p>
                         {errors.general.includes('AI Quality Check Failed') && (
                           <p className="mt-2 text-red-400 text-[10px] uppercase font-black flex items-center gap-1 tracking-widest">
-                            {t('submit.error.reviewDetailed', 'Review detailed reasoning')} <ChevronRight className="w-3 h-3" />
+                            Review detailed reasoning <ChevronRight className="w-3 h-3" />
                           </p>
                         )}
                       </div>
@@ -642,19 +642,19 @@ Page
                         <div className="flex flex-col items-center">
                           <div className="flex items-center gap-3">
                             <Loader2 className="w-6 h-6 animate-spin" />
-                            <span>{t('submit.status.auditing', 'AI Auditing...')}</span>
+                            <span>AI Auditing...</span>
                           </div>
-                          <span className="text-[10px] mt-1 opacity-60">{t('submit.status.qualityControl', 'Quality Control in progress')}</span>
+                          <span className="text-[10px] mt-1 opacity-60">🤖 Quality Control in progress</span>
                         </div>
                       ) : submitting ? (
                         <div className="flex items-center gap-3">
                           <Loader2 className="w-6 h-6 animate-spin" />
-                          <span>{t('submit.status.deploying', 'Deploying...')}</span>
+                          <span>Deploying...</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-3">
                           <CheckCircle2 className="w-6 h-6" />
-                          {t('submit.form.submitNetwork', 'Submit to Network')}
+                          Submit to Network
                         </div>
                       )}
                     </Button>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, ChevronLeft, Sparkles, Compass, CheckCircle2, Circle } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
 import { useLocation } from '@/react-app/hooks/useLocation';
 
@@ -11,24 +10,21 @@ interface QuestionnaireModalProps {
     onComplete: (filters: { searchTerm?: string; categories: string[]; tag?: string }) => void;
 }
 
-
+const DEMOGRAPHICS = [
+    { id: 'family', label: 'Family with Children', icon: '👨‍👩‍👧‍👦' },
+    { id: 'senior', label: 'Senior / Elderly', icon: '👴' },
+    { id: 'veteran', label: 'Veteran', icon: '🎖️' },
+    { id: 'student', label: 'Student', icon: '🎓' },
+    { id: 'any', label: 'Any / I don\'t care', icon: '🌍' },
+];
 
 export default function QuestionnaireModal({ isOpen, onClose, onComplete }: QuestionnaireModalProps) {
-    const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [zipCode, setZipCode] = useState('');
     const [selectedDemographic, setSelectedDemographic] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
     const { currentZip, location: userLocation } = useLocation();
-
-    const demographics = [
-        { id: 'family', label: t('discover.wizard.demo.family', 'Family with Children'), icon: '👨‍👩‍👧‍👦' },
-        { id: 'senior', label: t('discover.wizard.demo.senior', 'Senior / Elderly'), icon: '👴' },
-        { id: 'veteran', label: t('discover.wizard.demo.veteran', 'Veteran'), icon: '🎖️' },
-        { id: 'student', label: t('discover.wizard.demo.student', 'Student'), icon: '🎓' },
-        { id: 'any', label: t('discover.wizard.demo.any', "Any / I don't care"), icon: '🌍' },
-    ];
 
     useEffect(() => {
         if (isOpen && (currentZip || userLocation)) {
@@ -90,8 +86,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                     <Compass className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-black text-white uppercase tracking-tighter drop-shadow-sm">{t('discover.wizard.title', 'Resource Finder')}</h2>
-                                    <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">{t('discover.wizard.step', 'Step')} {step} {t('common.of', 'of')} 4</p>
+                                    <h2 className="text-xl font-black text-white uppercase tracking-tighter drop-shadow-sm">Resource Finder</h2>
+                                    <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Step {step} of 4</p>
                                 </div>
                             </div>
                             <button
@@ -122,8 +118,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">{t('discover.wizard.step1.title', 'Where are you?')}</h3>
-                                            <p className="text-slate-300 font-bold italic">{t('discover.wizard.step1.subtitle', 'Enter your ZIP code to find resources closest to you.')}</p>
+                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Where are you?</h3>
+                                            <p className="text-slate-300 font-bold italic">Enter your ZIP code to find resources closest to you.</p>
                                         </div>
 
                                         <div className="max-w-xs mx-auto space-y-4">
@@ -138,7 +134,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                 onClick={() => { setZipCode(''); setStep(2); }}
                                                 className="w-full py-3 text-slate-400 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
                                             >
-                                                {t('discover.wizard.step1.skip', 'See Everything (No ZIP needed)')}
+                                                See Everything (No ZIP needed)
                                             </button>
                                         </div>
                                     </motion.div>
@@ -152,12 +148,12 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">{t('discover.wizard.step2.title', 'Who is this for?')}</h3>
-                                            <p className="text-slate-300 font-bold italic">{t('discover.wizard.step2.subtitle', 'Tell us a bit about yourself or the person you are helping.')}</p>
+                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Who is this for?</h3>
+                                            <p className="text-slate-300 font-bold italic">Tell us a bit about yourself or the person you are helping.</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {demographics.map((demo) => (
+                                            {DEMOGRAPHICS.map((demo) => (
                                                 <button
                                                     key={demo.id}
                                                     onClick={() => setSelectedDemographic(demo.id)}
@@ -192,8 +188,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">{t('discover.wizard.step3.title', 'What do you need?')}</h3>
-                                            <p className="text-slate-300 font-bold italic">{t('discover.wizard.step3.subtitle', 'Select a category of support you are looking for.')}</p>
+                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">What do you need?</h3>
+                                            <p className="text-slate-300 font-bold italic">Select a category of support you are looking for.</p>
                                         </div>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -207,7 +203,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                         }`}
                                                 >
                                                     <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === cat.label ? 'text-blue-200' : 'text-slate-300'}`}>
-                                                        {t(`categories.${cat.id}`, cat.label)}
+                                                        {cat.label}
                                                     </span>
                                                 </button>
                                             ))}
@@ -219,7 +215,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                     }`}
                                             >
                                                 <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === 'any' ? 'text-blue-200' : 'text-slate-300'}`}>
-                                                    {t('common.anySkip', 'Any / Skip')}
+                                                    Any / Skip
                                                 </span>
                                             </button>
                                         </div>
@@ -235,15 +231,15 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">{t('discover.wizard.step4.title', 'Any specifics?')}</h3>
-                                            <p className="text-slate-300 font-bold italic">{t('discover.wizard.step4.subtitle', 'Choose an area of interest or skip to see all.')}</p>
+                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Any specifics?</h3>
+                                            <p className="text-slate-300 font-bold italic">Choose an area of interest or skip to see all.</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {selectedCategory === 'any' ? (
                                                 <div className="col-span-2 text-center py-10">
                                                     <Compass className="w-16 h-16 text-slate-500 mx-auto mb-4" />
-                                                    <p className="text-slate-400 font-bold italic">{t('discover.wizard.step4.skipMessage', "You've chosen to explore all resources. Ready to go!")}</p>
+                                                    <p className="text-slate-400 font-bold italic">You've chosen to explore all resources. Ready to go!</p>
                                                 </div>
                                             ) : (
                                                 <>
@@ -288,7 +284,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         onClick={() => setStep(step - 1)}
                                         className="flex items-center gap-2 px-4 sm:px-6 py-3 text-slate-400 font-black uppercase tracking-widest text-xs hover:text-white transition-colors"
                                     >
-                                        <ChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">{t('common.back', 'Back')}</span>
+                                        <ChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
                                     </button>
                                 ) : <div />}
 
@@ -305,7 +301,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         onClick={() => handleComplete()}
                                         className="flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]"
                                     >
-                                        {t('discover.wizard.finish', 'See Resources')} <Sparkles className="w-4 h-4" />
+                                        See Resources <Sparkles className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>

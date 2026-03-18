@@ -196,14 +196,7 @@
     "hours": "Hours:",
     "call": "Call",
     "visit": "Visit",
-    "categories": "Categories",
-    "highDensity": "High Density",
-    "mediumDensity": "Medium Density",
-    "lowDensity": "Low Density",
-    "resourcesInArea": "{{count}} resources in this area",
-    "resourcesInAreaTitle": "{{count}} Resources in Area",
-    "clusterSubtitle": "{{title}} and {{count}} others",
-    "moreResources": "+{{count}} more"
+    "categories": "Categories"
   },
   "auth": {
     "welcomeBack": "Welcome Back",

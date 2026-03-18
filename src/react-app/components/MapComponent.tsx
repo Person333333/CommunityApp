@@ -166,7 +166,7 @@ export default function MapComponent({
             <Popup>
               <div className="p-2">
                 <p className="text-sm font-medium text-slate-300">
-                  {t('map.resourcesInArea', `${heat.count} resources in this area`, { count: heat.count })}
+                  {heat.count} resource{heat.count !== 1 ? 's' : ''} in this area
                 </p>
               </div>
             </Popup>
@@ -187,10 +187,6 @@ export default function MapComponent({
             category === 'Transportation' ? '#6366F1' :
             category === 'Mental Health' ? '#EC4899' :
             category === 'Legal Assistance' || category === 'Legal Aid' ? '#F97316' :
-            category === 'Senior Services' ? '#06B6D4' :
-            category === 'Child Care' ? '#F43F5E' :
-            category === 'Veterans Services' ? '#84CC16' :
-            category === 'Financial Assistance' ? '#D946EF' :
             '#14B8A6';
 
           return (
@@ -271,7 +267,7 @@ export default function MapComponent({
                         className="flex items-center gap-1 text-sm bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors"
                       >
                         <Phone className="w-3 h-3" />
-                        {t('map.call', 'Call')}
+                        Call
                       </a>
                     )}
 
@@ -283,7 +279,7 @@ export default function MapComponent({
                         className="flex items-center gap-1 text-sm bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 transition-colors"
                       >
                         <Globe className="w-3 h-3" />
-                        {t('map.visit', 'Visit')}
+                        Visit
                       </a>
                     )}
                   </div>
@@ -328,10 +324,10 @@ export default function MapComponent({
                 <div className="p-4 space-y-3">
                   <div>
                     <h3 className="font-semibold text-lg text-slate-900 mb-1">
-                      {t('map.resourcesInAreaTitle', `${heat.count} Resources in Area`, { count: heat.count })}
+                      {heat.count} Resource{heat.count !== 1 ? 's' : ''} in Area
                     </h3>
                     <p className="text-sm text-slate-300 font-medium mb-2">
-                      {t('map.clusterSubtitle', `${mainResource.title} and ${heat.count - 1} others`, { title: mainResource.title, count: heat.count - 1 })}
+                      {mainResource.title} and {heat.count - 1} other{heat.count - 1 !== 1 ? 's' : ''}
                     </p>
                   </div>
 
@@ -343,7 +339,7 @@ export default function MapComponent({
                     ))}
                     {clusterResources.length > 3 && (
                       <div className="text-xs text-gray-500">
-                        {t('map.moreResources', `+${clusterResources.length - 3} more`, { count: clusterResources.length - 3 })}
+                        +{clusterResources.length - 3} more
                       </div>
                     )}
                   </div>
@@ -378,20 +374,14 @@ export default function MapComponent({
           <div className="grid grid-cols-2 gap-3 text-xs font-medium">
             {Object.entries(categoryIcons).slice(0, -1).map(([category, _]) => (
               <div key={category} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full shadow-sm ${
-                  category === 'Housing' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]' :
+                <div className={`w-3 h-3 rounded-full shadow-sm ${category === 'Housing' ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]' :
                   category === 'Food' || category === 'Food Assistance' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' :
-                  category === 'Healthcare' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' :
-                  category === 'Employment' ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]' :
-                  category === 'Education' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.8)]' :
-                  category === 'Transportation' ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]' :
-                  category === 'Mental Health' ? 'bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]' :
-                  category === 'Legal Aid' ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]' :
-                  category === 'Senior Services' ? 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]' :
-                  category === 'Child Care' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]' :
-                  category === 'Veterans Services' ? 'bg-lime-500 shadow-[0_0_8px_rgba(132,204,22,0.8)]' :
-                  category === 'Financial Assistance' ? 'bg-fuchsia-500 shadow-[0_0_8px_rgba(217,70,239,0.8)]' :
-                  'bg-teal-500 shadow-[0_0_8px_rgba(20,184,166,0.8)]'
+                    category === 'Healthcare' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' :
+                      category === 'Employment' ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]' :
+                        category === 'Education' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.8)]' :
+                          category === 'Transportation' ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]' :
+                            category === 'Mental Health' ? 'bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]' :
+                              'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]'
                   }`} />
                 <span className="text-slate-300 truncate tracking-wide">{t(`categories.${category}`, category)}</span>
               </div>

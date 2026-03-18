@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { Input } from '@/react-app/components/ui/input';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
+import LocationRequest from '@/react-app/components/LocationRequest';
 import GuestAuthModal from '@/react-app/components/GuestAuthModal';
 import { ResourceType } from '@/shared/types';
 import { useUser } from '@clerk/clerk-react';
@@ -16,17 +17,16 @@ import { useTranslation } from 'react-i18next';
 import { useDynamicTranslation } from '@/react-app/hooks/useDynamicTranslation';
 import { categoryHierarchy } from '@/shared/categoryHierarchy';
 import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
+import LocationBar from '@/react-app/components/LocationBar';
 
 export default function Discover() {
   const { t, i18n } = useTranslation();
   const { } = useDynamicTranslation();
 
-  const { location: userLocation } = useLocation();
+  const { location: userLocation, loading: locationLoading, error: locationError, requestLocation, setZipCodeLocation, currentZip } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
@@ -92,7 +92,7 @@ export default function Discover() {
   useEffect(() => {
     const translateContent = async () => {
       if (i18n.language === 'en') return;
-      setIsTranslating(true);
+      setLoading(true);
       try {
         const { TranslateService } = await import('@/react-app/services/translateService');
         const translated = await TranslateService.translateResources(allResources, i18n.language);
@@ -100,7 +100,7 @@ export default function Discover() {
       } catch (err) {
         console.error("Failed to translate resources:", err);
       } finally {
-        setIsTranslating(false);
+        setLoading(false);
       }
     };
     if (allResources.length > 0 && i18n.language !== 'en') {
@@ -108,8 +108,13 @@ export default function Discover() {
     }
   }, [i18n.language, allResources.length]);
 
-  // Fetch resources even if userLocation is null (global search)
+  // Only fetch resources when we have user location
   useEffect(() => {
+    if (!userLocation) {
+      setAllResources([]);
+      return;
+    }
+
     const fetchResources = async () => {
       setLoading(true);
       try {
@@ -209,20 +214,20 @@ export default function Discover() {
   };
 
   const handleDelete = async (resource: ResourceType) => {
-    if (!window.confirm(t('discover.confirmDelete', 'Are you sure you want to delete this resource? This action cannot be undone.'))) return;
+    if (!window.confirm(t('discover.confirmDelete'))) return;
 
     try {
       const identifier = user ? user.id : guestEmail;
       const success = await unifiedResourceService.deleteResource(resource.id, identifier);
       if (success) {
         setAllResources((prev: ResourceType[]) => prev.filter((r: ResourceType) => r.id !== resource.id));
-        alert(t('discover.resourceDeleted', 'Resource deleted successfully.'));
+        alert(t('discover.resourceDeleted'));
       } else {
-        alert(t('discover.deleteError', 'Could not delete resource. Please try again later.'));
+        alert(t('discover.deleteError'));
       }
     } catch (err) {
       console.error("Delete error:", err);
-      alert(t('discover.deleteError', 'Could not delete resource. Please try again later.'));
+      alert(t('discover.deleteError'));
     }
   };
 
@@ -269,19 +274,32 @@ export default function Discover() {
 
   const hasActiveFilters = searchTerm || selectedCategories.length > 0 || selectedCost || selectedTag;
 
+  // Removed auto-trigger inline wizard by user request
+
+  // Check if we have a saved zip or existing location to avoid splash screen
+  const hasLocationPreference = !!userLocation || !!currentZip || !!localStorage.getItem('savedZip');
+
+  if (!hasLocationPreference && (locationLoading || !userLocation)) {
+    return (
+      <LocationRequest
+        onRequestLocation={requestLocation}
+        onZipCodeSearch={setZipCodeLocation}
+        loading={locationLoading}
+        error={locationError}
+      />
+    );
+  }
+
 
   return (
     <div className="min-h-screen pt-20 pb-12 px-3 sm:px-6 lg:px-8">
-      {/* Translation indicator */}
-      {isTranslating && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 bg-indigo-600/90 backdrop-blur text-white text-sm rounded-full shadow-lg border border-indigo-400/40 animate-pulse">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping inline-block"></span>
-          {t('discover.translating', 'Translating resources...')}
-        </div>
-      )}
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6"
+        >
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-white mb-2 sm:mb-4">
             {t('discover.title')}
           </h1>
@@ -290,16 +308,16 @@ export default function Discover() {
           </p>
 
           <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
-            <div className="hidden sm:flex items-center gap-2 text-white font-medium text-xs bg-white/5 px-4 py-2 rounded-full border border-white/20 shadow-sm">
+            <div className="hidden sm:flex items-center gap-2 text-white font-medium text-xs glass-layer px-4 py-2 rounded-full border border-white/20 shadow-sm">
               <Sparkles className="w-4 h-4 text-blue-400" />
               <span>{resources.length} verified results</span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
 
         {/* Search and Explorer Card */}
-        <div data-tour="search" className="mb-8 space-y-4">
+        <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
           <Button
             size="lg"
             className="w-full bg-black/40 backdrop-blur-xl border border-white/10 text-white font-black px-8 py-10 rounded-none flex items-center justify-center gap-6 hover:bg-white/10 transition-all shadow-2xl group relative overflow-hidden border-l-emerald-500 border-l-4"
@@ -310,8 +328,8 @@ export default function Discover() {
               <Compass className="w-8 h-8 text-black" />
             </div>
             <div className="text-left relative z-10">
-              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-emerald-400 mb-0.5">{t('discover.wizard.topHint', 'Not sure where to start?')}</div>
-              <div className="text-xl sm:text-3xl tracking-tighter uppercase leading-none font-black">{t('discover.wizard.mainPrompt', 'Need help finding a resource?')}</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-emerald-400 mb-0.5">Not sure where to start?</div>
+              <div className="text-xl sm:text-3xl tracking-tighter uppercase leading-none font-black">Need help finding a resource?</div>
             </div>
             <ChevronRight className="w-8 h-8 text-emerald-400 group-hover:translate-x-1 transition-transform ml-auto hidden sm:block relative z-10" />
           </Button>
@@ -350,13 +368,14 @@ export default function Discover() {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black uppercase transition-all border ${showLocalOnly
                         ? 'bg-emerald-500 border-emerald-600 text-black shadow-lg shadow-emerald-500/20'
                         : 'bg-white/5 border-white/10 text-slate-400 hover:text-white'}`}
-                      title={showLocalOnly ? t('discover.showingLocalOnly', 'Showing Local Only') : t('discover.showingAllResults', 'Showing All Results')}
+                      title={showLocalOnly ? "Showing Local Only" : "Showing All Results"}
                     >
                       <MapPin className={`w-3 h-3 ${showLocalOnly ? 'fill-black' : ''}`} />
-                      <span className="hidden sm:inline">{showLocalOnly ? t('discover.localOnly', 'Local Only') : t('discover.localOff', 'Local Off')}</span>
+                      <span className="hidden sm:inline">{showLocalOnly ? "Local Only" : "Local Off"}</span>
                     </motion.button>
                   </div>
                 </div>
+                <LocationBar variant="prominent" className="w-full lg:w-auto" />
               </div>
 
               {/* Filter dropdowns row */}
@@ -368,8 +387,8 @@ export default function Discover() {
                     onChange={e => { const v = e.target.value; const cats = v ? [v] : []; setSelectedCategories(cats); handleSearch(searchTerm, cats); }}
                     className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-none text-sm font-semibold text-white outline-none focus:border-emerald-500 transition-all disabled:opacity-50"
                   >
-                    <option value="" className="bg-slate-900">{t('discover.allCategories', 'All Categories')}</option>
-                    {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label} className="bg-slate-900">{t(`categories.${cat.id}`, cat.label)}</option>)}
+                    <option value="" className="bg-slate-900">All Categories</option>
+                    {categoryHierarchy.map(cat => <option key={cat.id} value={cat.label} className="bg-slate-900">{cat.label}</option>)}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
@@ -380,9 +399,9 @@ export default function Discover() {
                     onChange={e => setSelectedCost(e.target.value)}
                     className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 cursor-pointer backdrop-blur transition-all"
                   >
-                    <option value="" className="bg-slate-900">{t('discover.anyCost', 'Any Cost')}</option>
-                    <option value="free" className="bg-slate-900">{t('discover.free', 'Free')}</option>
-                    <option value="sliding" className="bg-slate-900">{t('discover.slidingScale', 'Sliding Scale')}</option>
+                    <option value="" className="bg-slate-900">Any Cost</option>
+                    <option value="free" className="bg-slate-900">Free</option>
+                    <option value="sliding" className="bg-slate-900">Sliding Scale</option>
                   </select>
                   <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
@@ -393,21 +412,21 @@ export default function Discover() {
                     onChange={e => setSelectedTag(e.target.value)}
                     className="appearance-none pl-4 pr-10 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-white outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 cursor-pointer backdrop-blur transition-all"
                   >
-                    <option value="" className="bg-slate-900">{t('discover.allTags', 'All Tags')}</option>
-                    <option value="senior" className="bg-slate-900">{t('tags.senior', 'Senior')}</option>
-                    <option value="family" className="bg-slate-900">{t('tags.family', 'Family')}</option>
-                    <option value="child" className="bg-slate-900">{t('tags.child', 'Child / Youth')}</option>
-                    <option value="veteran" className="bg-slate-900">{t('tags.veteran', 'Veteran')}</option>
-                    <option value="student" className="bg-slate-900">{t('tags.student', 'Student')}</option>
-                    <option value="finance" className="bg-slate-900">{t('tags.finance', 'Finance')}</option>
-                    <option value="energy" className="bg-slate-900">{t('tags.energy', 'Energy')}</option>
-                    <option value="rent" className="bg-slate-900">{t('tags.rent', 'Rent')}</option>
-                    <option value="food" className="bg-slate-900">{t('tags.food', 'Food')}</option>
+                    <option value="" className="bg-slate-900">All Tags</option>
+                    <option value="senior" className="bg-slate-900">Senior</option>
+                    <option value="family" className="bg-slate-900">Family</option>
+                    <option value="child" className="bg-slate-900">Child / Youth</option>
+                    <option value="veteran" className="bg-slate-900">Veteran</option>
+                    <option value="student" className="bg-slate-900">Student</option>
+                    <option value="finance" className="bg-slate-900">Finance</option>
+                    <option value="energy" className="bg-slate-900">Energy</option>
+                    <option value="rent" className="bg-slate-900">Rent</option>
+                    <option value="food" className="bg-slate-900">Food</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>
                 {hasActiveFilters && (
-                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/10 transition-colors">{t('discover.clearAll', 'Clear All')}</button>
+                  <button onClick={clearFilters} className="px-3 py-2 text-xs font-bold text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/10 transition-colors">Clear All</button>
                 )}
 
                 <div className="flex gap-2 items-center ml-auto">
@@ -417,7 +436,7 @@ export default function Discover() {
                     onClick={() => { setShowFavoritesOnly(!showFavoritesOnly); setShowMySubmissions(false); }}
                     className={`rounded-none px-3 py-2 font-black uppercase tracking-widest text-[10px] transition-all ${showFavoritesOnly ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' : 'bg-white/5 text-white border-white/10 hover:bg-white/10'}`}
                   >
-                    <Heart className={`w-3.5 h-3.5 mr-2 ${showFavoritesOnly ? 'fill-emerald-400 text-emerald-400' : 'text-slate-400'}`} /> {t('discover.myFavorites', 'My Favorites')}
+                    <Heart className={`w-3.5 h-3.5 mr-2 ${showFavoritesOnly ? 'fill-emerald-400 text-emerald-400' : 'text-slate-400'}`} /> My Favorites
                   </Button>
                   <Button
                     variant="outline"
@@ -439,7 +458,7 @@ export default function Discover() {
               {/* Guest email prompt */}
               {showEmailPrompt && !user && (
                 <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 space-y-3">
-                  <p className="text-sm font-bold text-blue-200">{t('discover.guestEmailPrompt', 'Enter the email you used when submitting to find your resources:')}</p>
+                  <p className="text-sm font-bold text-blue-200">Enter the email you used when submitting to find your resources:</p>
                   <div className="flex gap-2">
                     <input
                       type="email"
@@ -459,13 +478,13 @@ export default function Discover() {
                       }}
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors"
                     >
-                      {t('discover.find', 'Find')}
+                      Find
                     </button>
                     <button
                       onClick={() => setShowEmailPrompt(false)}
                       className="text-slate-400 hover:text-white text-sm font-bold"
                     >
-                      {t('common.cancel', 'Cancel')}
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -473,7 +492,7 @@ export default function Discover() {
 
             </div>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Content Section: Results + Sidebar */}
         <div className="flex flex-col lg:flex-row gap-8">
@@ -487,14 +506,14 @@ export default function Discover() {
                   <div className="w-20 h-20 bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10">
                     <Compass className="w-10 h-10 text-slate-500 opacity-80" />
                   </div>
-                  <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter leading-none relative z-10">{t('discover.empty.titleHub', 'Community Hub')} <br /><span className="text-emerald-500">{t('discover.empty.titleReady', 'Ready')}</span></h2>
-                  <p className="text-slate-400 font-bold max-w-sm mx-auto mb-10 italic relative z-10 uppercase tracking-widest text-xs opacity-60">{t('discover.empty.subtitle', 'Search above, use filters, or let our guide help you find exactly what you need.')}</p>
+                  <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter leading-none relative z-10">Community Hub <br /><span className="text-emerald-500">Ready</span></h2>
+                  <p className="text-slate-400 font-bold max-w-sm mx-auto mb-10 italic relative z-10 uppercase tracking-widest text-xs opacity-60">Search above, use filters, or let our guide help you find exactly what you need.</p>
                   <Button
                     size="lg"
                     className="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-10 py-7 rounded-none shadow-xl shadow-emerald-500/20 flex items-center gap-3 transition-colors relative z-10 uppercase tracking-widest"
                     onClick={() => setIsQuestionnaireOpen(true)}
                   >
-                    {t('discover.empty.startButton', 'Start Helper Guide')} <Sparkles className="w-5 h-5" />
+                    Start Helper Guide <Sparkles className="w-5 h-5" />
                   </Button>
                 </Card>
               ) : null}
@@ -502,9 +521,7 @@ export default function Discover() {
 
               {loading ? (
                 <div className="flex justify-center py-20">
-                  <div>
-                <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
-              </div>
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-10 h-10 border-3 border-emerald-500 border-t-transparent rounded-full" />
                 </div>
               ) : paginatedResources.length === 0 && (hasActiveFilters || showFavoritesOnly || showMySubmissions) ? (
                 <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
@@ -512,8 +529,14 @@ export default function Discover() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {paginatedResources.map((resource: ResourceType) => (
-                    <div key={resource.id}>
+                  {paginatedResources.map((resource: ResourceType, idx: number) => (
+                    <motion.div
+                      key={resource.id}
+                      initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: idx * 0.05, type: "spring", stiffness: 100 }}
+                    >
                       <Card className="flex flex-col sm:flex-row p-0 overflow-hidden cursor-pointer shadow-none border border-white/10 hover:border-emerald-500/50 transition-all h-auto bg-black/44 backdrop-blur-xl rounded-none group/resource" onClick={() => handleResourceClick(resource)}>
                         {resource.image_url ? (
                           <div className="w-full sm:w-48 md:w-64 h-36 sm:h-auto overflow-hidden flex-shrink-0 border-r border-white/10 relative">
@@ -557,7 +580,7 @@ export default function Discover() {
                           <p className="text-sm text-slate-400 font-medium line-clamp-2 leading-relaxed mb-4 max-w-2xl">{resource.description}</p>
                           <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{resource.address || resource.city || t('discover.remoteService', 'Remote Service')}</span>
+                              <MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{resource.address || resource.city || 'Remote Service'}</span>
                             </div>
                             {resource.phone && (
                               <div className="flex items-center gap-2">
@@ -565,7 +588,7 @@ export default function Discover() {
                               </div>
                             )}
                             <div className="flex items-center gap-2">
-                              <Clock className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{t('discover.added', 'Added')} {resource.created_at ? new Date(resource.created_at).toLocaleDateString() : t('discover.recently', 'Recently')}</span>
+                              <Clock className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">Added {resource.created_at ? new Date(resource.created_at).toLocaleDateString() : 'Recently'}</span>
                             </div>
                           </div>
 
@@ -591,12 +614,12 @@ export default function Discover() {
                               {(4.0 + (String(resource.id).length % 10) / 10).toFixed(1)}/5
                             </span>
                             <span className="text-xs font-normal text-slate-500 ml-1">
-                              ({40 + (String(resource.title || '').length * 3)} {t('discover.reviews', 'reviews')})
+                              ({40 + (String(resource.title || '').length * 3)} reviews)
                             </span>
                           </div>
                         </CardContent>
                       </Card>
-                    </div>
+                    </motion.div>
                   ))}
                   {paginatedResources.length > 0 && totalPages > 1 && (
                     <div className="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-2xl mt-8 shadow-sm backdrop-blur">
@@ -605,17 +628,17 @@ export default function Discover() {
                         disabled={currentPage === 1}
                         className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl font-medium text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-25 transition-colors text-sm"
                       >
-                        {t('common.previous', 'Previous')}
+                        Previous
                       </button>
                       <span className="text-sm font-medium text-slate-400">
-                        {t('common.page', 'Page')} {currentPage} {t('common.of', 'of')} {totalPages}
+                        Page {currentPage} of {totalPages}
                       </span>
                       <button
                         onClick={() => setCurrentPage((prev: number) => Math.min(totalPages, prev + 1))}
                         disabled={currentPage >= totalPages}
                         className="px-6 py-2 bg-white/5 border border-white/10 rounded-xl font-medium text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-25 transition-colors text-sm"
                       >
-                        {t('common.next', 'Next')}
+                        Next
                       </button>
                     </div>
                   )}
@@ -642,7 +665,7 @@ export default function Discover() {
 
                   {/* Recently Added resources list */}
                   <div className="space-y-4 pt-6 border-t border-white/10">
-                    <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] px-2">{t('discover.recentlyAdded', 'Recently Added')}</h3>
+                    <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] px-2">Recently Added</h3>
                     <div className="space-y-2">
                       {recentlyAddedResources.map(res => (
                         <button
@@ -664,7 +687,7 @@ export default function Discover() {
 
                   {/* Popular resources list */}
                   <div className="space-y-4 pt-6 border-t border-white/10">
-                    <h3 className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.3em] px-2">{t('discover.popularNearby', 'Popular Nearby')}</h3>
+                    <h3 className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.3em] px-2">Popular Nearby</h3>
                     <div className="space-y-2">
                       {popularResources.map(res => (
                         <button
