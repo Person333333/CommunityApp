@@ -14,7 +14,6 @@ import { useLocation, calculateDistance } from '@/react-app/hooks/useLocation';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { useTranslation } from 'react-i18next';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
-import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -163,69 +162,74 @@ export default function Home() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-black">
-      {/* Geometric Hero Section */}
-      <HeroGeometric 
-        badge="PRECISION RESOURCE MAPPING"
-        title1={t('home.hero.title1')}
-        title2={t('home.hero.title2')}
-      >
-        <div className="max-w-3xl mx-auto">
-          <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
-            {t('home.hero.subtitle')}
-          </p>
 
-          <div className="relative max-w-2xl mx-auto mb-12">
-            <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
-              <div className="flex items-center gap-2 w-full flex-1 relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
-                <Input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder={t('home.hero.searchPlaceholder')}
-                  className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                      else navigate('/discover');
-                    }
-                  }}
-                />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                  <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
+  return (
+    <div className="min-h-screen bg-transparent">
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <div className="container mx-auto max-w-7xl relative z-10 text-center">
+          <div className="max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-6 animate-fade-in uppercase tracking-widest font-black">
+              Precision Resource Mapping
+            </p>
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter uppercase italic leading-none">
+              {t('home.hero.title1')}<br />
+              <span className="text-emerald-400">{t('home.hero.title2')}</span>
+            </h1>
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 mx-auto font-medium leading-relaxed mb-12 animate-fade-in">
+              {t('home.hero.subtitle')}
+            </p>
+
+            <div className="relative max-w-2xl mx-auto mb-12">
+              <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl">
+                <div className="flex items-center gap-2 w-full flex-1 relative group">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors pointer-events-none" />
+                  <Input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder={t('home.hero.searchPlaceholder')}
+                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-600 pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                        else navigate('/discover');
+                      }
+                    }}
+                  />
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-slate-500 hover:text-emerald-400 bg-transparent transition-colors" />
+                  </div>
                 </div>
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
+                  onClick={() => {
+                    if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
+                    else navigate('/discover');
+                  }}
+                >
+                  {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
               </div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
               <Button
+                variant="outline"
                 size="lg"
-                className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
-                onClick={() => {
-                  if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
-                  else navigate('/discover');
-                }}
+                className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
+                onClick={() => navigate('/discover?wizard=true')}
               >
-                {t('home.hero.explore')} <ArrowRight className="ml-2 w-4 h-4" />
+                <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
+                <div className="text-left">
+                  <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
+                  <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
+                </div>
               </Button>
             </div>
-            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur opacity-30 -z-10 group-hover:opacity-50 transition-opacity" />
           </div>
-
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-8">
-            <Button
-              variant="outline"
-              size="lg"
-              className="bg-white/5 border-white/10 text-white font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-white/10 transition-all group border-l-emerald-500 border-l-4"
-              onClick={() => navigate('/discover?wizard=true')}
-            >
-              <Compass className="w-6 h-6 text-emerald-400 group-hover:rotate-45 transition-transform" />
-              <div className="text-left">
-                <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-400 mb-0.5 opacity-80">Guided Search</div>
-                <div className="text-lg text-white font-black uppercase tracking-tight">Need help finding help?</div>
-              </div>
-            </Button>
-          </div>
-
           <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
             <div className="flex items-center gap-2">
               <span className="text-white">{stats.totalResources}+</span>
@@ -253,7 +257,7 @@ export default function Home() {
             />
           </motion.div>
         </div>
-      </HeroGeometric>
+      </section>
 
       {/* Sections below Hero with Shooting Stars */}
       <div className="relative overflow-hidden">
@@ -268,14 +272,6 @@ export default function Home() {
             maxSpeed={35}
             minDelay={1000}
             maxDelay={3000}
-          />
-          <ShootingStars
-            starColor="#93c5fd"
-            trailColor="#3b82f6"
-            minSpeed={10}
-            maxSpeed={25}
-            minDelay={2000}
-            maxDelay={4000}
           />
         </div>
 
@@ -586,7 +582,7 @@ export default function Home() {
       </section>
 
       {/* Newsletter - toned down */}
-      <section className="py-16 border-t border-white/10">
+      <section className="py-16 border-t border-border">
         <div className="container mx-auto max-w-2xl px-4 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -638,8 +634,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      </div>
-    </div>
 
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
@@ -665,7 +659,7 @@ export default function Home() {
           100% { opacity: 0.3; }
         }
       `}</style>
-    </div >
+    </div>
   );
 }
 

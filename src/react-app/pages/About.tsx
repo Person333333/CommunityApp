@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router';
 import { Heart, Users, Leaf, Lightbulb, Compass, Quote } from 'lucide-react';
@@ -12,7 +12,7 @@ export default function About() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-transparent">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       {/* Full-Screen Hero Section */}
       <section className="relative h-screen w-full overflow-hidden">
         <BackgroundPaths 
@@ -20,8 +20,6 @@ export default function About() {
           subtitle="Our Story & Mission"
           onCtaClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
         />
-        
-        {/* Additional "Scroll Down" hint if desired, or just use the button in BackgroundPaths */}
       </section>
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
@@ -134,7 +132,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* Our Values Section - 3D Reveal */}
+        {/* Our Values Section */}
         <section className="mb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -147,7 +145,7 @@ export default function About() {
             <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 perspective-lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
               {
                 title: "Sustainability",
@@ -183,7 +181,7 @@ export default function About() {
         >
           <GlassCard variant="strong" className="p-0 overflow-hidden bg-transparent border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.05)] rounded-[3rem] backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row">
-              <div className="lg:w-1/2 relative bg-slate-900 overflow-hidden group">
+              <div className="lg:w-1/2 relative bg-background overflow-hidden group">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
                   alt="Founder Alex Rivera"
@@ -198,7 +196,7 @@ export default function About() {
                   <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & Neighbor</p>
                 </div>
               </div>
-              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-white/5 backdrop-blur-md border-l border-white/10">
+              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/50 backdrop-blur-md border-l border-border">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
                 <h3 className="text-4xl sm:text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
@@ -222,7 +220,7 @@ export default function About() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="bg-slate-900/60 backdrop-blur-xl border border-blue-500/30 rounded-[3rem] p-12 sm:p-20 shadow-[0_0_50px_rgba(59,130,246,0.15)] relative overflow-hidden">
+          <div className="bg-background/60 backdrop-blur-xl border border-emerald-500/30 rounded-[3rem] p-12 sm:p-20 shadow-[0_0_50px_rgba(16,185,129,0.15)] relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 pointer-events-none" />
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
@@ -235,7 +233,7 @@ export default function About() {
             </p>
             <div className="flex justify-center relative z-10">
               <Link to="/submit">
-                <GlassButton variant="primary" className="bg-blue-600/80 backdrop-blur border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.5)] !text-white font-black uppercase tracking-widest px-12 h-16 rounded-chromic-pill hover:bg-blue-500 hover:scale-105 transition-all">
+                <GlassButton variant="primary" className="bg-emerald-600/80 backdrop-blur border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.5)] !text-white font-black uppercase tracking-widest px-12 h-16 rounded-chromic-pill hover:bg-emerald-500 hover:scale-105 transition-all">
                   {t('about.submitResource')}
                 </GlassButton>
               </Link>
@@ -248,56 +246,29 @@ export default function About() {
 }
 
 function ValueCard({ value }: { value: any }) {
-  const cardRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  });
-
-  const rotateX = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [45, 0, 0, -45]);
-  const rotateY = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [20, 0, 0, -20]);
-  const scale = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0.8, 1, 1, 0.8]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-  const smoothX = useSpring(rotateX, { stiffness: 100, damping: 30 });
-  const smoothY = useSpring(rotateY, { stiffness: 100, damping: 30 });
-  const smoothScale = useSpring(scale, { stiffness: 100, damping: 30 });
-
   return (
-    <motion.div
-      ref={cardRef}
-      style={{
-        rotateX: smoothX,
-        rotateY: smoothY,
-        scale: smoothScale,
-        opacity,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative z-10"
-    >
-      <FlipCard
-        heightClass="h-[360px]"
-        front={
-          <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-500/30 shadow-[0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden bg-slate-900/80 backdrop-blur-md group-hover:bg-slate-800/90 transition-colors rounded-chromic-card`}>
-            <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
-            <div className="mb-6 transform hover:scale-110 transition-transform duration-500">
-              {value.icon}
-            </div>
-            <h3 className={`text-3xl font-black uppercase tracking-tighter text-white group-hover:text-${value.color}-300 transition-colors drop-shadow-md`}>
-              {value.title}
-            </h3>
-            <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-slate-500 group-hover:text-slate-300 transition-colors">Tap to Reveal</p>
-          </GlassCard>
-        }
-        back={
-          <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-400/50 shadow-[0_0_40px_rgba(var(--color-${value.color}-500),0.2)] relative overflow-hidden bg-slate-950/90 backdrop-blur-xl border-2 rounded-chromic-card`}>
-            <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
-            <p className={`text-xl font-bold text-${value.color}-100 italic leading-relaxed drop-shadow-sm`}>
-              "{value.text}"
-            </p>
-          </GlassCard>
-        }
-      />
-    </motion.div>
+    <FlipCard
+      heightClass="h-[360px]"
+      front={
+        <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-500/30 shadow-[0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden bg-slate-900/80 backdrop-blur-md group-hover:bg-slate-800/90 transition-colors rounded-chromic-card`}>
+          <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
+          <div className="mb-6 transform hover:scale-110 transition-transform duration-500">
+            {value.icon}
+          </div>
+          <h3 className={`text-3xl font-black uppercase tracking-tighter text-white group-hover:text-${value.color}-300 transition-colors drop-shadow-md`}>
+            {value.title}
+          </h3>
+          <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-slate-500 group-hover:text-slate-300 transition-colors">Tap to Reveal</p>
+        </GlassCard>
+      }
+      back={
+        <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-400/50 shadow-[0_0_40px_rgba(var(--color-${value.color}-500),0.2)] relative overflow-hidden bg-slate-950/90 backdrop-blur-xl border-2 rounded-chromic-card`}>
+          <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
+          <p className={`text-xl font-bold text-${value.color}-100 italic leading-relaxed drop-shadow-sm`}>
+            "{value.text}"
+          </p>
+        </GlassCard>
+      }
+    />
   );
 }
