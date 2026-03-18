@@ -20,8 +20,6 @@ import NeedHelpNow from "@/react-app/components/NeedHelpNow";
 import CommandPalette from "@/react-app/components/CommandPalette";
 import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
-import { AnimatePresence, motion } from "framer-motion";
-
 
 function ScrollToTop() {
   const { pathname } = useRouterLocation();
@@ -32,34 +30,21 @@ function ScrollToTop() {
 }
 
 function AppRoutes() {
-  const location = useRouterLocation();
-  
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/discover" element={<DiscoverPage />} />
-          <Route path="/submit" element={<SubmitPage />} />
-          <Route path="/references" element={<ReferencesPage />} />
-          <Route path="/about" element={<AboutPage />} />
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/discover" element={<DiscoverPage />} />
+      <Route path="/submit" element={<SubmitPage />} />
+      <Route path="/references" element={<ReferencesPage />} />
+      <Route path="/about" element={<AboutPage />} />
 
-          <Route path="/sign-in" element={<SignInPage />} />
-          <Route path="/sign-up" element={<SignUpPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/my-submissions" element={<MySubmissionsPage />} />
+      <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/sign-up" element={<SignUpPage />} />
+      <Route path="/account" element={<AccountPage />} />
+      <Route path="/my-submissions" element={<MySubmissionsPage />} />
 
-          {/* Catch-all Route for 404 Page Not Found */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 
@@ -67,9 +52,7 @@ export default function App() {
   const [showTour, setShowTour] = useState(false);
   const { location, loading: locationLoading } = useLocation();
 
-  // Check for tour trigger (URL param or first-time visit)
   useEffect(() => {
-    // Only proceed if location is set and we're not loading location
     if (locationLoading || !location) return;
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -77,22 +60,11 @@ export default function App() {
     const tourCompleted = localStorage.getItem('community-tour-completed');
     const tourShownThisSession = sessionStorage.getItem('tour-shown-session');
 
-    // Show tour if forced via URL or if it's a first-time visitor
     if ((forceTour || !tourCompleted) && !tourShownThisSession) {
-      // Delay slightly to ensure layout is ready
       const timer = setTimeout(() => {
         setShowTour(true);
         sessionStorage.setItem('tour-shown-session', 'true');
       }, 1500);
-
-      // Clean up URL params if forced
-      if (forceTour) {
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-
-      return () => clearTimeout(timer);
-    }
-  }, [location, locationLoading]);
 
       if (forceTour) {
         window.history.replaceState({}, '', window.location.pathname);
@@ -104,14 +76,9 @@ export default function App() {
 
   return (
     <Router>
-
       <div className="relative min-h-screen w-full overflow-hidden bg-deep text-core font-sans">
-
-        {/* Base Grid Pattern */}
         <div className="pointer-events-none fixed inset-0 opacity-[0.03] dot-grid-pattern" />
-
         <div className="relative z-10 flex flex-col min-h-screen">
-
           <ScrollToTop />
           <Navbar />
           <main id="main-content" className="flex-grow">
