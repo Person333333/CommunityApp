@@ -20,7 +20,6 @@ import NeedHelpNow from "@/react-app/components/NeedHelpNow";
 import CommandPalette from "@/react-app/components/CommandPalette";
 import KeyboardShortcutsGuide from "@/react-app/components/KeyboardShortcutsGuide";
 import { useLocation } from "@/react-app/context/LocationContext";
-import CinematicIntro from "@/react-app/components/CinematicIntro";
 import { AnimatePresence, motion } from "framer-motion";
 
 
@@ -66,13 +65,6 @@ function AppRoutes() {
 
 export default function App() {
   const [showTour, setShowTour] = useState(false);
-  const [showIntro, setShowIntro] = useState(() => {
-    // Check ifintro has been shown in this session
-    if (typeof window !== 'undefined') {
-      return !sessionStorage.getItem('community-intro-seen');
-    }
-    return false;
-  });
   const { location, loading: locationLoading } = useLocation();
 
   // Check for tour trigger (URL param or first-time visit)
@@ -102,32 +94,24 @@ export default function App() {
     }
   }, [location, locationLoading]);
 
-  const handleIntroComplete = () => {
-    setShowIntro(false);
-    sessionStorage.setItem('community-intro-seen', 'true');
-  };
+      if (forceTour) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+
+      return () => clearTimeout(timer);
+    }
+  }, [location, locationLoading]);
 
   return (
     <Router>
-      <AnimatePresence mode="wait">
-        {showIntro && (
-          <CinematicIntro key="intro" onComplete={handleIntroComplete} />
-        )}
-      </AnimatePresence>
 
       <div className="relative min-h-screen w-full overflow-hidden bg-deep text-core font-sans">
-        {/* Ambient Floating Gradient Blobs */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden mix-blend-screen opacity-15">
-          <div className="absolute top-[-10%] left-[-10%] h-[50vh] w-[50vh] rounded-full bg-blue-600 blur-[120px] animate-blob-1" />
-          <div className="absolute top-[20%] right-[-10%] h-[40vh] w-[40vh] rounded-full bg-purple-600 blur-[120px] animate-blob-2" />
-          <div className="absolute bottom-[-10%] left-[20%] h-[60vh] w-[60vh] rounded-full bg-pink-600 blur-[140px] animate-blob-3" />
-        </div>
 
         {/* Base Grid Pattern */}
         <div className="pointer-events-none fixed inset-0 opacity-[0.03] dot-grid-pattern" />
 
         <div className="relative z-10 flex flex-col min-h-screen">
-          <a href="#main-content" className="skip-link">Skip to main content</a>
+
           <ScrollToTop />
           <Navbar />
           <main id="main-content" className="flex-grow">

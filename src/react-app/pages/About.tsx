@@ -6,22 +6,30 @@ import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
-import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 
 export default function About() {
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-transparent">
-      {/* Full-Screen Hero Section */}
-      <section className="relative h-screen w-full overflow-hidden">
-        <BackgroundPaths 
-          title="Community Compass" 
-          subtitle="Our Story & Mission"
-          onCtaClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-        />
-        
-        {/* Additional "Scroll Down" hint if desired, or just use the button in BackgroundPaths */}
+      {/* Simplified Hero Section */}
+      <section className="relative pt-32 pb-20 px-4 overflow-hidden bg-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.1),transparent_70%)]" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-5xl sm:text-7xl font-black text-white mb-6 uppercase tracking-tight">
+              {t('about.hero.title', 'Community Compass')}
+            </h1>
+            <p className="text-xl sm:text-2xl text-blue-400 font-bold uppercase tracking-widest italic opacity-80">
+              {t('about.hero.subtitle', 'Our Story & Mission')}
+            </p>
+            <div className="w-24 h-1 bg-blue-500/30 mx-auto mt-8 rounded-full" />
+          </motion.div>
+        </div>
       </section>
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
@@ -83,25 +91,19 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('home.impact.title')} & Research</h2>
+            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.impact.title', 'Impact')} & {t('about.research.title', 'Research')}</h2>
             <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
-            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Data-driven approach to solving local challenges</p>
+            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">{t('about.research.subtitle', 'Data-driven approach to solving local challenges')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {[
               {
                 step: "1",
-                title: "The Challenge",
-                text: "According to our community assessment research, 68% of local residents reported difficulty finding reliable, up-to-date information regarding food pantries and support services.",
-                subtext: "As part of the TSA Webmaster challenge, we recognized that existing solutions lacked interactivity, real-time updates, and broad accessibility.",
                 color: "blue"
               },
               {
                 step: "2",
-                title: "Our Methodology",
-                text: "We conducted robust research by reviewing over 50 regional resource boards and analyzing common user pain points: navigational complexity, mobile incompatibility, and language access.",
-                subtext: "Community Compass was designed directly from this feedback, implementing an interactive Leaflet map, a user-driven submission system, and automated multilingual translation.",
                 color: "indigo"
               }
             ].map((item, idx) => (
@@ -120,11 +122,11 @@ export default function About() {
                     </div>
                     <div>
                       <h3 className={`text-2xl font-black mb-4 tracking-tight ${item.color === 'blue' ? 'text-blue-300' : 'text-indigo-300'}`}>
-                        {item.title}
+                        {t(`about.research.step${item.step}.title`)}
                       </h3>
                       <div className="space-y-4 text-slate-300 font-bold leading-relaxed">
-                        <p>{item.text}</p>
-                        <p className="text-sm opacity-60 italic">{item.subtext}</p>
+                        <p>{t(`about.research.step${item.step}.text`)}</p>
+                        <p className="text-sm opacity-60 italic">{t(`about.research.step${item.step}.subtext`)}</p>
                       </div>
                     </div>
                   </div>
@@ -142,9 +144,9 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
+            <h2 className="text-5xl font-black text-white mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.values.title', 'Our Core Values')}</h2>
             <div className="w-20 h-1 bg-white/20 mx-auto mb-6" />
-            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
+            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle', 'Guiding principles for community impact')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 perspective-lg">
@@ -200,13 +202,13 @@ export default function About() {
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-white/5 backdrop-blur-md border-l border-white/10">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
-                <h3 className="text-4xl sm:text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
+                <h3 className="text-4xl sm:text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">{t('about.story.title', 'Inspired by Tradition, Driven by Need')}</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
                   <p className="drop-shadow-sm">
-                    "Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner."
+                    {t('about.story.quote1', '"Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner."')}
                   </p>
                   <p className="text-lg font-bold text-slate-400 not-italic">
-                    I grew up believing that a community is only as strong as its most vulnerable member. After seeing the power of teamwork during local projects, I knew we needed a digital "compass" to point people toward support.
+                    {t('about.story.text1', "I grew up believing that a community is only as strong as its most vulnerable member. After seeing the power of teamwork during local projects, I knew we needed a digital 'compass' to point people toward support.")}
                   </p>
                 </div>
               </div>
@@ -228,10 +230,10 @@ export default function About() {
               <Compass className="w-64 h-64 text-blue-300" />
             </div>
             <h2 className="text-4xl sm:text-6xl font-black mb-6 text-white uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
-              Build the Future<br />Together
+              {t('about.cta.title', 'Build the Future Together')}
             </h2>
             <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">
-              Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.
+              {t('about.cta.subtitle', 'Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.')}
             </p>
             <div className="flex justify-center relative z-10">
               <Link to="/submit">

@@ -1,0 +1,198 @@
+Agency,Clinic,Address,City,ZipCode,State,Longitude,Latitude,GeoDate,longitude,latitude
+"Adams County Health Dept","Adams CHD-Othello","425 E Main St, Ste 700","Othello",99344,"WA",-119.16909,46.82691,[object Object],46.826910000000005,-119.16908999999998
+"Adams County Health Dept","Adams CHD-Ritzville","108 W Main St","Ritzville",99169,"WA",-118.38054,47.12744,[object Object],47.12743999999999,-118.38053999999998
+"Asotin County Health District","Asotin CHD-Asotin","102 1st St","Asotin",99402,"WA",-117.05448,46.34116,[object Object],46.34116000000005,-117.05448
+"Asotin County Health District","Asotin CHD-Clarkston","935 6th St","Clarkston",99403,"WA",-117.04549,46.41203,[object Object],46.412030000000044,-117.04548999999997
+"Benton Franklin Health District","Benton Franklin HD-Benton City","701 Dale Avenue","Benton City",99320,"WA",-119.48501,46.26297,[object Object],46.26297000000001,-119.48501000000002
+"Benton Franklin Health District","Benton Franklin HD-Kennewick","7102 W Okanogan Place","Kennewick",99336,"WA",-119.21599,46.22325,[object Object],46.22325000000001,-119.21598999999996
+"Benton Franklin Health District","Benton Franklin HD-Pasco","412 W Clark St","Pasco",99301,"WA",-119.09145,46.23158,[object Object],46.23158000000001,-119.09145000000004
+"Chelan Douglas Health District","Chelan Douglas HD-East Wenatchee","200 VALLEY MALL PARKWAY","East Wenatchee",98802,"WA",-120.28898,47.40704,[object Object],47.40704000000003,-120.28897999999998
+"Chelan Douglas Health District","Chelan Douglas HD-Leavenworth","817 Commercial St","Leavenworth",98826,"WA",-120.66095,47.59426,[object Object],47.59425999999999,-120.66094999999997
+"CHI Franciscan Medical Group","CHI Franciscan-Harrison Medical Center WIC","21 NE Romance Hill","Belfair",98528,"WA",-122.82911,47.44675,[object Object],47.44674999999997,-122.82910999999999
+"CHI Franciscan Medical Group","CHI Franciscan-Highline","13030 Military Rd S #108","Tukwila",98168,"WA",-122.29511,47.48595,[object Object],47.48594999999999,-122.29511000000001
+"CHI Franciscan Medical Group","CHI Franciscan-Lakewood","11216 Bridgeport Way SW","Lakewood",98499,"WA",-122.50455,47.15559,[object Object],47.15559,-122.50454999999997
+"CHI Franciscan Medical Group","CHI Franciscan-Parkland","121 South 132nd St","Tacoma",98444,"WA",-122.43427,47.13745,[object Object],47.13745,-122.43427000000001
+"Clallam County Dept of Health and Human Services","Clallam CDHHS-Sequim","583 W Washington St","Sequim",98382,"WA",-123.11551,48.07947,[object Object],48.079469999999986,-123.11550999999999
+"Clallam County Dept of Health and Human Services","Clallam CDHHS-Forks","140 W C St","Forks",98331,"WA",-124.38683,47.94784,[object Object],47.947839999999985,-124.38683
+"Clallam County Dept of Health and Human Services","Clallam CDHHS-Port Angeles","111 E THIRD St","Port Angeles",98362,"WA",-123.43422,48.11724,[object Object],48.11724000000004,-123.43422000000002
+"Columbia Basin Health Association","Columbia Basin HA-Mattawa","601 Government Way","Mattawa",99349,"WA",-119.89934,46.73809,[object Object],46.738090000000035,-119.89934000000001
+"Columbia Basin Health Association","Columbia Basin HA-Othello","1515 E COLUMBIA ST","Othello",99344,"WA",-119.16846,46.8127,[object Object],46.81269999999998,-119.16845999999995
+"Columbia Basin Health Association","Columbia Basin HA-Royal City","229 Balsam St NW","Royal City",99357,"WA",-119.63417,46.89992,[object Object],46.89991999999998,-119.63416999999997
+"Columbia County Public Health Dept","Columbia CPHD-Dayton","112 N 2ND","Dayton",99328,"WA",-117.97942,46.32099,[object Object],46.32099000000005,-117.97941999999996
+"Columbia Valley Comm Health","Columbia Valley CH-Chelan","105 S Apple Blossom Drive","Chelan",98816,"WA",-120.07379,47.86248,[object Object],47.86248000000004,-120.07379000000003
+"Columbia Valley Comm Health","Columbia Valley CH-Wenatchee","502 Orondo Ave","Wenatchee",98801,"WA",-120.31614,47.42016,[object Object],47.420159999999996,-120.31614
+"Colville Confederated Tribes","Colville Confederated Tribes-Keller","11665 SOUTH HIGHWAY 21","Keller",99140,"WA",-118.68369,48.07806,[object Object],48.07806,-118.68369000000003
+"Colville Confederated Tribes","Colville Confederated Tribes-Grand Coulee","411 FORTUYN ROAD","Grand Coulee",99133,"WA",-119.00654,47.94242,[object Object],47.94242000000007,-119.00654000000002
+"Colville Confederated Tribes","Colville Confederated Tribes-Inchelium","#39 Short Cut Road","Inchelium",99138,"WA",-118.20474,48.29896,[object Object],48.29895999999999,-118.20473999999996
+"Colville Confederated Tribes","Colville Confederated Tribes-Nespelem","21 Colville St","Nespelem",99155,"WA",-118.97539,48.13263,[object Object],48.13263,-118.97538999999999
+"Colville Confederated Tribes","Colville Confederated Tribes-Omak ","617 Benton St","Omak",98841,"WA",-119.52506,48.40275,[object Object],48.40275000000006,-119.52505999999998
+"Comm Action Council Lewis, Mason, Thurston Co","Comm Action Council LMT-Shelton","807 W Railroad Ave","Shelton",98584,"WA",-123.10903,47.21334,[object Object],47.21333999999998,-123.10903
+"Comm Action of Skagit County","Comm Action Skagit Co-Naval Air Station Whidbey Is","260 W Pioneer Way, Bldg 13, Ste 111A","Oak Harbor",98278,"WA",-122.629576,48.289283,[object Object],48.28928299999999,-122.62957599999999
+"Comm Action of Skagit County","Comm Action Skagit Co-Anacortes","330 PACIFIC PLACE","Mount Vernon",98273,"WA",-122.33604,48.44095,[object Object],48.440950000000015,-122.33603999999994
+"Comm Action of Skagit County","Comm Action Skagit Co-Mt Vernon","330 Pacific Place","Mount Vernon",98273,"WA",-122.33604,48.44095,[object Object],48.440950000000015,-122.33603999999994
+"Comm Health of Central Washington","Comm Health CW-Cle Elum","112 W RAILROAD AVE","Cle Elum",98922,"WA",-120.94001,47.19438,[object Object],47.194380000000045,-120.94001
+"Comm Health of Central Washington","Comm Health CW-Ellensburg","607 E MOUNTAIN VIEW AVE","Ellensburg",98926,"WA",-120.53957,46.98528,[object Object],46.98528,-120.53956999999996
+"Cowlitz Family Health Center","Cowlitz Family HC-Castlerock","214 Cowlitz Ave","Castle Rock",98611,"WA",-122.91048,46.27553,[object Object],46.275529999999996,-122.91047999999998
+"Cowlitz Family Health Center","Cowlitz Family HC-Longview","1717 Olympia Way","Longview",98632,"WA",-122.94012,46.14056,[object Object],46.140559999999994,-122.94011999999998
+"Cowlitz Family Health Center","Cowlitz Family HC-Woodland","1345 Lewis River Road","Woodland",98674,"WA",-122.74081,45.91121,[object Object],45.911210000000004,-122.74080999999997
+"Family Health Centers","Family Health Center-Omak","1003 Koala Ave","Omak",98841,"WA",-119.50131,48.42498,[object Object],48.424979999999984,-119.50131000000002
+"Family Health Centers","Family Health Center-Twisp","315 S Lincoln, Room 1","Twisp",98856,"WA",-120.12039,48.363,[object Object],48.36300000000003,-120.12038999999997
+"Family Health Centers","Family Health Center-Tonasket","17 S Western #2","Tonasket",98855,"WA",-119.43826,48.70793,[object Object],48.70792999999999,-119.43825999999994
+"Family Health Centers","Family Health Center-Brewster","525 W Jay Ave","Brewster",98812,"WA",-119.78341,48.09996,[object Object],48.09996000000012,-119.78340999999998
+"Family Health Centers","Family Health Center-Bridgeport","1400 COLUMBIA AVE","Bridgeport",98813,"WA",-119.67182,48.00801,[object Object],48.00801,-119.67182000000004
+"Family Health Centers","Family Health Center-Oroville","1321 Main St","Oroville",98844,"WA",-119.43589,48.93811,[object Object],48.93811000000005,-119.43588999999999
+"Garfield County Health District","Garfield CHD-Pomeroy","121 S 10th ST","Pomeroy",99347,"WA",-117.59723,46.473,[object Object],46.473000000000056,-117.59723
+"Grays Harbor Co Public Health & Social Services","Grays Harbor CPHSS-Aberdeen","2109 SUMNER AVE","Aberdeen",98520,"WA",-123.84235,46.97556,[object Object],46.97556000000002,-123.84234999999998
+"Island County Public Health","Island CPH-Camano Island","127 N East Camano Dr, Ste B","Camano Island",98282,"WA",-122.52686,48.20938,[object Object],48.209380000000046,-122.52685999999999
+"Island County Public Health","Island CPH-Oak Harbor","1791 NE 1st Ave,  #2","Oak Harbor",98277,"WA",-122.63602,48.29849,[object Object],48.29849000000005,-122.63601999999999
+"Island County Public Health","Island CPH-Langley","5475 Maxwelton Rd","Langley",98260,"WA",-122.40929,48.0107,[object Object],48.01070000000001,-122.40928999999998
+"Jefferson County Public Health","Jefferson CPH-Quilcene","294843 Hwy 101","Quilcene",98376,"WA",-122.87589,47.82191,[object Object],47.82191000000001,-122.87589
+"Jefferson County Public Health","Jefferson CPH-Chimacum","10 W Valley Rd","Chimacum",98325,"WA",-122.77737,48.01392,[object Object],48.01392000000002,-122.77736999999998
+"Jefferson County Public Health","Jefferson CPH-Port Townsend","615 Sheridan","Port Townsend",98368,"WA",-122.79175,48.10423,[object Object],48.104230000000065,-122.79175
+"Kitsap Comm Resources","Kitsap Comm Resources-Bremerton","845 8th St","Bremerton",98337,"WA",-122.63263,47.56897,[object Object],47.56896999999999,-122.63262999999998
+"Kitsap Comm Resources","Kitsap Comm Resources-Port Orchard","3200 SE Rainshadow Court","Port Orchard",98366,"WA",-122.60971,47.52045,[object Object],47.52045,-122.60971
+"Kitsap Comm Resources","Kitsap Comm Resources-Poulsbo","19917 7th Ave NE, Ste 205","Poulsbo",98370,"WA",-122.64068,47.74412,[object Object],47.74412000000001,-122.64068
+"Kitsap Comm Resources","Kitsap Comm Resources-Silverdale","3513 NW Anderson Hill Rd","Silverdale",98383,"WA",-122.69901,47.64841,[object Object],47.64840999999999,-122.69900999999997
+"Klickitat County Health Dept","Klickitat CHD-Goldendale","115 West Court St","Goldendale",98620,"WA",-120.82294,45.82148,[object Object],45.821479999999994,-120.82293999999996
+"Klickitat County Health Dept","Klickitat CHD-White Salmon","501 NE Washington St","White Salmon",98672,"WA",-121.4838,45.7296,[object Object],45.729600000000055,-121.48380000000002
+"Lewis County Public Health & Social Services","Lewis CPHSS-Mossyrock","219 State Route 122","Mossyrock",98564,"WA",-122.4885,46.52861,[object Object],46.528610000000036,-122.48849999999999
+"Lewis County Public Health & Social Services","Lewis CPHSS-Winlock","607 NW Kerron St","Winlock",98596,"WA",-122.94121,46.48833,[object Object],46.48833000000001,-122.94121000000001
+"Lewis County Public Health & Social Services","Lewis CPHSS-Randle","9978 US Hwy 12","Randle",98377,"WA",-121.94981,46.53499,[object Object],46.534990000000064,-121.94981000000001
+"Lewis County Public Health & Social Services","Lewis CPHSS-Chehalis","360 NW NORTH","Chehalis",98532,"WA",-122.9694,46.66214,[object Object],46.66213999999997,-122.96939999999998
+"Lincoln County Health Dept","Lincoln CHD-Davenport","90 Nicholls St","Davenport",99122,"WA",-118.14617,47.65679,[object Object],47.65679000000006,-118.14617
+"Lummi Nation","Lummi Indian Health Center-Bellingham","2592 Kwina Road","Bellingham",98226,"WA",-122.62074,48.79575,[object Object],48.79575,-122.62073999999996
+"Makah Tribe","Makah Tribe-Neah Bay","100 Wellness Way","Neah Bay",98357,"WA",-124.585211,48.357928,[object Object],48.35792800000005,-124.585211
+"Mattawa Comm Medical Clinic","Mattawa CMC-Mattawa","215 1st St","Mattawa",99349,"WA",-119.90542,46.73674,[object Object],46.73673999999998,-119.90542
+"Moses Lake Comm Health Center","Moses Lake CHC-Moses Lake","605 Coolidge Dr","Moses Lake",98837,"WA",-119.26332,47.12918,[object Object],47.129179999999984,-119.26331999999998
+"Moses Lake Comm Health Center","Moses Lake CHC-Ephrata","131 Basin St SW","Ephrata",98823,"WA",-119.55307,47.3194,[object Object],47.31940000000005,-119.55307000000002
+"Moses Lake Comm Health Center","Moses Lake CHC-Quincy","1450 1st Avenue SW","Quincy",98848,"WA",-119.85403,47.2262,[object Object],47.22620000000001,-119.85402999999998
+"Moses Lake Comm Health Center","Moses Lake CHC-Warden","200 Main St South","Warden",98857,"WA",-119.04003,46.96858,[object Object],46.968580000000074,-119.04002999999999
+"MultiCare Health Systems","MultiCare HS-Joint Base Lewis McChord","Bldg 551 Barnes Rd JBLM","Fort Lewis",98433,"WA",-122.492925,47.124079,[object Object],47.124079000000044,-122.49292499999997
+"MultiCare Health Systems","MultiCare HS-Eatonville","118 Washington Ave N","Eatonville",98328,"WA",-122.26577,46.86753,[object Object],46.86753,-122.26576999999997
+"MultiCare Health Systems","MultiCare HS-Boze Elementary School","1140 E 65th St","Tacoma",98404,"WA",-122.41538,47.1976,[object Object],47.19759999999999,-122.41537999999997
+"MultiCare Health Systems","MultiCare HS-Eastside Family Support ","3569 E Roosevelt Ave","Tacoma",98404,"WA",-122.39869,47.22731,[object Object],47.227310000000024,-122.39868999999997
+"MultiCare Health Systems","MultiCare HS-Fredrickson","11102 Sunrise Blvd, Ste 103","Puyallup",98374,"WA",-122.28189,47.09703,[object Object],47.09702999999999,-122.28188999999998
+"MultiCare Health Systems","MultiCare HS-Gig Harbor","7700 Skansie Ave","Gig Harbor",98335,"WA",-122.60014,47.32785,[object Object],47.32784999999999,-122.60013999999998
+"MultiCare Health Systems","MultiCare HS-Key Peninsula","17010 S Vaughn Rd","Vaughn",98394,"WA",-122.76341,47.34264,[object Object],47.34264000000006,-122.76340999999996
+"MultiCare Health Systems","MultiCare HS-Mary Bridge Main","316 North  L St","Tacoma",98403,"WA",-122.4563,47.26018,[object Object],47.260179999999984,-122.45629999999998
+"MultiCare Health Systems","MultiCare HS-Puyallup","1011 East Main St, Ste 106","Puyallup",98372,"WA",-122.28083,47.19241,[object Object],47.19241000000004,-122.28082999999998
+"MultiCare Health Systems","MultiCare HS-Spanaway","18020 B St East","Spanaway",98387,"WA",-122.43018,47.0924,[object Object],47.09240000000005,-122.43018
+"NE Tri County Health District","NE Tri CHD-Republic","147 N Clark Ave, Ste 1","Republic",99166,"WA",-118.73837,48.6492,[object Object],48.64919999999999,-118.73836999999999
+"NE Tri County Health District","NE Tri CHD-Chewelah","518 E Clay Ave","Chewelah",99109,"WA",-117.72223,48.27723,[object Object],48.277229999999996,-117.72222999999997
+"NE Tri County Health District","NE Tri CHD-Colville","240 E Dominion St","Colville",99114,"WA",-117.90378,48.53992,[object Object],48.539920000000045,-117.90377999999998
+"NE Tri County Health District","NE Tri CHD-Newport","605 Highway 20","Newport",99156,"WA",-117.04886,48.18637,[object Object],48.18637000000004,-117.04886000000005
+"NE Tri County Health District","NE Tri CHD-Springdale","114 S Main","Springdale",99173,"WA",-117.74185,48.05518,[object Object],48.055179999999986,-117.74184999999997
+"Nooksack Indian Tribe","Nooksack Health Center-Everson","2510 Sulwhanon Dr","Everson",98247,"WA",-122.3495,48.8849,[object Object],48.884900000000016,-122.34950000000003
+"Pacific County Public Health & Human Services","Pacific CPHHS-South Bend","1216 W Robert Bush Dr","South Bend",98586,"WA",-123.81301,46.667084,[object Object],46.66708400000007,-123.81301
+"Pacific County Public Health & Human Services","Pacific CPHHS-Long Beach","7013 Sandridge Rd","Long Beach",98631,"WA",-124.03186,46.35611,[object Object],46.35611000000007,-124.03185999999994
+"Port Gamble S’Klallam Tribe","Port Gamble S’Klallam Tribe-Kingston","32010 Little Boston Rd NE","Kingston",98346,"WA",-122.5664,47.8482,[object Object],47.84820000000005,-122.5664
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Arlington","205 East 4th St","Arlington",98223,"WA",-122.12627,48.19612,[object Object],48.19612000000002,-122.12626999999996
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Granite Falls","402 Granite Ave","Granite Falls",98252,"WA",-121.9696,48.0794,[object Object],48.07940000000006,-121.96959999999997
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Marysville","1410 7TH St Ste A","Marysville",98270,"WA",-122.17843,48.05445,[object Object],48.05445000000003,-122.17843
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Monroe","15228 Woods Creek Rd","Monroe",98272,"WA",-121.96581,47.85968,[object Object],47.85968000000005,-121.96580999999999
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Silver Lake","1819 100th Pl SE, Ste B","Everett",98208,"WA",-122.20746,47.90704,[object Object],47.90704000000004,-122.20745999999997
+"Pregnancy Aid of Snohomish County","Pregnancy Aid WIC-Snohomish","1212 10th St, Unit B","Snohomish",98290,"WA",-122.09712,47.92425,[object Object],47.924249999999994,-122.09711999999998
+"Public Health Seattle King County","PHSKC-Northshore PHC-Carnation","31957 E Commercial","Carnation",98014,"WA",-121.91267,47.64886,[object Object],47.64885999999999,-121.91266999999998
+"Public Health Seattle King County","PHSKC-Eastgate PHC-North Bend","122 E 3rd St","North Bend",98045,"WA",-121.78311,47.4962,[object Object],47.4962,-121.78311
+"Public Health Seattle King County","PHSKC-Kaiser Permanente-Burien","140 SW 146TH ST","Burien",98166,"WA",-122.33571,47.47296,[object Object],47.47295999999998,-122.33570999999998
+"Public Health Seattle King County","PHSKC-Kaiser Permanente-Rainier Med Center Seattle","5316 Rainier Ave S","Seattle",98118,"WA",-122.27971,47.55402,[object Object],47.55402000000001,-122.27971
+"Public Health Seattle King County","PHSKC-North PHC-Shoreline","17018 15th Ave NE","Seattle",98155,"WA",-122.31291,47.75259,[object Object],47.75259000000001,-122.31291
+"Public Health Seattle King County","PHSKC-Auburn PHC-Auburn","901 Auburn Way N, Ste A","Auburn",98002,"WA",-122.22328,47.31618,[object Object],47.31617999999999,-122.22327999999997
+"Public Health Seattle King County","PHSKC-Auburn PHC-Enumclaw","1335 Cole St","Enumclaw",98022,"WA",-121.9915,47.20165,[object Object],47.201650000000015,-121.99149999999997
+"Public Health Seattle King County","PHSKC-Auburn PHC-Muckleshoot Indian Tribe","17500 SE 392nd St","Auburn",98092,"WA",-122.10778,47.25099,[object Object],47.25099000000004,-122.10778000000002
+"Public Health Seattle King County","PHSKC-Columbia PHC-Seattle","4400 - 37th Ave S","Seattle",98118,"WA",-122.28571,47.56347,[object Object],47.563470000000045,-122.28570999999994
+"Public Health Seattle King County","PHSKC-Country Doctor CC-Seattle","500 - 19th Ave E","Seattle",98112,"WA",-122.307,47.62341,[object Object],47.623410000000035,-122.30699999999997
+"Public Health Seattle King County","PHSKC-DOWNTOWN PHC-MOBILE UNIT","2124 4th Ave","Seattle",98121,"WA",-122.34216,47.61459,[object Object],47.614590000000085,-122.34215999999999
+"Public Health Seattle King County","PHSKC-Downtown PHC-Seattle","2124 4th Ave","Seattle",98121,"WA",-122.34216,47.61459,[object Object],47.614590000000085,-122.34215999999999
+"Public Health Seattle King County","PHSKC-Eastgate PHC-Bellevue","14350 SE Eastgate Way","Bellevue",98007,"WA",-122.14988,47.58115,[object Object],47.58115000000004,-122.14987999999997
+"Public Health Seattle King County","PHSKC-Federal Way PCH-Federal Way","33431 - 13th Pl S","Federal Way",98003,"WA",-122.31785,47.30195,[object Object],47.30194999999997,-122.31784999999996
+"Public Health Seattle King County","PHSKC-HealthPoint-Auburn","126 Auburn Ave, Ste 400","Auburn",98002,"WA",-122.22748,47.30891,[object Object],47.30891000000005,-122.22747999999996
+"Public Health Seattle King County","PHSKC-HealthPoint-Kent","403 East Meeker St, Ste 200","Kent",98030,"WA",-122.22934,47.38191,[object Object],47.38191000000005,-122.22934
+"Public Health Seattle King County","PHSKC-HealthPoint-Sea Tac","4040 S 188TH St, Ste 201","Seatac",98188,"WA",-122.28244,47.43469,[object Object],47.434689999999996,-122.28243999999998
+"Public Health Seattle King County","PHSKC-HIGHPOINT","6020 35th AVE SW","Seattle",98126,"WA",-122.37601,47.5478,[object Object],47.547800000000024,-122.37601
+"Public Health Seattle King County","PHSKC-International CHS-Holly Park","3815 S Othello St, 1st Floor","Seattle",98118,"WA",-122.28405,47.53685,[object Object],47.536849999999994,-122.28404999999997
+"Public Health Seattle King County","PHSKC-International CHS-Seattle","720 - 8th Ave S, Ste 100","Seattle",98104,"WA",-122.32218,47.59612,[object Object],47.59612000000007,-122.32217999999997
+"Public Health Seattle King County","PHSKC-International CHS-Shoreline","16549 Aurora Ave North","Shoreline",98133,"WA",-122.34595,47.75023,[object Object],47.750230000000045,-122.34594999999996
+"Public Health Seattle King County","PHSKC-Kent PHC-Birch Creek","13111 SE 274TH St, Ste 208","Kent",98030,"WA",-122.16619,47.35558,[object Object],47.35558000000004,-122.16618999999996
+"Public Health Seattle King County","PHSKC-Kent PHC-East Hill","25742-104th Ave SE","Kent",98030,"WA",-122.20073,47.37087,[object Object],47.370870000000004,-122.20072999999996
+"Public Health Seattle King County","PHSKC-North PHC-Lake City","2611 NE 125th St Ste 145","Seattle",98125,"WA",-122.29951,47.71898,[object Object],47.71898000000006,-122.29950999999994
+"Public Health Seattle King County","PHSKC-North PHC-Seattle Main","10521 Meridian Avenue North, 2nd Floor","Seattle",98133,"WA",-122.33477,47.70598,[object Object],47.70598000000005,-122.33477
+"Public Health Seattle King County","PHSKC-North PHC-Wallingford","1501 N 45th St","Seattle",98103,"WA",-122.33893,47.66116,[object Object],47.661160000000066,-122.33893000000005
+"Public Health Seattle King County","PHSKC-Northshore PHC-HealthPoint Bothell","10414 Beardslee Blvd","Bothell",98011,"WA",-122.20058,47.76093,[object Object],47.76092999999997,-122.20057999999999
+"Public Health Seattle King County","PHSKC-Northshore PHC-Totem Lake","13030 121st Way NE, Ste 202","Kirkland",98034,"WA",-122.17862,47.71762,[object Object],47.71762000000005,-122.17862000000002
+"Public Health Seattle King County","PHSKC-Odessa Brown Clinic-Seattle","2101 E Yesler Way","Seattle",98122,"WA",-122.30465,47.60132,[object Object],47.601319999999994,-122.30464999999997
+"Public Health Seattle King County","PHSKC-Renton PHC-Renton","3201 NE 7th St","Renton",98056,"WA",-122.17609,47.49482,[object Object],47.49482000000004,-122.17609000000002
+"Public Health Seattle King County","PHSKC-Swedish MC-Ballard Campus","1801 NW Market St, Ste 401","Seattle",98107,"WA",-122.38018,47.66817,[object Object],47.66817000000004,-122.38018
+"Public Health Seattle King County","PHSKC-Swedish MC-First Hill Campus","801 Broadway, Health 711","Seattle",98104,"WA",-122.32083,47.60925,[object Object],47.60925000000003,-122.32082999999997
+"Public Health Seattle King County","PHSKC-White Center PHC-HealthPoint Midway","26401 Pacific Highway South","Des Moines",98198,"WA",-122.30654,47.36499,[object Object],47.36499,-122.30653999999998
+"Public Health Seattle King County","PHSKC-White Center PHC-Seattle Greenbridge","9934 8th Ave SW","Seattle",98106,"WA",-122.34498,47.51431,[object Object],47.51430999999999,-122.34498000000002
+"Public Health Seattle King County","PHSKC-White Center PHC-Vashon Island","17928 Vashon Hwy SW","Vashon",98070,"WA",-122.46019,47.44404,[object Object],47.44404000000006,-122.46018999999998
+"Puyallup Tribal Health Authority","Puyallup Tribal Takopid Health Center-Tacoma","2209 E 32nd St","Tacoma",98404,"WA",-122.39996,47.23579,[object Object],47.23579000000005,-122.39996000000002
+"Quinault Indian Nation","Quinault Indian Nation-Taholah","1505 Kla-Ook-Wa Drive","Taholah",98587,"WA",-124.280984,47.3393,[object Object],47.33930000000002,-124.280984
+"Quinault Indian Nation","Quinault Indian Nation-Aberdeen","400 8th St, Ste A","Hoquiam",98550,"WA",-123.88538,46.97653,[object Object],46.97653000000003,-123.88538000000001
+"Quinault Indian Nation","Quinault Indian Nation-Queets","173 Queets Avenue","Queets",98331,"WA",-124.33281,47.54007,[object Object],47.54007000000006,-124.33281
+"San Juan County Health & Comm Services","San Juan CHCS-Lopez Island","23 PEAR TREE LN","Lopez Island",98261,"WA",-122.913936,48.526092,[object Object],48.52609200000006,-122.91393599999995
+"San Juan County Health & Comm Services","San Juan CHCS-Friday Harbor","145 RHONE ST","Friday Harbor",98250,"WA",-123.01949,48.53458,[object Object],48.53458000000006,-123.01949
+"San Juan County Health & Comm Services","San Juan CHCS-Orcas Island","62 Henry Lane","Eastsound",98245,"WA",-122.90673,48.70202,[object Object],48.70202000000003,-122.90673000000001
+"Sea Mar Comm Health Centers","Sea Mar CHC-Elma","1510 W Main St","Elma",98541,"WA",-123.4195,47.00343,[object Object],47.00343000000001,-123.41949999999999
+"Sea Mar Comm Health Centers","Sea Mar CHC-Downtown Bellingham","1764 Iowa St","Bellingham",98229,"WA",-122.45134,48.75632,[object Object],48.75632000000004,-122.45134
+"Sea Mar Comm Health Centers","Sea Mar CHC-Ferndale","6046 Portal Way, Bldg","Ferndale",98248,"WA",-122.58379,48.86102,[object Object],48.86102000000002,-122.58379000000001
+"Sea Mar Comm Health Centers","Sea Mar CHC-Tillicum","14916 Washington Ave SW","Lakewood",98498,"WA",-122.5545,47.12383,[object Object],47.12382999999998,-122.55449999999999
+"Sea Mar Comm Health Centers","Sea Mar CHC-Washougal","1702 ""C"" St","Washougal",98671,"WA",-122.35345,45.57908,[object Object],45.579080000000005,-122.35344999999998
+"Sea Mar Comm Health Centers","Sea Mar CHC-Battle Ground","701 E Main St","Battle Ground",98604,"WA",-122.52998,45.78074,[object Object],45.78073999999998,-122.52998000000001
+"Sea Mar Comm Health Centers","Sea Mar CHC-Bellingham","4455 Cordata Pkwy","Bellingham",98226,"WA",-122.49679,48.80139,[object Object],48.80138999999999,-122.49679000000002
+"Sea Mar Comm Health Centers","Sea Mar CHC-Burien","14434 Ambaum Blvd SW, Ste 3","Burien",98166,"WA",-122.34666,47.47293,[object Object],47.47293000000005,-122.34665999999997
+"Sea Mar Comm Health Centers","Sea Mar CHC-Fife","6622 20TH ST E FIFE","Fife",98424,"WA",-122.34065,47.23867,[object Object],47.23867000000004,-122.34064999999997
+"Sea Mar Comm Health Centers","Sea Mar CHC-Hidden Brook","19005 SE 34th St","Vancouver",98683,"WA",-122.47881,45.59617,[object Object],45.59617000000002,-122.47881
+"Sea Mar Comm Health Centers","Sea Mar CHC-Medical Clinic Facility-Yelm","202 Cullens St NW","Yelm",98597,"WA",-122.61271,46.94705,[object Object],46.94704999999998,-122.61270999999996
+"Sea Mar Comm Health Centers","Sea Mar CHC-Ocean Shores","597 Point Brown Ave NW","Ocean Shores",98569,"WA",-124.16127,47.002,[object Object],47.00200000000002,-124.16127
+"Sea Mar Comm Health Centers","Sea Mar CHC-Olympia","905 24th Way SW, Ste B","Olympia",98502,"WA",-122.9138,47.02759,[object Object],47.02759,-122.9138
+"Sea Mar Comm Health Centers","Sea Mar CHC-Rochester","18543 Albany ST SW","Rochester",98579,"WA",-123.09768,46.8173,[object Object],46.81730000000003,-123.09767999999997
+"Sea Mar Comm Health Centers","Sea Mar CHC-Seattle","8915 - 14th Ave S, 3rd Floor","Seattle",98108,"WA",-122.3151,47.52337,[object Object],47.52337000000003,-122.31510000000002
+"Sea Mar Comm Health Centers","Sea Mar CHC-Tacoma","1516 S 11th St","Tacoma",98405,"WA",-122.4584,47.25108,[object Object],47.25108000000003,-122.45839999999997
+"Sea Mar Comm Health Centers","Sea Mar CHC-Tenino","125 Central St E","Tenino",98589,"WA",-122.85073,46.85678,[object Object],46.856780000000036,-122.85073000000003
+"Sea Mar Comm Health Centers","Sea Mar CHC-University Place","3560 Bridgeport Way West, Ste 1-A","University Place",98466,"WA",-122.53772,47.22662,[object Object],47.226619999999976,-122.53771999999995
+"Sea Mar Comm Health Centers","Sea Mar CHC-Vancouver","2502 E 4TH PLAIN BLVD","Vancouver",98661,"WA",-122.64495,45.63863,[object Object],45.63863000000003,-122.64494999999998
+"Seattle Indian Health Board","Seattle Indian HB-Seattle","611 12th Ave South","Seattle",98144,"WA",-122.3181,47.59723,[object Object],47.59723000000006,-122.31809999999999
+"Skamania County Health Dept","Skamania CHD-Stevenson","710 SW Rock Creek Dr","Stevenson",98648,"WA",-121.89325,45.69167,[object Object],45.69166999999999,-121.89324999999998
+"South Puget Intertribal Planning Agency","SPIPA-Skokomish Indian Tribe-Shelton","561 N Tribal Center Rd # 100","Skokomish Nation",98584,"WA",-123.15113,47.32604,[object Object],47.326040000000006,-123.15113
+"South Puget Intertribal Planning Agency","SPIPA-Nisqually Indian-Olympia","4822 She-Nah-Num Dr SE","Olympia",98513,"WA",-122.67046,47.00424,[object Object],47.00424,-122.67046000000002
+"South Puget Intertribal Planning Agency","SPIPA-Chehalis Tribe-Oakville","21 Niederman Rd","Oakville",98568,"WA",-123.17122,46.81111,[object Object],46.81111,-123.17122
+"South Puget Intertribal Planning Agency","SPIPA-Squaxin Island Tribe-Shelton","3104 Old Olympia Hwy","Shelton",98584,"WA",-123.08317,47.12413,[object Object],47.124130000000015,-123.08316999999997
+"Spokane Regional Health District","Spokane RHD-North Spokane","N 5901 Lidgerwood, Ste 224","Spokane",99208,"WA",-117.40678,47.71203,[object Object],47.71203000000001,-117.40677999999997
+"Spokane Regional Health District","Spokane RHD-East Central","S 500 Stone St","Spokane",99202,"WA",-117.37753,47.65121,[object Object],47.651210000000006,-117.37753000000004
+"Spokane Regional Health District","Spokane RHD-Northeast Comm Center","4001 N Cook St","Spokane",99207,"WA",-117.37408,47.69414,[object Object],47.694140000000054,-117.37407999999998
+"Spokane Regional Health District","Spokane RHD-Deer Park","E 113 - 2nd St","Deer Park",99006,"WA",-117.47488,47.95655,[object Object],47.95655,-117.47488
+"Spokane Regional Health District","Spokane RHD-Valley Center","12213 E Broadway, Ste 5","Spokane Valley",99206,"WA",-117.23996,47.66467,[object Object],47.66467000000007,-117.23995999999995
+"Spokane Tribe of Indians","Spokane Tribe of Indians-Wellpinit","6228 E Old School Road","Wellpinit",99040,"WA",-117.988,47.88968,[object Object],47.88968000000001,-117.98799999999997
+"Suquamish Tribe","Suquamish Tribe-Suquamish","18490 Suquamish Way","Suquamish",98392,"WA",-122.55863,47.72856,[object Object],47.72856000000001,-122.55863000000001
+"Swinomish Indian Tribal Community","Swinomish Indian Tribal Community-La Conner","17400 Reservation Rd","La Conner",98257,"WA",-122.50103,48.39426,[object Object],48.39426000000004,-122.50103000000001
+"Tri Cities Comm Health","Tri Cities CH-Basin City","6950 Road 170","Mesa",99343,"WA",-119.14903,46.59091,[object Object],46.590910000000044,-119.14903000000002
+"Tri Cities Comm Health","Tri Cities CH-Pasco","715 West Court St","Pasco",99301,"WA",-119.09754,46.24149,[object Object],46.24149000000007,-119.09753999999997
+"Tri Cities Comm Health","Tri Cities CH-Richland","829 Goethals","Richland",99352,"WA",-119.28016,46.27817,[object Object],46.27817,-119.28015999999998
+"Tulalip Tribes","Tulalip Health Clinic-Tulalip","7520 TOTEM BEACH RD","Tulalip",98271,"WA",-122.28222,48.06474,[object Object],48.064740000000064,-122.28221999999998
+"UNITED GENERAL DISTRICT 304","UNITED GD 304-CONCRETE","45770 Main St","Concrete",98237,"WA",-121.74938,48.53862,[object Object],48.53861999999999,-121.74937999999997
+"UNITED GENERAL DISTRICT 304","UNITED GD 304-SEDRO WOOLLEY","2031 C Hospital Dr","Sedro Woolley",98284,"WA",-122.27584,48.49462,[object Object],48.49462000000005,-122.27583999999996
+"UNITED GENERAL DISTRICT 304","UNITED GD 304-STANWOOD","9612 271ST St NW","Stanwood",98292,"WA",-122.3633,48.2417,[object Object],48.24170000000004,-122.36329999999997
+"Wahkiakum Health and Human Services","Wahkiakum HHS-Cathlamet","64 Main St","Cathlamet",98612,"WA",-123.38499,46.20281,[object Object],46.20281000000001,-123.38498999999997
+"Walla Walla County Dept of Comm Health","Walla Walla CDCH-Broetje Orchard","1111 Fishhook Park Rd","Prescott",99348,"WA",-118.72489,46.31413,[object Object],46.314130000000056,-118.72489000000002
+"Walla Walla County Dept of Comm Health","Walla Walla CDCH-Walla Walla","314 W Main St","Walla Walla",99362,"WA",-118.34407,46.06503,[object Object],46.065030000000036,-118.34406999999997
+"West Central Comm Center","West Central CC-Airway Heights","13120 W 13th Ave","Airway Heights",99001,"WA",-117.59262,47.6441,[object Object],47.64410000000002,-117.59261999999997
+"West Central Comm Center","West Central CC-Cheney","204 4th St","Cheney",99004,"WA",-117.5799,47.48742,[object Object],47.48741999999998,-117.57989999999998
+"West Central Comm Center","West Central CC-Fairchild AFB","610 N Depot Ave, Rm 306, Bldg 2447","Fairchild Afb",99011,"WA",-117.65562,47.63347,[object Object],47.63346999999997,-117.65562
+"West Central Comm Center","West Central CC-Spokane","1603 N Belt","Spokane",99205,"WA",-117.44316,47.67278,[object Object],47.67278000000002,-117.44315999999998
+"Whitman County Health Dept","Whitman CHD-Colfax","N 310 Main St, Ste 108","Colfax",99111,"WA",-117.3649,46.8788,[object Object],46.87880000000004,-117.36489999999999
+"Whitman County Health Dept","Whitman CHD-Pullman","1205 SE Professional Mall Blvd, Ste 203","Pullman",99163,"WA",-117.16634,46.72043,[object Object],46.72042999999999,-117.16633999999999
+"Yakama Nation","Yakama Nation-White Swan ","80 Birdsong Lane","White Swan",98952,"WA",-120.73467,46.379444,[object Object],46.379443999999985,-120.73466999999997
+"Yakama Nation","Yakama Nation-Toppenish","401 Buster Rd","Toppenish",98948,"WA",-120.34533,46.37744,[object Object],46.37743999999999,-120.34532999999998
+"Yakima Neighborhood Health Services","Yakima NHS-Sunnyside","617 Scoon Road","Sunnyside",98944,"WA",-120.0208,46.33328,[object Object],46.33328000000006,-120.0208
+"Yakima Neighborhood Health Services","Yakima NHS-Yakima","12 South 8th St","Yakima",98901,"WA",-120.49553,46.60373,[object Object],46.603730000000056,-120.49552999999999
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Yakima Memorial Hospital ","218 SOUTH 29TH AVE","Yakima",98902,"WA",-120.5479,46.60114,[object Object],46.60114000000006,-120.54790000000003
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Lincoln Ave Yakima","2205 W Lincoln Ave","Yakima",98902,"WA",-120.539,46.60395,[object Object],46.60394999999998,-120.539
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Walla Walla","1120 W Rose","Walla Walla",99362,"WA",-118.35605,46.06193,[object Object],46.06192999999999,-118.35605
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Grandview","1000 Wallace Way","Grandview",98930,"WA",-119.92264,46.26623,[object Object],46.26623000000006,-119.92263999999997
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Granger","121 Sunnyside Ave","Granger",98932,"WA",-120.19453,46.34385,[object Object],46.343850000000046,-120.19452999999996
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Prosser","820 Memorial St, Ste 1","Prosser",99350,"WA",-119.7639,46.20738,[object Object],46.207379999999986,-119.7639
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Toppenish","510 W 1st Ave","Toppenish",98948,"WA",-120.31649,46.37447,[object Object],46.37446999999998,-120.31648999999999
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Wapato","620 W 1st St","Wapato",98951,"WA",-120.42717,46.44823,[object Object],46.44823000000003,-120.42716999999999
+"Yakima Valley Farmworkers Clinic","Yakima Valley FWC-Yakima","602 E Nob Hill Blvd","Yakima",98901,"WA",-120.49397,46.58412,[object Object],46.58411999999997,-120.49396999999999
