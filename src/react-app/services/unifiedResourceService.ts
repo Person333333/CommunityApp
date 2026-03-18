@@ -123,7 +123,15 @@ export class UnifiedResourceService {
       '30303': [33.7490, -84.3880], // Atlanta
     };
 
-    const searchCoords = isZip ? zipCoords[location] : null;
+    let searchCoords = isZip ? zipCoords[location] : null;
+
+    // Dynamically infer coordinates if not in hardcoded zipCoords
+    if (isZip && !searchCoords) {
+      const reference = resources.find(r => r.zip === location && r.latitude && r.longitude);
+      if (reference) {
+        searchCoords = [reference.latitude!, reference.longitude!];
+      }
+    }
 
     return resources.filter(resource => {
       // 1. If we have coordinates for the search location and the resource, use strict radius
@@ -135,7 +143,7 @@ export class UnifiedResourceService {
         return d <= distance;
       }
 
-      // 2. Fallback to strict ZIP match if input is ZIP
+      // 2. Fallback to strict ZIP match if input is ZIP and NO coordinates were found
       if (isZip) {
         return resource.zip === location;
       }

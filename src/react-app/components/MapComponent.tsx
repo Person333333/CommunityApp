@@ -127,11 +127,11 @@ export default function MapComponent({
   const heatmapData = showHeatmap ? calculateHeatmap(resources) : [];
 
   // Get coordinates for resources
-  const getResourceCoordinates = (resource: ResourceType): [number, number] => {
-    if (resource.latitude != null && resource.longitude != null) {
+  const getResourceCoordinates = (resource: ResourceType): [number, number] | null => {
+    if (resource.latitude != null && resource.longitude != null && !isNaN(resource.latitude) && !isNaN(resource.longitude)) {
       return [resource.latitude, resource.longitude];
     }
-    return center; // fallback
+    return null; // Do not fallback to center, just hide the marker
   };
 
   return (
@@ -187,27 +187,20 @@ export default function MapComponent({
                 className: 'custom-div-icon',
                 html: `
                   <div class="marker-container" 
-                       style="background-color: ${category === 'Housing' ? '#3B82F6' :
-                    category === 'Food' || category === 'Food Assistance' ? '#10B981' :
-                      category === 'Healthcare' ? '#EF4444' :
-                        category === 'Employment' ? '#A855F7' :
-                          category === 'Education' ? '#EAB308' :
-                            category === 'Transportation' ? '#6366F1' :
-                              category === 'Mental Health' ? '#EC4899' :
-                                '#F97316'
+                       style="background-color: ${
+                         category === 'Housing' || category === 'Housing / Shelter' ? '#3B82F6' :
+                         category === 'Food' || category === 'Food Assistance' || category === 'Emergency Food' ? '#10B981' :
+                         category === 'Healthcare' || category === 'Medical Care' ? '#EF4444' :
+                         category === 'Employment' ? '#A855F7' :
+                         category === 'Education' ? '#EAB308' :
+                         category === 'Transportation' ? '#6366F1' :
+                         category === 'Mental Health' ? '#EC4899' :
+                         category === 'Legal Assistance' || category === 'Legal Aid' ? '#F97316' :
+                         '#14B8A6'
                   };">
                     <div class="marker-inner">
                       📍
                     </div>
-                    <div class="marker-pulse" style="background-color: ${category === 'Housing' ? '#3B82F6' :
-                    category === 'Food' || category === 'Food Assistance' ? '#10B981' :
-                      category === 'Healthcare' ? '#EF4444' :
-                        category === 'Employment' ? '#A855F7' :
-                          category === 'Education' ? '#EAB308' :
-                            category === 'Transportation' ? '#6366F1' :
-                              category === 'Mental Health' ? '#EC4899' :
-                                '#F97316'
-                  };"></div>
                   </div>
                 `,
                 iconSize: [40, 40],
@@ -288,6 +281,7 @@ export default function MapComponent({
           const clusterResources = resources.filter(resource => {
             if (!resource.address) return false;
             const coords = getResourceCoordinates(resource);
+            if (!coords) return false;
             const dist = Math.sqrt(
               Math.pow(coords[0] - heat.center[0], 2) +
               Math.pow(coords[1] - heat.center[1], 2)
