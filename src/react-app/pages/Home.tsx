@@ -15,11 +15,6 @@ import { calculateDistance } from '@/react-app/hooks/useLocation';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
 import communityHomeImg from '@/react-app/assets/community-home-light.png';
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, ease: "easeOut" }
-};
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -73,6 +68,7 @@ export default function Home() {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+  const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -162,6 +158,7 @@ export default function Home() {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: "easeOut" }}
