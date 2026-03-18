@@ -191,7 +191,7 @@ export default function Submit() {
           transition={{ type: "spring", duration: 0.6 }}
           className="max-w-2xl w-full"
         >
-          <Card className="text-center p-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-none relative overflow-hidden">
+          <Card className="text-center p-12 bg-card/70 backdrop-blur-xl border border-border rounded-none relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent opacity-50" />
             <motion.div
               initial={{ scale: 0 }}
@@ -202,11 +202,11 @@ export default function Submit() {
               <Sparkles className="w-12 h-12" />
             </motion.div>
 Page
-            <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter relative z-10">
+            <h2 className="text-4xl font-black text-foreground mb-4 uppercase tracking-tighter relative z-10">
               {t('submit.success.title')}
             </h2>
 
-            <p className="text-xl text-slate-400 mb-10 font-bold uppercase tracking-widest text-xs relative z-10">
+            <p className="text-xl text-muted-foreground mb-10 font-bold uppercase tracking-widest text-xs relative z-10">
               {t('submit.success.text')}
             </p>
 
@@ -214,7 +214,7 @@ Page
               <Button onClick={() => setSuccess(false)} className="px-10 py-7 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest rounded-none shadow-xl shadow-emerald-500/20">
                 {t('submit.success.submitAnother')}
               </Button>
-              <Button variant="outline" onClick={() => window.location.href = '/discover'} className="px-10 py-7 bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-none uppercase font-black tracking-widest">
+              <Button variant="outline" onClick={() => window.location.href = '/discover'} className="px-10 py-7 bg-muted/20 border-border text-foreground hover:bg-muted/40 rounded-none uppercase font-black tracking-widest">
                 {t('submit.success.browse')}
               </Button>
             </div>
@@ -230,10 +230,10 @@ Page
         {/* Progress Header */}
         <div className="mb-12">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+            <h1 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tight drop-shadow-[0_0_20px_rgba(var(--foreground),0.1)]">
               {t('submit.title')}
             </h1>
-            <div className="text-sm font-black text-slate-400 uppercase tracking-widest">
+            <div className="text-sm font-black text-muted-foreground uppercase tracking-widest">
               Step {currentStep} / 3
             </div>
           </div>
@@ -242,7 +242,7 @@ Page
             {[1, 2, 3].map(s => (
               <div
                 key={s}
-                className={`flex-1 rounded-none transition-all duration-500 ${currentStep >= s ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-white/10'
+                className={`flex-1 rounded-none transition-all duration-500 ${currentStep >= s ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-muted/20'
                   }`}
               />
             ))}
@@ -270,8 +270,8 @@ Page
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
-                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
+              <Card className="bg-card/70 backdrop-blur-xl border border-border rounded-none overflow-hidden p-0 shadow-2xl">
+                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-foreground border-b border-border">
                   <ImageIcon className="w-6 h-6 text-emerald-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 1: Resource Core Details</p>
                 </div>
@@ -282,10 +282,10 @@ Page
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Category *</label>
-                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer">
-                        <option value="" disabled className="bg-black text-slate-400">Select a category...</option>
-                        {categories.map(cat => <option key={cat} value={cat} className="bg-black text-white">{cat}</option>)}
+                      <label className="block text-sm font-black text-muted-foreground mb-3 uppercase tracking-widest">Category *</label>
+                      <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-muted/20 border border-border rounded-none px-4 py-4 font-bold text-foreground outline-none focus:ring-2 focus:ring-primary-green transition-all appearance-none cursor-pointer">
+                        <option value="" disabled className="bg-card text-muted-foreground">Select a category...</option>
+                        {categories.map(cat => <option key={cat} value={cat} className="bg-card text-foreground">{cat}</option>)}
                       </select>
                       {errors.category && <p className="mt-2 text-xs text-emerald-500 font-bold">{errors.category}</p>}
                     </div>
@@ -316,7 +316,7 @@ Page
                           value={formData.website}
                           onChange={handleChange}
                           placeholder="https://..."
-                          className={`flex-1 bg-white/5 border ${errors.website ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-white/10'} rounded-none px-4 py-7 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all`}
+                          className={`flex-1 bg-muted/20 border ${errors.website ? 'border-primary-green ring-1 ring-primary-green' : 'border-border'} rounded-none px-4 py-7 font-bold text-foreground outline-none focus:ring-2 focus:ring-primary-green transition-all`}
                         />
                       </div>
                     </div>
@@ -433,8 +433,8 @@ Page
                       onDragLeave={onDragLeave}
                       onDrop={onDrop}
                       onClick={() => document.getElementById('fileInput')?.click()}
-                      className={`relative border-2 border-dashed rounded-chromic-card p-10 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 ${isDragging ? 'border-blue-500 bg-blue-500/10' : 'border-white/20 bg-white/5 hover:border-blue-400'
-                        } ${formData.image_url ? 'bg-slate-900 border-none' : ''}`}
+                      className={`relative border-2 border-dashed rounded-chromic-card p-10 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 ${isDragging ? 'border-primary border-solid bg-primary/10' : 'border-border bg-muted/20 hover:border-primary'
+                        } ${formData.image_url ? 'bg-muted border-none' : ''}`}
                     >
                       <input id="fileInput" type="file" accept="image/*" className="hidden" onChange={(e) => {
                         const file = e.target.files?.[0];
@@ -481,7 +481,7 @@ Page
               exit={{ opacity: 0, x: -20 }}
               className="space-y-6"
             >
-              <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-0 shadow-2xl">
+              <Card className="bg-card/70 backdrop-blur-xl border border-border rounded-none overflow-hidden p-0 shadow-2xl">
                 <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
                   <UserIcon className="w-6 h-6 text-emerald-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 2: Your & Location Details</p>
@@ -715,7 +715,7 @@ function FormField({
           required={required}
           rows={rows}
           placeholder={placeholder}
-          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-slate-600 min-h-[120px]"
+          className="w-full bg-muted/20 border border-border rounded-none px-4 py-4 text-foreground outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-muted-foreground/50 min-h-[120px]"
         />
       ) : (
         <Input
@@ -728,7 +728,7 @@ function FormField({
           required={required}
           placeholder={placeholder}
           step={step}
-          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-7 text-white outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-slate-600 h-auto"
+          className="w-full bg-muted/20 border border-border rounded-none px-4 py-7 text-foreground outline-none focus-visible:ring-emerald-500 transition-all font-bold placeholder:text-muted-foreground/50 h-auto"
         />
       )}
       {error && (

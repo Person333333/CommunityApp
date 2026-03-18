@@ -179,34 +179,54 @@ export default function Home() {
               className="w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
+            
+            {/* Animated Floating Icons */}
+            <motion.div 
+              animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-1/4 left-[10%] opacity-20 hidden md:block"
+            >
+              <Users className="w-16 h-16 text-primary-green" />
+            </motion.div>
+            <motion.div 
+              animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-1/4 right-[10%] opacity-20 hidden md:block"
+            >
+              <Heart className="w-16 h-16 text-primary" />
+            </motion.div>
           </div>
           <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
             <div className="max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8 md:mb-12 shadow-sm">
-                <Circle className="h-2 w-2 fill-emerald-500/80" />
-                <span className="text-xs text-emerald-600 tracking-[0.2em] font-black uppercase">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                >
+                  <Compass className="h-4 w-4 text-primary" />
+                </motion.div>
+                <span className="text-xs text-primary font-black uppercase tracking-[0.2em]">
                   PRECISION RESOURCE MAPPING
                 </span>
               </div>
               <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
                 {t('home.hero.title1')}<br />
-                <span className="text-emerald-600 drop-shadow-sm">{t('home.hero.title2')}</span>
+                <span className="text-primary-green drop-shadow-sm">{t('home.hero.title2')}</span>
               </h1>
               <div className="max-w-3xl mx-auto">
                 <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-medium leading-relaxed mb-12">
                   {t('home.hero.subtitle')}
                 </p>
-                {/* Search Bar and Buttons reused below */}
                 <div className="relative max-w-2xl mx-auto mb-12">
-                  <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl bg-background/80 backdrop-blur-xl border-border">
+                  <div className="glass-panel p-1 flex flex-col sm:flex-row items-center gap-1 shadow-2xl bg-card/60 backdrop-blur-xl border-border/50 rounded-2xl">
                     <div className="flex items-center gap-2 w-full flex-1 relative group">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-emerald-500 transition-colors pointer-events-none" />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
                       <Input
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder={t('home.hero.searchPlaceholder')}
-                        className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground pl-12 pr-12 w-full font-medium text-sm sm:text-base py-6 focus-visible:ring-0"
+                        className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground pl-12 pr-12 w-full font-bold text-sm sm:text-base py-6 focus-visible:ring-0"
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
                             if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
@@ -215,12 +235,12 @@ export default function Home() {
                         }}
                       />
                       <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                        <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-muted-foreground hover:text-emerald-500 bg-transparent transition-colors" />
+                        <VoiceSearchButton onResult={(text) => { setSearchTerm(text); navigate(`/discover?q=${encodeURIComponent(text)}`); }} className="w-8 h-8 sm:w-10 sm:h-10 border-none shadow-none text-muted-foreground hover:text-primary bg-transparent transition-colors" />
                       </div>
                     </div>
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-white font-black uppercase tracking-widest px-8 py-6 rounded-none transition-all"
+                      className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest px-8 py-6 rounded-xl transition-all shadow-lg"
                       onClick={() => {
                         if (searchTerm) navigate(`/discover?q=${encodeURIComponent(searchTerm)}`);
                         else navigate('/discover');
@@ -235,12 +255,12 @@ export default function Home() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="bg-background/50 border-border text-foreground font-bold px-8 py-7 rounded-none flex items-center gap-4 hover:bg-emerald-500/10 transition-all group border-l-emerald-500 border-l-4"
+                    className="bg-card/40 border-border text-foreground font-black px-8 py-7 rounded-2xl flex items-center gap-4 hover:bg-primary/5 transition-all group border-l-primary border-l-4 shadow-sm"
                     onClick={() => navigate('/discover?wizard=true')}
                   >
-                    <Compass className="w-6 h-6 text-emerald-500 group-hover:rotate-45 transition-transform" />
+                    <Compass className="w-6 h-6 text-primary group-hover:rotate-45 transition-transform" />
                     <div className="text-left">
-                      <div className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-600 mb-0.5 opacity-80">Guided Search</div>
+                      <div className="text-[10px] uppercase tracking-[0.2em] font-black text-primary mb-0.5 opacity-80">Guided Search</div>
                       <div className="text-lg text-foreground font-black uppercase tracking-tight">Need help finding help?</div>
                     </div>
                   </Button>
@@ -248,16 +268,16 @@ export default function Home() {
               </div>
             </div>
             <div className="flex justify-center flex-wrap gap-8 mt-16 text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">
-              <div className="flex items-center gap-2">
-                <span className="text-foreground">{stats.totalResources}+</span>
+              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
+                <span className="text-primary font-bold">{stats.totalResources}+</span>
                 <span>{t('home.stats.resources')}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-foreground">12+</span>
+              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
+                <span className="text-primary-green font-bold">12+</span>
                 <span>{t('home.stats.categories')}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-foreground">LIVE</span>
+              <div className="flex items-center gap-2 px-3 py-1 bg-card/40 rounded-full border border-border/50 shadow-sm">
+                <span className="text-emerald-500 font-bold">LIVE</span>
                 <span>{t('home.stats.localSupport')}</span>
               </div>
             </div>
@@ -354,14 +374,16 @@ export default function Home() {
               className="flex justify-center mt-12"
               style={{ transform: "translateZ(10px)" }}
             >
-              <ChevronDown 
-                className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
-                onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
-              />
-            </motion.div>
-          </HeroGeometric>
-        </motion.div>
-      )}
+                <ChevronDown 
+                  className="w-6 h-6 text-slate-500 cursor-pointer hover:text-white transition-colors" 
+                  onClick={() => window.scrollBy({ top: window.innerHeight - 80, behavior: 'smooth' })}
+                />
+              </motion.div>
+            </HeroGeometric>
+          </motion.div>
+        )}
+      {/* Morphing Community Images Section */}
+      <CommunityMorpher />
 
       {/* Sections below Hero with Shooting Stars */}
       <div className="relative overflow-hidden">
@@ -413,8 +435,8 @@ export default function Home() {
               </motion.div>
 
           {displaySpotlights.length === 0 ? (
-            <Card className="text-center py-12 bg-white/5 border border-white/10 rounded-none">
-              <p className="text-xl text-slate-300 font-bold">{t('home.spotlight.noResources')}</p>
+            <Card className="text-center py-12 bg-card/40 border border-border rounded-none shadow-sm">
+              <p className="text-xl text-muted-foreground font-black italic">{t('home.spotlight.noResources')}</p>
             </Card>
           ) : (
             <div
@@ -432,23 +454,23 @@ export default function Home() {
                       className={`w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-4`}
                     >
                       <Card
-                        className="h-full cursor-pointer bg-white/5 border border-white/10 shadow-2xl rounded-none hover:border-emerald-500/50 transition-all backdrop-blur-xl group/card"
+                        className="h-full cursor-pointer bg-card/60 border border-border/50 shadow-2xl rounded-2xl hover:border-primary/50 transition-all backdrop-blur-xl group/card overflow-hidden"
                         onClick={() => setSelectedResource(resource)}
                       >
                         <CardContent className="p-6 space-y-4">
                           {resource.image_url && (
                             <div className="aspect-video rounded-xl overflow-hidden relative shadow-md">
                               <img src={resource.image_url} alt={resource.title} className="w-full h-full object-cover" />
-                              <div className="absolute top-3 right-3 px-2 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold rounded-full border border-white/20 shadow-sm">Featured</div>
+                              <div className="absolute top-3 right-3 px-2 py-1 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-black rounded-full border border-white/20 shadow-sm uppercase tracking-widest">Featured</div>
                             </div>
                           )}
                           <div>
-                            <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">{resource.category}</span>
-                            <h3 className="text-lg font-black text-white mt-1 line-clamp-1 drop-shadow-sm">{resource.title}</h3>
+                            <span className="text-xs font-black text-primary uppercase tracking-[0.2em]">{resource.category}</span>
+                            <h3 className="text-lg font-black text-foreground mt-1 line-clamp-1 drop-shadow-sm uppercase tracking-tight">{resource.title}</h3>
                           </div>
-                          <p className="text-slate-300 text-sm font-semibold line-clamp-2 leading-relaxed">{resource.description}</p>
-                          <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                            <button className="text-blue-400 font-black tracking-widest uppercase text-[10px] flex items-center gap-2 hover:text-blue-300 transition-colors">
+                          <p className="text-muted-foreground text-sm font-bold line-clamp-2 leading-relaxed italic">{resource.description}</p>
+                          <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                            <button className="text-primary font-black tracking-[0.2em] uppercase text-[10px] flex items-center gap-2 hover:text-primary/70 transition-colors">
                               Explore Details <ArrowRight className="w-3.5 h-3.5" />
                             </button>
                           </div>
@@ -481,7 +503,7 @@ export default function Home() {
                       <button
                         key={i}
                         onClick={() => { setCarouselIndex(i); setAutoPlay(false); }}
-                        className={`h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-blue-400'}`}
+                        className={`h-2 rounded-full transition-all duration-300 ${i === carouselIndex ? 'w-6 bg-primary shadow-sm shadow-primary/30' : 'w-2 bg-muted hover:bg-primary/40'}`}
                         aria-label={`Go to slide ${i + 1}`}
                       />
                     ))}
@@ -506,22 +528,22 @@ export default function Home() {
             {[
               {
                 title: t('home.howItWorks.step1.title', '1. Discover'),
-                icon: <Search className="w-8 h-8 text-blue-400" />,
-                iconBg: "bg-blue-500/10 border border-blue-500/20",
+                icon: <Search className="w-10 h-10 text-primary" />,
+                iconBg: "bg-matte-blue",
                 frontText: "Find what you need.",
                 desc: t('home.howItWorks.step1.desc', 'Search our interactive directory or talk to our AI assistant to find exactly what you need in your area.'),
               },
               {
                 title: t('home.howItWorks.step2.title', '2. Connect'),
-                icon: <Heart className="w-8 h-8 text-purple-400" />,
-                iconBg: "bg-purple-500/10 border border-purple-500/20",
+                icon: <Heart className="w-10 h-10 text-primary-green" />,
+                iconBg: "bg-matte-green",
                 frontText: "Reach out to local heroes.",
                 desc: t('home.howItWorks.step2.desc', 'Get immediate access to contact info, hours, directions, and services for local organizations.'),
               },
               {
                 title: t('home.howItWorks.step3.title', '3. Contribute'),
-                icon: <Users className="w-8 h-8 text-pink-400" />,
-                iconBg: "bg-pink-500/10 border border-pink-500/20",
+                icon: <Users className="w-10 h-10 text-orange-500" />,
+                iconBg: "bg-accent-peach/20",
                 frontText: "Grow the community hub.",
                 desc: t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.'),
               }
@@ -540,15 +562,15 @@ export default function Home() {
                 }}
                 className="h-full"
               >
-                <div className="bg-card backdrop-blur-xl p-10 border border-border shadow-2xl text-center h-full flex flex-col items-center justify-center group hover:border-emerald-500/50 transition-all duration-500 rounded-none relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className={`w-20 h-20 ${step.iconBg} flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-lg relative z-10`}>
+                <div className={`${step.iconBg} p-10 border border-border shadow-2xl text-center h-full flex flex-col items-center justify-center group hover:border-primary/50 transition-all duration-500 rounded-3xl relative overflow-hidden`}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`w-24 h-24 rounded-2xl bg-card border border-border/50 flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-xl relative z-10`}>
                     {step.icon}
                   </div>
-                  <h3 className="text-2xl font-black text-foreground mb-4 uppercase tracking-tighter relative z-10">{step.title}</h3>
-                  <p className={`text-base font-bold text-emerald-600 dark:text-emerald-400 mb-4 px-2 italic opacity-80 relative z-10`}>{step.frontText}</p>
-                  <div className="w-12 h-1 bg-border mb-6 group-hover:w-24 group-hover:bg-emerald-500 transition-all relative z-10" />
-                  <p className="text-sm font-medium text-muted-foreground leading-relaxed relative z-10">{step.desc}</p>
+                  <h3 className="text-3xl font-black text-foreground mb-4 uppercase tracking-tighter relative z-10">{step.title}</h3>
+                  <p className={`text-base font-black text-primary mb-4 px-2 italic relative z-10`}>{step.frontText}</p>
+                  <div className="w-12 h-1 bg-primary/20 mb-6 group-hover:w-24 group-hover:bg-primary transition-all relative z-10" />
+                  <p className="text-base font-bold text-muted-foreground leading-relaxed relative z-10">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -834,25 +856,153 @@ export default function Home() {
   );
 }
 
-// Animated stat card component
-function StatCard({ icon, target, suffix, label, color, staticText }: {
-  icon: React.ReactNode; target: number; suffix: string; label: string; color: string; staticText?: string;
-}) {
-  const { count, ref } = useCountUp(target, 2000);
-  const borderColor = { blue: 'border-l-emerald-400', indigo: 'border-l-cyan-400', teal: 'border-l-teal-400', amber: 'border-l-amber-400' }[color] || 'border-l-emerald-400';
+function CommunityMorpher() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
+  const scenes = [
+    {
+      title: "Neighbors Helping Neighbors",
+      color: "bg-matte-blue",
+      svg: (
+        <svg viewBox="0 0 200 200" className="w-full h-full">
+          <motion.path
+            d="M50,100 Q75,50 100,100 T150,100"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            className="text-primary/40"
+          />
+          <circle cx="50" cy="100" r="10" className="fill-primary" />
+          <circle cx="150" cy="100" r="10" className="fill-primary-green" />
+        </svg>
+      )
+    },
+    {
+      title: "Building Stronger Communities",
+      color: "bg-matte-green",
+      svg: (
+        <svg viewBox="0 0 200 200" className="w-full h-full">
+          <motion.circle
+            cx="100" cy="100" r="60"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="text-primary-green/40"
+          />
+          <Users className="x-1/2 y-1/2 w-20 h-20 text-primary-green translate-x-[60px] translate-y-[60px]" />
+        </svg>
+      )
+    },
+    {
+      title: "Connected Support Networks",
+      color: "bg-accent-peach/20",
+      svg: (
+         <svg viewBox="0 0 200 200" className="w-full h-full">
+          <motion.path
+            d="M20,20 L180,180 M180,20 L20,180"
+            stroke="currentColor"
+            strokeWidth="1"
+            className="text-orange-400/30"
+          />
+          <MapPin className="x-1/2 y-1/2 w-16 h-16 text-orange-500 translate-x-[70px] translate-y-[70px]" />
+        </svg>
+      )
+    },
+    {
+      title: "Your Community Compass",
+      color: "bg-matte-blue",
+      svg: (
+        <svg viewBox="0 0 200 200" className="w-full h-full">
+          <Compass className="w-32 h-32 text-primary translate-x-[34px] translate-y-[34px]" />
+        </svg>
+      )
+    }
+  ];
+
+  const activeIndex = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [0, 0, 1, 2, 3]);
+  
+  // Create a selector for current scene index
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    return activeIndex.onChange(v => setCurrentIndex(Math.min(Math.max(Math.floor(v), 0), 3)));
+  }, [activeIndex]);
+
+  return (
+    <section ref={containerRef} className="relative h-[300vh] w-full bg-background mt-20">
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Background Morphing Base */}
+        <motion.div 
+          className={`absolute inset-0 transition-colors duration-1000 opacity-30 ${scenes[currentIndex].color}`}
+        />
+        
+        <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+          <div className="order-2 lg:order-1">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.8 }}
+            >
+              <span className="text-primary font-black uppercase tracking-[0.4em] text-xs mb-6 block">Our Impact</span>
+              <h2 className="text-5xl sm:text-7xl font-black text-foreground uppercase tracking-tighter leading-none mb-10">
+                {scenes[currentIndex].title}
+              </h2>
+              <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed mb-12">
+                We believe that every connection made is a step toward a more resilient neighborhood.
+              </p>
+              <Button onClick={() => window.scrollTo({ top: window.scrollY + 500, behavior: 'smooth' })} variant="outline" className="rounded-full border-primary/30 text-primary uppercase font-black tracking-widest px-8">
+                Explore More <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </motion.div>
+          </div>
+          
+          <div className="order-1 lg:order-2 flex justify-center">
+            <div className="relative w-64 h-64 sm:w-96 sm:h-96">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 1.2, rotate: 10 }}
+                transition={{ duration: 1 }}
+                className="w-full h-full flex items-center justify-center p-10 bg-card/40 backdrop-blur-xl border border-border/50 rounded-[3rem] shadow-2xl"
+              >
+                {scenes[currentIndex].svg}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatCard({ icon, target, suffix, label, staticText }: { icon: any, target: number, suffix: string, label: string, color?: string, staticText?: string }) {
+  const { count, ref } = useCountUp(target);
   return (
     <motion.div
       ref={ref}
-      whileHover={{ scale: 1.03, y: -4 }}
-      transition={{ type: 'spring', stiffness: 300 }}
-      className={`bg-card backdrop-blur-xl p-5 sm:p-6 rounded-none border border-border shadow-sm relative overflow-hidden group border-l-4 ${borderColor} hover:border-emerald-500/50 transition-all`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="relative group p-8 bg-card border border-border shadow-xl rounded-2xl overflow-hidden hover:border-primary/50 transition-all"
     >
-      <div className="absolute -right-4 -bottom-4 opacity-20 group-hover:opacity-40 transition-opacity">{icon}</div>
-      <div className="text-2xl sm:text-3xl font-bold text-foreground mb-1 tabular-nums relative z-10">
-        {staticText || <>{count.toLocaleString()}{suffix}</>}
+      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        {icon}
       </div>
-      <div className="text-emerald-400/80 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] relative z-10">{label}</div>
+      <div className="text-4xl sm:text-5xl font-black text-foreground mb-2 flex items-center justify-center gap-1">
+        {staticText || count}{suffix}
+      </div>
+      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">
+        {label}
+      </div>
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-border group-hover:bg-primary transition-colors" />
     </motion.div>
   );
 }

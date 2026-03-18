@@ -97,15 +97,15 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(37,99,235,0.15)] border-white/10 group rounded-chromic-card">
+            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(37,99,235,0.05)] border-border/50 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800"
                 alt="Vision"
                 className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-slate-900/60 dark:bg-slate-900/60 bg-white/40 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
-                <Compass className="w-12 h-12 text-blue-600 dark:text-blue-400 mb-4 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-md">{t('about.vision')}</h2>
+              <div className="absolute inset-0 bg-matte-blue/80 dark:bg-slate-900/60 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
+                <Compass className="w-12 h-12 text-primary mb-4 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-sm">{t('about.vision')}</h2>
                 <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-300 font-bold leading-relaxed line-clamp-2">
                   {t('about.visionText')}
                 </p>
@@ -119,15 +119,15 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(16,185,129,0.15)] border-white/10 group rounded-chromic-card">
+            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(16,185,129,0.05)] border-border/50 group rounded-chromic-card">
               <img
                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
                 alt="Mission"
                 className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-slate-900/60 dark:bg-slate-900/60 bg-white/40 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
-                <Heart className="w-12 h-12 text-emerald-600 dark:text-emerald-400 mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-md">{t('about.mission')}</h2>
+              <div className="absolute inset-0 bg-matte-green/80 dark:bg-slate-900/60 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
+                <Heart className="w-12 h-12 text-primary-green mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-sm">{t('about.mission')}</h2>
                 <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-300 font-bold leading-relaxed line-clamp-2">
                   {t('about.missionText')}
                 </p>
@@ -206,7 +206,7 @@ export default function About() {
             className="text-center mb-24"
           >
             <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
-            <div className="w-20 h-1 bg-white/20 mx-auto mb-6" />
+            <div className="w-20 h-1 bg-border/40 mx-auto mb-6" />
             <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
           </motion.div>
 
@@ -244,7 +244,7 @@ export default function About() {
           transition={{ duration: 1 }}
           className="mb-32"
         >
-          <GlassCard variant="strong" className="p-0 overflow-hidden bg-transparent border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.05)] rounded-[3rem] backdrop-blur-xl">
+          <GlassCard variant="strong" className="p-0 overflow-hidden bg-card/40 border-border shadow-[0_0_50px_rgba(0,0,0,0.05)] rounded-[3rem] backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2 relative bg-background overflow-hidden group">
                 <img
@@ -253,7 +253,7 @@ export default function About() {
                   className="w-full h-full object-cover min-h-[500px] grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
-                <div className="absolute bottom-8 left-8 p-8 bg-card/80 backdrop-blur-xl rounded-[2rem] border border-border shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                <div className="absolute bottom-8 left-8 p-8 bg-card/90 backdrop-blur-xl rounded-[2.5rem] border border-border/50 shadow-xl">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="w-1 h-8 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
                     <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">ALEX RIVERA</h4>
@@ -261,7 +261,7 @@ export default function About() {
                   <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & Neighbor</p>
                 </div>
               </div>
-              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/50 backdrop-blur-md border-l border-border">
+              <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
                 <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
@@ -285,7 +285,7 @@ export default function About() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <div className="bg-background/60 backdrop-blur-xl border border-emerald-500/30 rounded-[3rem] p-12 sm:p-20 shadow-[0_0_50px_rgba(16,185,129,0.15)] relative overflow-hidden">
+          <div className="bg-matte-green/40 dark:bg-emerald-500/5 backdrop-blur-xl border border-primary-green/30 rounded-[3rem] p-12 sm:p-20 shadow-2xl relative overflow-hidden text-foreground">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 pointer-events-none" />
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
