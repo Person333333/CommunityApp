@@ -4,7 +4,6 @@ import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
-import LocationSelector from './LocationSelector';
 import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 import ScrollProgress from './ScrollProgress';
@@ -117,8 +116,6 @@ export default function Navbar() {
                   )}
                 </SignedIn>
 
-                {/* Location Selector */}
-                <LocationSelector />
 
                 {/* Accessibility Menu */}
                 <div className="relative">
@@ -231,21 +228,21 @@ export default function Navbar() {
                       <Link
                         to="/sign-up"
                         onClick={() => setIsOpen(false)}
-                        className="block w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-500 transition-all text-left font-bold shadow-md shadow-blue-500/20"
+                        className="block w-full bg-emerald-500 text-black px-4 py-3 rounded-none hover:bg-emerald-400 transition-all text-left font-black uppercase tracking-widest text-[10px] shadow-sm"
                       >
                         Sign Up
                       </Link>
                     </SignedOut>
                     <SignedIn>
-                      <div className="px-4 py-3 glass-layer border border-white/10 rounded-xl shadow-sm">
+                      <div className="px-4 py-3 glass-layer border border-white/10 rounded-none shadow-sm">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-white/20 text-white font-medium flex items-center justify-center border border-white/10">
                               {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                             </div>
-                            <div className="text-white font-medium"><Translated text={user?.firstName || 'Account'} /></div>
+                            <div className="text-white font-medium uppercase tracking-wider text-sm"><Translated text={user?.firstName || 'Account'} /></div>
                           </div>
-                          <button onClick={() => signOut()} className="text-blue-300 hover:text-blue-200 text-sm font-medium uppercase tracking-wider">{t('account.signOut')}</button>
+                          <button onClick={() => signOut()} className="text-emerald-400 hover:text-emerald-300 text-[10px] font-black uppercase tracking-widest">{t('account.signOut')}</button>
                         </div>
                       </div>
                     </SignedIn>

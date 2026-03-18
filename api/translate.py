@@ -134,8 +134,8 @@ class handler(BaseHTTPRequestHandler):
             translation_cache[cache_key_group] = {}
 
         results = [None] * len(inputs)
-        missing_indices = []
-        missing_texts = []
+        missing_indices: list[int] = []
+        missing_texts: list[str] = []
 
         # 1. Check In-Memory Cache
         for i, original in enumerate(inputs):

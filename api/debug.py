@@ -11,7 +11,7 @@ class handler(BaseHTTPRequestHandler):
         self.run_diagnostics()
 
     def run_diagnostics(self):
-        diagnostics = {
+        diagnostics: dict = {
             "status": "I AM ALIVE",
             "build_info": {
                 "timestamp": "2026-01-24 10:25:00 UTC",

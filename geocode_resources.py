@@ -29,6 +29,10 @@ def geocode_all():
             if conn is None:
                 conn = psycopg2.connect(dsn=DB_URL)
             
+            if conn is None:
+                time.sleep(1)
+                continue
+                
             cur = conn.cursor()
 
             cur.execute("""
