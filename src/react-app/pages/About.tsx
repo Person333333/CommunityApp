@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 import { useTheme } from '@/react-app/hooks/useTheme';
 import { Circle } from 'lucide-react';
+import communityAboutImg from '@/react-app/assets/community-about-light.png';
 
 export default function About() {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ export default function About() {
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
           <div className="absolute inset-0 z-0">
             <img 
-              src="file:///Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_about_1773841997382.png" 
+              src={communityAboutImg} 
               alt="Community Collaboration" 
               className="w-full h-full object-cover opacity-60"
             />

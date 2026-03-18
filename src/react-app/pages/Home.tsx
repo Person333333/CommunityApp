@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
 import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
 import { useTheme } from '@/react-app/hooks/useTheme';
+import communityHomeImg from '@/react-app/assets/community-home-light.png';
 
 // Animated count-up hook
 function useCountUp(target: number, duration = 2000, startOnView = true) {
@@ -173,7 +174,7 @@ export default function Home() {
         <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20">
           <div className="absolute inset-0 z-0">
             <img 
-              src="file:///Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_1773841972305.png" 
+              src={communityHomeImg} 
               alt="Community" 
               className="w-full h-full object-cover opacity-60"
             />
