@@ -190,8 +190,8 @@ export default function Home() {
               </div>
               
               <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6">
-                Community<br />
-                <span className="text-primary-green">Compass</span>
+                {t('home.hero.title').split(' ')[0]}<br />
+                <span className="text-primary-green">{t('home.hero.title').split(' ')[1]}</span>
               </h1>
               
               <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-xl leading-relaxed">
@@ -236,9 +236,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-
-      {/* Morphing Community Images Section */}
-      <CommunityMorpher />
 
       {/* Sections below Hero with Shooting Stars */}
       <div className="relative overflow-hidden">
@@ -456,7 +453,7 @@ export default function Home() {
 
       {/* Recent Community Activity */}
       <div className="section-divider mx-auto max-w-4xl opacity-30" />
-      <section className="py-14 sm:py-18">
+      <section className="py-14 sm:py-18" data-tour="bulletin-board">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
             <div className="flex items-center justify-center gap-2 mb-3">
@@ -694,148 +691,6 @@ export default function Home() {
   );
 }
 
-
-function CommunityMorpher() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const scenes = [
-    {
-      title: "Navigation & Discovery",
-      desc: "Find verified local resources tailored to your exact needs.",
-      color: "var(--matte-blue)",
-      icon: <Compass className="w-16 h-16 text-primary" />,
-      image: "https://images.unsplash.com/photo-1577563906417-45a11b3f9f75?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      title: "Stronger Connections",
-      desc: "Bridge the gap between residents and specialized support services.",
-      color: "var(--matte-green)",
-      icon: <Users className="w-16 h-16 text-primary-green" />,
-      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      title: "Community Resilience",
-      desc: "Building a neighborhood where everyone has what they need to thrive.",
-      color: "var(--accent-peach)",
-      icon: <Heart className="w-16 h-16 text-red-400" />,
-      image: "https://images.unsplash.com/photo-1469571483332-960416999908?q=80&w=800&auto=format&fit=crop"
-    }
-  ];
-
-  // Map progress to scenes more evenly across a longer scroll
-  const activeIndex = useTransform(scrollYProgress, [0.1, 0.4, 0.7, 0.9], [0, 0, 1, 2]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
-  // Transform for Circle-to-Arc Morph - smoother transitions
-  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "25%", "10%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 0.95]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
-  const arcHeight = useTransform(scrollYProgress, [0, 0.4, 0.8], ["100%", "85%", "65%"]);
-  
-  useEffect(() => {
-    return activeIndex.onChange(v => {
-      const idx = Math.min(Math.max(Math.floor(v), 0), 2);
-      if (idx !== currentIndex) setCurrentIndex(idx);
-    });
-  }, [activeIndex, currentIndex]);
-
-  return (
-    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Dynamic Canvas Background */}
-        <motion.div 
-          className="absolute inset-0 transition-colors duration-1000 opacity-20"
-          style={{ backgroundColor: scenes[currentIndex].color }}
-        />
-        
-        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-          <div className="order-2 lg:order-1 space-y-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6, ease: "circOut" }}
-                className="space-y-6"
-              >
-                <div className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
-                  <Sparkles className="w-3 h-3" /> Our Impact
-                </div>
-                <h2 className="text-5xl sm:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85]">
-                  {scenes[currentIndex].title.split(' ')[0]}<br/>
-                  <span className="text-primary-green">{scenes[currentIndex].title.split(' ').slice(1).join(' ')}</span>
-                </h2>
-                <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed">
-                  {scenes[currentIndex].desc}
-                </p>
-                <div className="pt-4">
-                  <Button variant="outline" className="rounded-full border-primary/20 hover:border-primary/50 text-foreground uppercase font-black tracking-widest px-8 transition-colors">
-                    Explore Our Mission <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          
-          <div className="order-1 lg:order-2 flex justify-center">
-            <div className="relative w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]">
-              {/* The "Compass-to-Arc" Shape */}
-              <motion.div
-                style={{ borderRadius, scale, height: arcHeight }}
-                className="relative w-full h-full bg-card border-[12px] border-primary/10 shadow-2xl overflow-hidden group"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentIndex}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.8 }}
-                    className="absolute inset-0"
-                  >
-                    <img src={scenes[currentIndex].image} className="w-full h-full object-cover grayscale mix-blend-multiply opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-                  </motion.div>
-                </AnimatePresence>
-                
-                {/* Floating Icon in Morph Central */}
-                <motion.div 
-                  style={{ rotate }}
-                  className="absolute inset-0 flex items-center justify-center p-20 pointer-events-none"
-                >
-                  <div className="w-full h-full rounded-full border border-primary/10 flex items-center justify-center backdrop-blur-sm bg-white/5">
-                    <motion.div
-                      key={currentIndex}
-                      initial={{ scale: 0.5, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", damping: 12 }}
-                    >
-                      {scenes[currentIndex].icon}
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </motion.div>
-              
-
-              {/* Compass Needle Element */}
-              <motion.div 
-                style={{ rotate }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] opacity-20 pointer-events-none"
-              >
-                <div className="w-1 h-full bg-primary mx-auto rounded-full shadow-[0_0_20px_rgba(74,144,226,0.5)]" />
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 
 function StatCard({ icon, target, suffix, label, staticText }: { icon: any, target: number, suffix: string, label: string, color?: string, staticText?: string }) {

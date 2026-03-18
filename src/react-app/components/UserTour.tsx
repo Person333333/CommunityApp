@@ -114,6 +114,14 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       position: 'top'
     },
     {
+      id: 'impact',
+      titleKey: 'tour.impact.title',
+      contentKey: 'tour.impact.content',
+      target: '[data-tour="community-morpher"]',
+      path: '/about',
+      position: 'center'
+    },
+    {
       id: 'complete',
       titleKey: 'tour.complete.title',
       contentKey: 'tour.complete.content',
@@ -255,6 +263,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                   {step.id === 'add-resource' && <PlusCircle className="w-5 h-5 text-white" />}
                   {step.id === 'board' && <Compass className="w-5 h-5 text-white" />}
                   {step.id === 'helper' && <Bot className="w-5 h-5 text-white" />}
+                  {step.id === 'impact' && <Sparkles className="w-5 h-5 text-white" />}
                   {step.id === 'complete' && <Compass className="w-5 h-5 text-white" />}
                 </div>
                 <div className="flex-1">

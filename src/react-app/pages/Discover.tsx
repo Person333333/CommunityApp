@@ -310,6 +310,7 @@ export default function Discover() {
         {/* Search and Explorer Card */}
         <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
           <Button
+            data-tour="ai-search"
             size="lg"
             className="w-full bg-card/60 backdrop-blur-xl border border-border text-foreground font-black px-8 py-10 rounded-2xl flex items-center justify-center gap-6 hover:bg-primary/5 transition-all shadow-2xl group relative overflow-hidden border-l-primary border-l-4"
             onClick={() => setIsQuestionnaireOpen(true)}
@@ -372,7 +373,7 @@ export default function Discover() {
               {/* Filter dropdowns row */}
               <div className="flex flex-wrap gap-3 mt-2">
                 {/* Category */}
-                <div className="relative">
+                <div className="relative" data-tour="category-explorer">
                   <select
                     value={selectedCategories[0] || ''}
                     onChange={e => { const v = e.target.value; const cats = v ? [v] : []; setSelectedCategories(cats); handleSearch(searchTerm, cats); }}
@@ -430,6 +431,7 @@ export default function Discover() {
                     <Heart className={`w-3.5 h-3.5 mr-2 ${showFavoritesOnly ? 'fill-primary text-primary' : 'text-muted-foreground'}`} /> My Favorites
                   </Button>
                   <Button
+                    data-tour="my-resources"
                     variant="outline"
                     size="sm"
                     onClick={() => {

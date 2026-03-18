@@ -77,6 +77,14 @@ export default function Navbar() {
                     {t('nav.signIn')}
                   </Link>
                   <Link
+                  to="/submit"
+                  data-tour="add-resource"
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-black uppercase tracking-widest text-[10px] transition-all bg-emerald-500 text-black hover:bg-emerald-400 shadow-md`}
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  {t('nav.addResource')}
+                </Link>
+                  <Link
                     to="/sign-up"
                     className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm"
                   >

@@ -1,7 +1,8 @@
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router';
-import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
+import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles, ArrowRight } from 'lucide-react';
+import { Button } from '@/react-app/components/ui/button';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
@@ -16,14 +17,6 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: "easeOut" }
 };
 
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
 export default function About() {
   const { t } = useTranslation();
 
@@ -34,18 +27,13 @@ export default function About() {
   const smoothRotateX = useSpring(rotateX, { stiffness: 100, damping: 30 });
   const smoothTranslateZ = useSpring(translateZ, { stiffness: 100, damping: 30 });
   const { isLight } = useTheme();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <motion.div 
-      initial="initial"
-      animate="animate"
-      variants={staggerContainer}
-      className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`} 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
+      className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700`} 
       style={{ perspective: "1200px" }}
     >
       {/* Hero Section with Conditional Background */}
@@ -285,6 +273,9 @@ export default function About() {
           </GlassCard>
         </motion.section>
 
+        {/* Community Morpher Section */}
+        <CommunityMorpher />
+
         {/* Call to Action */}
         <motion.section variants={fadeInUp} className="text-center">
           <div className="bg-matte-green/40 dark:bg-emerald-500/5 backdrop-blur-xl border border-primary-green/30 rounded-[3rem] p-12 sm:p-20 shadow-2xl relative overflow-hidden text-foreground">
@@ -364,5 +355,153 @@ function ValueCard({ value }: { value: any }) {
         }
       />
     </motion.div>
+  );
+}
+
+function CommunityMorpher() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const scenes = [
+    {
+      title: t('about.morpher.title1'),
+      desc: t('about.morpher.desc1'),
+      color: "var(--matte-blue)",
+      icon: <Compass className="w-16 h-16 text-primary" />,
+      image: "https://images.unsplash.com/photo-1577563906417-45a11b3f9f75?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: t('about.morpher.title2'),
+      desc: t('about.morpher.desc2'),
+      color: "var(--matte-green)",
+      icon: <Users className="w-16 h-16 text-primary-green" />,
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      title: t('about.morpher.title3'),
+      desc: t('about.morpher.desc3'),
+      color: "var(--accent-peach)",
+      icon: <Heart className="w-16 h-16 text-red-400" />,
+      image: "https://images.unsplash.com/photo-1469571483332-960416999908?q=80&w=800&auto=format&fit=crop"
+    }
+  ];
+
+  // Map progress to scenes more evenly across a longer scroll
+  const activeIndex = useTransform(scrollYProgress, [0.1, 0.4, 0.7, 0.9], [0, 0, 1, 2]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Transform for Circle-to-Arc Morph - smoother transitions
+  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "25%", "10%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 0.95]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const arcHeight = useTransform(scrollYProgress, [0, 0.4, 0.8], ["100%", "85%", "65%"]);
+  
+  useEffect(() => {
+    return activeIndex.onChange(v => {
+      const idx = Math.min(Math.max(Math.floor(v), 0), 2);
+      if (idx !== currentIndex) setCurrentIndex(idx);
+    });
+  }, [activeIndex, currentIndex]);
+
+  return (
+    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40">
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Dynamic Canvas Background */}
+        <motion.div 
+          className="absolute inset-0 transition-colors duration-1000 opacity-20"
+          style={{ backgroundColor: scenes[currentIndex].color }}
+        />
+        
+        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          <div className="order-2 lg:order-1 space-y-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.6, ease: "circOut" }}
+                className="space-y-6"
+              >
+                <div className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
+                  <Sparkles className="w-3 h-3" /> Our Impact
+                </div>
+                <h2 className="text-5xl sm:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85]">
+                  {scenes[currentIndex].title.split(' ')[0]}<br/>
+                  <span className="text-primary-green">{scenes[currentIndex].title.split(' ').slice(1).join(' ')}</span>
+                </h2>
+                <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed">
+                  {scenes[currentIndex].desc}
+                </p>
+                <div className="pt-4">
+                    <Button 
+                      onClick={() => navigate('/submit')}
+                      variant="outline" 
+                      className="rounded-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10 font-black uppercase tracking-widest text-[10px] sm:text-xs h-10 sm:h-12 px-6 sm:px-8"
+                    >
+                      {t('about.morpher.getInvolved')} <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          
+          <div className="order-1 lg:order-2 flex justify-center">
+            <div className="relative w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]">
+              {/* The "Compass-to-Arc" Shape */}
+              <motion.div
+                style={{ borderRadius, scale, height: arcHeight }}
+                className="relative w-full h-full bg-card border-[12px] border-primary/10 shadow-2xl overflow-hidden group"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0"
+                  >
+                    <img src={scenes[currentIndex].image} className="w-full h-full object-cover grayscale mix-blend-multiply opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Floating Icon in Morph Central */}
+                <motion.div 
+                  style={{ rotate }}
+                  className="absolute inset-0 flex items-center justify-center p-20 pointer-events-none"
+                >
+                  <div className="w-full h-full rounded-full border border-primary/10 flex items-center justify-center backdrop-blur-sm bg-white/5">
+                    <motion.div
+                      key={currentIndex}
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", damping: 12 }}
+                    >
+                      {scenes[currentIndex].icon}
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </motion.div>
+              
+
+              {/* Compass Needle Element */}
+              <motion.div 
+                style={{ rotate }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] opacity-20 pointer-events-none"
+              >
+                <div className="w-1 h-full bg-primary mx-auto rounded-full shadow-[0_0_20px_rgba(74,144,226,0.5)]" />
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

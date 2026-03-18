@@ -7,18 +7,18 @@ export default function References() {
   const { t } = useTranslation();
 
   const techStack = [
-    { category: 'Frontend Framework', tech: 'React 19 with TypeScript (19.0.0)' },
-    { category: 'Build Tool', tech: 'Vite (7.x)' },
-    { category: 'Styling', tech: 'Tailwind CSS (3.4.x)' },
-    { category: 'Animation', tech: 'Framer Motion (12.x)' },
-    { category: 'Routing', tech: 'React Router (7.x)' },
-    { category: 'Database', tech: 'Neon Postgres Serverless' },
-    { category: 'Authentication', tech: 'Clerk (5.x)' },
-    { category: 'Maps', tech: 'Leaflet + React Leaflet (1.9.x)' },
-    { category: 'Validation', tech: 'Zod (3.24.x)' },
-    { category: 'I18n', tech: 'i18next + react-i18next' },
-    { category: 'Translation API', tech: 'Python Flask + deep-translator' },
-    { category: 'AI Processing', tech: 'Google Gemini API (used for NLP search & content validation)' }
+    { category: t('references.techStackLabels.frontend'), tech: 'React 19 with TypeScript (19.0.0)' },
+    { category: t('references.techStackLabels.build'), tech: 'Vite (7.x)' },
+    { category: t('references.techStackLabels.styling'), tech: 'Tailwind CSS (3.4.x)' },
+    { category: t('references.techStackLabels.animation'), tech: 'Framer Motion (12.x)' },
+    { category: t('references.techStackLabels.routing'), tech: 'React Router (7.x)' },
+    { category: t('references.techStackLabels.database'), tech: 'Neon Postgres Serverless' },
+    { category: t('references.techStackLabels.auth'), tech: 'Clerk (5.x)' },
+    { category: t('references.techStackLabels.maps'), tech: 'Leaflet + React Leaflet (1.9.x)' },
+    { category: t('references.techStackLabels.validation'), tech: 'Zod (3.24.x)' },
+    { category: t('references.techStackLabels.i18n'), tech: 'i18next + react-i18next' },
+    { category: t('references.techStackLabels.translation'), tech: 'Python Flask + deep-translator' },
+    { category: t('references.techStackLabels.ai'), tech: 'Google Gemini API (used for NLP search & content validation)' }
   ];
 
   const additionalLibraries = [
@@ -90,23 +90,23 @@ export default function References() {
           {/* Project Information */}
           <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
             <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 flex items-center gap-2 border-b border-white/10 pb-2 uppercase tracking-widest">
-              <Info className="w-6 h-6 text-blue-400" /> Project Information
+              <Info className="w-6 h-6 text-blue-400" /> {t('references.projectInfo')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-300">
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Event</h3>
-                  <p className="font-bold text-lg text-white">Washington TSA Webmaster (HS)</p>
+                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.event')}</h3>
+                  <p className="font-bold text-lg text-white">{t('references.labels.eventValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Chapter</h3>
-                  <p className="font-bold text-lg text-white">2139 (Kenmore Area)</p>
+                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.chapter')}</h3>
+                  <p className="font-bold text-lg text-white">{t('references.labels.chapterValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Theme</h3>
-                  <p className="font-bold text-lg text-white">Community Resource Hub</p>
+                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.theme')}</h3>
+                  <p className="font-bold text-lg text-white">{t('references.labels.themeValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">Team Members</h3>
+                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.members')}</h3>
                   <ul className="list-disc pl-5 font-bold space-y-1 mt-1 text-white">
                     <li>Nathan Choy</li>
                     <li>Nikhil Vincent</li>

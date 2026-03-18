@@ -29,11 +29,32 @@
   },
   "home": {
     "hero": {
-      "title1": "Your Neighborhood,",
-      "title2": "Your Community",
+      "badge": "Helping Neighbors",
+      "title": "Community Compass",
       "subtitle": "Connecting neighbors with local support, one hand at a time. Find the help you need, right where you live.",
+      "cta": "Find Resources",
       "searchPlaceholder": "Find help in your neighborhood...",
       "explore": "Explore Community"
+    },
+    "morpher": {
+      "ourImpact": "Our Impact",
+      "scenes": [
+        {
+          "title": "Navigation & Discovery",
+          "desc": "Find verified local resources tailored to your exact needs.",
+          "cta": "Explore Our Mission"
+        },
+        {
+          "title": "Stronger Connections",
+          "desc": "Bridge the gap between residents and specialized support services.",
+          "cta": "Get Involved"
+        },
+        {
+          "title": "Community Resilience",
+          "desc": "Building a neighborhood where everyone has what they need to thrive.",
+          "cta": "Join Us"
+        }
+      ]
     },
     "stats": {
       "resources": "Community Resources",
@@ -423,6 +444,19 @@
     "helper": {
       "title": "AI Assistant",
       "content": "If you ever get lost, our Community Helper is here 24/7 to answer questions and guide you to the right services."
+    },
+    "impact": {
+      "title": "Our Impact",
+      "content": "Discover how Community Compass is bridging the gap between need and support. Every resource shared is a hand extended to someone in need."
+    },
+    "morpher": {
+      "title1": "Navigation & Discovery",
+      "desc1": "Find verified local resources tailored to your exact needs.",
+      "title2": "Stronger Connections",
+      "desc2": "Bridge the gap between residents and specialized support services.",
+      "title3": "Community Resilience",
+      "desc3": "Building a neighborhood where everyone has what they need to thrive.",
+      "getInvolved": "Get Involved"
     },
     "complete": {
       "title": "You're All Set!",

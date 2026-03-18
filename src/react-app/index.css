@@ -158,10 +158,21 @@
   .bg-accent-peach {
     background-color: hsl(var(--accent-peach));
   }
-  .glass-panel {
-    @apply backdrop-blur-md bg-background/70 border border-border/50;
+  .glass-layer {
+    @apply backdrop-blur-xl bg-background/70 border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)];
   }
   .rounded-chromic-card {
     @apply rounded-[1.5rem];
+  }
+  .reduce-motion *,
+  .reduce-motion *::before,
+  .reduce-motion *::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
   }
 }
