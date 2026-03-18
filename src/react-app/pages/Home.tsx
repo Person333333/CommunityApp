@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
@@ -7,10 +7,8 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
 import { ResourceType } from '@/shared/types';
-import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
 import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
 import GuestAuthModal from '@/react-app/components/GuestAuthModal';
-import { useTheme } from '@/react-app/hooks/useTheme';
 import { useLocation } from '@/react-app/hooks/useLocation';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { calculateDistance } from '@/react-app/hooks/useLocation';
@@ -79,8 +77,6 @@ export default function Home() {
 
   // 3D Scroll Perspective Logic
   const { scrollYProgress } = useScroll();
-  const rotateX = useTransform(scrollYProgress, [0, 0.2], [0, 15]);
-  const translateZ = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
   const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   // Only fetch featured resources when we have user location
@@ -716,7 +712,13 @@ export default function Home() {
       </section>
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <NeedsWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
-      <GuestAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <GuestAuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+        title="Authentication Required" 
+        message="Please sign in to continue" 
+        type="favorite" 
+      />
     </motion.div>
   );
 }
