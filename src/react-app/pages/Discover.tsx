@@ -43,7 +43,7 @@ export default function Discover() {
   const itemsPerPage = 5;
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
-  const LOCAL_RADIUS_KM = 50;
+  const LOCAL_RADIUS_KM = 100;
 
   // Local favorites state (togglable per card)
   const [favoriteIds, setFavoriteIds] = useState<number[]>(() => {

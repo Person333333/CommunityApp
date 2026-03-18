@@ -177,7 +177,17 @@ export default function MapComponent({
           const coords = getResourceCoordinates(resource);
           if (!coords) return null as any;
 
-          const category = (resource.category_raw || resource.category) as any;
+          const category = (resource.category_raw || resource.category) as string;
+          const markerColor = 
+            category === 'Housing' || category === 'Housing / Shelter' ? '#3B82F6' :
+            category === 'Food' || category === 'Food Assistance' || category === 'Emergency Food' ? '#10B981' :
+            category === 'Healthcare' || category === 'Medical Care' ? '#EF4444' :
+            category === 'Employment' ? '#A855F7' :
+            category === 'Education' ? '#EAB308' :
+            category === 'Transportation' ? '#6366F1' :
+            category === 'Mental Health' ? '#EC4899' :
+            category === 'Legal Assistance' || category === 'Legal Aid' ? '#F97316' :
+            '#14B8A6';
 
           return (
             <Marker
@@ -186,25 +196,29 @@ export default function MapComponent({
               icon={L.divIcon({
                 className: 'custom-div-icon',
                 html: `
-                  <div class="marker-container" 
-                       style="background-color: ${
-                         category === 'Housing' || category === 'Housing / Shelter' ? '#3B82F6' :
-                         category === 'Food' || category === 'Food Assistance' || category === 'Emergency Food' ? '#10B981' :
-                         category === 'Healthcare' || category === 'Medical Care' ? '#EF4444' :
-                         category === 'Employment' ? '#A855F7' :
-                         category === 'Education' ? '#EAB308' :
-                         category === 'Transportation' ? '#6366F1' :
-                         category === 'Mental Health' ? '#EC4899' :
-                         category === 'Legal Assistance' || category === 'Legal Aid' ? '#F97316' :
-                         '#14B8A6'
-                  };">
-                    <div class="marker-inner">
-                      📍
+                  <div style="position:relative;width:32px;height:32px;">
+                    <div style="
+                      width:28px;height:28px;
+                      background-color:${markerColor};
+                      border-radius:50%;
+                      border:3px solid white;
+                      box-shadow:0 2px 8px rgba(0,0,0,0.3);
+                      display:flex;align-items:center;justify-content:center;
+                      position:absolute;top:2px;left:2px;
+                    ">
+                      <div style="width:8px;height:8px;background:white;border-radius:50%;"></div>
                     </div>
+                    <div style="
+                      position:absolute;inset:-4px;
+                      background-color:${markerColor};
+                      border-radius:50%;
+                      opacity:0.35;
+                      animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;
+                    "></div>
                   </div>
                 `,
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
               })}
               eventHandlers={{
                 click: () => {
