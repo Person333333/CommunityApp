@@ -2,22 +2,19 @@ import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'fra
 import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
-import { Input } from '@/react-app/components/ui/input';
 import { Card, CardContent } from '@/react-app/components/ui/card';
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { unifiedResourceService, ResourceType } from '@/react-app/services/unifiedResourceService';
-import { QuestionnaireModal } from '@/react-app/components/QuestionnaireModal';
-import { ResourceDetailModal } from '@/react-app/components/ResourceDetailModal';
-import { GuestAuthModal } from '@/react-app/components/GuestAuthModal';
+import { unifiedResourceService } from '@/react-app/services/unifiedResourceService';
+import { ResourceType } from '@/shared/types';
+import QuestionnaireModal from '@/react-app/components/QuestionnaireModal';
+import ResourceDetailModal from '@/react-app/components/ResourceDetailModal';
+import GuestAuthModal from '@/react-app/components/GuestAuthModal';
 import { useTheme } from '@/react-app/hooks/useTheme';
 import { useLocation } from '@/react-app/hooks/useLocation';
-import VoiceSearchButton from '@/react-app/components/VoiceSearchButton';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { calculateDistance } from '@/react-app/hooks/useLocation';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
-import { HeroGeometric } from '@/react-app/components/ui/shape-landing-hero';
-import communityHomeImg from '@/react-app/assets/community-home-light.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -68,7 +65,6 @@ function useCountUp(target: number, duration = 2000, startOnView = true) {
 export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
   const { location: userLocation, loading: locationLoading } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
@@ -79,16 +75,12 @@ export default function Home() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [showWizard, setShowWizard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const { isLight } = useTheme();
   const [isVisible, setIsVisible] = useState(false); // For overall page fade-in
 
   // 3D Scroll Perspective Logic
   const { scrollYProgress } = useScroll();
   const rotateX = useTransform(scrollYProgress, [0, 0.2], [0, 15]);
   const translateZ = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
-  const smoothRotateX = useSpring(rotateX, { stiffness: 100, damping: 30 });
-  const smoothTranslateZ = useSpring(translateZ, { stiffness: 100, damping: 30 });
   const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   // Only fetch featured resources when we have user location
