@@ -192,7 +192,7 @@ export default function Home() {
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
               
-              <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground uppercase tracking-tighter leading-none mb-6 drop-shadow-sm">
                 {t('home.hero.title')}
               </h1>
               

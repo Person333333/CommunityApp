@@ -48,7 +48,7 @@ export default function Navbar() {
     <>
       <ScrollProgress />
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 glass-layer border-b border-white/10"
+        className="fixed top-0 left-0 right-0 z-50 glass-layer border-b border-border"
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -63,6 +63,7 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max text-slate-300">
               <NavLink to="/discover">{t('nav.discover')}</NavLink>
+              <NavLink to="/submit">{t('nav.addResource')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
               <NavLink to="/references">{t('nav.references')}</NavLink>
 
@@ -203,6 +204,9 @@ export default function Navbar() {
                 <div className="flex flex-col space-y-2">
                   <MobileNavLink to="/discover" onClick={() => setIsOpen(false)}>
                     {t('nav.discover')}
+                  </MobileNavLink>
+                  <MobileNavLink to="/submit" onClick={() => setIsOpen(false)}>
+                    {t('nav.addResource')}
                   </MobileNavLink>
                   <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>
                     {t('nav.about')}

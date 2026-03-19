@@ -48,7 +48,7 @@ export default function References() {
       <ContainerScroll
         titleComponent={
           <div className="mb-12 text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-sm mb-4 uppercase tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-foreground drop-shadow-sm mb-4 uppercase tracking-tighter">
               {t('references.title')}
             </h1>
             <p className="text-xl text-blue-300 font-bold italic">
@@ -62,7 +62,7 @@ export default function References() {
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <GlassCard hover className="flex flex-col items-center text-center p-8 bg-blue-500/10 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)]">
               <FileText className="w-12 h-12 text-blue-400 mb-4" />
-              <h2 className="text-xl font-bold text-white drop-shadow-sm mb-4">{t('references.workLog')}</h2>
+              <h2 className="text-xl font-bold text-foreground drop-shadow-sm mb-4">{t('references.workLog')}</h2>
               <a
                 href="/documents/work-log.pdf"
                 target="_blank"
@@ -75,7 +75,7 @@ export default function References() {
 
             <GlassCard hover className="flex flex-col items-center text-center p-8 bg-amber-500/10 border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.1)]">
               <Download className="w-12 h-12 text-amber-500 mb-4" />
-              <h2 className="text-xl font-bold text-white drop-shadow-sm mb-4">{t('references.copyright')}</h2>
+              <h2 className="text-xl font-bold text-foreground drop-shadow-sm mb-4">{t('references.copyright')}</h2>
               <a
                 href="/documents/copyright-checklist.pdf"
                 target="_blank"
@@ -88,26 +88,26 @@ export default function References() {
           </section>
 
           {/* Project Information */}
-          <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-            <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 flex items-center gap-2 border-b border-white/10 pb-2 uppercase tracking-widest">
+          <div className="bg-card/40 rounded-2xl p-8 border border-border backdrop-blur-md">
+            <h2 className="text-2xl font-black text-foreground drop-shadow-sm mb-6 flex items-center gap-2 border-b border-border pb-2 uppercase tracking-widest">
               <Info className="w-6 h-6 text-blue-400" /> {t('references.projectInfo')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-300">
                <div>
                   <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.event')}</h3>
-                  <p className="font-bold text-lg text-white">{t('references.labels.eventValue')}</p>
+                  <p className="font-bold text-lg text-foreground">{t('references.labels.eventValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.chapter')}</h3>
-                  <p className="font-bold text-lg text-white">{t('references.labels.chapterValue')}</p>
+                  <h3 className="font-bold text-blue-500 dark:text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.chapter')}</h3>
+                  <p className="font-bold text-lg text-foreground">{t('references.labels.chapterValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.theme')}</h3>
-                  <p className="font-bold text-lg text-white">{t('references.labels.themeValue')}</p>
+                  <h3 className="font-bold text-blue-500 dark:text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.theme')}</h3>
+                  <p className="font-bold text-lg text-foreground">{t('references.labels.themeValue')}</p>
                </div>
                <div>
-                  <h3 className="font-bold text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.members')}</h3>
-                  <ul className="list-disc pl-5 font-bold space-y-1 mt-1 text-white">
+                  <h3 className="font-bold text-blue-500 dark:text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.members')}</h3>
+                  <ul className="list-disc pl-5 font-bold space-y-1 mt-1 text-foreground">
                     <li>Nathan Choy</li>
                     <li>Nikhil Vincent</li>
                     <li>George Xu</li>
@@ -119,25 +119,25 @@ export default function References() {
           {/* Other Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Tech Stack */}
-            <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.techStack')}</h2>
+            <div className="bg-card/40 rounded-2xl p-8 border border-border backdrop-blur-md">
+              <h2 className="text-2xl font-black text-foreground drop-shadow-sm mb-6 border-b border-border pb-2 uppercase tracking-widest">{t('references.techStack')}</h2>
               <ul className="space-y-4">
                 {techStack.map((item, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-300">
-                    <span className="text-white font-bold text-sm tracking-tight">{item.category}</span>
-                    <span className="text-xs italic font-bold text-indigo-400 text-right ml-4">{item.tech}</span>
+                  <li key={i} className="flex justify-between items-center text-muted-foreground">
+                    <span className="text-foreground font-bold text-sm tracking-tight">{item.category}</span>
+                    <span className="text-xs italic font-bold text-indigo-500 dark:text-indigo-400 text-right ml-4">{item.tech}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Libraries */}
-            <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.libraries')}</h2>
+            <div className="bg-card/40 rounded-2xl p-8 border border-border backdrop-blur-md">
+              <h2 className="text-2xl font-black text-foreground drop-shadow-sm mb-6 border-b border-border pb-2 uppercase tracking-widest">{t('references.libraries')}</h2>
               <ul className="space-y-4">
                 {additionalLibraries.map((lib, i) => (
-                  <li key={i} className="flex justify-between items-center text-slate-300">
-                    <span className="text-indigo-300 font-mono text-xs font-bold">{lib.name}</span>
+                  <li key={i} className="flex justify-between items-center text-muted-foreground">
+                    <span className="text-indigo-600 dark:text-indigo-300 font-mono text-xs font-bold">{lib.name}</span>
                     <span className="text-xs italic font-bold text-right ml-4">{lib.purpose}</span>
                   </li>
                 ))}
@@ -146,17 +146,17 @@ export default function References() {
           </div>
 
           {/* Organization Links */}
-          <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-            <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.citations')}</h2>
+          <div className="bg-card/40 rounded-2xl p-8 border border-border backdrop-blur-md">
+            <h2 className="text-2xl font-black text-foreground drop-shadow-sm mb-6 border-b border-border pb-2 uppercase tracking-widest">{t('references.citations')}</h2>
             <div className="grid grid-cols-1 gap-4">
               {resourceLinks.map((org, i) => (
-                <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                  <span className="text-white text-sm font-bold uppercase tracking-tight">{org.title}</span>
+                <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-3 rounded-lg bg-background/50 border border-border hover:bg-background/80 transition-colors">
+                  <span className="text-foreground text-sm font-bold uppercase tracking-tight">{org.title}</span>
                   <a
                     href={org.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-blue-400 hover:text-blue-200 transition-colors truncate font-black tracking-tighter"
+                    className="text-xs text-blue-500 dark:text-blue-400 hover:text-blue-600 transition-colors truncate font-black tracking-tighter"
                   >
                     {org.url}
                   </a>
