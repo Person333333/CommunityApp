@@ -27,12 +27,16 @@ function StickyAboutStory() {
   const motionProgress = useMotionValue(0);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Cache once on mount — getBoundingClientRect().top is relative to viewport,
+    // so add current scrollY to get the true document-relative offset.
+    const start = el.getBoundingClientRect().top + window.scrollY;
+    const totalHeight = el.offsetHeight - window.innerHeight;
+
     return scrollY.on("change", (v) => {
-      const el = containerRef.current;
-      if (!el) return;
-      const start = el.offsetTop;
-      const end = start + el.offsetHeight - window.innerHeight;
-      const p = Math.min(Math.max((v - start) / (end - start), 0), 1);
+      const p = Math.min(Math.max((v - start) / totalHeight, 0), 1);
       motionProgress.set(p);
     });
   }, [scrollY, motionProgress]);
