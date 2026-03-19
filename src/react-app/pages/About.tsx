@@ -24,24 +24,38 @@ function StickyCompassSection() {
     offset: ["start start", "end end"]
   });
 
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 2, 4]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const lineOpacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
+  // Dramatic zoom and rotation
+  const scale = useTransform(scrollYProgress, [0, 0.4, 0.8], [1, 2.5, 6]);
+  const rotate = useTransform(scrollYProgress, [0, 0.8], [0, 720]);
+  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 1]); // Stay visible at end
+  const lineOpacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
   
-  // Needle specific rotation to end horizontal
-  const needleRotate = useTransform(scrollYProgress, [0, 1], [0, 720 + 90]);
+  // Needle specific rotation to end horizontal (90deg)
+  const needleRotate = useTransform(scrollYProgress, [0, 0.8], [0, 720 + 90]);
+  
+  // Morph to line: when scale gets huge, we fade out the ring and fade in the line
+  const ringOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[200vh] bg-background">
+    <section ref={containerRef} className="relative h-[300vh] bg-background">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         <motion.div 
-          style={{ scale: shouldReduceMotion ? 1 : scale, rotate: shouldReduceMotion ? 0 : rotate, opacity }}
+          style={{ 
+            scale: shouldReduceMotion ? 1 : scale, 
+            rotate: shouldReduceMotion ? 0 : rotate, 
+            opacity 
+          }}
           className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center"
         >
           {/* Outer Ring */}
-          <div className="absolute inset-0 border-4 border-primary/20 rounded-full" />
-          <div className="absolute inset-2 border border-primary/10 rounded-full" />
+          <motion.div 
+            style={{ opacity: ringOpacity }}
+            className="absolute inset-0 border-4 border-primary/20 rounded-full" 
+          />
+          <motion.div 
+            style={{ opacity: ringOpacity }}
+            className="absolute inset-2 border border-primary/10 rounded-full" 
+          />
           
           {/* Inner Compass Needle Container */}
           <motion.div 
@@ -53,20 +67,29 @@ function StickyCompassSection() {
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full z-10" />
           </motion.div>
 
-          <Compass className="absolute inset-0 m-auto w-12 h-12 text-primary opacity-20" />
+          <motion.div style={{ opacity: ringOpacity }}>
+            <Compass className="absolute inset-0 m-auto w-12 h-12 text-primary opacity-20" />
+          </motion.div>
         </motion.div>
 
-        {/* The Horizontal Line that forms at the end */}
-        <motion.div 
-          style={{ opacity: shouldReduceMotion ? 1 : lineOpacity }}
-          className="absolute w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent bottom-[20%]"
-        />
+        {/* The Horizontal Line that forms at the end and STAYS */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <motion.div 
+            style={{ 
+              opacity: shouldReduceMotion ? 1 : lineOpacity,
+              scaleX: useTransform(scrollYProgress, [0.8, 1], [0.1, 1.5])
+            }}
+            className="w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
+          />
+        </div>
         
         <motion.div
            style={{ opacity: lineOpacity }}
-           className="mt-12 text-center px-4"
+           className="absolute bottom-[15%] text-center px-4"
         >
-           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/40">Alignment Achieved</p>
+           <p className="text-[10px] font-black uppercase tracking-[0.6em] text-primary/60 animate-pulse">
+             Direction Established
+           </p>
         </motion.div>
       </div>
     </section>
@@ -97,11 +120,6 @@ export default function About() {
         </div>
         <div className="relative z-10 container mx-auto px-4 md:px-6 text-center pt-32">
           <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 mb-6 group justify-center">
-               <div className="p-3 rounded-2xl bg-primary/10 border border-primary/20 backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform">
-                  <Compass className="w-8 h-8 text-primary" />
-               </div>
-            </div>
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/5 border border-primary/10 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
               <Sparkles className="h-4 w-4 text-primary opacity-50" />
               <span className="text-[10px] text-primary/60 tracking-[0.2em] font-black uppercase">
