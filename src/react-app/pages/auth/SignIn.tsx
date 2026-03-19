@@ -97,10 +97,10 @@ export default function SignInPage() {
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2 uppercase tracking-widest drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.welcomeBack')}
           </h1>
-          <p className="text-lg text-slate-300 font-bold">
+          <p className="text-lg text-muted-foreground font-bold">
             {t('auth.signInSubtitle')}
           </p>
         </motion.div>
@@ -128,7 +128,7 @@ export default function SignInPage() {
                   </motion.div>
                 )}
                 <div className="space-y-2">
-                  <label htmlFor="code" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="code" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.verificationCode')}
                   </label>
                   <input
@@ -139,7 +139,7 @@ export default function SignInPage() {
                     placeholder={t('auth.codePlaceholder')}
                     required
                     maxLength={6}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
                   />
                 </div>
                 <GlassButton type="submit" variant="primary" size="lg" className="w-full text-white" disabled={loading || !isLoaded}>
@@ -168,7 +168,7 @@ export default function SignInPage() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="email" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
@@ -180,14 +180,14 @@ export default function SignInPage() {
                       onChange={(e) => setEmailAddress(e.target.value)}
                       placeholder={t('auth.emailPlaceholder')}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Password Input */}
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="password" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
@@ -199,7 +199,7 @@ export default function SignInPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('auth.passwordPlaceholder')}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                     <button
                       type="button"

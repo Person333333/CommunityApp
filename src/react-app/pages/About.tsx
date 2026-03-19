@@ -26,35 +26,41 @@ function StickyAboutStory() {
     offset: ["start start", "end end"]
   });
 
-  // Animation Timelines
-  const scale        = useTransform(scrollYProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
-  const rotate       = useTransform(scrollYProgress, [0, 0.45], [0, 720]);
-  const needleRotate = useTransform(scrollYProgress, [0, 0.45], [0, 720 + 90]);
-  const compassOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
-  const ringOpacity = useTransform(scrollYProgress, [0.3, 0.45], [1, 0]);
-  const lineOpacity = useTransform(scrollYProgress, [0.45, 0.55], [0, 1]);
-  const lineWidth   = useTransform(scrollYProgress, [0.5, 0.6], ["0%", "100%"]);
+  // Animation Timelines
+  const scale        = useTransform(smoothProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
+  const rotate       = useTransform(smoothProgress, [0, 0.45], [0, 720]);
+  const needleRotate = useTransform(smoothProgress, [0, 0.45], [0, 720 + 90]);
+  const compassOpacity = useTransform(smoothProgress, [0, 0.08], [0, 1]);
+
+  const ringOpacity = useTransform(smoothProgress, [0.3, 0.45], [1, 0]);
+  const lineOpacity = useTransform(smoothProgress, [0.45, 0.55], [0, 1]);
+  const lineWidth   = useTransform(smoothProgress, [0.5, 0.6], ["0%", "100%"]);
 
   // Vision & Mission (0.55 – 0.75)
-  const visionOpacity  = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
-  const visionY        = useTransform(scrollYProgress, [0.55, 0.65], [40, 0]);
-  const missionOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
-  const missionY       = useTransform(scrollYProgress, [0.65, 0.75], [40, 0]);
+  const visionOpacity  = useTransform(smoothProgress, [0.55, 0.65], [0, 1]);
+  const visionY        = useTransform(smoothProgress, [0.55, 0.65], [40, 0]);
+  const missionOpacity = useTransform(smoothProgress, [0.65, 0.75], [0, 1]);
+  const missionY       = useTransform(smoothProgress, [0.65, 0.75], [40, 0]);
 
   // Fade out story before methodology
-  const storyContainerOpacity = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
+  const storyContainerOpacity = useTransform(smoothProgress, [0.75, 0.8], [1, 0]);
 
   // Methodology (0.82 – 0.95)
-  const methodologyOpacity = useTransform(scrollYProgress, [0.82, 0.95], [0, 1]);
-  const methodologyY       = useTransform(scrollYProgress, [0.82, 0.95], [60, 0]);
+  const methodologyOpacity = useTransform(smoothProgress, [0.82, 0.95], [0, 1]);
+  const methodologyY       = useTransform(smoothProgress, [0.82, 0.95], [60, 0]);
 
   // Scroll indicator
-  const indicatorOpacity = useTransform(scrollYProgress, [0.92, 1], [1, 0]);
+  const indicatorOpacity = useTransform(smoothProgress, [0.92, 1], [1, 0]);
 
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-background">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+      <div className="sticky top-16 h-[calc(100vh-64px)] flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
         <motion.div 

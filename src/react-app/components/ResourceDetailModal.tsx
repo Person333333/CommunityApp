@@ -85,12 +85,32 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
     }));
     setHasSavedProfile(true);
 
-    // Simulate redirect to agency
+    // Attempt to find donation URL in action_urls
+    const donationAction = resource?.action_urls?.find(a => a.label === 'Donate');
+    const baseUrl = donationAction?.url || resource?.website || '#';
+
+    // Construct deep link with pre-fill params
+    // Some sites might not support these exact params, but they are standard conventions
+    let finalUrl = baseUrl;
+    try {
+      const urlObj = new URL(baseUrl);
+      urlObj.searchParams.append('name', donorName);
+      urlObj.searchParams.append('email', donorEmail);
+      urlObj.searchParams.append('zip', donorZip);
+      urlObj.searchParams.append('first_name', donorName.split(' ')[0] || '');
+      urlObj.searchParams.append('last_name', donorName.split(' ').slice(1).join(' ') || '');
+      urlObj.searchParams.append('utm_source', 'community-compass');
+      finalUrl = urlObj.toString();
+    } catch (e) {
+      console.warn("Invalid URL for donation redirect", baseUrl);
+    }
+
+    // Simulate redirect to agency with a slight delay for "Processing" feedback
     setTimeout(() => {
       setProcessingDonation(false);
-      alert(`Redirecting ${donorName} seamlessly to ${resource?.title}'s secure donation page...`);
+      window.open(finalUrl, '_blank');
       setShowDonationForm(false);
-    }, 1500);
+    }, 1200);
   };
 
   if (!resource) return null;

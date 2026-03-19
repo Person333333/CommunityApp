@@ -8,7 +8,7 @@ async function migrateActions() {
 
         const updates = [
             {
-                id: 119,
+                title: 'Basic Food',
                 schedule: 'Mon-Fri: 8:00 AM - 5:00 PM',
                 action_urls: [
                     { label: 'Register', url: 'https://www.dshs.wa.gov/esa/community-services-offices/basic-food' },
@@ -16,7 +16,7 @@ async function migrateActions() {
                 ]
             },
             {
-                id: 90,
+                title: 'YouthCare',
                 schedule: '24/7 Crisis Support | Drop-in: 9am-8pm Daily',
                 action_urls: [
                     { label: 'Volunteer', url: 'https://youthcare.org/volunteer' },
@@ -24,45 +24,53 @@ async function migrateActions() {
                 ]
             },
             {
-                id: 124,
-                schedule: 'Appointments: Tue/Thu 10am-2pm',
+                title: 'Byrd Barr Place',
+                schedule: 'Helping people build stability and self-sufficiency',
                 action_urls: [
-                    { label: 'Register', url: 'https://www.whatcomcounty.us/3313/Eviction-Prevention' },
-                    { label: 'Learn More', url: 'https://www.oppco.org/housing/' }
+                    { label: 'Donate', url: 'https://byrdbarrplace.org/give/' },
+                    { label: 'Learn More', url: 'https://byrdbarrplace.org/' }
                 ]
             },
             {
-                id: 127,
-                schedule: 'Winter Hours: 8:30am-4:30pm | Emergency Walk-ins welcome',
+                title: 'Crisis Connections',
+                schedule: '24-hour crisis line and connections to community resources',
                 action_urls: [
-                    { label: 'Register', url: 'https://www.snapwa.org/energy-assistance/' },
-                    { label: 'Learn More', url: 'https://www.commerce.wa.gov/growing-the-economy/energy/low-income-home-energy-assistance-program-liheap/' }
+                    { label: 'Donate', url: 'https://www.crisisconnections.org/donate/' },
+                    { label: 'Volunteer', url: 'https://www.crisisconnections.org/get-involved/volunteer/' }
                 ]
             },
             {
-                id: 122,
-                schedule: 'Legal Clinic: Wed 5pm-8pm | General Advice: Mon-Fri',
+                title: "Mary's Place",
+                schedule: 'Emergency shelter and services for families',
                 action_urls: [
-                    { label: 'Volunteer', url: 'https://www.vlpvancouver.org/volunteer' },
-                    { label: 'Learn More', url: 'https://www.cityofvancouver.us/government/department/community-development/housing-resources/' }
+                    { label: 'Donate', url: 'https://www.marysplaceseattle.org/donate' },
+                    { label: 'Volunteer', url: 'https://www.marysplaceseattle.org/volunteer' }
                 ]
             },
             {
-                id: 96,
-                schedule: 'Group Sessions: Sat 10am | 1-on-1: By Appointment',
+                title: 'FareStart',
+                schedule: 'Job training and placement in the culinary industry',
                 action_urls: [
-                    { label: 'Register', url: 'https://www.sound.health/get-started/' },
-                    { label: 'Learn More', url: 'https://www.sound.health/locations/' }
+                    { label: 'Donate', url: 'https://www.farestart.org/donate' },
+                    { label: 'Learn More', url: 'https://www.farestart.org/' }
+                ]
+            },
+            {
+                title: 'Lifelong',
+                schedule: 'Food, housing, and health services for people with chronic illnesses',
+                action_urls: [
+                    { label: 'Donate', url: 'https://www.lifelong.org/donate' },
+                    { label: 'Volunteer', url: 'https://www.lifelong.org/get-involved/volunteer' }
                 ]
             }
         ];
 
         for (const update of updates) {
             await (sql.query as any)(
-                `UPDATE curated_resources SET schedule = $1, action_urls = $2::jsonb WHERE id = $3`,
-                [update.schedule, JSON.stringify(update.action_urls), update.id]
+                `UPDATE curated_resources SET schedule = $1, action_urls = $2::jsonb WHERE title ILIKE $3`,
+                [update.schedule, JSON.stringify(update.action_urls), `%${update.title}%`]
             );
-            console.log(`Updated resource ${update.id} (${update.schedule})`);
+            console.log(`Updated resource: ${update.title}`);
         }
 
         console.log('Migration complete.');

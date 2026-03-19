@@ -100,10 +100,10 @@ export default function SignUpPage() {
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2 uppercase tracking-widest drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.joinCommunity')}
           </h1>
-          <p className="text-lg text-slate-300 font-bold">
+          <p className="text-lg text-muted-foreground font-bold">
             {pendingVerification ? t('auth.verifyEmailTitle') : t('auth.createAccount')}
           </p>
         </motion.div>
@@ -122,8 +122,8 @@ export default function SignUpPage() {
                   className="text-center mb-6"
                 >
                   <CheckCircle className="w-16 h-16 text-blue-400 mx-auto mb-4" />
-                  <p className="text-white font-bold text-center mb-6">
-                    {t('auth.codeSentTo')} <span className="text-blue-400 font-black">{emailAddress}</span>
+                  <p className="text-foreground font-bold text-center mb-6">
+                    {t('auth.codeSentTo')} <span className="text-blue-600 font-black">{emailAddress}</span>
                   </p>
                 </motion.div>
 
@@ -139,7 +139,7 @@ export default function SignUpPage() {
                 )}
 
                 <div className="space-y-2">
-                  <label htmlFor="code" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="code" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.verificationCode')}
                   </label>
                   <input
@@ -149,7 +149,7 @@ export default function SignUpPage() {
                     onChange={(e) => setCode(e.target.value)}
                     placeholder={t('auth.codePlaceholder')}
                     required
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center text-2xl tracking-widest font-bold"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center text-2xl tracking-widest font-bold"
                     maxLength={6}
                   />
                 </div>
@@ -192,7 +192,7 @@ export default function SignUpPage() {
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label htmlFor="firstName" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                    <label htmlFor="firstName" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                       {t('auth.firstName')}
                     </label>
                     <div className="relative">
@@ -204,13 +204,13 @@ export default function SignUpPage() {
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder={t('auth.firstPlaceholder')}
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="lastName" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                    <label htmlFor="lastName" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                       {t('auth.lastName')}
                     </label>
                     <div className="relative">
@@ -222,7 +222,7 @@ export default function SignUpPage() {
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder={t('auth.lastPlaceholder')}
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                       />
                     </div>
                   </div>
@@ -230,7 +230,7 @@ export default function SignUpPage() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="email" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
@@ -242,14 +242,14 @@ export default function SignUpPage() {
                       onChange={(e) => setEmailAddress(e.target.value)}
                       placeholder={t('auth.emailPlaceholder')}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Password Input */}
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-bold text-slate-300 uppercase tracking-widest">
+                  <label htmlFor="password" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
@@ -261,7 +261,7 @@ export default function SignUpPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('auth.createPasswordPlaceholder')}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-12 py-3 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
                     />
                     <button
                       type="button"
