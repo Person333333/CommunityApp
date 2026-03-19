@@ -41,6 +41,7 @@ export default function Discover() {
   const [selectedCost, setSelectedCost] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [zipCode, setZipCode] = useState('');
   const itemsPerPage = 5;
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
@@ -64,7 +65,7 @@ export default function Discover() {
   // Reset pagination on filter change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedCategories, selectedCost, selectedTag, showFavoritesOnly, showMySubmissions, showLocalOnly]);
+  }, [searchTerm, zipCode, selectedCategories, selectedCost, selectedTag, showFavoritesOnly, showMySubmissions, showLocalOnly]);
 
   // Auto-open questionnaire if wizard=true in URL
   useEffect(() => {
@@ -120,11 +121,12 @@ export default function Discover() {
       setLoading(true);
       try {
         const q = searchParams.get('q') || '';
-        const isZip = /^\d{5}$/.test(q);
+        const zipParam = searchParams.get('zip');
+        const isZip = zipParam || /^\d{5}$/.test(q);
 
         const data = await unifiedResourceService.fetchAllResources({
-          keyword: isZip ? undefined : q || undefined,
-          location: isZip ? q : undefined,
+          keyword: zipParam ? q : (isZip ? undefined : q || undefined),
+          location: zipParam || (isZip ? q : undefined),
           distance: LOCAL_RADIUS_KM,
           category: searchParams.get('category') || undefined,
           includeUserSubmitted: true,
@@ -172,9 +174,20 @@ export default function Discover() {
     let filtered = allResources;
     if (showLocalOnly && userLocation) {
       filtered = filtered.filter((resource: ResourceType) => {
-        if (!resource.latitude || !resource.longitude) return true;
-        const distance = calculateDistance(userLocation[0], userLocation[1], resource.latitude, resource.longitude);
-        return distance <= LOCAL_RADIUS_KM;
+        // If resource has coordinates, check distance
+        if (resource.latitude && resource.longitude) {
+          const distance = calculateDistance(userLocation[0], userLocation[1], resource.latitude, resource.longitude);
+          return distance <= LOCAL_RADIUS_KM;
+        }
+        
+        // If no coordinates, only show if it matches the current zip search (if any)
+        if (zipCode) {
+          return resource.zip === zipCode;
+        }
+
+        // Otherwise, if showLocalOnly is true, we probably shouldn't show things without location data
+        // unless they are explicitly marked as "Global" (which we don't have yet)
+        return false;
       });
     }
 
@@ -244,18 +257,21 @@ export default function Discover() {
       .slice(0, 3);
   }, [allResources]);
 
-  const handleSearch = (queryOverride?: string, categoryOverride?: string[]) => {
+  const handleSearch = (queryOverride?: string, categoryOverride?: string[], zipOverride?: string) => {
     const params = new URLSearchParams();
     const q = queryOverride !== undefined ? queryOverride : searchTerm;
     const cats = categoryOverride !== undefined ? categoryOverride : selectedCategories;
+    const z = zipOverride !== undefined ? zipOverride : zipCode;
 
     if (q) params.append('q', q);
     if (cats.length > 0) params.append('category', cats.join(','));
+    if (z) params.append('zip', z);
     setSearchParams(params);
   };
 
   const clearFilters = () => {
     setSearchTerm('');
+    setZipCode('');
     setSelectedCategories([]);
     setSelectedCost('');
     setSelectedTag('');
@@ -273,7 +289,7 @@ export default function Discover() {
     setSearchParams(params);
   };
 
-  const hasActiveFilters = searchTerm || selectedCategories.length > 0 || selectedCost || selectedTag;
+  const hasActiveFilters = searchTerm || zipCode || selectedCategories.length > 0 || selectedCost || selectedTag;
 
   // Removed auto-trigger inline wizard by user request
 
@@ -308,7 +324,7 @@ export default function Discover() {
 
 
         {/* Search and Explorer Card */}
-        <motion.div data-tour="search" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
+        <motion.div data-tour="search-input" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
           <Button
             data-tour="ai-search"
             size="lg"
@@ -367,7 +383,20 @@ export default function Discover() {
                     </motion.button>
                   </div>
                 </div>
-                {/* Removed LocationBar by user request */}
+                <div className="relative w-full lg:w-48 group" data-tour="zip-search">
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors" />
+                  <Input
+                    type="text"
+                    value={zipCode}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setZipCode(val);
+                      handleSearch(searchTerm, selectedCategories, val);
+                    }}
+                    placeholder={t('discover.zipPlaceholder', 'Zip Code')}
+                    className="w-full bg-muted/20 border border-border rounded-xl pl-12 py-7 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary transition-all font-bold backdrop-blur shadow-inner"
+                  />
+                </div>
               </div>
 
               {/* Filter dropdowns row */}
@@ -490,7 +519,7 @@ export default function Discover() {
         {/* Content Section: Results + Sidebar */}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Results Area */}
-          <div className="flex-1 order-2 lg:order-1">
+          <div className="flex-1 order-2 lg:order-1" data-tour="resource-list">
 
             <div className="relative min-h-[400px]">
               {paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
@@ -650,11 +679,11 @@ export default function Discover() {
           </div>
 
           {/* Sidebar */}
-          <aside className="w-full lg:w-96 space-y-6 order-1 lg:order-2" data-tour="highlights-sidebar">
+          <aside className="w-full lg:w-96 space-y-6 order-1 lg:order-2" data-tour="filter-sidebar">
             <div className="sticky top-32 space-y-6">
 
               {/* Map Component Always Visible on Desktop Sidebar */}
-              <div className="h-[400px] rounded-3xl overflow-hidden border border-border shadow-2xl relative">
+              <div className="h-[400px] rounded-3xl overflow-hidden border border-border shadow-2xl relative" data-tour="map-container">
                 <div className="absolute inset-0 bg-primary/5 pointer-events-none z-10 mix-blend-overlay"></div>
                 <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation || [0, 0]} zoom={10} />
               </div>

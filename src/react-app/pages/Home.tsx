@@ -12,8 +12,10 @@ import GuestAuthModal from '@/react-app/components/GuestAuthModal';
 import { useLocation } from '@/react-app/hooks/useLocation';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { calculateDistance } from '@/react-app/hooks/useLocation';
+import { useTheme } from '@/react-app/hooks/useTheme';
+import homeLight from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_light_1773879180096.png';
+import homeDark from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_dark_1773879193722.png';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
-import communityHomeImg from '@/react-app/assets/community-home-light.png';
 
 
 // Animated count-up hook
@@ -61,6 +63,7 @@ export default function Home() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [showWizard, setShowWizard] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isLight } = useTheme();
 
   // 3D Scroll Perspective Logic
   const containerRef = useRef<HTMLDivElement>(null);
@@ -169,20 +172,20 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src={communityHomeImg} 
+            src={isLight ? homeLight : homeDark} 
             alt="Community Compass" 
             className="w-full h-full object-cover opacity-60 scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background" />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 pt-20">
-          <div className="max-w-4xl">
+        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-center justify-center text-center">
+          <div className="max-w-4xl mx-auto">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-8 flex flex-col items-center"
             >
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
                 <Sparkles className="w-5 h-5 text-primary animate-pulse" />
@@ -190,15 +193,14 @@ export default function Home() {
               </div>
               
               <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6">
-                {t('home.hero.title').split(' ')[0]}<br />
-                <span className="text-primary-green">{t('home.hero.title').split(' ')[1]}</span>
+                {t('home.hero.title')}
               </h1>
               
-              <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-xl leading-relaxed">
+              <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-2xl leading-relaxed mx-auto">
                 {t('home.hero.subtitle')}
               </p>
               
-              <div className="flex flex-wrap gap-6 pt-4">
+              <div className="flex flex-wrap justify-center gap-6 pt-4">
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
@@ -207,16 +209,9 @@ export default function Home() {
                   {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
-                <div className="flex items-center gap-4 px-6 py-4 bg-card/30 backdrop-blur-md rounded-full border border-border/50">
-                  <div className="flex -space-x-4">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-background bg-card flex items-center justify-center overflow-hidden shadow-lg">
-                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 15}`} alt="User" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-[10px] font-black text-foreground/70 uppercase tracking-widest">
-                    Joined by <span className="text-primary">5,000+</span> neighbors
+                <div className="flex items-center gap-4 px-8 py-4 bg-card/30 backdrop-blur-md rounded-full border border-border/50">
+                  <div className="text-xs font-black text-foreground/70 uppercase tracking-widest">
+                    {t('home.hero.joinedBy', { countLabel: '5,000+' })}
                   </div>
                 </div>
               </div>
@@ -458,10 +453,10 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
             <div className="flex items-center justify-center gap-2 mb-3">
               <Activity className="w-5 h-5 text-emerald-400" />
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Live</span>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t('home.activity.live')}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Recent Community Activity</h2>
-            <p className="text-sm text-muted-foreground font-medium">See the latest resources added by your neighbors</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{t('home.activity.title')}</h2>
+            <p className="text-sm text-muted-foreground font-medium">{t('home.activity.subtitle')}</p>
           </motion.div>
 
           <div className="space-y-4">
@@ -490,7 +485,7 @@ export default function Home() {
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-8">
             <button onClick={() => navigate('/discover')} className="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors">
-              View all resources →
+              {t('home.activity.viewAll')}
             </button>
           </motion.div>
         </div>
@@ -500,28 +495,28 @@ export default function Home() {
       <section className="py-20 bg-background/30 transition-colors duration-300">
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-black text-foreground mb-4 uppercase tracking-tighter">Frequently Asked Questions</h2>
+            <h2 className="text-3xl sm:text-5xl font-black text-foreground mb-4 uppercase tracking-tighter">{t('home.faq.title')}</h2>
             <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full mb-6 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-            <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.3em]">Insights for your community journey</p>
+            <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.3em]">{t('home.faq.subtitle')}</p>
           </motion.div>
 
           <div className="space-y-4">
             {[
               {
-                q: "What is Community Compass?",
-                a: "Community Compass is a modern, interactive directory designed to help residents find local resources like food assistance, healthcare, and housing. We use AI and real-time mapping to ensure you get the help you need, when you need it."
+                q: t('home.faq.q1'),
+                a: t('home.faq.a1')
               },
               {
-                q: "How can I submit a new resource?",
-                a: "Simply click the 'Submit Resource' button in the navigation or on the Home page. Fill out the details about the organization or service, and once verified by our team, it will appear for everyone in the community."
+                q: t('home.faq.q2'),
+                a: t('home.faq.a2')
               },
               {
-                q: "Is my personal data safe?",
-                a: "Yes. We take privacy seriously. Most features can be used without an account. If you choose to sign up or submit a resource, we only use your information for verification and service communication."
+                q: t('home.faq.q3'),
+                a: t('home.faq.a3')
               },
               {
-                q: "What does the 'Verified' badge mean?",
-                a: "The 'Verified' badge indicates that our team or a community moderator has confirmed the resource's details, ensuring the contact information, location, and services offered are accurate and up-to-date."
+                q: t('home.faq.q4'),
+                a: t('home.faq.a4')
               }
             ].map((faq, idx) => (
               <motion.div
@@ -638,9 +633,9 @@ export default function Home() {
             <div className="w-12 h-12 bg-background rounded-full flex items-center justify-center mx-auto mb-4 border border-border">
               <Mail className="w-6 h-6 text-emerald-500" />
             </div>
-            <h2 className="text-2xl font-black text-foreground uppercase tracking-tight mb-2">Stay in the Loop</h2>
+            <h2 className="text-2xl font-black text-foreground uppercase tracking-tight mb-2">{t('home.newsletter.title')}</h2>
             <p className="text-muted-foreground font-medium mb-6 text-sm">
-              Weekly updates on new resources, volunteer opportunities, and community events.
+              {t('home.newsletter.subtitle')}
             </p>
             {emailSubscribed ? (
               <motion.div
@@ -670,7 +665,7 @@ export default function Home() {
                   className="flex-1 px-4 py-3 rounded-xl bg-background border border-border text-foreground font-medium outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-muted-foreground text-sm"
                 />
                 <Button className="rounded-none bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest flex items-center justify-center gap-2">
-                  Subscribe <Send className="w-3.5 h-3.5" />
+                  {t('home.newsletter.button')} <Send className="w-3.5 h-3.5" />
                 </Button>
               </form>
             )}

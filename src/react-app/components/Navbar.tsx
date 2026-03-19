@@ -1,6 +1,6 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router';
-import { Compass, Menu, X, Accessibility, Eye, Type, Zap, PlusCircle } from 'lucide-react';
+import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
@@ -63,7 +63,6 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max text-slate-300">
               <NavLink to="/discover">{t('nav.discover')}</NavLink>
-              <NavLink to="/submit" data-tour="add-resource">{t('nav.addResource')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
               <NavLink to="/references">{t('nav.references')}</NavLink>
 
@@ -76,14 +75,6 @@ export default function Navbar() {
                   >
                     {t('nav.signIn')}
                   </Link>
-                  <Link
-                  to="/submit"
-                  data-tour="add-resource"
-                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-black uppercase tracking-widest text-[10px] transition-all bg-emerald-500 text-black hover:bg-emerald-400 shadow-md`}
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  {t('nav.addResource')}
-                </Link>
                   <Link
                     to="/sign-up"
                     className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm"
@@ -212,9 +203,6 @@ export default function Navbar() {
                 <div className="flex flex-col space-y-2">
                   <MobileNavLink to="/discover" onClick={() => setIsOpen(false)}>
                     {t('nav.discover')}
-                  </MobileNavLink>
-                  <MobileNavLink to="/submit" onClick={() => setIsOpen(false)}>
-                    {t('nav.addResource')}
                   </MobileNavLink>
                   <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>
                     {t('nav.about')}

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Compass, Search, Sparkles, Globe, Bot, PlusCircle, FolderHeart, MapPinned, Star } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Compass, Search, Sparkles, Globe, Bot, FolderHeart, MapPinned, Star } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import GlassCard from './GlassCard';
 import { useTranslation } from 'react-i18next';
@@ -32,76 +32,53 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
       id: 'welcome',
       titleKey: 'tour.welcome.title',
       contentKey: 'tour.welcome.content',
-      path: '/',
-      position: 'center'
+      position: 'center',
+      path: '/'
     },
     {
       id: 'discover',
       titleKey: 'tour.discover.title',
       contentKey: 'tour.discover.content',
-      target: '[data-tour="search"]',
+      target: '[data-tour="search-input"]',
       path: '/discover',
       position: 'bottom'
     },
     {
-      id: 'explorer',
-      titleKey: 'tour.explorer.title',
-      contentKey: 'tour.explorer.content',
-      target: '[data-tour="category-explorer"]',
+      id: 'zip-search',
+      titleKey: 'tour.zipSearch.title',
+      contentKey: 'tour.zipSearch.content',
+      target: '[data-tour="zip-search"]',
       path: '/discover',
       position: 'bottom'
     },
     {
-      id: 'highlights',
-      titleKey: 'tour.highlights.title',
-      contentKey: 'tour.highlights.content',
-      target: '[data-tour="highlights-sidebar"]',
+      id: 'filter',
+      titleKey: 'tour.filter.title',
+      contentKey: 'tour.filter.content',
+      target: '[data-tour="filter-sidebar"]',
+      path: '/discover',
+      position: 'right'
+    },
+    {
+      id: 'map',
+      titleKey: 'tour.map.title',
+      contentKey: 'tour.map.content',
+      target: '[data-tour="map-container"]',
       path: '/discover',
       position: 'left'
     },
     {
-      id: 'ai-search',
-      titleKey: 'tour.aiSearch.title',
-      contentKey: 'tour.aiSearch.content',
-      target: '[data-tour="ai-search"]',
+      id: 'resources',
+      titleKey: 'tour.resources.title',
+      contentKey: 'tour.resources.content',
+      target: '[data-tour="resource-list"]',
       path: '/discover',
-      position: 'bottom'
+      position: 'top'
     },
     {
-      id: 'my-resources',
-      titleKey: 'tour.myResources.title',
-      contentKey: 'tour.myResources.content',
-      target: '[data-tour="my-resources"]',
-      path: '/discover',
-      position: 'bottom'
-    },
-    {
-      id: 'translation',
-      titleKey: 'tour.translation.title',
-      contentKey: 'tour.translation.content',
-      target: '[data-tour="language-selector"]',
-      position: 'bottom'
-    },
-    {
-      id: 'unified-map',
-      titleKey: 'tour.unifiedMap.title',
-      contentKey: 'tour.unifiedMap.content',
-      target: '[data-tour="map-toggle"]',
-      path: '/discover',
-      position: 'bottom'
-    },
-    {
-      id: 'add-resource',
-      titleKey: 'tour.addResource.title',
-      contentKey: 'tour.addResource.content',
-      target: '[data-tour="add-resource"]',
-      path: '/submit',
-      position: 'bottom'
-    },
-    {
-      id: 'board',
-      titleKey: 'tour.board.title',
-      contentKey: 'tour.board.content',
+      id: 'activity',
+      titleKey: 'tour.activity.title',
+      contentKey: 'tour.activity.content',
       target: '[data-tour="bulletin-board"]',
       path: '/',
       position: 'bottom'
@@ -259,8 +236,8 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                   {step.id === 'ai-search' && <Sparkles className="w-5 h-5 text-white" />}
                   {step.id === 'my-resources' && <FolderHeart className="w-5 h-5 text-white" />}
                   {step.id === 'translation' && <Globe className="w-5 h-5 text-white" />}
+                  {step.id === 'zip-search' && <MapPinned className="w-5 h-5 text-white" />}
                   {step.id === 'unified-map' && <MapPinned className="w-5 h-5 text-white" />}
-                  {step.id === 'add-resource' && <PlusCircle className="w-5 h-5 text-white" />}
                   {step.id === 'board' && <Compass className="w-5 h-5 text-white" />}
                   {step.id === 'helper' && <Bot className="w-5 h-5 text-white" />}
                   {step.id === 'impact' && <Sparkles className="w-5 h-5 text-white" />}

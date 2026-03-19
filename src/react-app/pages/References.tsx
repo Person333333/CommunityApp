@@ -22,12 +22,12 @@ export default function References() {
   ];
 
   const additionalLibraries = [
-    { name: '@clerk/clerk-react', purpose: 'Authentication and user management' },
-    { name: 'leaflet', purpose: 'Interactive mapping functionality' },
-    { name: 'react-leaflet', purpose: 'React components for Leaflet maps' },
-    { name: 'lucide-react', purpose: 'Icon library for UI components' },
-    { name: 'i18next', purpose: 'Internationalization framework' },
-    { name: 'framer-motion', purpose: 'Smooth UI animations and transitions' }
+    { name: '@clerk/clerk-react', purpose: t('references.libraryPurposes.auth') },
+    { name: 'leaflet', purpose: t('references.libraryPurposes.maps') },
+    { name: 'react-leaflet', purpose: t('references.libraryPurposes.reactMaps') },
+    { name: 'lucide-react', purpose: t('references.libraryPurposes.icons') },
+    { name: 'i18next', purpose: t('references.libraryPurposes.i18n') },
+    { name: 'framer-motion', purpose: t('references.libraryPurposes.animation') }
   ];
 
   const resourceLinks = [
@@ -69,7 +69,7 @@ export default function References() {
                 rel="noopener noreferrer"
                 className="w-full py-3 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 rounded-xl text-white transition-all font-bold shadow-sm"
               >
-                View PDF Work Log
+                {t('references.viewWorkLog')}
               </a>
             </GlassCard>
 
@@ -82,7 +82,7 @@ export default function References() {
                 rel="noopener noreferrer"
                 className="w-full py-3 bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/30 rounded-xl text-white transition-all font-bold shadow-sm"
               >
-                View PDF Checklist
+                {t('references.viewChecklist')}
               </a>
             </GlassCard>
           </section>
@@ -120,7 +120,7 @@ export default function References() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Tech Stack */}
             <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Tech Stack</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.techStack')}</h2>
               <ul className="space-y-4">
                 {techStack.map((item, i) => (
                   <li key={i} className="flex justify-between items-center text-slate-300">
@@ -133,7 +133,7 @@ export default function References() {
 
             {/* Libraries */}
             <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Libraries</h2>
+              <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.libraries')}</h2>
               <ul className="space-y-4">
                 {additionalLibraries.map((lib, i) => (
                   <li key={i} className="flex justify-between items-center text-slate-300">
@@ -147,7 +147,7 @@ export default function References() {
 
           {/* Organization Links */}
           <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-md">
-            <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">Citations & Organizations</h2>
+            <h2 className="text-2xl font-black text-white drop-shadow-sm mb-6 border-b border-white/10 pb-2 uppercase tracking-widest">{t('references.citations')}</h2>
             <div className="grid grid-cols-1 gap-4">
               {resourceLinks.map((org, i) => (
                 <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">

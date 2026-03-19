@@ -7,9 +7,9 @@ import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
-import { BackgroundPaths } from '@/react-app/components/ui/background-paths';
 import { useTheme } from '@/react-app/hooks/useTheme';
-import communityAboutImg from '@/react-app/assets/community-about-light.png';
+import aboutLight from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_about_light_1773879209748.png';
+import aboutDark from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_about_dark_1773879227438.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -20,12 +20,6 @@ const fadeInUp = {
 export default function About() {
   const { t } = useTranslation();
 
-  // 3D Scroll Logic for About Page
-  const { scrollYProgress } = useScroll();
-  const rotateX = useTransform(scrollYProgress, [0, 0.2], [0, 10]);
-  const translateZ = useTransform(scrollYProgress, [0, 0.2], [0, -50]);
-  const smoothRotateX = useSpring(rotateX, { stiffness: 100, damping: 30 });
-  const smoothTranslateZ = useSpring(translateZ, { stiffness: 100, damping: 30 });
   const { isLight } = useTheme();
 
   return (
@@ -36,68 +30,53 @@ export default function About() {
       className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700`} 
       style={{ perspective: "1200px" }}
     >
-      {/* Hero Section with Conditional Background */}
-      {isLight ? (
-        <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src={communityAboutImg} 
-              alt="Community Collaboration" 
-              className="w-full h-full object-cover opacity-60"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
-          </div>
-          <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-            <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
-                <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-                <span className="text-xs text-primary tracking-[0.2em] font-black uppercase">
-                  OUR STORY & MISSION
-                </span>
-              </div>
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
-                Community<br />
-                <span className="text-primary-green drop-shadow-sm">Compass</span>
-              </h1>
-              <div className="max-w-3xl mx-auto">
-                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-bold italic leading-relaxed mb-12">
-                  Building a stronger, more connected neighborhood through shared resources and collective support.
-                </p>
-                <div className="flex justify-center">
-                  <div 
-                    className="flex flex-col items-center gap-4 cursor-pointer group"
-                    onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+      {/* Hero Section with Theme-aware Background */}
+      <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={isLight ? aboutLight : aboutDark} 
+            alt="Community Collaboration" 
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
+        </div>
+        <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
+          <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
+              <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+              <span className="text-xs text-primary tracking-[0.2em] font-black uppercase">
+                {t('about.hero.badge')}
+              </span>
+            </div>
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
+              Community<br />
+              <span className="text-primary-green drop-shadow-sm">Compass</span>
+            </h1>
+            <div className="max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-bold italic leading-relaxed mb-12">
+                {t('about.hero.subtitle')}
+              </p>
+              <div className="flex justify-center">
+                <div 
+                  className="flex flex-col items-center gap-4 cursor-pointer group"
+                  onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                >
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground group-hover:text-foreground transition-colors">
+                    {t('about.hero.scroll')}
+                  </span>
+                  <motion.div
+                    animate={{ y: [0, 5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center bg-background/50 backdrop-blur-md"
                   >
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground group-hover:text-foreground transition-colors">Scroll to Discover</span>
-                    <motion.div
-                      animate={{ y: [0, 5, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      className="w-12 h-12 rounded-full border border-border flex items-center justify-center bg-background/50 backdrop-blur-md"
-                    >
-                      <Compass className="w-6 h-6 text-primary" />
-                    </motion.div>
-                  </div>
+                    <Compass className="w-6 h-6 text-primary" />
+                  </motion.div>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </section>
-      ) : (
-        <motion.section 
-          className="relative h-screen w-full overflow-hidden"
-          style={{
-            rotateX: smoothRotateX,
-            translateZ: smoothTranslateZ,
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <BackgroundPaths 
-            title="Community Compass" 
-            subtitle={t('about.subtitle', "Our Story & Mission")}
-            onCtaClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          />
-        </motion.section>
-      )}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
 
@@ -148,25 +127,25 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('home.impact.title')} & Research</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.methodology.title')}</h2>
             <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
-            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Data-driven approach to solving local challenges</p>
+            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {[
               {
                 step: "1",
-                title: "The Challenge",
-                text: "According to our community assessment research, 68% of local residents reported difficulty finding reliable, up-to-date information regarding food pantries and support services.",
-                subtext: "As part of the TSA Webmaster challenge, we recognized that existing solutions lacked interactivity, real-time updates, and broad accessibility.",
+                title: t('about.methodology.challenge.title'),
+                text: t('about.methodology.challenge.content'),
+                subtext: "TSA Webmaster Research",
                 color: "blue"
               },
               {
                 step: "2",
-                title: "Our Methodology",
-                text: "We conducted robust research by reviewing over 50 regional resource boards and analyzing common user pain points: navigational complexity, mobile incompatibility, and language access.",
-                subtext: "Community Compass was designed directly from this feedback, implementing an interactive Leaflet map, a user-driven submission system, and automated multilingual translation.",
+                title: t('about.methodology.solution.title'),
+                text: t('about.methodology.solution.content'),
+                subtext: "Community Compass Solution",
                 color: "indigo"
               }
             ].map((item, idx) => (
@@ -207,9 +186,9 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Our Core Values</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.values.title')}</h2>
             <div className="w-20 h-1 bg-border/40 mx-auto mb-6" />
-            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">Guiding principles for community impact</p>
+            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -252,20 +231,20 @@ export default function About() {
                 <div className="absolute bottom-8 left-8 p-8 bg-card/90 backdrop-blur-xl rounded-[2.5rem] border border-border/50 shadow-xl">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="w-1 h-8 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">ALEX RIVERA</h4>
+                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">{t('about.founder.title')}</h4>
                   </div>
-                  <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & Neighbor</p>
+                  <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">{t('about.founder.role')}</p>
                 </div>
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
-                <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">Inspired by Tradition,<br />Driven by Need</h3>
+                <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">{t('about.founder.subtitle')}</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
                   <p className="drop-shadow-sm">
-                    "Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner."
+                    "{t('about.founder.quote1')}"
                   </p>
                   <p className="text-lg font-bold text-slate-400 not-italic">
-                    I grew up believing that a community is only as strong as its most vulnerable member. After seeing the power of teamwork during local projects, I knew we needed a digital "compass" to point people toward support.
+                    {t('about.founder.quote2')}
                   </p>
                 </div>
               </div>
@@ -284,10 +263,10 @@ export default function About() {
               <Compass className="w-64 h-64 text-blue-300" />
             </div>
             <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
-              Build the Future<br />Together
+              {t('about.footer.title')}
             </h2>
             <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">
-              Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.
+              {t('about.footer.subtitle')}
             </p>
             <div className="flex justify-center relative z-10">
               <Link to="/submit">
@@ -409,7 +388,7 @@ function CommunityMorpher() {
   }, [activeIndex, currentIndex]);
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40">
+    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40" data-tour="community-morpher">
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Dynamic Canvas Background */}
         <motion.div 
@@ -429,7 +408,7 @@ function CommunityMorpher() {
                 className="space-y-6"
               >
                 <div className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
-                  <Sparkles className="w-3 h-3" /> Our Impact
+                  <Sparkles className="w-3 h-3" /> {t('about.impact.badge', 'Our Impact')}
                 </div>
                 <h2 className="text-5xl sm:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85]">
                   {scenes[currentIndex].title.split(' ')[0]}<br/>

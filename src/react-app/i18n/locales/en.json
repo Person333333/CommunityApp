@@ -29,79 +29,45 @@
   },
   "home": {
     "hero": {
-      "badge": "Helping Neighbors",
-      "title": "Community Compass",
-      "subtitle": "Connecting neighbors with local support, one hand at a time. Find the help you need, right where you live.",
-      "cta": "Find Resources",
-      "searchPlaceholder": "Find help in your neighborhood...",
-      "explore": "Explore Community"
-    },
-    "morpher": {
-      "ourImpact": "Our Impact",
-      "scenes": [
-        {
-          "title": "Navigation & Discovery",
-          "desc": "Find verified local resources tailored to your exact needs.",
-          "cta": "Explore Our Mission"
-        },
-        {
-          "title": "Stronger Connections",
-          "desc": "Bridge the gap between residents and specialized support services.",
-          "cta": "Get Involved"
-        },
-        {
-          "title": "Community Resilience",
-          "desc": "Building a neighborhood where everyone has what they need to thrive.",
-          "cta": "Join Us"
-        }
-      ]
-    },
-    "stats": {
-      "resources": "Community Resources",
-      "categories": "Support Categories",
-      "localSupport": "Help Nearby"
+      "badge": "Community Compass",
+      "title": "Connecting neighbors with local support, one hand at a time.",
+      "subtitle": "Find the help you need, right where you live.",
+      "cta": "Explore Resources",
+      "joinedBy": "Joined by {{countLabel}} neighbors"
     },
     "impact": {
-      "title": "Our Community Impact",
-      "subtitle": "Seeing how we grow together",
+      "title": "Our Impact",
+      "subtitle": "Strengthening communities through shared support",
       "neighborsHelped": "Neighbors Helped",
-      "localOrgs": "Local Organizations",
-      "neighborhoods": "Neighborhoods Served"
+      "localOrgs": "Local Resources",
+      "neighborhoods": "Neighborhoods"
+    },
+    "activity": {
+      "live": "Live",
+      "title": "Recent Community Activity",
+      "subtitle": "See the latest resources added by your neighbors",
+      "viewAll": "View all resources →"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Insights for your community journey",
+      "q1": "What is Community Compass?",
+      "a1": "Community Compass is a modern, interactive directory designed to help residents find local resources like food assistance, healthcare, and housing. We use AI and real-time mapping to ensure you get the help you need, when you need it.",
+      "q2": "How can I submit a new resource?",
+      "a2": "Simply click the 'Submit Resource' button in the navigation or on the Home page. Fill out the details about the organization or service, and once verified by our team, it will appear for everyone in the community.",
+      "q3": "Is my personal data safe?",
+      "a3": "Yes. We take privacy seriously. Most features can be used without an account. If you choose to sign up or submit a resource, we only use your information for verification and service communication.",
+      "q4": "What does the 'Verified' badge mean?",
+      "a4": "The 'Verified' badge indicates that our team or a community moderator has confirmed the resource's details, ensuring the contact information, location, and services offered are accurate and up-to-date."
+    },
+    "newsletter": {
+      "title": "Stay in the Loop",
+      "subtitle": "Weekly updates on new resources, volunteer opportunities, and community events.",
+      "button": "Subscribe"
     },
     "stories": {
-      "title": "Real Stories from Our Community",
-      "subtitle": "Neighbors helping neighbors"
-    },
-    "spotlight": {
-      "title": "Spotlight Resources",
-      "subtitle": "Making an impact in our community",
-      "noResources": "No local featured resources found in your area. Check back soon!",
-      "viewAll": "View All Resources",
-      "learnMore": "Learn More"
-    },
-    "cta": {
-      "title": "Know a Resource That Should Be Listed?",
-      "subtitle": "Help us build a comprehensive directory by submitting community resources",
-      "button": "Submit a Resource"
-    },
-    "popular": {
-      "title": "Popular in Your Neighborhood",
-      "subtitle": "Most accessed resources in your immediate area"
-    },
-    "recent": {
-      "title": "Recently Added",
-      "subtitle": "Fresh resources shared by our community members"
-    },
-    "board": {
-      "title": "Community Bulletin Board",
-      "subtitle": "Local events, news, and neighborhood alerts",
-      "emergency": "Emergency Alert",
-      "news": "Neighborhood News",
-      "event": "Upcoming Event"
-    },
-    "volunteer": {
-      "title": "Volunteer Opportunities",
-      "subtitle": "Ways you can lend a hand and give back today"
+      "title": "Community Stories",
+      "subtitle": "Voices of impact and connection"
     }
   },
   "location": {
@@ -132,6 +98,7 @@
     "subtitle": "Discover local resources, connect with support services, and find the help you need—all in one place",
     "searchResources": "Search for food banks, housing, healthcare, and more...",
     "searchPlaceholder": "Search for food banks, housing, healthcare, and more...",
+    "zipPlaceholder": "Zip Code",
     "showingLocal": "Showing local resources only (within ~200 miles)",
     "ofResources": "of",
     "resourcesInArea": "resources in your area",
@@ -172,11 +139,45 @@
   "about": {
     "title": "About Community Compass",
     "subtitle": "Empowering communities through accessible, comprehensive resource discovery",
-    "vision": "Our Vision",
+    "hero": {
+      "badge": "OUR STORY & MISSION",
+      "title": "Compassion in Action",
+      "subtitle": "Building a stronger, more connected neighborhood through shared resources and collective support.",
+      "scroll": "Scroll to Discover"
+    },
+    "methodology": {
+      "title": "Our Methodology",
+      "subtitle": "Data-driven approach to solving local challenges",
+      "challenge": {
+        "title": "The Challenge",
+        "content": "Finding real help shouldn't be a maze. Many services exist, but they are often scattered across outdated websites or physical bulletin boards."
+      },
+      "solution": {
+        "title": "The Compass Solution",
+        "content": "We bridge the gap using modern tech. Real-time mapping, AI-powered search, and community-verified data ensure you always find the right path."
+      }
+    },
+    "values": {
+      "title": "Our Core Values",
+      "subtitle": "Guiding principles for community impact"
+    },
+    "founder": {
+      "title": "ALEX RIVERA",
+      "role": "Founder & Neighbor",
+      "subtitle": "Inspired by Tradition, Driven by Need",
+      "quote1": "Community Compass began with a simple observation: many of our neighbors were struggling to find help even when resources were right around the corner.",
+      "quote2": "I grew up believing that a community is only as strong as its most vulnerable member. After seeing the power of teamwork during local projects, I knew we needed a digital 'compass' to point people toward support."
+    },
+    "footer": {
+      "title": "Build the Future Together",
+      "subtitle": "Join the movement and help us bridge the gap between need and support. Every resource shared is a hand extended to someone in need.",
+      "button": "Get Involved"
+    },
+    "visionLabel": "Our Vision",
     "visionText": "Community Compass aims to help people when things get tough. Help shows up in many forms, often through groups working tirelessly nearby. This space exists because getting assistance should not be as hard as it is. Sometimes a bit of clarity makes all the difference.",
-    "mission": "Our Mission",
+    "missionLabel": "Our Mission",
     "missionText": "A place takes shape when people find what they need without getting lost. This website builds a single hub that brings together all resources into one place for people in need. One goal drives it: making access straightforward for everyone.",
-    "values": "Our Values",
+    "coreValuesLabel": "Our Values",
     "sustainabilitySummary": "Green practices for a healthier tomorrow.",
     "sustainabilityText": "We prioritize the health of the planet and our community through eco-friendly practices and local partnerships.",
     "communitySummary": "Uplifting neighbors through genuine connection.",
@@ -189,7 +190,16 @@
     "exploreResources": "Explore Resources",
     "footerText": "Connecting communities with the resources they need. Your guide to local support services.",
     "quickLinks": "Quick Links",
-    "connectWithUs": "Connect With Us"
+    "connectWithUs": "Connect With Us",
+    "morpher": {
+        "title1": "Navigation & Discovery",
+        "desc1": "Find verified local resources tailored to your exact needs.",
+        "title2": "Stronger Connections",
+        "desc2": "Bridge the gap between residents and specialized support services.",
+        "title3": "Community Resilience",
+        "desc3": "Building a neighborhood where everyone has what they need to thrive.",
+        "getInvolved": "Get Involved"
+    }
   },
   "footer": {
     "tagline": "Connecting communities with the resources they need. Your guide to local support services.",
@@ -339,10 +349,43 @@
     "subtitle": "Complete development documentation and attribution",
     "workLog": "Work Log",
     "copyright": "Copyright Checklist",
-    "techStack": "Code Stack",
-    "libraries": "Additional Libraries Utilized",
-    "images": "Image Links",
-    "research": "Research Links"
+    "techStack": "Tech Stack",
+    "libraries": "Additional Libraries",
+    "citations": "Citations & Organizations",
+    "projectInfo": "Project Information",
+    "viewWorkLog": "View PDF Work Log",
+    "viewChecklist": "View PDF Checklist",
+    "techStackLabels": {
+      "frontend": "Frontend",
+      "build": "Build Tooling",
+      "styling": "Styling",
+      "animation": "Animation",
+      "routing": "Routing",
+      "database": "Database",
+      "auth": "Authentication",
+      "maps": "Map Infrastructure",
+      "validation": "Data Validation",
+      "i18n": "Internationalization",
+      "translation": "Translation Engine",
+      "ai": "AI Core"
+    },
+    "libraryPurposes": {
+      "auth": "Authentication and user management",
+      "maps": "Interactive mapping functionality",
+      "reactMaps": "React components for Leaflet maps",
+      "icons": "Icon library for UI components",
+      "i18n": "Internationalization framework",
+      "animation": "Smooth UI animations and transitions"
+    },
+    "labels": {
+      "event": "Event",
+      "chapter": "Chapter",
+      "theme": "Theme",
+      "members": "Team Members",
+      "eventValue": "Webmaster - High School",
+      "chapterValue": "Redmond High School TSA",
+      "themeValue": "Interactive Community Resource Directory"
+    }
   },
   "saves": {
     "saves": "Saves",
@@ -398,7 +441,11 @@
     "close": "Close",
     "clear": "Clear",
     "all": "All",
-    "none": "None"
+    "none": "None",
+    "next": "Next",
+    "previous": "Previous",
+    "skip": "Skip",
+    "step": "Step {{current}} of {{total}}"
   },
   "tour": {
     "welcome": {
@@ -409,63 +456,38 @@
       "title": "Smart Search",
       "content": "Use our high-contrast search bar to find exactly what you need. Type a keyword and the list will update instantly!"
     },
-    "explorer": {
-      "title": "Three-Tier Explorer",
-      "content": "Not sure what you're looking for? Click through our hierarchical categories. From Healthcare to specific services, we guide you step-by-step."
+    "zipSearch": {
+      "title": "Local Precision",
+      "content": "Enter your ZIP code to find resources exactly in your neighborhood. We'll prioritize the closest support for you."
     },
-    "highlights": {
-      "title": "Local Snapshots",
-      "content": "Check out 'Popular' and 'Just Added' resources in the sidebar. These are the most relevant and freshest updates in your neighborhood."
+    "filter": {
+      "title": "Powerful Filters",
+      "content": "Need something specific? Filter by category or toggle local results to narrow down your search."
     },
-    "aiSearch": {
-      "title": "AI-Powered Search",
-      "content": "Our AI understands natural language. To use it, simply type what you need (like 'help with rent') and THEN press the AI button!"
+    "map": {
+      "title": "Interactive Map",
+      "content": "Visualize everything! Use the map to see exactly where resources are located relative to you."
     },
-    "myResources": {
-      "title": "My Resources",
-      "content": "Manage your journey here! Access your saved favorites with the heart icon, or view and edit your own contributions with the profile icon. You have full control to update or delete your submissions anytime!"
+    "resources": {
+      "title": "Verified Listings",
+      "content": "Every resource is community-verified. Click on any card to see detailed contact info, hours, and more."
     },
-    "translation": {
-      "title": "One-Click Translation",
-      "content": "Instantly translate everything! Our AI translates search results, descriptions, and helper messages into your preferred language."
-    },
-    "unifiedMap": {
-      "title": "Integrated Map View",
-      "content": "Visualize resources near you without leaving the page! Toggle between 'List' and 'Map' views to see exactly where support is located in your neighborhood."
-    },
-    "addResource": {
-      "title": "Add a Resource",
-      "content": "Know of a service that could help others? Add it to our directory here! You can submit details, photos, and locations to help your neighbors find what they need."
-    },
-    "board": {
-      "title": "Bulletin Board",
-      "content": "Stay updated with local news, upcoming events, and critical emergency alerts in your immediate neighborhood."
+    "activity": {
+      "title": "Recent Activity",
+      "content": "Stay updated with the latest resources added by your neighbors in our live activity feed."
     },
     "helper": {
-      "title": "AI Assistant",
-      "content": "If you ever get lost, our Community Helper is here 24/7 to answer questions and guide you to the right services."
+      "title": "Smart Assistant",
+      "content": "Have a question? Our AI-powered helper is always ready to guide you or answer specific questions."
     },
     "impact": {
-      "title": "Our Impact",
-      "content": "Discover how Community Compass is bridging the gap between need and support. Every resource shared is a hand extended to someone in need."
-    },
-    "morpher": {
-      "title1": "Navigation & Discovery",
-      "desc1": "Find verified local resources tailored to your exact needs.",
-      "title2": "Stronger Connections",
-      "desc2": "Bridge the gap between residents and specialized support services.",
-      "title3": "Community Resilience",
-      "desc3": "Building a neighborhood where everyone has what they need to thrive.",
-      "getInvolved": "Get Involved"
+      "title": "Our Collective Impact",
+      "content": "See how we're making a difference together. Explore our methodology and community stories on the About page."
     },
     "complete": {
       "title": "You're All Set!",
-      "content": "You're ready to explore. Find the help you need and connect with your community!",
+      "content": "You've mastered the basics of Community Compass. Go ahead and start exploring your neighborhood!",
       "getStarted": "Get Started"
-    },
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip tour",
-    "step": "Step {{current}} of {{total}}"
+    }
   }
 }
