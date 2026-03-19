@@ -488,6 +488,10 @@
       "title": "You're All Set!",
       "content": "You've mastered the basics of Community Compass. Go ahead and start exploring your neighborhood!",
       "getStarted": "Get Started"
-    }
+    },
+    "next": "Next",
+    "previous": "Previous",
+    "skip": "Skip",
+    "step": "Step {{current}} of {{total}}"
   }
 }

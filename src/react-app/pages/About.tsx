@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router';
-import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
+import { Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
@@ -16,48 +16,53 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: "easeOut" }
 };
 
-function StickyCompassSection() {
+function StickyAboutStory() {
   const containerRef = useRef(null);
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
-  // Dramatic zoom and rotation
-  const scale = useTransform(scrollYProgress, [0, 0.4, 0.8], [1, 2.5, 6]);
-  const rotate = useTransform(scrollYProgress, [0, 0.8], [0, 720]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 1]); // Stay visible at end
-  const lineOpacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
+  // Animation Timelines
+  // Period 1: 0.0 - 0.4 (Zoom & Rotate)
+  // Period 2: 0.4 - 0.6 (Flatten to Line)
+  // Period 3: 0.6 - 1.0 (Text Reveal & Final Stay)
+
+  const scale = useTransform(scrollYProgress, [0, 0.4, 0.6], [1, 2.5, 8]);
+  const rotate = useTransform(scrollYProgress, [0, 0.6], [0, 720]);
+  const needleRotate = useTransform(scrollYProgress, [0, 0.6], [0, 720 + 90]);
   
-  // Needle specific rotation to end horizontal (90deg)
-  const needleRotate = useTransform(scrollYProgress, [0, 0.8], [0, 720 + 90]);
+  const ringOpacity = useTransform(scrollYProgress, [0.4, 0.6], [1, 0]);
+  const lineOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
+  const lineWidth = useTransform(scrollYProgress, [0.6, 0.8], ["10%", "100%"]);
+
+  // Text Reveal Timings
+  const visionOpacity = useTransform(scrollYProgress, [0.65, 0.8], [0, 1]);
+  const visionY = useTransform(scrollYProgress, [0.65, 0.8], [40, 0]);
   
-  // Morph to line: when scale gets huge, we fade out the ring and fade in the line
-  const ringOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0]);
+  const missionOpacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
+  const missionY = useTransform(scrollYProgress, [0.8, 0.95], [40, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[300vh] bg-background">
+    <section ref={containerRef} className="relative h-[400vh] bg-background">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        
+        {/* Animated Compass Core */}
         <motion.div 
           style={{ 
             scale: shouldReduceMotion ? 1 : scale, 
-            rotate: shouldReduceMotion ? 0 : rotate, 
-            opacity 
+            rotate: shouldReduceMotion ? 0 : rotate,
+            opacity: useTransform(scrollYProgress, [0, 0.1], [0, 1])
           }}
-          className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center"
+          className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center z-10"
         >
           {/* Outer Ring */}
-          <motion.div 
-            style={{ opacity: ringOpacity }}
-            className="absolute inset-0 border-4 border-primary/20 rounded-full" 
-          />
-          <motion.div 
-            style={{ opacity: ringOpacity }}
-            className="absolute inset-2 border border-primary/10 rounded-full" 
-          />
+          <motion.div style={{ opacity: ringOpacity }} className="absolute inset-0 border-4 border-primary/20 rounded-full" />
+          <motion.div style={{ opacity: ringOpacity }} className="absolute inset-2 border border-primary/10 rounded-full" />
           
-          {/* Inner Compass Needle Container */}
+          {/* Inner Compass Needle */}
           <motion.div 
             style={{ rotate: shouldReduceMotion ? 90 : needleRotate }}
             className="w-full h-full relative"
@@ -72,23 +77,53 @@ function StickyCompassSection() {
           </motion.div>
         </motion.div>
 
-        {/* The Horizontal Line that forms at the end and STAYS */}
+        {/* The Horizontal Divider Line */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <motion.div 
             style={{ 
               opacity: shouldReduceMotion ? 1 : lineOpacity,
-              scaleX: useTransform(scrollYProgress, [0.8, 1], [0.1, 1.5])
+              width: lineWidth
             }}
-            className="w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
+            className="max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
           />
         </div>
-        
+
+        {/* Vision & Mission Content Overlay */}
+        <div className="absolute inset-0 z-20 container mx-auto px-6 pointer-events-none">
+          <div className="h-full flex flex-col justify-center items-center gap-24 py-20">
+            
+            {/* Vision */}
+            <motion.div 
+              style={{ opacity: visionOpacity, y: visionY }}
+              className="w-full max-w-4xl text-center pointer-events-auto"
+            >
+               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-foreground/40">{t('about.vision')}</h2>
+               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-primary/30">
+                 {t('about.visionText')}
+               </p>
+            </motion.div>
+
+            {/* Mission */}
+            <motion.div 
+              style={{ opacity: missionOpacity, y: missionY }}
+              className="w-full max-w-4xl text-center pointer-events-auto"
+            >
+               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/40">{t('about.mission')}</h2>
+               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-emerald/30">
+                 {t('about.missionText')}
+               </p>
+            </motion.div>
+
+          </div>
+        </div>
+
+        {/* Scroll Indicator Tag */}
         <motion.div
-           style={{ opacity: lineOpacity }}
-           className="absolute bottom-[15%] text-center px-4"
+           style={{ opacity: useTransform(scrollYProgress, [0.9, 1], [1, 0]) }}
+           className="absolute bottom-10 text-center px-4"
         >
-           <p className="text-[10px] font-black uppercase tracking-[0.6em] text-primary/60 animate-pulse">
-             Direction Established
+           <p className="text-[10px] font-black uppercase tracking-[0.8em] text-primary/30 animate-pulse">
+             The Journey Continues
            </p>
         </motion.div>
       </div>
@@ -108,7 +143,7 @@ export default function About() {
       className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700`} 
       style={{ perspective: "1200px" }}
     >
-      {/* Hero Section with Theme-aware Background */}
+      {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
         <div className="absolute inset-0 z-0">
           <img 
@@ -156,49 +191,10 @@ export default function About() {
         </div>
       </section>
 
-      <StickyCompassSection />
+      <StickyAboutStory />
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
-
-        {/* Our Vision & Mission - Clean Scroll Reveal */}
-        <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
-          <div>
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(37,99,235,0.05)] border-border/50 group rounded-chromic-card">
-              <img
-                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800"
-                alt="Vision"
-                className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-matte-blue/80 dark:bg-slate-900/60 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
-                <Compass className="w-12 h-12 text-primary mb-4 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-sm">{t('about.vision')}</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-300 font-bold leading-relaxed line-clamp-2">
-                  {t('about.visionText')}
-                </p>
-              </div>
-            </GlassCard>
-          </div>
-
-          <div>
-            <GlassCard variant="strong" className="p-0 h-[320px] overflow-hidden relative shadow-[0_0_30px_rgba(16,185,129,0.05)] border-border/50 group rounded-chromic-card">
-              <img
-                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
-                alt="Mission"
-                className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-40 group-hover:grayscale-0 group-hover:opacity-70 transition-all duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-matte-green/80 dark:bg-slate-900/60 p-8 flex flex-col justify-end text-foreground dark:text-white backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-700">
-                <Heart className="w-12 h-12 text-primary-green mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tighter mb-2 drop-shadow-sm">{t('about.mission')}</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground dark:text-slate-300 font-bold leading-relaxed line-clamp-2">
-                  {t('about.missionText')}
-                </p>
-              </div>
-            </GlassCard>
-          </div>
-        </motion.div>
-
         {/* Research & Community Need Section */}
-        <div className="section-divider mx-auto max-w-md mb-12 opacity-20" />
         <motion.section variants={fadeInUp} className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -207,7 +203,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.methodology.title')}</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
             <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
             <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
           </motion.div>
@@ -258,7 +254,7 @@ export default function About() {
           </div>
         </motion.section>
 
-        {/* Our Values Section - 3D Reveal */}
+        {/* Our Values Section */}
         <motion.section variants={fadeInUp} className="mb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -266,7 +262,7 @@ export default function About() {
             viewport={{ once: true }}
             className="text-center mb-24"
           >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{t('about.values.title')}</h2>
+            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.values.title')}</h2>
             <div className="w-20 h-1 bg-border/40 mx-auto mb-6" />
             <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle')}</p>
           </motion.div>
@@ -275,19 +271,19 @@ export default function About() {
             {[
               {
                 title: "Sustainability",
-                icon: <Leaf className="w-16 h-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]" />,
+                icon: <Leaf className="w-16 h-16 text-emerald-400" />,
                 text: t('about.sustainabilityText'),
                 color: "emerald"
               },
               {
                 title: "Community",
-                icon: <Users className="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]" />,
+                icon: <Users className="w-16 h-16 text-blue-400" />,
                 text: t('about.communityText'),
                 color: "blue"
               },
               {
                 title: "Innovation",
-                icon: <Lightbulb className="w-16 h-16 text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />,
+                icon: <Lightbulb className="w-16 h-16 text-amber-400" />,
                 text: t('about.innovationText'),
                 color: "amber"
               }
@@ -317,22 +313,16 @@ export default function About() {
                 </div>
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
-                <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20 drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]" />
-                <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic drop-shadow-md">{t('about.founder.subtitle')}</h3>
+                <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20" />
+                <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic">{t('about.founder.subtitle')}</h3>
                 <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
-                  <p className="drop-shadow-sm">
-                    "{t('about.founder.quote1')}"
-                  </p>
-                  <p className="text-lg font-bold text-slate-400 not-italic">
-                    {t('about.founder.quote2')}
-                  </p>
+                  <p>"{t('about.founder.quote1')}"</p>
+                  <p className="text-lg font-bold text-slate-400 not-italic">{t('about.founder.quote2')}</p>
                 </div>
               </div>
             </div>
           </GlassCard>
         </motion.section>
-
-        {/* Removed CommunityMorpher per user request */}
 
         {/* Call to Action */}
         <motion.section variants={fadeInUp} className="text-center">
@@ -341,7 +331,7 @@ export default function About() {
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
             </div>
-            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] relative z-10">
+            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter relative z-10">
               {t('about.footer.title')}
             </h2>
             <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">

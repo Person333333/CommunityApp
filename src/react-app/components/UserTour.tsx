@@ -225,7 +225,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
             bottom: step.position === 'bottom' ? '80px' : 'auto',
           }}
         >
-          <GlassCard variant="strong" className="p-6 glass-layer border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+          <GlassCard variant="strong" className="p-6 bg-card border border-border shadow-xl">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]">
@@ -244,24 +244,24 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                   {step.id === 'complete' && <Compass className="w-5 h-5 text-white" />}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-white uppercase tracking-widest drop-shadow-sm">
+                  <h3 className="text-lg font-bold text-foreground uppercase tracking-widest drop-shadow-sm">
                     {t(step.titleKey)}
                   </h3>
-                  <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest mt-1">
+                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">
                     {t('tour.step', { current: currentStep + 1, total: tourSteps.length })}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-slate-300 mb-8 leading-relaxed font-medium text-sm">
+            <p className="text-muted-foreground mb-8 leading-relaxed font-medium text-sm">
               {t(step.contentKey)}
             </p>
 
@@ -269,7 +269,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
               {tourSteps.map((_, index) => (
                 <div
                   key={index}
-                  className={`flex-1 h-1.5 rounded-full transition-all duration-300 ${index <= currentStep ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-[0_0_10px_rgba(79,70,229,0.5)]' : 'bg-white/10'}`}
+                  className={`flex-1 h-1.5 rounded-full transition-all duration-300 ${index <= currentStep ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-[0_0_10px_rgba(79,70,229,0.5)]' : 'bg-primary/10'}`}
                 />
               ))}
             </div>
@@ -277,7 +277,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
             <div className="flex items-center justify-between">
               <button
                 onClick={handleSkip}
-                className="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+                className="text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('tour.skip')}
               </button>
@@ -286,7 +286,7 @@ export default function UserTour({ isOpen, onClose, onComplete }: UserTourProps)
                 {!isFirstStep && (
                   <button
                     onClick={handlePrevious}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all rounded-lg text-sm font-bold uppercase tracking-wide"
+                    className="flex items-center gap-2 px-4 py-2 bg-muted/50 border border-border text-foreground hover:bg-muted transition-all rounded-lg text-sm font-bold uppercase tracking-wide"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     {t('tour.previous')}
