@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router';
 import { Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -17,35 +17,51 @@ const fadeInUp = {
 };
 
 function StickyAboutStory() {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLElement>(null);
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
-  // Animation Timelines
-  const scale = useTransform(scrollYProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
-  const rotate = useTransform(scrollYProgress, [0, 0.45], [0, 720]);
-  const needleRotate = useTransform(scrollYProgress, [0, 0.45], [0, 720 + 90]);
-  
-  const ringOpacity = useTransform(scrollYProgress, [0.3, 0.45], [1, 0]);
-  const lineOpacity = useTransform(scrollYProgress, [0.45, 0.55], [0, 1]);
-  const lineWidth = useTransform(scrollYProgress, [0.5, 0.6], ["10%", "100%"]);
+  // Manual window scroll tracking — the only reliable way to drive
+  // scroll-linked animations when the animated child is position:sticky
+  const { scrollY } = useScroll();
+  const motionProgress = useMotionValue(0);
 
-  // Vision & Mission Timings (0.55 - 0.75)
-  const visionOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
-  const visionY = useTransform(scrollYProgress, [0.55, 0.65], [40, 0]);
-  const missionOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
-  const missionY = useTransform(scrollYProgress, [0.65, 0.75], [40, 0]);
-  
-  // Fade out Vision/Mission container before Methodology
-  const storyContainerOpacity = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
+  useEffect(() => {
+    return scrollY.on("change", (v) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const start = el.offsetTop;
+      const end = start + el.offsetHeight - window.innerHeight;
+      const p = Math.min(Math.max((v - start) / (end - start), 0), 1);
+      motionProgress.set(p);
+    });
+  }, [scrollY, motionProgress]);
 
-  // Methodology Timings (0.8 - 0.95)
-  const methodologyOpacity = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
-  const methodologyY = useTransform(scrollYProgress, [0.85, 0.95], [60, 0]);
+  // Animation Timelines — all driven by motionProgress
+  const scale       = useTransform(motionProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
+  const rotate      = useTransform(motionProgress, [0, 0.45], [0, 720]);
+  const needleRotate = useTransform(motionProgress, [0, 0.45], [0, 720 + 90]);
+  const compassOpacity = useTransform(motionProgress, [0, 0.08], [0, 1]);
+
+  const ringOpacity = useTransform(motionProgress, [0.3, 0.45], [1, 0]);
+  const lineOpacity = useTransform(motionProgress, [0.45, 0.55], [0, 1]);
+  const lineWidth   = useTransform(motionProgress, [0.5, 0.6], ["0%", "100%"]);
+
+  // Vision & Mission (0.55 – 0.75)
+  const visionOpacity = useTransform(motionProgress, [0.55, 0.65], [0, 1]);
+  const visionY       = useTransform(motionProgress, [0.55, 0.65], [40, 0]);
+  const missionOpacity = useTransform(motionProgress, [0.65, 0.75], [0, 1]);
+  const missionY       = useTransform(motionProgress, [0.65, 0.75], [40, 0]);
+
+  // Fade out story before methodology
+  const storyContainerOpacity = useTransform(motionProgress, [0.75, 0.8], [1, 0]);
+
+  // Methodology (0.82 – 0.95)
+  const methodologyOpacity = useTransform(motionProgress, [0.82, 0.95], [0, 1]);
+  const methodologyY       = useTransform(motionProgress, [0.82, 0.95], [60, 0]);
+
+  // Scroll indicator (fade out at very end)
+  const indicatorOpacity = useTransform(motionProgress, [0.92, 1], [1, 0]);
 
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-background">
@@ -56,7 +72,7 @@ function StickyAboutStory() {
           style={{ 
             scale: shouldReduceMotion ? 1 : scale, 
             rotate: shouldReduceMotion ? 0 : rotate,
-            opacity: useTransform(scrollYProgress, [0, 0.1], [0, 1])
+            opacity: shouldReduceMotion ? 1 : compassOpacity
           }}
           className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center z-10"
         >
@@ -115,7 +131,7 @@ function StickyAboutStory() {
               className="w-full text-center pointer-events-auto"
             >
                <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/40">{t('about.mission')}</h2>
-               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-emerald/30">
+               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground">
                  {t('about.missionText')}
                </p>
             </motion.div>
@@ -150,13 +166,13 @@ function StickyAboutStory() {
                 }
               ].map((item, idx) => (
                 <div key={idx} className="h-full">
-                  <GlassCard variant="strong" className={`p-8 lg:p-10 h-full backdrop-blur-md bg-card/60 border-border group transition-all rounded-[2rem] shadow-sm \${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.1)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] hover:border-indigo-400/30'}`}>
+                  <GlassCard variant="strong" className={`p-8 lg:p-10 h-full backdrop-blur-md bg-card/60 border-border group transition-all rounded-[2rem] shadow-sm ${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.1)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] hover:border-indigo-400/30'}`}>
                     <div className="flex flex-col sm:flex-row items-start gap-6">
-                      <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/80 border border-border flex items-center justify-center text-xl font-black shadow-sm \${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
+                      <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/80 border border-border flex items-center justify-center text-xl font-black shadow-sm ${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
                         {item.step}
                       </div>
                       <div>
-                        <h3 className={`text-xl lg:text-2xl font-black mb-4 tracking-tight \${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
+                        <h3 className={`text-xl lg:text-2xl font-black mb-4 tracking-tight ${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
                           {item.title}
                         </h3>
                         <div className="space-y-4 text-muted-foreground font-bold leading-relaxed">
@@ -173,9 +189,9 @@ function StickyAboutStory() {
 
         </div>
 
-        {/* Scroll Indicator Tag */}
+        {/* Scroll Indicator */}
         <motion.div
-           style={{ opacity: useTransform(scrollYProgress, [0.95, 1], [1, 0]) }}
+           style={{ opacity: indicatorOpacity }}
            className="absolute bottom-10 text-center px-4"
         >
            <p className="text-[10px] font-black uppercase tracking-[0.8em] text-primary/30 animate-pulse">
