@@ -1,8 +1,7 @@
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles, ArrowRight } from 'lucide-react';
-import { Button } from '@/react-app/components/ui/button';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
+import { Link } from 'react-router';
+import { Heart, Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
@@ -17,9 +16,65 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: "easeOut" }
 };
 
+function StickyCompassSection() {
+  const containerRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 2, 4]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const lineOpacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
+  
+  // Needle specific rotation to end horizontal
+  const needleRotate = useTransform(scrollYProgress, [0, 1], [0, 720 + 90]);
+
+  return (
+    <section ref={containerRef} className="relative h-[200vh] bg-background">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        <motion.div 
+          style={{ scale: shouldReduceMotion ? 1 : scale, rotate: shouldReduceMotion ? 0 : rotate, opacity }}
+          className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center"
+        >
+          {/* Outer Ring */}
+          <div className="absolute inset-0 border-4 border-primary/20 rounded-full" />
+          <div className="absolute inset-2 border border-primary/10 rounded-full" />
+          
+          {/* Inner Compass Needle Container */}
+          <motion.div 
+            style={{ rotate: shouldReduceMotion ? 90 : needleRotate }}
+            className="w-full h-full relative"
+          >
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1/2 bg-gradient-to-t from-primary to-primary-green rounded-t-full" />
+             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1/2 bg-gradient-to-b from-primary/40 to-muted rounded-b-full" />
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full z-10" />
+          </motion.div>
+
+          <Compass className="absolute inset-0 m-auto w-12 h-12 text-primary opacity-20" />
+        </motion.div>
+
+        {/* The Horizontal Line that forms at the end */}
+        <motion.div 
+          style={{ opacity: shouldReduceMotion ? 1 : lineOpacity }}
+          className="absolute w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent bottom-[20%]"
+        />
+        
+        <motion.div
+           style={{ opacity: lineOpacity }}
+           className="mt-12 text-center px-4"
+        >
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/40">Alignment Achieved</p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 export default function About() {
   const { t } = useTranslation();
-
   const { isLight } = useTheme();
 
   return (
@@ -36,24 +91,29 @@ export default function About() {
           <img 
             src={isLight ? aboutLight : aboutDark} 
             alt="Community Collaboration" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-30 grayscale-[20%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
         </div>
-        <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
+        <div className="relative z-10 container mx-auto px-4 md:px-6 text-center pt-32">
           <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
-              <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-              <span className="text-xs text-primary tracking-[0.2em] font-black uppercase">
+            <div className="inline-flex items-center gap-2 mb-6 group justify-center">
+               <div className="p-3 rounded-2xl bg-primary/10 border border-primary/20 backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform">
+                  <Compass className="w-8 h-8 text-primary" />
+               </div>
+            </div>
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/5 border border-primary/10 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
+              <Sparkles className="h-4 w-4 text-primary opacity-50" />
+              <span className="text-[10px] text-primary/60 tracking-[0.2em] font-black uppercase">
                 {t('about.hero.badge')}
               </span>
             </div>
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
               Community<br />
               <span className="text-primary-green drop-shadow-sm">Compass</span>
             </h1>
             <div className="max-w-3xl mx-auto">
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mx-auto font-bold italic leading-relaxed mb-12">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground/80 mx-auto font-bold italic leading-relaxed mb-12">
                 {t('about.hero.subtitle')}
               </p>
               <div className="flex justify-center">
@@ -77,6 +137,8 @@ export default function About() {
           </motion.div>
         </div>
       </section>
+
+      <StickyCompassSection />
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
 
@@ -157,13 +219,13 @@ export default function About() {
                 transition={{ duration: 0.8, delay: idx * 0.1 }}
                 className="h-full"
               >
-                <GlassCard variant="strong" className={`p-10 h-full backdrop-blur-md bg-card border-border shadow-[0_0_30px_rgba(255,255,255,0.03)] group transition-all rounded-chromic-card ${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.15)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.15)] hover:border-indigo-400/30'}`}>
+                <GlassCard variant="strong" className={`p-10 h-full backdrop-blur-md bg-card border-border shadow-[0_0_30px_rgba(255,255,255,0.03)] group transition-all rounded-chromic-card \${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.15)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.15)] hover:border-indigo-400/30'}`}>
                   <div className="flex items-start gap-6">
-                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/50 backdrop-blur border border-border text-foreground flex items-center justify-center text-xl font-black shadow-lg ${item.color === 'blue' ? 'shadow-blue-500/10 text-blue-600 dark:text-blue-300' : 'shadow-indigo-500/10 text-indigo-600 dark:text-indigo-300'}`}>
+                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/50 backdrop-blur border border-border text-foreground flex items-center justify-center text-xl font-black shadow-lg \${item.color === 'blue' ? 'shadow-blue-500/10 text-blue-600 dark:text-blue-300' : 'shadow-indigo-500/10 text-indigo-600 dark:text-indigo-300'}`}>
                       {item.step}
                     </div>
                     <div>
-                      <h3 className={`text-2xl font-black mb-4 tracking-tight ${item.color === 'blue' ? 'text-blue-300' : 'text-indigo-300'}`}>
+                      <h3 className={`text-2xl font-black mb-4 tracking-tight \${item.color === 'blue' ? 'text-blue-300' : 'text-indigo-300'}`}>
                         {item.title}
                       </h3>
                       <div className="space-y-4 text-slate-300 font-bold leading-relaxed">
@@ -252,8 +314,7 @@ export default function About() {
           </GlassCard>
         </motion.section>
 
-        {/* Community Morpher Section */}
-        <CommunityMorpher />
+        {/* Removed CommunityMorpher per user request */}
 
         {/* Call to Action */}
         <motion.section variants={fadeInUp} className="text-center">
@@ -334,153 +395,5 @@ function ValueCard({ value }: { value: any }) {
         }
       />
     </motion.div>
-  );
-}
-
-function CommunityMorpher() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const scenes = [
-    {
-      title: t('about.morpher.title1'),
-      desc: t('about.morpher.desc1'),
-      color: "var(--matte-blue)",
-      icon: <Compass className="w-16 h-16 text-primary" />,
-      image: "https://images.unsplash.com/photo-1577563906417-45a11b3f9f75?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      title: t('about.morpher.title2'),
-      desc: t('about.morpher.desc2'),
-      color: "var(--matte-green)",
-      icon: <Users className="w-16 h-16 text-primary-green" />,
-      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      title: t('about.morpher.title3'),
-      desc: t('about.morpher.desc3'),
-      color: "var(--accent-peach)",
-      icon: <Heart className="w-16 h-16 text-red-400" />,
-      image: "https://images.unsplash.com/photo-1469571483332-960416999908?q=80&w=800&auto=format&fit=crop"
-    }
-  ];
-
-  // Map progress to scenes more evenly across a longer scroll
-  const activeIndex = useTransform(scrollYProgress, [0.1, 0.4, 0.7, 0.9], [0, 0, 1, 2]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
-  // Transform for Circle-to-Arc Morph - smoother transitions
-  const borderRadius = useTransform(scrollYProgress, [0, 0.5, 1], ["50%", "25%", "10%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 0.95]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
-  const arcHeight = useTransform(scrollYProgress, [0, 0.4, 0.8], ["100%", "85%", "65%"]);
-  
-  useEffect(() => {
-    return activeIndex.onChange(v => {
-      const idx = Math.min(Math.max(Math.floor(v), 0), 2);
-      if (idx !== currentIndex) setCurrentIndex(idx);
-    });
-  }, [activeIndex, currentIndex]);
-
-  return (
-    <section ref={containerRef} className="relative h-[400vh] w-full bg-background mt-40" data-tour="community-morpher">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Dynamic Canvas Background */}
-        <motion.div 
-          className="absolute inset-0 transition-colors duration-1000 opacity-20"
-          style={{ backgroundColor: scenes[currentIndex].color }}
-        />
-        
-        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-          <div className="order-2 lg:order-1 space-y-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6, ease: "circOut" }}
-                className="space-y-6"
-              >
-                <div className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-[0.4em] text-[10px]">
-                  <Sparkles className="w-3 h-3" /> {t('about.impact.badge', 'Our Impact')}
-                </div>
-                <h2 className="text-5xl sm:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85]">
-                  {scenes[currentIndex].title.split(' ')[0]}<br/>
-                  <span className="text-primary-green">{scenes[currentIndex].title.split(' ').slice(1).join(' ')}</span>
-                </h2>
-                <p className="text-xl text-muted-foreground font-bold italic max-w-lg leading-relaxed">
-                  {scenes[currentIndex].desc}
-                </p>
-                <div className="pt-4">
-                    <Button 
-                      onClick={() => navigate('/submit')}
-                      variant="outline" 
-                      className="rounded-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10 font-black uppercase tracking-widest text-[10px] sm:text-xs h-10 sm:h-12 px-6 sm:px-8"
-                    >
-                      {t('about.morpher.getInvolved')} <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          
-          <div className="order-1 lg:order-2 flex justify-center">
-            <div className="relative w-[300px] h-[300px] sm:w-[500px] sm:h-[500px]">
-              {/* The "Compass-to-Arc" Shape */}
-              <motion.div
-                style={{ borderRadius, scale, height: arcHeight }}
-                className="relative w-full h-full bg-card border-[12px] border-primary/10 shadow-2xl overflow-hidden group"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentIndex}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.8 }}
-                    className="absolute inset-0"
-                  >
-                    <img src={scenes[currentIndex].image} className="w-full h-full object-cover grayscale mix-blend-multiply opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-                  </motion.div>
-                </AnimatePresence>
-                
-                {/* Floating Icon in Morph Central */}
-                <motion.div 
-                  style={{ rotate }}
-                  className="absolute inset-0 flex items-center justify-center p-20 pointer-events-none"
-                >
-                  <div className="w-full h-full rounded-full border border-primary/10 flex items-center justify-center backdrop-blur-sm bg-white/5">
-                    <motion.div
-                      key={currentIndex}
-                      initial={{ scale: 0.5, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", damping: 12 }}
-                    >
-                      {scenes[currentIndex].icon}
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </motion.div>
-              
-
-              {/* Compass Needle Element */}
-              <motion.div 
-                style={{ rotate }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] opacity-20 pointer-events-none"
-              >
-                <div className="w-1 h-full bg-primary mx-auto rounded-full shadow-[0_0_20px_rgba(74,144,226,0.5)]" />
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }

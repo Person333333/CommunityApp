@@ -5,41 +5,41 @@
 
 @layer base {
   :root {
-    /* Matte Palette - Soft & Professional */
-    --background: 210 20% 98%;      /* #F8F9FA translated to HSL approx */
+    /* Matte Palette - Soft, Muted & Professional */
+    --background: 210 20% 96%;      /* Muted Matte White (#F1F3F5) */
     --foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
+    --card: 210 20% 98%;            /* Very Soft Matte Card Background */
     --card-foreground: 222.2 47.4% 11.2%;
-    --popover: 0 0% 100%;
+    --popover: 210 20% 98%;
     --popover-foreground: 222.2 47.4% 11.2%;
     
     /* Matte Blue/Green Primary Muted */
-    --primary: 212.7 72.4% 59%;     /* #4A90E2 - Muted Blue */
-    --primary-foreground: 210 40% 98%;
+    --primary: 212.7 60% 50%;       /* Deeper Matte Blue */
+    --primary-foreground: 0 0% 100%;
     
-    --secondary: 210 40% 96.1%;
+    --secondary: 210 40% 94.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     
     /* Matte Background Accents */
-    --matte-blue: 210 33.3% 95.1%;   /* #EEF2F6 */
-    --matte-green: 130 38.5% 94.1%;  /* #E8F5E9 */
-    --primary-green: 151.7 41.8% 52.2%; /* #52B788 */
-    --accent-peach: 24.1 66.4% 70%;  /* #E8A87C */
+    --matte-blue: 210 33.3% 92.1%;   /* #E9EEF2 - More Matte */
+    --matte-green: 140 38.5% 91.1%;  /* #E1F0E3 - More Matte */
+    --primary-green: 151.7 35% 45%;  /* Muted Emerald */
+    --accent-peach: 24.1 50% 65%;    /* Muted Peach */
     
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --muted: 210 40% 92.1%;
+    --muted-foreground: 215.4 16.3% 40.9%;
+    --accent: 210 40% 94.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 70% 55%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 212.7 72.4% 59%;
-    --radius: 0.75rem;
+    --border: 214.3 31.8% 88.4%;
+    --input: 214.3 31.8% 88.4%;
+    --ring: 212.7 60% 50%;
+    --radius: 1rem;
     
-    --glass-background: 255 255% 255% / 0.7;
-    --glass-border: 0 0% 0% / 0.05;
+    --glass-background: 255 255% 255% / 0.6;
+    --glass-border: 0 0% 0% / 0.1;
   }
 
   .dark {
@@ -175,4 +175,45 @@
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
+}
+/* Accessibility Overlays */
+.large-text {
+  font-size: 1.25rem !important;
+}
+.large-text h1 { font-size: 2.5rem !important; }
+.large-text h2 { font-size: 2.2rem !important; }
+.large-text h3 { font-size: 1.8rem !important; }
+.large-text p, .large-text span, .large-text div, .large-text button, .large-text input {
+  font-size: 1.15em !important;
+  line-height: 1.6 !important;
+}
+
+.high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --primary: 240 100% 20%;
+  --primary-foreground: 0 0% 100%;
+  --border: 0 0% 0%;
+  --input: 0 0% 0%;
+  --ring: 0 0% 0%;
+}
+.high-contrast * {
+  border-color: #000 !important;
+  color: #000 !important;
+  outline-color: #000 !important;
+  box-shadow: none !important;
+}
+.high-contrast .bg-primary, .high-contrast .bg-blue-600, .high-contrast .bg-emerald-600 {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.high-contrast .text-white, .high-contrast .text-primary-foreground {
+  color: #fff !important;
+}
+.high-contrast .bg-card, .high-contrast .glass-layer {
+  background: #fff !important;
+  border: 3px solid #000 !important;
+  backdrop-filter: none !important;
 }
