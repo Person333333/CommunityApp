@@ -337,7 +337,7 @@ export default function Discover() {
             </div>
             <div className="text-left relative z-10">
               <div className="text-[9px] uppercase tracking-[0.3em] font-black text-primary mb-0.5">Not sure where to start?</div>
-              <div className="text-lg sm:text-2xl tracking-tighter uppercase leading-tight font-black">Need help finding a resource?</div>
+              <div className="text-base sm:text-xl tracking-tighter uppercase leading-tight font-black">Need help finding a resource?</div>
             </div>
             <ChevronRight className="w-6 h-6 text-primary group-hover:translate-x-1 transition-transform ml-auto hidden sm:block relative z-10" />
           </Button>

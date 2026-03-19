@@ -174,9 +174,30 @@ export default function Home() {
           <img 
             src={isLight ? homeLight : homeDark} 
             alt="Community Compass" 
-            className="w-full h-full object-cover opacity-60 scale-105"
+            className="w-full h-full object-cover opacity-40 scale-110 blur-[2px]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/20 to-background" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]" />
+        </div>
+
+        {/* Floating Abstract Shapes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"
+          />
+          <motion.div
+            animate={{ 
+              y: [0, 30, 0],
+              rotate: [0, -5, 0]
+            }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-1/4 -right-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-[120px]"
+          />
         </div>
 
         <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-center justify-center text-center">
@@ -192,11 +213,14 @@ export default function Home() {
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground uppercase tracking-tighter leading-none mb-6 drop-shadow-sm">
-                {t('home.hero.title')}
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] mb-8">
+                <span className="block mb-2">Connecting neighbors with</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-emerald-400 drop-shadow-sm">
+                  local support, one hand at a time.
+                </span>
               </h1>
               
-              <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-2xl leading-relaxed mx-auto">
+              <p className="text-xl sm:text-2xl text-muted-foreground font-black italic max-w-2xl leading-relaxed mx-auto border-l-4 border-primary/30 pl-6 bg-primary/5 py-4 rounded-r-2xl backdrop-blur-sm">
                 {t('home.hero.subtitle')}
               </p>
               
@@ -204,13 +228,16 @@ export default function Home() {
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
-                  className="bg-primary hover:bg-primary/90 text-white font-black px-12 py-8 rounded-full shadow-2xl shadow-primary/30 flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
+                  className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-black px-12 py-8 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.4)] flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                   {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
-                <div className="flex items-center gap-4 px-8 py-4 bg-card/30 backdrop-blur-md rounded-full border border-border/50">
-                  <div className="text-xs font-black text-foreground/70 uppercase tracking-widest">
+                <div className="flex items-center gap-4 px-8 py-4 bg-background/50 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="text-xs font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-primary" />
                     {t('home.hero.joinedBy', { countLabel: '5,000+' })}
                   </div>
                 </div>

@@ -83,7 +83,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                   <Compass className="w-5 h-5 text-blue-400" />
                   <span className="text-xs font-bold text-blue-300 uppercase tracking-widest">Step {step + 1} of 3</span>
                 </div>
-                <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+                <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -93,16 +93,16 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                 <AnimatePresence mode="wait">
                   {step === 0 && (
                     <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                      <h2 className="text-xl font-bold text-white mb-1 drop-shadow-sm">What are you looking for?</h2>
-                      <p className="text-sm text-slate-300 font-medium mb-5">Select one or more categories</p>
+                      <h2 className="text-xl font-bold text-foreground mb-1 drop-shadow-sm">What are you looking for?</h2>
+                      <p className="text-sm text-muted-foreground font-medium mb-5">Select one or more categories</p>
                       <div className="grid grid-cols-2 gap-3">
                         {categories.map(cat => (
                           <button
                             key={cat}
                             onClick={() => toggleCategory(cat)}
                             className={`flex items-center gap-3 p-3 rounded-xl text-left text-sm font-semibold transition-all ${selectedCategories.includes(cat)
-                                ? 'bg-blue-500/20 text-blue-300 border-2 border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
-                                : 'bg-white/5 text-slate-300 border-2 border-transparent hover:border-white/20'
+                                ? 'bg-primary/20 text-primary border-2 border-primary/50 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
+                                : 'bg-card text-muted-foreground border-2 border-transparent hover:border-primary/20'
                               }`}
                           >
                             <span className={`p-1.5 rounded-lg ${selectedCategories.includes(cat) ? 'bg-blue-500/30 shadow-inner' : 'bg-white/10'}`}>
@@ -113,7 +113,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                         ))}
                       </div>
                       <div className="flex items-center justify-between mt-5">
-                        <button onClick={goToResults} className="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-blue-400 transition-colors">Skip → View all</button>
+                        <button onClick={goToResults} className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Skip → View all</button>
                         <button
                           onClick={() => setStep(1)}
                           disabled={selectedCategories.length === 0}
@@ -127,8 +127,8 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
 
                   {step === 1 && (
                     <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                      <h2 className="text-xl font-bold text-white drop-shadow-sm mb-1">How urgent is your need?</h2>
-                      <p className="text-sm text-slate-300 font-medium mb-5">This helps us prioritize the right resources</p>
+                      <h2 className="text-xl font-bold text-foreground drop-shadow-sm mb-1">How urgent is your need?</h2>
+                      <p className="text-sm text-muted-foreground font-medium mb-5">This helps us prioritize the right resources</p>
                       <div className="space-y-3">
                         {urgencyOptions.map(opt => (
                           <button
@@ -139,9 +139,9 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                                 : 'bg-white/5 border-2 border-transparent text-slate-300 hover:border-white/20'
                               }`}
                           >
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${urgency === opt.value ? `border-${opt.color}-400 bg-${opt.color}-500/30` : 'border-slate-500'
-                              }`}>
-                              {urgency === opt.value && <CheckCircle2 className="w-4 h-4 text-white" />}
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${urgency === opt.value ? `border-${opt.color}-500 bg-${opt.color}-500/30` : 'border-muted-foreground/30'
+                                }`}>
+                              {urgency === opt.value && <CheckCircle2 className="w-4 h-4 text-primary" />}
                             </div>
                             <div>
                               <div className="font-semibold text-sm">{opt.label}</div>
@@ -151,7 +151,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                         ))}
                       </div>
                       <div className="flex items-center justify-between mt-5">
-                        <button onClick={() => setStep(0)} className="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors">← Back</button>
+                        <button onClick={() => setStep(0)} className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors">← Back</button>
                         <button
                           onClick={() => setStep(2)}
                           disabled={!urgency}
@@ -167,10 +167,10 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                     <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <div className="text-center mb-5">
                         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }} className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-emerald-400/30">
-                          <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+                          <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         </motion.div>
-                        <h2 className="text-xl font-bold text-white drop-shadow-sm mb-1">We found resources for you!</h2>
-                        <p className="text-sm text-slate-300 font-medium">Based on your selections, here are your personalized recommendations</p>
+                        <h2 className="text-xl font-bold text-foreground drop-shadow-sm mb-1">We found resources for you!</h2>
+                        <p className="text-sm text-muted-foreground font-medium">Based on your selections, here are your personalized recommendations</p>
                       </div>
                       <div className="space-y-3 mb-5">
                         {selectedCategories.map(cat => (

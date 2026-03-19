@@ -100,7 +100,7 @@ export default function SignInPage() {
           <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.welcomeBack')}
           </h1>
-          <p className="text-lg text-muted-foreground font-bold">
+          <p className="text-lg text-foreground/80 font-bold">
             {t('auth.signInSubtitle')}
           </p>
         </motion.div>
@@ -168,7 +168,7 @@ export default function SignInPage() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
+                  <label htmlFor="email" className="block text-sm font-black text-foreground uppercase tracking-widest">
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
@@ -187,7 +187,7 @@ export default function SignInPage() {
 
                 {/* Password Input */}
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">
+                  <label htmlFor="password" className="block text-sm font-black text-foreground uppercase tracking-widest">
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">

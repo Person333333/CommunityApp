@@ -185,7 +185,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 glass-layer"
+              className="md:hidden p-2 rounded-lg text-foreground hover:bg-foreground/10 glass-layer"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -221,7 +221,7 @@ export default function Navbar() {
                       <Link
                         to="/sign-in"
                         onClick={() => setIsOpen(false)}
-                        className="block w-full glass-layer px-4 py-3 rounded-lg text-white border border-white/20 hover:bg-white/10 transition-all text-left font-bold"
+                        className="block w-full glass-layer px-4 py-3 rounded-lg text-foreground border border-border hover:bg-foreground/5 transition-all text-left font-bold"
                       >
                         Sign In
                       </Link>
@@ -237,10 +237,10 @@ export default function Navbar() {
                       <div className="px-4 py-3 glass-layer border border-white/10 rounded-none shadow-sm">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-white/20 text-white font-medium flex items-center justify-center border border-white/10">
+                            <div className="w-8 h-8 rounded-full bg-foreground/20 text-foreground font-medium flex items-center justify-center border border-border">
                               {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                             </div>
-                            <div className="text-white font-medium uppercase tracking-wider text-sm"><Translated text={user?.firstName || 'Account'} /></div>
+                            <div className="text-foreground font-medium uppercase tracking-wider text-sm"><Translated text={user?.firstName || 'Account'} /></div>
                           </div>
                           <button onClick={() => signOut()} className="text-emerald-400 hover:text-emerald-300 text-[10px] font-black uppercase tracking-widest">{t('account.signOut')}</button>
                         </div>
@@ -293,8 +293,8 @@ function MobileNavLink({ to, children, onClick }: { to: string; children: React.
       to={to}
       onClick={onClick}
       className={`block px-4 py-3 rounded-none text-base font-bold uppercase tracking-wider transition-colors duration-200 ${isActive
-        ? 'bg-white/10 text-white border-l-4 border-emerald-500'
-        : 'text-white/70 hover:bg-white/5 hover:text-white'
+        ? 'bg-foreground/10 text-foreground border-l-4 border-emerald-500'
+        : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
         }`}
     >
       {children}
