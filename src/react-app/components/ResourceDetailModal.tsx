@@ -167,7 +167,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
-              <Card className="p-0 overflow-hidden bg-black/60 backdrop-blur-2xl border border-white/10 rounded-none relative">
+              <Card className="p-0 overflow-hidden bg-card backdrop-blur-2xl border border-border rounded-2xl relative">
                 {/* Header */}
                 <div className="relative">
                   {resource.image_url && (
@@ -183,10 +183,10 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2.5 rounded-none hover:bg-emerald-500 hover:text-black transition-all z-50 shadow-xl border border-white/10 group"
+                    className="absolute top-4 right-4 bg-card/80 backdrop-blur-md p-2.5 rounded-xl hover:bg-emerald-500 hover:text-black transition-all z-50 shadow-xl border border-border group"
                     aria-label="Close modal"
                   >
-                    <X className="w-6 h-6 text-white group-hover:rotate-90 transition-transform" />
+                    <X className="w-6 h-6 text-foreground group-hover:rotate-90 transition-transform" />
                   </button>
 
                   <div className={`p-8 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
@@ -200,7 +200,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         </span>
                       )}
                     </div>
-                    <h2 className="text-4xl sm:text-6xl font-black text-white mb-2 uppercase tracking-tighter drop-shadow-2xl">
+                    <h2 className="text-4xl sm:text-6xl font-black text-foreground mb-2 uppercase tracking-tighter drop-shadow-2xl">
                       {resource.title}
                     </h2>
                   </div>
@@ -241,7 +241,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   </div>
 
                   {/* Star Rating */}
-                  <div className="bg-black/40 border border-white/10 rounded-none p-6 backdrop-blur-xl">
+                  <div className="bg-card border border-border rounded-xl p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Community Rating</p>
@@ -252,7 +252,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       {/* Show aggregate */}
                       {resource.rating != null && (
                         <div className="flex items-center gap-2">
-                           <span className="text-3xl font-black text-white leading-none">{resource.rating.toFixed(1)}</span>
+                           <span className="text-3xl font-black text-foreground leading-none">{resource.rating.toFixed(1)}</span>
                           <Star className="w-6 h-6 fill-emerald-500 text-emerald-500" />
                         </div>
                       )}
@@ -271,7 +271,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           onMouseLeave={() => setHoverRating(0)}
                           className="transition-all hover:scale-110 disabled:cursor-default"
                         >
-                          <Star className={`w-8 h-8 transition-colors ${s <= (hoverRating || userRating) ? 'fill-emerald-500 text-emerald-500' : 'text-slate-700 fill-slate-800'}`} />
+                          <Star className={`w-8 h-8 transition-colors ${s <= (hoverRating || userRating) ? 'fill-emerald-500 text-emerald-500' : 'text-muted-foreground/30 fill-muted/30'}`} />
                         </button>
                       ))}
                       {ratingSubmitted && <span className="ml-4 text-[10px] font-black text-emerald-400 uppercase tracking-widest self-center border border-emerald-500/20 px-2 py-1 bg-emerald-500/5">✓ Network Verified</span>}
@@ -281,7 +281,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex flex-col gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl overflow-hidden relative group/map">
+                      <div className="flex flex-col gap-4 bg-card border border-border p-6 rounded-xl overflow-hidden relative group/map">
                         <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover/map:opacity-100 transition-opacity" />
                         <div className="flex items-start gap-4 relative z-10">
                           <MapPin className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
@@ -305,13 +305,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       </div>
                     )}
                     {resource.phone && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                      <div className="flex items-start gap-4 bg-card border border-border p-6 rounded-xl">
                         <Phone className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.phone')}</p>
                           <a
                             href={`tel:${resource.phone}`}
-                            className="text-white font-black text-2xl hover:text-emerald-400 transition-colors uppercase tracking-tighter"
+                            className="text-foreground font-black text-2xl hover:text-emerald-500 transition-colors uppercase tracking-tighter"
                           >
                             {resource.phone}
                           </a>
@@ -320,13 +320,13 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.email && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
-                        <Mail className="w-6 h-6 text-slate-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <div className="flex items-start gap-4 bg-card border border-border p-6 rounded-xl">
+                        <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{t('resource.email')}</p>
+                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">{t('resource.email')}</p>
                           <a
                             href={`mailto:${resource.email}`}
-                            className="text-white font-black hover:text-emerald-400 transition-colors break-all text-sm uppercase tracking-tight"
+                            className="text-foreground font-black hover:text-emerald-500 transition-colors break-all text-sm uppercase tracking-tight"
                           >
                             {resource.email}
                           </a>
@@ -335,7 +335,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.website && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                      <div className="flex items-start gap-4 bg-card border border-border p-6 rounded-xl">
                         <Globe className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">{t('resource.website')}</p>
@@ -343,7 +343,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             href={resource.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white font-black hover:text-cyan-400 transition-colors break-all underline decoration-white/10 uppercase tracking-widest text-[10px]"
+                            className="text-foreground font-black hover:text-cyan-500 transition-colors break-all underline decoration-border uppercase tracking-widest text-[10px]"
                           >
                             {t('resource.visitWebsite')}
                           </a>
@@ -352,11 +352,11 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.hours && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                      <div className="flex items-start gap-4 bg-card border border-border p-6 rounded-xl">
                         <Clock className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.hours')}</p>
-                          <p className="text-white font-black uppercase tracking-tighter text-lg">{resource.hours}</p>
+                          <p className="text-foreground font-black uppercase tracking-tighter text-lg">{resource.hours}</p>
                         </div>
                       </div>
                     )}
@@ -371,11 +371,11 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {resource.audience && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                      <div className="flex items-start gap-4 bg-card border border-border p-6 rounded-xl">
                         <Users className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.audience')}</p>
-                          <p className="text-white font-black uppercase tracking-tighter">{resource.audience}</p>
+                          <p className="text-foreground font-black uppercase tracking-tighter">{resource.audience}</p>
                         </div>
                       </div>
                     )}
@@ -412,7 +412,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         {resource.tags.split(',').map((tag, i) => (
                           <span
                             key={i}
-                            className="text-[10px] px-3 py-1.5 bg-white/5 border border-white/10 rounded-none text-slate-400 font-black uppercase tracking-widest"
+                            className="text-[10px] px-3 py-1.5 bg-muted border border-border rounded-md text-muted-foreground font-black uppercase tracking-widest"
                           >
                             {tag.trim()}
                           </span>
@@ -422,7 +422,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   )}
 
                   {/* Actions & Report */}
-                  <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 pt-4 border-t border-white/10">
+                  <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 pt-4 border-t border-border">
                     <div className="flex flex-wrap gap-3">
                       {resource.latitude && resource.longitude && (
                         <Button 
@@ -447,7 +447,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                       {resource.phone && (
                         <a href={`tel:${resource.phone}`}>
-                          <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none transition-all">
+                          <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-black uppercase tracking-widest text-xs h-12 px-6 rounded-xl transition-all">
                             <Phone className="w-4 h-4 mr-2" />
                             {t('resource.callNow')}
                           </Button>
@@ -455,7 +455,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                       {resource.email && (
                         <a href={`mailto:${resource.email}`}>
-                          <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none transition-all">
+                          <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-black uppercase tracking-widest text-xs h-12 px-6 rounded-xl transition-all">
                             <Mail className="w-4 h-4 mr-2" />
                             {t('resource.sendEmail')}
                           </Button>
@@ -504,16 +504,16 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   {/* Utility Actions: Share / Print / QR / Read Aloud */}
                   <div className="flex flex-wrap gap-2 relative mt-8 w-full font-black uppercase tracking-widest">
-                    <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
+                    <button onClick={handleShare} className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-emerald-500 transition-colors bg-muted border border-border hover:bg-muted/80 px-4 py-2 rounded-lg group">
                       <Share2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Share
                     </button>
-                    <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] text-slate-500 hover:text-emerald-400 transition-colors bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-none backdrop-blur-xl group">
+                    <button onClick={handlePrint} className="flex items-center gap-1.5 text-[10px] text-muted-foreground hover:text-emerald-500 transition-colors bg-muted border border-border hover:bg-muted/80 px-4 py-2 rounded-lg group">
                       <Printer className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" /> Print
                     </button>
-                    <button onClick={() => setShowQR(!showQR)} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${showQR ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
+                    <button onClick={() => setShowQR(!showQR)} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-lg group ${showQR ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/50' : 'text-muted-foreground hover:text-foreground bg-muted border-border'}`}>
                       <QrCode className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> QR Protocol
                     </button>
-                    <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-none backdrop-blur-xl group ${isSpeaking ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/50' : 'text-slate-500 hover:text-white bg-white/5 border-white/10'}`}>
+                    <button onClick={handleReadAloud} className={`flex items-center gap-1.5 text-[10px] transition-colors border px-4 py-2 rounded-lg group ${isSpeaking ? 'text-cyan-500 bg-cyan-500/10 border-cyan-500/50' : 'text-muted-foreground hover:text-foreground bg-muted border-border'}`}>
                       {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5 group-hover:scale-125 transition-transform" />}
                       {isSpeaking ? 'Terminate' : 'Audio Feed'}
                     </button>
@@ -538,19 +538,19 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                     )}
 
                     {/* Was This Helpful? */}
-                    <div className="flex items-center justify-between p-6 bg-black/40 border border-white/10 rounded-none w-full mt-4 backdrop-blur-3xl">
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Resource effectiveness index?</span>
+                    <div className="flex items-center justify-between p-6 bg-card border border-border rounded-xl w-full mt-4">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Resource effectiveness index?</span>
                       <div className="flex gap-3">
                         <button
                           onClick={() => handleFeedback('up')}
-                          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'up' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-xl shadow-emerald-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
+                          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'up' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/50 shadow-xl shadow-emerald-500/10' : 'bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground'
                             }`}
                         >
                           <ThumbsUp className="w-3.5 h-3.5" /> Affirmative
                         </button>
                         <button
                           onClick={() => handleFeedback('down')}
-                          className={`flex items-center gap-2 px-4 py-2.5 rounded-none text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'down' ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 shadow-xl shadow-rose-500/10' : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10 hover:text-white'
+                          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all border ${feedback === 'down' ? 'bg-rose-500/10 text-rose-500 border-rose-500/50 shadow-xl shadow-rose-500/10' : 'bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground'
                             }`}
                         >
                           <ThumbsDown className="w-3.5 h-3.5" /> Negative

@@ -294,21 +294,21 @@ Page
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Website Action Button</label>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
+                      <label className="block text-sm font-black text-muted-foreground mb-3 uppercase tracking-widest">Website Action Button</label>
+                      <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-2">This will show as a button on your published resource</p>
                       <div className="flex gap-2">
                         <select
                           value={(formData as any).website_action_label || 'Visit Website'}
                           onChange={(e) => setFormData(prev => ({ ...prev, website_action_label: e.target.value }))}
-                          className="bg-white/5 border border-white/10 rounded-none px-3 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
+                          className="bg-muted/20 border border-border rounded-lg px-3 py-4 font-bold text-foreground outline-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-sm w-44 shrink-0"
                         >
-                          <option value="Visit Website" className="bg-black text-white">Visit Website</option>
-                          <option value="Register" className="bg-black text-white">Register</option>
-                          <option value="Learn More" className="bg-black text-white">Learn More</option>
-                          <option value="Donate" className="bg-black text-white">Donate</option>
-                          <option value="Volunteer" className="bg-black text-white">Volunteer</option>
-                          <option value="Apply Now" className="bg-black text-white">Apply Now</option>
-                          <option value="Get Help" className="bg-black text-white">Get Help</option>
+                          <option value="Visit Website" className="bg-card text-foreground">Visit Website</option>
+                          <option value="Register" className="bg-card text-foreground">Register</option>
+                          <option value="Learn More" className="bg-card text-foreground">Learn More</option>
+                          <option value="Donate" className="bg-card text-foreground">Donate</option>
+                          <option value="Volunteer" className="bg-card text-foreground">Volunteer</option>
+                          <option value="Apply Now" className="bg-card text-foreground">Apply Now</option>
+                          <option value="Get Help" className="bg-card text-foreground">Get Help</option>
                         </select>
                         <Input
                           type="url"
@@ -321,32 +321,32 @@ Page
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-black text-slate-300 mb-3 uppercase tracking-widest">Donation Link (Optional)</label>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Shows as a "Donate" button on your resource</p>
+                      <label className="block text-sm font-black text-muted-foreground mb-3 uppercase tracking-widest">Donation Link (Optional)</label>
+                      <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-2">Shows as a "Donate" button on your resource</p>
                       <input
                         type="url"
                         name="donation_url"
                         value={formData.donation_url}
                         onChange={handleChange}
                         placeholder="https://donate..."
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 font-bold text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        className="w-full bg-muted/20 border border-border rounded-xl px-4 py-4 font-bold text-foreground outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-muted-foreground/50"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-6 pt-6 border-t border-white/10">
+                  <div className="space-y-6 pt-6 border-t border-border">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
+                      <h4 className="font-black text-foreground uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
                         <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
                       </h4>
-                      <div className="text-[10px] font-black uppercase text-slate-400">Max 2 custom actions</div>
+                      <div className="text-[10px] font-black uppercase text-muted-foreground">Max 2 custom actions</div>
                     </div>
 
                     <div className="space-y-4">
                       {formData.action_urls.map((action, idx) => (
-                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 relative group">
+                        <div key={idx} className="flex flex-col sm:flex-row gap-4 p-4 bg-muted/40 rounded-2xl border border-border relative group">
                           <div className="flex-1">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Action Type</label>
+                            <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Action Type</label>
                             <select
                               value={action.label}
                               onChange={(e) => {
@@ -354,13 +354,13 @@ Page
                                 next[idx].label = e.target.value;
                                 setFormData(prev => ({ ...prev, action_urls: next }));
                               }}
-                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-2 text-sm font-bold text-foreground outline-none"
                             >
                               {["Register", "Learn More", "Visit Website", "Donate", "Volunteer"].map(l => <option key={l} value={l}>{l}</option>)}
                             </select>
                           </div>
                           <div className="flex-[2]">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Destination URL</label>
+                            <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Destination URL</label>
                             <input
                               type="url"
                               placeholder="https://..."
@@ -370,7 +370,7 @@ Page
                                 next[idx].url = e.target.value;
                                 setFormData(prev => ({ ...prev, action_urls: next }));
                               }}
-                              className="w-full bg-slate-900 border border-white/20 rounded-lg px-3 py-2 text-sm font-bold text-white outline-none"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-2 text-sm font-bold text-foreground outline-none placeholder:text-muted-foreground/50"
                             />
                           </div>
                           <button
@@ -406,7 +406,7 @@ Page
                     </div>
                   )}
 
-                  <div className="flex flex-col justify-center py-4 border-y border-white/10">
+                  <div className="flex flex-col justify-center py-4 border-y border-border">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <div className="relative">
                         <input
@@ -415,12 +415,12 @@ Page
                           checked={formData.auto_assign_tags}
                           onChange={(e) => setFormData(prev => ({ ...prev, auto_assign_tags: e.target.checked }))}
                         />
-                        <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-white/10 border border-white/20'}`} />
-                        <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
+                        <div className={`w-12 h-6 rounded-full transition-colors ${formData.auto_assign_tags ? 'bg-blue-600' : 'bg-muted border border-border'}`} />
+                        <div className={`absolute top-1 left-1 w-4 h-4 bg-card rounded-full border border-border shadow-sm transition-transform ${formData.auto_assign_tags ? 'translate-x-6' : ''}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-black text-white uppercase tracking-tight">Auto-assign Smart Tags</p>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase">AI will suggest tags based on your description</p>
+                        <p className="text-sm font-black text-foreground uppercase tracking-tight">Auto-assign Smart Tags</p>
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">AI will suggest tags based on your description</p>
                       </div>
                     </label>
                   </div>
@@ -482,7 +482,7 @@ Page
               className="space-y-6"
             >
               <Card className="bg-card/70 backdrop-blur-xl border border-border rounded-none overflow-hidden p-0 shadow-2xl">
-                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-white border-b border-white/10">
+                <div className="bg-emerald-500/10 p-6 flex items-center gap-4 text-foreground border-b border-border">
                   <UserIcon className="w-6 h-6 text-emerald-400" />
                   <p className="font-black uppercase tracking-widest text-sm">Step 2: Your & Location Details</p>
                 </div>
@@ -497,9 +497,9 @@ Page
                     <FormField label="Target Audience" name="audience" value={formData.audience} onChange={handleChange} placeholder="e.g. Seniors, Families, Veterans..." />
                   </div>
 
-                  <div className="space-y-6 pt-6 border-t border-white/10">
+                  <div className="space-y-6 pt-6 border-t border-border">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-black text-white uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
+                      <h4 className="font-black text-foreground uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
                         <MapPin className="w-4 h-4 text-blue-400" /> Physical Address (Required)
                       </h4>
                       <Button onClick={handleGetLocation} variant="outline" className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/5 border-emerald-500/20 px-3 py-1 rounded-none hover:bg-emerald-500/10 hover:text-emerald-300 transition-all h-auto flex items-center gap-2">
@@ -557,35 +557,42 @@ Page
               className="space-y-8"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Preview Card */}
+                {/* Preview Card - looks like a real resource card */}
                 <div className="space-y-4">
                   <p className="font-black uppercase tracking-widest text-[10px] text-emerald-500 ml-2">How it will look</p>
-                  <Card className="p-0 overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl group/preview">
-                    <div className="h-48 bg-slate-950 relative">
+                  <Card className="p-0 overflow-hidden bg-card border border-border rounded-2xl shadow-lg group/preview cursor-pointer hover:shadow-xl hover:border-primary/40 transition-all">
+                    <div className="h-48 bg-muted relative overflow-hidden">
                       {formData.image_url ? (
-                        <img src={formData.image_url} className="w-full h-full object-cover opacity-80" alt="Preview" />
+                        <img src={formData.image_url} className="w-full h-full object-cover" alt="Preview" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-slate-400" /></div>
+                        <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-16 h-16 text-muted-foreground/30" /></div>
                       )}
-                      <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-none text-[10px] font-black text-emerald-400 border border-emerald-500/20 uppercase tracking-widest shadow-xl">
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+                      <div className="absolute top-3 left-3 px-3 py-1 bg-card/90 backdrop-blur-sm text-foreground text-[10px] font-black rounded-full border border-border uppercase tracking-widest shadow-sm">
                         {formData.category || 'Category'}
                       </div>
                     </div>
-                    <CardContent className="p-6 space-y-3">
-                      <h3 className="text-2xl font-black text-white uppercase tracking-tighter line-clamp-1 group-hover/preview:text-emerald-400 transition-colors">{formData.title || 'Untitled Resource'}</h3>
-                      <p className="text-sm text-slate-400 font-medium line-clamp-3 leading-relaxed">{formData.description || 'No description provided yet...'}</p>
-                      <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10 text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><MapPin className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.city || 'Remote'}</span></div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-none"><UserIcon className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-slate-300">{formData.audience || 'Everyone'}</span></div>
+                    <CardContent className="p-5 space-y-3">
+                      <div>
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{formData.category || 'Category'}</span>
+                        <h3 className="text-lg font-black text-foreground mt-1 line-clamp-1 uppercase tracking-tight group-hover/preview:text-primary transition-colors">{formData.title || 'Untitled Resource'}</h3>
                       </div>
+                      <p className="text-sm text-muted-foreground font-medium line-clamp-2 leading-relaxed italic">{formData.description || 'No description provided yet...'}</p>
+                      <div className="flex flex-wrap gap-3 pt-3 border-t border-border text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-emerald-500" /> {formData.city || 'Location'}</div>
+                        <div className="flex items-center gap-1.5"><UserIcon className="w-3.5 h-3.5 text-emerald-500" /> {formData.audience || 'Everyone'}</div>
+                      </div>
+                      <button className="text-primary font-black tracking-[0.2em] uppercase text-[10px] flex items-center gap-2 hover:text-primary/70 transition-colors mt-1">
+                        Explore Details <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
                     </CardContent>
                   </Card>
                 </div>
 
                 {/* Final Verification Details */}
                 <div className="space-y-6">
-                  <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-none overflow-hidden p-6 shadow-2xl">
-                    <h4 className="font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2 drop-shadow-sm">
+                  <Card className="bg-card border border-border rounded-2xl overflow-hidden p-6 shadow-md">
+                    <h4 className="font-black text-foreground uppercase tracking-tight mb-4 flex items-center gap-2 drop-shadow-sm">
                       <ShieldCheck className="w-5 h-5 text-emerald-400" /> Submission Policy
                     </h4>
                     <ul className="space-y-4">
@@ -594,7 +601,7 @@ Page
                         "AI analysis for quality and helpfulness check.",
                         "Instantly live after passing automated review."
                       ].map((text, i) => (
-                        <li key={i} className="flex gap-3 text-sm font-bold text-slate-300">
+                        <li key={i} className="flex gap-3 text-sm font-bold text-foreground">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                           {text}
                         </li>

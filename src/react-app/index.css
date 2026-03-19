@@ -6,9 +6,9 @@
 @layer base {
   :root {
     /* Matte Palette - Soft, Muted & Professional */
-    --background: 210 20% 96%;      /* Muted Matte White (#F1F3F5) */
+    --background: 35 20% 94%;       /* Warm Creamy Matte (#F2EFE9) */
     --foreground: 222.2 47.4% 11.2%;
-    --card: 210 20% 98%;            /* Very Soft Matte Card Background */
+    --card: 35 20% 97%;             /* Very Soft Creamy Card Background */
     --card-foreground: 222.2 47.4% 11.2%;
     --popover: 210 20% 98%;
     --popover-foreground: 222.2 47.4% 11.2%;
