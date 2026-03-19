@@ -8,8 +8,8 @@ import GlassButton from '@/react-app/components/GlassButton';
 import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/react-app/hooks/useTheme';
-import aboutLight from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_about_light_1773879209748.png';
-import aboutDark from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_about_dark_1773879227438.png';
+import aboutLight from '../assets/hero/about-light.png';
+import aboutDark from '../assets/hero/about-dark.png';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },

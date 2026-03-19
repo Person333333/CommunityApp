@@ -13,8 +13,8 @@ import { useLocation } from '@/react-app/hooks/useLocation';
 import NeedsWizard from '@/react-app/components/NeedsWizard';
 import { calculateDistance } from '@/react-app/hooks/useLocation';
 import { useTheme } from '@/react-app/hooks/useTheme';
-import homeLight from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_light_1773879180096.png';
-import homeDark from '/Users/nikhilvincent/.gemini/antigravity/brain/8f347c09-1d09-433a-ac61-884cd3ed66ff/community_hero_home_dark_1773879193722.png';
+import homeLight from '../assets/hero/home-light.png';
+import homeDark from '../assets/hero/home-dark.png';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
 
 
