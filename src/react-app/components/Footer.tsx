@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="relative mt-20 border-t border-white/10 glass-layer">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -26,7 +26,7 @@ export default function Footer() {
               >
                 <Compass className="w-8 h-8 text-blue-400" />
               </motion.div>
-              <span className="text-xl font-bold text-white tracking-widest uppercase">{t('app.name')}</span>
+              <span className="text-xl font-bold text-foreground tracking-widest uppercase">{t('app.name')}</span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed font-medium">
               {t('footer.tagline')}
@@ -41,7 +41,7 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="space-y-4"
           >
-            <h3 className="text-sm tracking-widest uppercase font-bold text-white">{t('about.vision')}</h3>
+            <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('about.visionLabel')}</h3>
             <p className="text-slate-400 text-sm leading-relaxed font-medium">
               {t('footer.visionText')}
             </p>
@@ -55,7 +55,7 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-sm tracking-widest uppercase font-bold text-white">{t('about.quickLinks')}</h3>
+            <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('about.quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/discover" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
@@ -72,9 +72,37 @@ export default function Footer() {
                   {t('nav.about')}
                 </Link>
               </li>
+            </ul>
+          </motion.div>
+
+          {/* Categories */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="space-y-4"
+          >
+            <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('map.categories')}</h3>
+            <ul className="space-y-2">
               <li>
-                <Link to="/references" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
-                  {t('nav.references')}
+                <Link to="/discover?category=Housing" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                  {t('categories.Housing')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/discover?category=Food Assistance" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                  {t('categories.Food')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/discover?category=Healthcare" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                  {t('categories.Health')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/discover?category=Mental Health" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                  Mental Health
                 </Link>
               </li>
             </ul>
@@ -88,7 +116,7 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="text-sm tracking-widest uppercase font-bold text-white">{t('about.connectWithUs')}</h3>
+            <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('about.connectWithUs')}</h3>
             <div className="space-y-3">
               <a
                 href="mailto:hello@communitycompass.org"

@@ -572,7 +572,7 @@ export default function Discover() {
                         )}
                         <CardContent className="p-4 sm:p-6 flex-1 flex flex-col justify-center">
                           <div className="flex items-center justify-between mb-2">
-                            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-none border border-emerald-500/20 text-emerald-400 bg-emerald-500/5`}>
+                            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-none border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5`}>
                               {resource.category}
                             </span>
                             <div className="flex items-center gap-2">

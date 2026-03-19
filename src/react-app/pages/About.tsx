@@ -108,7 +108,7 @@ function StickyAboutStory() {
               style={{ opacity: visionOpacity, y: visionY }}
               className="w-full text-center pointer-events-auto"
             >
-               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-foreground/40">{t('about.vision')}</h2>
+               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-foreground/70">{t('about.vision')}</h2>
                <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-primary/30">
                  {t('about.visionText')}
                </p>
@@ -119,7 +119,7 @@ function StickyAboutStory() {
               style={{ opacity: missionOpacity, y: missionY }}
               className="w-full text-center pointer-events-auto"
             >
-               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/40">{t('about.mission')}</h2>
+               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/70">{t('about.mission')}</h2>
                <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground">
                  {t('about.missionText')}
                </p>

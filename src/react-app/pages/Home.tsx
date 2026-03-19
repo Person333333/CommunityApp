@@ -276,7 +276,7 @@ export default function Home() {
                 <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-foreground mb-3 sm:mb-4 uppercase tracking-tighter">
                   {t('home.spotlight.title')}
                 </h2>
-                <p className="text-lg text-slate-300 font-bold italic opacity-80">
+                <p className="text-lg text-slate-600 dark:text-slate-300 font-bold italic opacity-80">
                   {t('home.spotlight.subtitle')}
                 </p>
               </motion.div>

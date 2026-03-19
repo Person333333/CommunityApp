@@ -462,13 +462,15 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         </a>
                       )}
 
-                      <Button
-                        onClick={() => setShowDonationForm(true)}
-                        className="bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6"
-                      >
-                        <Heart className="w-4 h-4 mr-2 fill-black" />
-                        Donate Now
-                      </Button>
+                      {resource.action_urls?.some(a => a.label === 'Donate') && (
+                        <Button
+                          onClick={() => setShowDonationForm(true)}
+                          className="bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6"
+                        >
+                          <Heart className="w-4 h-4 mr-2 fill-black" />
+                          Donate Now
+                        </Button>
+                      )}
                     </div>
 
                     <div className="text-right">
