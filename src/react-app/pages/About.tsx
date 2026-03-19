@@ -26,27 +26,29 @@ function StickyAboutStory() {
   });
 
   // Animation Timelines
-  // Period 1: 0.0 - 0.4 (Zoom & Rotate)
-  // Period 2: 0.4 - 0.6 (Flatten to Line)
-  // Period 3: 0.6 - 1.0 (Text Reveal & Final Stay)
-
-  const scale = useTransform(scrollYProgress, [0, 0.4, 0.6], [1, 2.5, 8]);
-  const rotate = useTransform(scrollYProgress, [0, 0.6], [0, 720]);
-  const needleRotate = useTransform(scrollYProgress, [0, 0.6], [0, 720 + 90]);
+  const scale = useTransform(scrollYProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
+  const rotate = useTransform(scrollYProgress, [0, 0.45], [0, 720]);
+  const needleRotate = useTransform(scrollYProgress, [0, 0.45], [0, 720 + 90]);
   
-  const ringOpacity = useTransform(scrollYProgress, [0.4, 0.6], [1, 0]);
-  const lineOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
-  const lineWidth = useTransform(scrollYProgress, [0.6, 0.8], ["10%", "100%"]);
+  const ringOpacity = useTransform(scrollYProgress, [0.3, 0.45], [1, 0]);
+  const lineOpacity = useTransform(scrollYProgress, [0.45, 0.55], [0, 1]);
+  const lineWidth = useTransform(scrollYProgress, [0.5, 0.6], ["10%", "100%"]);
 
-  // Text Reveal Timings
-  const visionOpacity = useTransform(scrollYProgress, [0.65, 0.8], [0, 1]);
-  const visionY = useTransform(scrollYProgress, [0.65, 0.8], [40, 0]);
+  // Vision & Mission Timings (0.55 - 0.75)
+  const visionOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
+  const visionY = useTransform(scrollYProgress, [0.55, 0.65], [40, 0]);
+  const missionOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
+  const missionY = useTransform(scrollYProgress, [0.65, 0.75], [40, 0]);
   
-  const missionOpacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
-  const missionY = useTransform(scrollYProgress, [0.8, 0.95], [40, 0]);
+  // Fade out Vision/Mission container before Methodology
+  const storyContainerOpacity = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
+
+  // Methodology Timings (0.8 - 0.95)
+  const methodologyOpacity = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
+  const methodologyY = useTransform(scrollYProgress, [0.85, 0.95], [60, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-background">
+    <section ref={containerRef} className="relative h-[600vh] bg-background">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
@@ -88,14 +90,18 @@ function StickyAboutStory() {
           />
         </div>
 
-        {/* Vision & Mission Content Overlay */}
-        <div className="absolute inset-0 z-20 container mx-auto px-6 pointer-events-none">
-          <div className="h-full flex flex-col justify-center items-center gap-24 py-20">
-            
+        {/* Unified Content Overlay */}
+        <div className="absolute inset-0 z-20 flex justify-center items-center pointer-events-none">
+          
+          {/* Vision & Mission Container */}
+          <motion.div 
+             style={{ opacity: storyContainerOpacity }}
+             className="absolute w-full max-w-4xl flex flex-col gap-24 px-6"
+          >
             {/* Vision */}
             <motion.div 
               style={{ opacity: visionOpacity, y: visionY }}
-              className="w-full max-w-4xl text-center pointer-events-auto"
+              className="w-full text-center pointer-events-auto"
             >
                <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-foreground/40">{t('about.vision')}</h2>
                <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-primary/30">
@@ -106,20 +112,70 @@ function StickyAboutStory() {
             {/* Mission */}
             <motion.div 
               style={{ opacity: missionOpacity, y: missionY }}
-              className="w-full max-w-4xl text-center pointer-events-auto"
+              className="w-full text-center pointer-events-auto"
             >
                <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/40">{t('about.mission')}</h2>
                <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-emerald/30">
                  {t('about.missionText')}
                </p>
             </motion.div>
+          </motion.div>
 
-          </div>
+          {/* Methodology Container */}
+          <motion.div
+            style={{ opacity: methodologyOpacity, y: methodologyY }}
+            className="absolute w-full max-w-6xl px-6 pointer-events-auto"
+          >
+            <div className="text-center mb-12 lg:mb-16">
+               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
+               <div className="w-24 h-1 bg-primary/20 mx-auto rounded-full mb-6" />
+               <p className="text-muted-foreground font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 text-left">
+              {[
+                {
+                  step: "1",
+                  title: t('about.methodology.challenge.title'),
+                  text: t('about.methodology.challenge.content'),
+                  subtext: "TSA Webmaster Research",
+                  color: "blue"
+                },
+                {
+                  step: "2",
+                  title: t('about.methodology.solution.title'),
+                  text: t('about.methodology.solution.content'),
+                  subtext: "Community Compass Solution",
+                  color: "indigo"
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="h-full">
+                  <GlassCard variant="strong" className={`p-8 lg:p-10 h-full backdrop-blur-md bg-card/60 border-border group transition-all rounded-[2rem] shadow-sm \${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.1)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] hover:border-indigo-400/30'}`}>
+                    <div className="flex flex-col sm:flex-row items-start gap-6">
+                      <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/80 border border-border flex items-center justify-center text-xl font-black shadow-sm \${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
+                        {item.step}
+                      </div>
+                      <div>
+                        <h3 className={`text-xl lg:text-2xl font-black mb-4 tracking-tight \${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
+                          {item.title}
+                        </h3>
+                        <div className="space-y-4 text-muted-foreground font-bold leading-relaxed">
+                          <p>{item.text}</p>
+                          <p className="text-xs opacity-60 italic">{item.subtext}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
         </div>
 
         {/* Scroll Indicator Tag */}
         <motion.div
-           style={{ opacity: useTransform(scrollYProgress, [0.9, 1], [1, 0]) }}
+           style={{ opacity: useTransform(scrollYProgress, [0.95, 1], [1, 0]) }}
            className="absolute bottom-10 text-center px-4"
         >
            <p className="text-[10px] font-black uppercase tracking-[0.8em] text-primary/30 animate-pulse">
@@ -194,65 +250,7 @@ export default function About() {
       <StickyAboutStory />
 
       <div className="container mx-auto max-w-6xl py-16 px-4 sm:px-6 lg:px-8">
-        {/* Research & Community Need Section */}
-        <motion.section variants={fadeInUp} className="mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
-            <div className="w-24 h-1 bg-white/20 mx-auto rounded-full mb-6" />
-            <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {[
-              {
-                step: "1",
-                title: t('about.methodology.challenge.title'),
-                text: t('about.methodology.challenge.content'),
-                subtext: "TSA Webmaster Research",
-                color: "blue"
-              },
-              {
-                step: "2",
-                title: t('about.methodology.solution.title'),
-                text: t('about.methodology.solution.content'),
-                subtext: "Community Compass Solution",
-                color: "indigo"
-              }
-            ].map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: idx * 0.1 }}
-                className="h-full"
-              >
-                <GlassCard variant="strong" className={`p-10 h-full backdrop-blur-md bg-card border-border shadow-[0_0_30px_rgba(255,255,255,0.03)] group transition-all rounded-chromic-card \${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.15)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.15)] hover:border-indigo-400/30'}`}>
-                  <div className="flex items-start gap-6">
-                    <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/50 backdrop-blur border border-border text-foreground flex items-center justify-center text-xl font-black shadow-lg \${item.color === 'blue' ? 'shadow-blue-500/10 text-blue-600 dark:text-blue-300' : 'shadow-indigo-500/10 text-indigo-600 dark:text-indigo-300'}`}>
-                      {item.step}
-                    </div>
-                    <div>
-                      <h3 className={`text-2xl font-black mb-4 tracking-tight \${item.color === 'blue' ? 'text-blue-300' : 'text-indigo-300'}`}>
-                        {item.title}
-                      </h3>
-                      <div className="space-y-4 text-slate-300 font-bold leading-relaxed">
-                        <p>{item.text}</p>
-                        <p className="text-sm opacity-60 italic">{item.subtext}</p>
-                      </div>
-                    </div>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
+        {/* Research & Community Need Section moved inside StickyAboutStory */}
 
         {/* Our Values Section */}
         <motion.section variants={fadeInUp} className="mb-32">
@@ -264,7 +262,7 @@ export default function About() {
           >
             <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.values.title')}</h2>
             <div className="w-20 h-1 bg-border/40 mx-auto mb-6" />
-            <p className="text-slate-400 font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle')}</p>
+            <p className="text-muted-foreground font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -315,9 +313,9 @@ export default function About() {
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20" />
                 <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic">{t('about.founder.subtitle')}</h3>
-                <div className="space-y-6 text-slate-300 leading-relaxed text-xl font-bold italic">
+                <div className="space-y-6 text-muted-foreground leading-relaxed text-xl font-bold italic">
                   <p>"{t('about.founder.quote1')}"</p>
-                  <p className="text-lg font-bold text-slate-400 not-italic">{t('about.founder.quote2')}</p>
+                  <p className="text-lg font-bold text-muted-foreground/80 not-italic">{t('about.founder.quote2')}</p>
                 </div>
               </div>
             </div>
@@ -326,7 +324,7 @@ export default function About() {
 
         {/* Call to Action */}
         <motion.section variants={fadeInUp} className="text-center">
-          <div className="bg-matte-green/40 dark:bg-emerald-500/5 backdrop-blur-xl border border-primary-green/30 rounded-[3rem] p-12 sm:p-20 shadow-2xl relative overflow-hidden text-foreground">
+          <div className="bg-primary/10 border border-primary/20 rounded-[3rem] p-12 sm:p-20 shadow-2xl relative overflow-hidden text-foreground">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-indigo-600/10 pointer-events-none" />
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
@@ -334,7 +332,7 @@ export default function About() {
             <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter relative z-10">
               {t('about.footer.title')}
             </h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-blue-200 font-bold italic relative z-10">
+            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-foreground/80 font-bold italic relative z-10">
               {t('about.footer.subtitle')}
             </p>
             <div className="flex justify-center relative z-10">

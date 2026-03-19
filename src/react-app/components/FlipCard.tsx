@@ -20,7 +20,7 @@ export default function FlipCard({ front, back, heightClass = "h-[400px]" }: Fli
                 className="w-full h-full relative"
                 style={{ transformStyle: 'preserve-3d' }}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 1.2, type: "spring", stiffness: 60, damping: 15 }}
+                transition={{ duration: 2.5, type: "spring", stiffness: 20, damping: 10 }}
             >
                 {/* Front */}
                 <div className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: 'hidden' }}>
