@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
 import { Link } from 'react-router';
 import { Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
@@ -21,51 +21,40 @@ function StickyAboutStory() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
-  // Manual window scroll tracking — the only reliable way to drive
-  // scroll-linked animations when the animated child is position:sticky
-  const { scrollY } = useScroll();
-  const motionProgress = useMotionValue(0);
+  // layoutEffect: false is the fix for sticky children —
+  // it makes Framer measure positions after paint (useEffect)
+  // instead of before (useLayoutEffect), so sticky layout is resolved.
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+    layoutEffect: false
+  } as any);
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+  // Animation Timelines
+  const scale        = useTransform(scrollYProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
+  const rotate       = useTransform(scrollYProgress, [0, 0.45], [0, 720]);
+  const needleRotate = useTransform(scrollYProgress, [0, 0.45], [0, 720 + 90]);
+  const compassOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
 
-    // Cache once on mount — getBoundingClientRect().top is relative to viewport,
-    // so add current scrollY to get the true document-relative offset.
-    const start = el.getBoundingClientRect().top + window.scrollY;
-    const totalHeight = el.offsetHeight - window.innerHeight;
-
-    return scrollY.on("change", (v) => {
-      const p = Math.min(Math.max((v - start) / totalHeight, 0), 1);
-      motionProgress.set(p);
-    });
-  }, [scrollY, motionProgress]);
-
-  // Animation Timelines — all driven by motionProgress
-  const scale       = useTransform(motionProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
-  const rotate      = useTransform(motionProgress, [0, 0.45], [0, 720]);
-  const needleRotate = useTransform(motionProgress, [0, 0.45], [0, 720 + 90]);
-  const compassOpacity = useTransform(motionProgress, [0, 0.08], [0, 1]);
-
-  const ringOpacity = useTransform(motionProgress, [0.3, 0.45], [1, 0]);
-  const lineOpacity = useTransform(motionProgress, [0.45, 0.55], [0, 1]);
-  const lineWidth   = useTransform(motionProgress, [0.5, 0.6], ["0%", "100%"]);
+  const ringOpacity = useTransform(scrollYProgress, [0.3, 0.45], [1, 0]);
+  const lineOpacity = useTransform(scrollYProgress, [0.45, 0.55], [0, 1]);
+  const lineWidth   = useTransform(scrollYProgress, [0.5, 0.6], ["0%", "100%"]);
 
   // Vision & Mission (0.55 – 0.75)
-  const visionOpacity = useTransform(motionProgress, [0.55, 0.65], [0, 1]);
-  const visionY       = useTransform(motionProgress, [0.55, 0.65], [40, 0]);
-  const missionOpacity = useTransform(motionProgress, [0.65, 0.75], [0, 1]);
-  const missionY       = useTransform(motionProgress, [0.65, 0.75], [40, 0]);
+  const visionOpacity  = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
+  const visionY        = useTransform(scrollYProgress, [0.55, 0.65], [40, 0]);
+  const missionOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
+  const missionY       = useTransform(scrollYProgress, [0.65, 0.75], [40, 0]);
 
   // Fade out story before methodology
-  const storyContainerOpacity = useTransform(motionProgress, [0.75, 0.8], [1, 0]);
+  const storyContainerOpacity = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
 
   // Methodology (0.82 – 0.95)
-  const methodologyOpacity = useTransform(motionProgress, [0.82, 0.95], [0, 1]);
-  const methodologyY       = useTransform(motionProgress, [0.82, 0.95], [60, 0]);
+  const methodologyOpacity = useTransform(scrollYProgress, [0.82, 0.95], [0, 1]);
+  const methodologyY       = useTransform(scrollYProgress, [0.82, 0.95], [60, 0]);
 
-  // Scroll indicator (fade out at very end)
-  const indicatorOpacity = useTransform(motionProgress, [0.92, 1], [1, 0]);
+  // Scroll indicator
+  const indicatorOpacity = useTransform(scrollYProgress, [0.92, 1], [1, 0]);
 
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-background">
