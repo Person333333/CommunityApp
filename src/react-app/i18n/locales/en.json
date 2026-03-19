@@ -68,6 +68,11 @@
     "stories": {
       "title": "Community Stories",
       "subtitle": "Voices of impact and connection"
+    },
+    "spotlight": {
+      "title": "Community Spotlights",
+      "subtitle": "Hand-picked resources making a difference near you.",
+      "noResources": "No spotlighted resources at this time."
     }
   },
   "location": {

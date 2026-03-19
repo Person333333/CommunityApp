@@ -196,8 +196,7 @@ export default function About() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: "easeOut" }}
-      className={`min-h-screen overflow-x-hidden bg-background selection:bg-primary/20 transition-all duration-700`} 
-      style={{ perspective: "1200px" }}
+      className={`min-h-screen bg-background selection:bg-primary/20 transition-all duration-700`}
     >
       {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-20">
