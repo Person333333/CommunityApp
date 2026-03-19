@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation as useRouterLocation } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import './i18n'; // Initialize i18n
 import HomePage from "@/react-app/pages/Home";
 import DiscoverPage from "@/react-app/pages/Discover";
@@ -26,8 +26,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 function ScrollToTop() {
   const { pathname } = useRouterLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
   return null;
 }

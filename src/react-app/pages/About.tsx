@@ -21,14 +21,10 @@ function StickyAboutStory() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
-  // layoutEffect: false is the fix for sticky children —
-  // it makes Framer measure positions after paint (useEffect)
-  // instead of before (useLayoutEffect), so sticky layout is resolved.
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"],
-    layoutEffect: false
-  } as any);
+    offset: ["start start", "end end"]
+  });
 
   // Animation Timelines
   const scale        = useTransform(scrollYProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
