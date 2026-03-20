@@ -66,11 +66,7 @@ export default function Home() {
   const { isLight } = useTheme();
 
   // 3D Scroll Perspective Logic
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  const { scrollYProgress } = useScroll();
   const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const compassRotate = useTransform(scrollYProgress, [0, 0.1], [0, 360]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0.8]);
@@ -164,7 +160,6 @@ export default function Home() {
 
   return (
     <motion.div
-      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: "easeOut" }}

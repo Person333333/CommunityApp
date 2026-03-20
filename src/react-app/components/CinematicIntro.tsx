@@ -35,23 +35,27 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete }) => {
       setPhase(2);
 
       // Phase 2: The Chromic Shatter (1.5s - 2.5s)
-      await animate(
-        ".intro-pill",
-        { 
-          scale: [0, 1],
-          opacity: [0, 1],
-          x: (i: number) => (i % 2 === 0 ? 300 : -300) * Math.random(),
-          y: (i: number) => (i < 3 ? 300 : -300) * Math.random(),
-          rotate: (i: number) => i * 45
-        } as any,
-        { 
-          duration: 1.2, 
-          type: "spring", 
-          damping: 12, 
-          stiffness: 100,
-          delay: (i: number) => i * 0.1 
-        }
-      );
+      if (scope.current) {
+        const pills = scope.current.querySelectorAll(".intro-pill");
+        const animations = Array.from(pills).map((pill, i) => animate(
+          pill,
+          { 
+            scale: [0, 1],
+            opacity: [0, 1],
+            x: (i % 2 === 0 ? 300 : -300) * Math.random(),
+            y: (i < 3 ? 300 : -300) * Math.random(),
+            rotate: i * 45
+          },
+          { 
+            duration: 1.2, 
+            type: "spring", 
+            damping: 12, 
+            stiffness: 100,
+            delay: i * 0.1 
+          }
+        ));
+        await Promise.all(animations);
+      }
       setPhase(3);
 
       // Phase 3: The Headline Eruption (2.0s - 3.5s)

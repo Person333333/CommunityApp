@@ -64,6 +64,8 @@ function AppRoutes() {
   );
 }
 
+import { ErrorBoundary } from "@/react-app/components/ErrorBoundary";
+
 export default function App() {
   const [showTour, setShowTour] = useState(false);
   const [showIntro, setShowIntro] = useState(() => {
@@ -108,6 +110,7 @@ export default function App() {
   };
 
   return (
+    <ErrorBoundary>
     <Router>
       <AnimatePresence mode="wait">
         {showIntro && (
@@ -147,6 +150,7 @@ export default function App() {
         </div>
       </div>
     </Router>
+    </ErrorBoundary>
   );
 }
 
