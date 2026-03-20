@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Translated from './Translated';
 import ScrollProgress from './ScrollProgress';
 import ThemeToggle from './ThemeToggle';
+import { useClickOutside } from '@/react-app/hooks/useClickOutside';
 
 // Main Navigation Component
 export default function Navbar() {
@@ -16,6 +17,10 @@ export default function Navbar() {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const { user } = useUser();
   const [showAccessibility, setShowAccessibility] = useState(false);
+  
+  const accountMenuRef = useClickOutside<HTMLDivElement>(() => setShowAccountMenu(false));
+  const accessibilityMenuRef = useClickOutside<HTMLDivElement>(() => setShowAccessibility(false));
+
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem('a11y-high-contrast') === 'true');
   const [largeText, setLargeText] = useState(() => localStorage.getItem('a11y-large-text') === 'true');
   useEffect(() => {
@@ -72,36 +77,38 @@ export default function Navbar() {
                   </Link>
                 </SignedOut>
                 <SignedIn>
-                  <button
-                    onClick={() => setShowAccountMenu(!showAccountMenu)}
-                    className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center shadow-sm hover:opacity-90"
-                    aria-label="Account menu"
-                  >
-                    {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
-                  </button>
-                  {showAccountMenu && (
-                    <div className="absolute right-0 top-12 w-64 bg-slate-900/90 p-4 rounded-xl border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center border border-white/10">
-                          {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                  <div ref={accountMenuRef} className="relative flex items-center">
+                    <button
+                      onClick={() => setShowAccountMenu(!showAccountMenu)}
+                      className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center shadow-sm hover:opacity-90"
+                      aria-label="Account menu"
+                    >
+                      {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                    </button>
+                    {showAccountMenu && (
+                      <div className="absolute right-0 top-12 w-64 bg-slate-900/90 p-4 rounded-xl border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center border border-white/10">
+                            {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                          </div>
+                          <div>
+                            <div className="text-white font-medium leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
+                            <div className="text-slate-400 text-xs truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-white font-medium leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
-                          <div className="text-slate-400 text-xs truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
+                        <div className="space-y-1">
+                          <Link to="/account" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('nav.account')}</Link>
+                          <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('discover.mySubmissions')}</Link>
+                          <button
+                            onClick={() => signOut()}
+                            className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-emerald-400 font-medium text-sm transition-colors"
+                          >
+                            {t('account.signOut')}
+                          </button>
                         </div>
                       </div>
-                      <div className="space-y-1">
-                        <Link to="/account" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('nav.account')}</Link>
-                        <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('discover.mySubmissions')}</Link>
-                        <button
-                          onClick={() => signOut()}
-                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-emerald-400 font-medium text-sm transition-colors"
-                        >
-                          {t('account.signOut')}
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </SignedIn>
 
 
@@ -110,7 +117,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Accessibility Menu */}
-                <div className="relative">
+                <div ref={accessibilityMenuRef} className="relative">
                   <button
                     onClick={() => setShowAccessibility(!showAccessibility)}
                     className={`p-2 rounded-none transition-all flex items-center gap-1 ${showAccessibility

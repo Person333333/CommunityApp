@@ -4,12 +4,15 @@ import { Globe, Check, Loader2, Search } from 'lucide-react';
 import { SUPPORTED_LANGUAGES } from '@/react-app/constants/languages';
 import { TranslateService } from '@/react-app/services/translateService';
 import enTranslations from '@/react-app/i18n/locales/en.json';
+import { useClickOutside } from '@/react-app/hooks/useClickOutside';
 
 export default function LanguageSelector() {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const languageSelectorRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
 
   const currentLanguage = SUPPORTED_LANGUAGES.find(l => l.code === i18n.language) ||
     { code: i18n.language || 'en', name: (i18n.language || 'en').toUpperCase() };
@@ -60,7 +63,7 @@ export default function LanguageSelector() {
   );
 
   return (
-    <div className="relative">
+    <div ref={languageSelectorRef} className="relative">
       <button
         onClick={() => {
           setIsOpen(!isOpen);
