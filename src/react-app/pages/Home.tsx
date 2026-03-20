@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, Compass, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
+import { Search, MapPin, Clock, Users, Heart, ArrowRight, Quote, Sparkles, ChevronDown, Activity, ChevronLeft, ChevronRight, Mail, Send } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button } from '@/react-app/components/ui/button';
 import { Card, CardContent } from '@/react-app/components/ui/card';
@@ -16,6 +16,25 @@ import { useTheme } from '@/react-app/hooks/useTheme';
 import homeLight from '../assets/hero/home-light.png';
 import homeDark from '../assets/hero/home-dark.png';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
+
+const CompassNeedleIcon = ({ rotation }: { rotation: any }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2.5" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className="w-12 h-12 text-primary drop-shadow-sm"
+  >
+    <circle cx="12" cy="12" r="10" className="opacity-20" strokeWidth="1.5" />
+    <motion.path 
+      style={{ rotate: rotation, originX: "12px", originY: "12px" }}
+      d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" 
+    />
+    <circle cx="12" cy="12" r="1.5" className="fill-current" />
+  </svg>
+);
 
 
 // Animated count-up hook
@@ -198,58 +217,31 @@ export default function Home() {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-start justify-center text-left">
-          <div className="max-w-4xl">
+        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-center justify-center text-center">
+          <div className="max-w-4xl mx-auto">
             <motion.div 
               style={{ opacity: heroOpacity, scale: heroScale }}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-10"
             >
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
                 <Sparkles className="w-5 h-5 text-primary animate-pulse" />
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
               
-              <div className="space-y-6 max-w-2xl border-l-4 border-primary/30 pl-8 py-6 bg-background/20 backdrop-blur-md rounded-r-[3rem] shadow-2xl relative overflow-hidden group/dictionary">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover/dictionary:opacity-100 transition-opacity duration-1000" />
-                
-                <div className="flex items-center gap-6 relative z-10">
-                  <h1 className="text-5xl sm:text-7xl font-black text-foreground uppercase tracking-tighter leading-none italic group-hover/dictionary:not-italic transition-all duration-700">
-                    Community Compass
-                  </h1>
-                  <motion.div style={{ rotate: compassRotate }} className="shrink-0 bg-primary/10 p-3 rounded-2xl border border-primary/20 shadow-lg">
-                    <Compass className="w-10 h-10 sm:w-16 sm:h-16 text-primary" />
-                  </motion.div>
-                </div>
-
-                <div className="space-y-6 relative z-10">
-                  <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-black uppercase tracking-[0.3em] text-primary">
-                    <span className="px-3 py-1 bg-primary text-white rounded-md">Community Support Hub</span>
-                    <span className="opacity-30">|</span>
-                    <span className="lowercase italic text-muted-foreground font-bold">/kəˈmjuːnɪti ˈkʌmpəs/</span>
-                  </div>
-                  
-                  <div className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/50 italic flex items-center gap-2">
-                    <div className="w-8 h-px bg-muted-foreground/30" />
-                    noun
-                  </div>
-                  
-                  <ol className="space-y-4 text-lg sm:text-xl font-black italic text-foreground/90 leading-snug tracking-tight">
-                    <li className="flex gap-4 group/entry">
-                      <span className="text-primary not-italic opacity-40 group-hover/entry:opacity-100 transition-opacity">1.</span>
-                      <span className="group-hover/entry:translate-x-1 transition-transform inline-block">Local support, one hand at a time.</span>
-                    </li>
-                    <li className="flex gap-4 group/entry">
-                      <span className="text-primary not-italic opacity-40 group-hover/entry:opacity-100 transition-opacity">2.</span>
-                      <span className="group-hover/entry:translate-x-1 transition-transform inline-block">A unified platform for neighborhood resources.</span>
-                    </li>
-                  </ol>
-                </div>
-              </div>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] flex flex-col items-center gap-6">
+                <span>Connecting neighbors with</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-emerald-400 drop-shadow-sm flex items-center justify-center gap-6">
+                  local support, one hand at a time.
+                  <span className="inline-flex bg-primary/10 p-4 rounded-3xl border border-primary/20 shadow-2xl">
+                    <CompassNeedleIcon rotation={compassRotate} />
+                  </span>
+                </span>
+              </h1>
               
-              <div className="flex flex-wrap items-center gap-8 pt-6">
+              <div className="flex flex-wrap justify-center gap-8 pt-6">
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
@@ -259,7 +251,7 @@ export default function Home() {
                   {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 items-center">
                   <div className="flex items-center gap-4 px-8 py-4 bg-background/40 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group/badge">
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover/badge:opacity-100 transition-opacity" />
                     <div className="text-xs font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
@@ -267,7 +259,7 @@ export default function Home() {
                       {t('home.hero.joinedBy', { countLabel: '5,000+' })}
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em] ml-8">Trusted by Neighbors</span>
+                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Trusted by Neighbors</span>
                 </div>
               </div>
             </motion.div>
@@ -616,7 +608,7 @@ export default function Home() {
             >
               <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card border border-border rounded-none shadow-2xl">
                 <Quote className="w-8 h-8 text-emerald-500/20 mb-4" />
-                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
+                <blockquote className="text-lg text-foreground/80 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency, I didn't know where to turn. Community Compass pointed us to a local clinic that provided the support we needed within hours."
                 </blockquote>
                 <div className="flex items-center gap-3">
@@ -630,7 +622,7 @@ export default function Home() {
 
               <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
-                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
+                <blockquote className="text-lg text-foreground/80 font-medium italic mb-6 leading-relaxed">
                   "As a volunteer, reaching people who need us most was always a challenge. This platform has bridged that gap, connecting us with dozens of families every single week."
                 </blockquote>
                 <div className="flex items-center gap-3">
@@ -644,7 +636,7 @@ export default function Home() {
 
               <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-white/20 mb-4" />
-                <blockquote className="text-lg text-slate-300 font-medium italic mb-6 leading-relaxed">
+                <blockquote className="text-lg text-foreground/80 font-medium italic mb-6 leading-relaxed">
                   "Finding reliable childcare felt impossible until I used the 'Family Support' filter here. Within minutes, I found three certified providers in my own ZIP code."
                 </blockquote>
                 <div className="flex items-center gap-3">
@@ -659,7 +651,7 @@ export default function Home() {
               {/* Duplicate for seamless loop */}
               <Card className="w-full md:w-[600px] flex-shrink-0 p-8 bg-card backdrop-blur-xl border border-border rounded-none shadow-sm transition-all group/card">
                 <Quote className="w-8 h-8 text-foreground/10 mb-4" />
-                <blockquote className="text-lg text-muted-foreground font-medium italic mb-6 leading-relaxed">
+                <blockquote className="text-lg text-foreground/80 font-medium italic mb-6 leading-relaxed">
                   "When my family was facing a sudden medical emergency..."
                 </blockquote>
                 <div className="flex items-center gap-3">

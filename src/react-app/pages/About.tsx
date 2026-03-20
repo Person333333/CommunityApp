@@ -334,9 +334,9 @@ export default function About() {
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
                 <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20" />
                 <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic">{t('about.founder.subtitle')}</h3>
-                <div className="space-y-6 text-muted-foreground leading-relaxed text-xl font-bold italic">
+                <div className="space-y-6 text-foreground leading-relaxed text-xl font-bold italic">
                   <p>"{t('about.founder.quote1')}"</p>
-                  <p className="text-lg font-bold text-muted-foreground/80 not-italic">{t('about.founder.quote2')}</p>
+                  <p className="text-lg font-bold text-foreground/80 not-italic">{t('about.founder.quote2')}</p>
                 </div>
               </div>
             </div>

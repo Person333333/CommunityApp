@@ -67,9 +67,9 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed inset-0 z-[81] flex items-center justify-center p-4"
           >
-            <div className="glass-layer rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-white/10">
+            <div className="bg-card rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-border/50">
               {/* Progress bar */}
-              <div className="h-1.5 bg-white/5">
+              <div className="h-1.5 bg-muted">
                 <motion.div
                   className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]"
                   animate={{ width: `${((step + 1) / 3) * 100}%` }}
@@ -105,7 +105,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                                 : 'bg-card text-muted-foreground border-2 border-transparent hover:border-primary/20'
                               }`}
                           >
-                            <span className={`p-1.5 rounded-lg ${selectedCategories.includes(cat) ? 'bg-blue-500/30 shadow-inner' : 'bg-white/10'}`}>
+                            <span className={`p-1.5 rounded-lg ${selectedCategories.includes(cat) ? 'bg-blue-500/30 shadow-inner' : 'bg-muted/50'}`}>
                               {CATEGORY_ICONS[cat] || <Zap className="w-5 h-5" />}
                             </span>
                             <span className="truncate">{cat}</span>
@@ -136,7 +136,7 @@ export default function NeedsWizard({ isOpen, onClose }: NeedsWizardProps) {
                             onClick={() => setUrgency(opt.value)}
                             className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all ${urgency === opt.value
                                 ? `bg-${opt.color}-500/20 border-2 border-${opt.color}-400/50 text-${opt.color}-300 shadow-[0_0_15px_rgba(59,130,246,0.15)]`
-                                : 'bg-white/5 border-2 border-transparent text-slate-300 hover:border-white/20'
+                                : 'bg-muted/30 border-2 border-transparent text-foreground/60 hover:border-primary/20'
                               }`}
                           >
                             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${urgency === opt.value ? `border-${opt.color}-500 bg-${opt.color}-500/30` : 'border-muted-foreground/30'
