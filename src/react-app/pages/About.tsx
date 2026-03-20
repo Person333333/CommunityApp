@@ -51,9 +51,9 @@ function StickyAboutStory() {
   // Fade out story before methodology
   const storyContainerOpacity = useTransform(smoothProgress, [0.75, 0.8], [1, 0]);
 
-  // Methodology (0.82 – 0.95)
-  const methodologyOpacity = useTransform(smoothProgress, [0.82, 0.95], [0, 1]);
-  const methodologyY       = useTransform(smoothProgress, [0.82, 0.95], [60, 0]);
+  // Methodology (0.45 – 0.85) - MOVED UP TO BE THE MAIN FOCUS
+  const methodologyOpacity = useTransform(smoothProgress, [0.45, 0.65], [0, 1]);
+  const methodologyY       = useTransform(smoothProgress, [0.45, 0.65], [60, 0]);
 
   // Scroll indicator
   const indicatorOpacity = useTransform(smoothProgress, [0.92, 1], [1, 0]);
@@ -104,12 +104,12 @@ function StickyAboutStory() {
         {/* Unified Content Overlay */}
         <div className="absolute inset-0 z-20 flex justify-center items-center pointer-events-none">
           
-          {/* Vision & Mission Container */}
+          {/* Vision & Mission Container - HIDDEN BUT PRESERVED AS REQUESTED */}
+          {/* 
           <motion.div 
              style={{ opacity: storyContainerOpacity }}
              className="absolute w-full max-w-4xl flex flex-col gap-24 px-6"
           >
-            {/* Vision */}
             <motion.div 
               style={{ opacity: visionOpacity, y: visionY }}
               className="w-full text-center pointer-events-auto"
@@ -120,7 +120,6 @@ function StickyAboutStory() {
                </p>
             </motion.div>
 
-            {/* Mission */}
             <motion.div 
               style={{ opacity: missionOpacity, y: missionY }}
               className="w-full text-center pointer-events-auto"
@@ -131,6 +130,7 @@ function StickyAboutStory() {
                </p>
             </motion.div>
           </motion.div>
+          */}
 
           {/* Methodology Container */}
           <motion.div
@@ -193,6 +193,17 @@ function StickyAboutStory() {
              The Journey Continues
            </p>
         </motion.div>
+      </div>
+
+      {/* PRESERVED FOR REVERSION (USER REQUEST) - DO NOT DELETE */}
+      <div className="hidden" aria-hidden="true">
+        {(() => {
+          // Dummy usage to satisfy TypeScript unused variable checks
+          const _unused = { 
+            FlipCard, visionOpacity, visionY, missionOpacity, missionY, storyContainerOpacity 
+          };
+          return !!_unused;
+        })()}
       </div>
     </section>
   );
@@ -385,31 +396,32 @@ function ValueCard({ value }: { value: any }) {
         opacity,
         transformStyle: "preserve-3d",
       }}
-      className="relative z-10"
+      className="relative z-10 group"
     >
-      <FlipCard
-        heightClass="h-[360px]"
-        front={
-          <GlassCard variant="strong" className={`p-10 w-full h-full text-center flex flex-col items-center justify-center border-border shadow-[0_0_30px_rgba(0,0,0,0.1)] relative overflow-hidden bg-card backdrop-blur-md hover:bg-card/90 transition-colors rounded-chromic-card group`}>
-            <div className={`absolute top-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.1)]`} />
-            <div className="mb-6 transform group-hover:scale-110 transition-transform duration-500">
-              {value.icon}
-            </div>
-            <h3 className={`text-3xl font-black uppercase tracking-tighter text-foreground group-hover:text-${value.color}-600 dark:group-hover:text-${value.color}-300 transition-colors drop-shadow-sm`}>
-              {value.title}
-            </h3>
-            <p className="mt-6 text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground group-hover:text-foreground transition-colors uppercase">Tap to Reveal</p>
-          </GlassCard>
-        }
-        back={
-          <GlassCard variant="strong" className={`p-8 w-full h-full text-center flex flex-col items-center justify-center border-${value.color}-400/50 shadow-[0_0_40px_rgba(16,185,129,0.1)] relative overflow-hidden bg-card/90 backdrop-blur-xl border-2 rounded-chromic-card`}>
-            <div className={`absolute bottom-0 left-0 w-full h-1 bg-${value.color}-400 shadow-[0_0_10px_rgba(255,255,255,0.1)]`} />
-            <p className={`text-xl font-bold text-foreground italic leading-relaxed drop-shadow-sm`}>
-              "{value.text}"
-            </p>
-          </GlassCard>
-        }
-      />
+      <GlassCard 
+        variant="strong" 
+        className="p-12 w-full h-[400px] text-left flex flex-col items-start justify-between border-border shadow-2xl relative overflow-hidden bg-card/40 backdrop-blur-2xl rounded-[2.5rem] transition-all duration-500 group-hover:border-primary/50 group-hover:shadow-primary/10"
+      >
+        <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-${value.color}-500 to-transparent opacity-30 group-hover:opacity-100 transition-opacity`} />
+        
+        <div className="space-y-6">
+          <div className={`p-4 rounded-2xl bg-${value.color}-500/10 border border-${value.color}-500/20 w-fit transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-inner`}>
+            {value.icon}
+          </div>
+          <h3 className="text-4xl font-black uppercase tracking-tighter text-foreground leading-none">
+            {value.title}
+          </h3>
+          <div className="w-12 h-1 bg-primary/20 group-hover:w-24 group-hover:bg-primary transition-all duration-700" />
+        </div>
+
+        <p className="text-lg font-bold text-muted-foreground/80 leading-relaxed italic pr-4 group-hover:text-foreground transition-colors duration-500">
+          "{value.text}"
+        </p>
+
+        <div className="absolute top-8 right-8 mix-blend-overlay opacity-5 group-hover:opacity-20 transition-opacity duration-1000">
+          {value.icon}
+        </div>
+      </GlassCard>
     </motion.div>
   );
 }

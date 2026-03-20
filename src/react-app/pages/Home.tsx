@@ -72,6 +72,9 @@ export default function Home() {
     offset: ["start start", "end end"]
   });
   const starFieldY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const compassRotate = useTransform(scrollYProgress, [0, 0.1], [0, 360]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0.8]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.1], [1, 0.98]);
 
   // Only fetch featured resources when we have user location
   useEffect(() => {
@@ -200,46 +203,76 @@ export default function Home() {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-center justify-center text-center">
-          <div className="max-w-4xl mx-auto">
+        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-start justify-center text-left">
+          <div className="max-w-4xl">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              style={{ opacity: heroOpacity, scale: heroScale }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8 flex flex-col items-center"
+              className="space-y-8"
             >
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
                 <Sparkles className="w-5 h-5 text-primary animate-pulse" />
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
               
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] mb-8">
-                <span className="block mb-2">Connecting neighbors with</span>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-emerald-400 drop-shadow-sm">
-                  local support, one hand at a time.
-                </span>
-              </h1>
+              <div className="space-y-6 max-w-2xl border-l-4 border-primary/30 pl-8 py-6 bg-background/20 backdrop-blur-md rounded-r-[3rem] shadow-2xl relative overflow-hidden group/dictionary">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover/dictionary:opacity-100 transition-opacity duration-1000" />
+                
+                <div className="flex items-center gap-6 relative z-10">
+                  <h1 className="text-5xl sm:text-7xl font-black text-foreground uppercase tracking-tighter leading-none italic group-hover/dictionary:not-italic transition-all duration-700">
+                    Community Compass
+                  </h1>
+                  <motion.div style={{ rotate: compassRotate }} className="shrink-0 bg-primary/10 p-3 rounded-2xl border border-primary/20 shadow-lg">
+                    <Compass className="w-10 h-10 sm:w-16 sm:h-16 text-primary" />
+                  </motion.div>
+                </div>
+
+                <div className="space-y-6 relative z-10">
+                  <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-black uppercase tracking-[0.3em] text-primary">
+                    <span className="px-3 py-1 bg-primary text-white rounded-md">Community Support Hub</span>
+                    <span className="opacity-30">|</span>
+                    <span className="lowercase italic text-muted-foreground font-bold">/kəˈmjuːnɪti ˈkʌmpəs/</span>
+                  </div>
+                  
+                  <div className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/50 italic flex items-center gap-2">
+                    <div className="w-8 h-px bg-muted-foreground/30" />
+                    noun
+                  </div>
+                  
+                  <ol className="space-y-4 text-lg sm:text-xl font-black italic text-foreground/90 leading-snug tracking-tight">
+                    <li className="flex gap-4 group/entry">
+                      <span className="text-primary not-italic opacity-40 group-hover/entry:opacity-100 transition-opacity">1.</span>
+                      <span className="group-hover/entry:translate-x-1 transition-transform inline-block">Local support, one hand at a time.</span>
+                    </li>
+                    <li className="flex gap-4 group/entry">
+                      <span className="text-primary not-italic opacity-40 group-hover/entry:opacity-100 transition-opacity">2.</span>
+                      <span className="group-hover/entry:translate-x-1 transition-transform inline-block">A unified platform for neighborhood resources.</span>
+                    </li>
+                  </ol>
+                </div>
+              </div>
               
-              <p className="text-xl sm:text-2xl text-muted-foreground font-black italic max-w-2xl leading-relaxed mx-auto border-l-4 border-primary/30 pl-6 bg-primary/5 py-4 rounded-r-2xl backdrop-blur-sm">
-                {t('home.hero.subtitle')}
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-6 pt-4">
+              <div className="flex flex-wrap items-center gap-8 pt-6">
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
-                  className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-black px-12 py-8 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.4)] flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
+                  className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-black px-12 py-9 rounded-full shadow-[0_20px_40px_rgba(59,130,246,0.3)] flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer" />
                   {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
-                <div className="flex items-center gap-4 px-8 py-4 bg-background/50 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="text-xs font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
-                    <Users className="w-4 h-4 text-primary" />
-                    {t('home.hero.joinedBy', { countLabel: '5,000+' })}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-4 px-8 py-4 bg-background/40 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group/badge">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover/badge:opacity-100 transition-opacity" />
+                    <div className="text-xs font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-primary" />
+                      {t('home.hero.joinedBy', { countLabel: '5,000+' })}
+                    </div>
                   </div>
+                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em] ml-8">Trusted by Neighbors</span>
                 </div>
               </div>
             </motion.div>
@@ -251,10 +284,10 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Scroll</span>
-          <div className="w-1 h-12 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50" />
+          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Explore Our Impact</span>
+          <div className="w-1 h-14 bg-gradient-to-b from-primary to-transparent rounded-full opacity-30" />
         </motion.div>
       </section>
 

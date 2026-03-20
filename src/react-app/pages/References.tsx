@@ -7,18 +7,18 @@ export default function References() {
   const { t } = useTranslation();
 
   const techStack = [
-    { category: t('references.techStackLabels.frontend'), tech: 'React 19 with TypeScript (19.0.0)' },
-    { category: t('references.techStackLabels.build'), tech: 'Vite (7.x)' },
-    { category: t('references.techStackLabels.styling'), tech: 'Tailwind CSS (3.4.x)' },
-    { category: t('references.techStackLabels.animation'), tech: 'Framer Motion (12.x)' },
-    { category: t('references.techStackLabels.routing'), tech: 'React Router (7.x)' },
+    { category: t('references.techStackLabels.frontend'), tech: 'React 19 with TypeScript' },
+    { category: t('references.techStackLabels.build'), tech: 'Vite 7.x' },
+    { category: t('references.techStackLabels.styling'), tech: 'Tailwind CSS 3.4.x' },
+    { category: t('references.techStackLabels.animation'), tech: 'Framer Motion 12.x' },
+    { category: t('references.techStackLabels.routing'), tech: 'React Router 7.x' },
     { category: t('references.techStackLabels.database'), tech: 'Neon Postgres Serverless' },
-    { category: t('references.techStackLabels.auth'), tech: 'Clerk (5.x)' },
-    { category: t('references.techStackLabels.maps'), tech: 'Leaflet + React Leaflet (1.9.x)' },
-    { category: t('references.techStackLabels.validation'), tech: 'Zod (3.24.x)' },
+    { category: t('references.techStackLabels.auth'), tech: 'Clerk 5.x' },
+    { category: t('references.techStackLabels.maps'), tech: 'Leaflet + React Leaflet' },
+    { category: t('references.techStackLabels.validation'), tech: 'Zod 3.24.x' },
     { category: t('references.techStackLabels.i18n'), tech: 'i18next + react-i18next' },
-    { category: t('references.techStackLabels.translation'), tech: 'Python Flask + deep-translator' },
-    { category: t('references.techStackLabels.ai'), tech: 'Google Gemini API (used for NLP search & content validation)' }
+    { category: 'NLP & Search', tech: 'Google Gemini 1.5 Flash' },
+    { category: 'UI Components', tech: 'Shadcn UI + Aceternity UI' }
   ];
 
   const additionalLibraries = [
@@ -27,20 +27,24 @@ export default function References() {
     { name: 'react-leaflet', purpose: t('references.libraryPurposes.reactMaps') },
     { name: 'lucide-react', purpose: t('references.libraryPurposes.icons') },
     { name: 'i18next', purpose: t('references.libraryPurposes.i18n') },
-    { name: 'framer-motion', purpose: t('references.libraryPurposes.animation') }
+    { name: 'framer-motion', purpose: t('references.libraryPurposes.animation') },
+    { name: '@neondatabase/serverless', purpose: 'Database Connectivity' },
+    { name: 'clsx / tailwind-merge', purpose: 'Dynamic Styling' }
   ];
 
   const resourceLinks = [
+    { title: 'Alimentando al Pueblo', url: 'https://www.alimentandoalpueblo.org/' },
+    { title: 'ACRS (Asian Counseling and Referral Service)', url: 'https://acrs.org/' },
     { title: 'Ballard Food Bank', url: 'https://www.ballardfoodbank.org/' },
-    { title: 'Carolyn Downs Family Medical Center', url: 'https://neighborcare.org/clinics/carolyn-downs/' },
-    { title: 'Sound Health', url: 'https://www.sound.health/' },
-    { title: 'DC Central Kitchen', url: 'https://dccentralkitchen.org/' },
-    { title: 'Coalition for the Homeless', url: 'https://www.coalitionforthehomeless.org/' },
-    { title: 'Boston Medical Center', url: 'https://www.bmc.org/' },
-    { title: 'Pine Street Inn', url: 'https://www.pinestreetinn.org/' },
-    { title: 'Rosie\'s Place', url: 'https://www.rosiesplace.org/' },
-    { title: 'Greater Boston Food Bank', url: 'https://www.gbfb.org/' },
-    { title: 'Martha\'s Table', url: 'https://marthastable.org/' }
+    { title: 'El Centro de la Raza', url: 'https://www.elcentrodelaraza.org/' },
+    { title: 'Northwest Harvest', url: 'https://www.northwestharvest.org/' },
+    { title: 'Rainier Valley Food Bank', url: 'https://www.rvfb.org/' },
+    { title: 'University District Food Bank', url: 'https://www.udfb.org/' },
+    { title: 'West Seattle Food Bank', url: 'https://www.westseattlefoodbank.org/' },
+    { title: 'YouthCare', url: 'https://youthcare.org/' },
+    { title: 'Crisis Connections', url: 'https://www.crisisconnections.org/' },
+    { title: 'Unsplash (Visual Assets)', url: 'https://unsplash.com/' },
+    { title: 'Google Fonts (Typography)', url: 'https://fonts.google.com/' }
   ];
 
   return (
