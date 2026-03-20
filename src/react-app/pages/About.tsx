@@ -66,7 +66,7 @@ function StickyAboutStory() {
   const indicatorOpacity = useTransform(smoothProgress, [0.1, 0.2], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[600vh] bg-background">
+    <section ref={containerRef} className="relative h-[250vh] bg-background">
       <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
@@ -113,15 +113,6 @@ function StickyAboutStory() {
             style={{ opacity: contentOpacity }}
             className="absolute z-30 w-full max-w-7xl px-4 md:px-8 xl:px-12 pointer-events-auto flex flex-col items-center justify-center h-full"
         >
-            {/* Background Animation for Methodology */}
-            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.05] pointer-events-none overflow-hidden">
-               <motion.div
-                 animate={{ rotate: 360 }}
-                 transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-               >
-                 <Compass className="w-[800px] h-[800px] text-primary" />
-               </motion.div>
-            </div>
             <motion.div style={{ y: methodologyY }} className="absolute top-[8%] md:top-[12%] text-center">
                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
                <div className="w-32 h-1.5 bg-primary/40 mx-auto rounded-full mb-6" />
