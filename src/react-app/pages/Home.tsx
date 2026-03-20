@@ -17,24 +17,7 @@ import homeLight from '../assets/hero/home-light.png';
 import homeDark from '../assets/hero/home-dark.png';
 import { ShootingStars } from '@/react-app/components/ui/shooting-stars';
 
-const CompassNeedleIcon = ({ rotation }: { rotation: any }) => (
-  <svg 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2.5" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className="w-20 h-20 md:w-28 md:h-28 text-primary drop-shadow-sm"
-  >
-    <circle cx="12" cy="12" r="10" className="opacity-20" strokeWidth="1.5" />
-    <motion.path 
-      style={{ rotate: rotation, originX: "50%", originY: "50%" }}
-      d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" 
-    />
-    <circle cx="12" cy="12" r="1.5" className="fill-current" />
-  </svg>
-);
+// Removed custom CompassNeedleIcon in favor of standard Compass
 
 
 // Animated count-up hook
@@ -226,17 +209,12 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="space-y-10"
             >
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-xl shadow-inner group">
-                <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-                <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
-              </div>
-              
               <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-10 mb-8 mt-4">
-                <span className="inline-flex text-primary">
-                  <CompassNeedleIcon rotation={compassRotate} />
-                </span>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] text-center md:text-left">
-                  Community<br />Compass
+                <motion.div style={{ rotate: compassRotate }} className="inline-flex text-emerald-400">
+                  <Compass className="w-20 h-20 md:w-28 md:h-28 drop-shadow-sm" strokeWidth={1.5} />
+                </motion.div>
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-tighter leading-[0.9] text-center md:text-left bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent pb-2 drop-shadow-sm">
+                  Community Compass
                 </h1>
               </div>
               
@@ -441,8 +419,8 @@ export default function Home() {
               },
               {
                 title: t('home.howItWorks.step3.title', '3. Contribute'),
-                icon: <Users className="w-10 h-10 text-orange-500" />,
-                iconBg: "bg-accent-peach/20",
+                icon: <Users className="w-10 h-10 text-primary" />,
+                iconBg: "bg-matte-blue",
                 frontText: "Grow the community hub.",
                 desc: t('home.howItWorks.step3.desc', 'Help your community grow by submitting new local resources, organizations, and services to our hub directly.'),
               }
@@ -483,7 +461,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-6xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12 flex flex-col items-center">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="mb-4">
-              <Compass className="w-10 h-10 text-blue-400 opacity-40" />
+              <Compass className="w-10 h-10 text-emerald-400 opacity-40" />
             </motion.div>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">{t('home.impact.title')}</h2>
             <p className="text-base text-muted-foreground font-medium">{t('home.impact.subtitle')}</p>

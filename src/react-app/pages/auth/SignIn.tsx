@@ -93,9 +93,9 @@ export default function SignInPage() {
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
             >
-              <Compass className="w-10 h-10 text-blue-600" />
+              <Compass className="w-10 h-10 text-emerald-600" />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.welcomeBack')}
@@ -114,7 +114,7 @@ export default function SignInPage() {
             {pendingCode ? (
               <form onSubmit={handleVerify} className="space-y-6">
                 <div className="text-center">
-                  <CheckCircle className="w-12 h-12 text-blue-400 mx-auto mb-2" />
+                  <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-2" />
                   <p className="text-white font-bold text-sm block drop-shadow-sm">{t('auth.emailCodeSent', { email: emailAddress })}</p>
                 </div>
                 {error && (
@@ -139,7 +139,7 @@ export default function SignInPage() {
                     placeholder={t('auth.codePlaceholder')}
                     required
                     maxLength={6}
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
                   />
                 </div>
                 <GlassButton type="submit" variant="primary" size="lg" className="w-full text-foreground" disabled={loading || !isLoaded}>
@@ -148,7 +148,7 @@ export default function SignInPage() {
                 <button
                   type="button"
                   onClick={() => { setPendingCode(false); setCode(''); setError(''); }}
-                  className="w-full text-sm text-blue-600 hover:text-blue-800 font-bold"
+                  className="w-full text-sm text-emerald-600 hover:text-emerald-800 font-bold"
                 >
                   {t('auth.backToPassword')}
                 </button>
@@ -172,7 +172,7 @@ export default function SignInPage() {
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                     <input
                       id="email"
                       type="email"
@@ -180,7 +180,7 @@ export default function SignInPage() {
                       onChange={(e) => setEmailAddress(e.target.value)}
                       placeholder={t('auth.emailPlaceholder')}
                       required
-                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export default function SignInPage() {
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
@@ -199,7 +199,7 @@ export default function SignInPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('auth.passwordPlaceholder')}
                       required
-                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                     />
                     <button
                       type="button"
@@ -227,7 +227,7 @@ export default function SignInPage() {
             <div className="mt-6 text-center">
               <Link
                 to="/sign-up"
-                className="text-sm text-blue-600 hover:text-blue-800 font-bold transition-colors uppercase tracking-widest"
+                className="text-sm text-emerald-600 hover:text-emerald-800 font-bold transition-colors uppercase tracking-widest"
               >
                 {t('auth.noAccount')}
               </Link>

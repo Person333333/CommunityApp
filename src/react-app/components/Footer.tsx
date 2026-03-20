@@ -24,7 +24,7 @@ export default function Footer() {
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.5 }}
               >
-                <Compass className="w-8 h-8 text-blue-400" />
+                <Compass className="w-8 h-8 text-emerald-400" />
               </motion.div>
               <span className="text-xl font-bold text-foreground tracking-widest uppercase">{t('app.name')}</span>
             </Link>
@@ -58,17 +58,17 @@ export default function Footer() {
             <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('about.quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/discover" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/discover" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('nav.discover')}
                 </Link>
               </li>
               <li>
-                <Link to="/submit" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/submit" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('nav.addResource')}
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/about" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('nav.about')}
                 </Link>
               </li>
@@ -86,22 +86,22 @@ export default function Footer() {
             <h3 className="text-sm tracking-widest uppercase font-bold text-foreground">{t('map.categories')}</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/discover?category=Housing" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/discover?category=Housing" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('categories.Housing')}
                 </Link>
               </li>
               <li>
-                <Link to="/discover?category=Food Assistance" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/discover?category=Food Assistance" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('categories.Food')}
                 </Link>
               </li>
               <li>
-                <Link to="/discover?category=Healthcare" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/discover?category=Healthcare" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   {t('categories.Health')}
                 </Link>
               </li>
               <li>
-                <Link to="/discover?category=Mental Health" className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide">
+                <Link to="/discover?category=Mental Health" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm font-medium tracking-wide">
                   Mental Health
                 </Link>
               </li>
@@ -120,20 +120,20 @@ export default function Footer() {
             <div className="space-y-3">
               <a
                 href="mailto:hello@communitycompass.org"
-                className="flex items-center gap-3 text-slate-400 hover:text-blue-400 transition-colors text-sm group font-medium"
+                className="flex items-center gap-3 text-slate-400 hover:text-emerald-400 transition-colors text-sm group font-medium"
               >
-                <Mail className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
+                <Mail className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" />
                 <span>hello@communitycompass.org</span>
               </a>
               <a
                 href="tel:+11234567890"
-                className="flex items-center gap-3 text-slate-400 hover:text-blue-400 transition-colors text-sm group font-medium"
+                className="flex items-center gap-3 text-slate-400 hover:text-emerald-400 transition-colors text-sm group font-medium"
               >
-                <Phone className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
+                <Phone className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" />
                 <span>+1 (123) 456-7890</span>
               </a>
               <div className="flex items-start gap-3 text-slate-400 text-sm font-medium">
-                <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 <span>123 Community Street<br />City, State 12345</span>
               </div>
             </div>
@@ -152,10 +152,10 @@ export default function Footer() {
             {t('footer.rights', { year: new Date().getFullYear() })}
           </p>
           <div className="flex gap-6 text-sm text-slate-500 font-medium tracking-wide">
-            <Link to="/references" className="hover:text-blue-400 transition-colors">
+            <Link to="/references" className="hover:text-emerald-400 transition-colors">
               {t('footer.privacy')}
             </Link>
-            <Link to="/references" className="hover:text-blue-400 transition-colors">
+            <Link to="/references" className="hover:text-emerald-400 transition-colors">
               {t('footer.terms')}
             </Link>
           </div>

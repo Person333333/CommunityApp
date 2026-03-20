@@ -122,13 +122,14 @@ function StickyAboutStory() {
             <div className="w-full flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-10 mt-32 xl:mt-40">
               {/* Challenge Box */}
               <motion.div style={{ x: challengeX }} className="w-full md:w-[38%] xl:w-[35%]">
-                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-blue-500/30 shadow-[0_0_50px_rgba(96,165,250,0.15)] rounded-[2.5rem] group hover:border-blue-500/50 transition-all duration-500 h-full">
+                <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="h-full">
+                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.15)] rounded-[2.5rem] group hover:border-emerald-500/50 hover:shadow-[0_0_80px_rgba(16,185,129,0.3)] transition-all duration-500 h-full">
                   <div className="flex flex-col xl:flex-row items-start gap-6 h-full">
-                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-blue-500 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-emerald-500 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                       1
                     </div>
                     <div>
-                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-blue-500 uppercase">
+                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-emerald-500 uppercase">
                         {t('about.methodology.challenge.title')}
                       </h3>
                       <div className="space-y-4 text-foreground/80 font-bold leading-relaxed text-lg">
@@ -138,6 +139,7 @@ function StickyAboutStory() {
                     </div>
                   </div>
                 </GlassCard>
+                </motion.div>
               </motion.div>
 
               {/* Center spacer explicitly mapped to compass scale so needle beautifully reaches the cards */}
@@ -145,13 +147,14 @@ function StickyAboutStory() {
 
               {/* Solution Box */}
               <motion.div style={{ x: solutionX }} className="w-full md:w-[38%] xl:w-[35%]">
-                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-indigo-500/30 shadow-[0_0_50px_rgba(129,140,248,0.15)] rounded-[2.5rem] group hover:border-indigo-500/50 transition-all duration-500 h-full">
+                <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="h-full">
+                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-teal-500/30 shadow-[0_0_50px_rgba(20,184,166,0.15)] rounded-[2.5rem] group hover:border-teal-500/50 hover:shadow-[0_0_80px_rgba(20,184,166,0.3)] transition-all duration-500 h-full">
                   <div className="flex flex-col xl:flex-row items-start gap-6 h-full">
-                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-indigo-500 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
+                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-teal-500 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
                       2
                     </div>
                     <div>
-                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-indigo-500 uppercase">
+                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-teal-500 uppercase">
                         {t('about.methodology.solution.title')}
                       </h3>
                       <div className="space-y-4 text-foreground/80 font-bold leading-relaxed text-lg">
@@ -161,6 +164,7 @@ function StickyAboutStory() {
                     </div>
                   </div>
                 </GlassCard>
+                </motion.div>
               </motion.div>
             </div>
         </motion.div>
@@ -201,21 +205,18 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
         </div>
         <div className="relative z-10 container mx-auto px-4 md:px-6 text-center pt-32">
-          <motion.div variants={fadeInUp} className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/5 border border-primary/10 mb-8 md:mb-12 shadow-sm backdrop-blur-md">
-              <Sparkles className="h-4 w-4 text-primary opacity-50" />
-              <span className="text-[10px] text-primary/60 tracking-[0.2em] font-black uppercase">
-                {t('about.hero.badge')}
+          <motion.div variants={fadeInUp} className="max-w-5xl mx-auto flex flex-col items-center">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-primary-green/10 border border-primary-green/20 mb-6 shadow-sm backdrop-blur-md">
+              <Sparkles className="h-4 w-4 text-emerald-400 opacity-80 animate-pulse" />
+              <span className="text-xs text-emerald-400 tracking-[0.3em] font-black uppercase">
+                Est. 2026
               </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
-              Community<br />
-              <span className="text-primary-green drop-shadow-sm">Compass</span>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 md:mb-10 tracking-tighter leading-[0.9] uppercase text-foreground drop-shadow-md bg-gradient-to-br from-foreground via-foreground/90 to-foreground/60 bg-clip-text text-transparent">
+              {t('about.hero.badge')}
             </h1>
+            <div className="w-24 md:w-32 h-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 mx-auto rounded-full mb-12 shadow-[0_0_20px_rgba(52,211,153,0.4)]" />
             <div className="max-w-3xl mx-auto">
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground/80 mx-auto font-bold italic leading-relaxed mb-12">
-                {t('about.hero.subtitle')}
-              </p>
               <div className="flex justify-center">
                 <div 
                   className="flex flex-col items-center gap-4 cursor-pointer group"
@@ -287,22 +288,31 @@ export default function About() {
           <GlassCard variant="strong" className="p-0 overflow-hidden bg-card/40 border-border shadow-[0_0_50px_rgba(0,0,0,0.05)] rounded-[3rem] backdrop-blur-xl">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-1/2 relative bg-background overflow-hidden group">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
-                  alt="Founder Alex Rivera"
-                  className="w-full h-full object-cover min-h-[500px] grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
-                />
+                <div className="w-full h-full min-h-[500px] flex">
+                  <img
+                    src="/George CEO photo.jpg"
+                    alt="Co-Creator George Xu"
+                    onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544168190-79c15427015f?auto=format&fit=crop&q=80&w=400"; }}
+                    className="w-1/2 h-full object-cover grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
+                  />
+                  <img
+                    src="/Nikhil CEO photo.jpg"
+                    alt="Co-Creator Nikhil Vincent"
+                    onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400"; }}
+                    className="w-1/2 h-full object-cover grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
                 <div className="absolute bottom-8 left-8 p-8 bg-card/90 backdrop-blur-xl rounded-[2.5rem] border border-border/50 shadow-xl">
                   <div className="flex items-center gap-4 mb-2">
-                    <div className="w-1 h-8 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
-                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">{t('about.founder.title')}</h4>
+                    <div className="w-1 h-8 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">George Xu <br className="md:hidden"/>& Nikhil Vincent</h4>
                   </div>
-                  <p className="text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] ml-5">{t('about.founder.role')}</p>
+                  <p className="text-emerald-400 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Co-Creators</p>
                 </div>
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
-                <Quote className="w-16 h-16 text-blue-500 mb-8 opacity-20" />
+                <Quote className="w-16 h-16 text-emerald-500 mb-8 opacity-20" />
                 <h3 className="text-4xl sm:text-5xl font-black text-foreground mb-8 leading-tight tracking-tighter uppercase italic">{t('about.founder.subtitle')}</h3>
                 <div className="space-y-6 text-foreground leading-relaxed text-xl font-bold italic">
                   <p>"{t('about.founder.quote1')}"</p>

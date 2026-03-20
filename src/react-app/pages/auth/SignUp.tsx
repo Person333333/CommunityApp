@@ -96,9 +96,9 @@ export default function SignUpPage() {
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.5 }}
             >
-              <Compass className="w-10 h-10 text-blue-600" />
+              <Compass className="w-10 h-10 text-emerald-600" />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.joinCommunity')}
@@ -121,9 +121,9 @@ export default function SignUpPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center mb-6"
                 >
-                  <CheckCircle className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+                  <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
                   <p className="text-foreground font-bold text-center mb-6">
-                    {t('auth.codeSentTo')} <span className="text-blue-600 font-black">{emailAddress}</span>
+                    {t('auth.codeSentTo')} <span className="text-emerald-600 font-black">{emailAddress}</span>
                   </p>
                 </motion.div>
 
@@ -149,7 +149,7 @@ export default function SignUpPage() {
                     onChange={(e) => setCode(e.target.value)}
                     placeholder={t('auth.codePlaceholder')}
                     required
-                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center text-2xl tracking-widest font-bold"
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-center text-2xl tracking-widest font-bold"
                     maxLength={6}
                   />
                 </div>
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                     setCode('');
                     setError('');
                   }}
-                  className="w-full text-sm text-blue-600 hover:text-blue-800 font-bold transition-colors uppercase tracking-widest"
+                  className="w-full text-sm text-emerald-600 hover:text-emerald-800 font-bold transition-colors uppercase tracking-widest"
                 >
                   {t('auth.changeEmail')}
                 </button>
@@ -196,7 +196,7 @@ export default function SignUpPage() {
                       {t('auth.firstName')}
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                       <input
                         id="firstName"
                         type="text"
@@ -204,7 +204,7 @@ export default function SignUpPage() {
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder={t('auth.firstPlaceholder')}
                         required
-                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                       />
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export default function SignUpPage() {
                       {t('auth.lastName')}
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                       <input
                         id="lastName"
                         type="text"
@@ -222,7 +222,7 @@ export default function SignUpPage() {
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder={t('auth.lastPlaceholder')}
                         required
-                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                        className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                       />
                     </div>
                   </div>
@@ -234,7 +234,7 @@ export default function SignUpPage() {
                     {t('auth.emailLabel')}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                     <input
                       id="email"
                       type="email"
@@ -242,7 +242,7 @@ export default function SignUpPage() {
                       onChange={(e) => setEmailAddress(e.target.value)}
                       placeholder={t('auth.emailPlaceholder')}
                       required
-                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function SignUpPage() {
                     {t('auth.passwordLabel')}
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
@@ -261,12 +261,12 @@ export default function SignUpPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={t('auth.createPasswordPlaceholder')}
                       required
-                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium"
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-500 transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -293,7 +293,7 @@ export default function SignUpPage() {
               <div className="mt-6 text-center">
                 <Link
                   to="/sign-in"
-                  className="text-sm text-blue-600 hover:text-blue-800 font-bold transition-colors uppercase tracking-widest"
+                  className="text-sm text-emerald-600 hover:text-emerald-800 font-bold transition-colors uppercase tracking-widest"
                 >
                   {t('auth.alreadyHaveAccount')}
                 </Link>

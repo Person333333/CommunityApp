@@ -337,7 +337,7 @@ Page
                   <div className="space-y-6 pt-6 border-t border-border">
                     <div className="flex justify-between items-center">
                       <h4 className="font-black text-foreground uppercase tracking-widest text-sm flex items-center gap-2 drop-shadow-sm">
-                        <Compass className="w-4 h-4 text-indigo-400" /> Additional Action Buttons
+                        <Compass className="w-4 h-4 text-emerald-400" /> Additional Action Buttons
                       </h4>
                       <div className="text-[10px] font-black uppercase text-muted-foreground">Max 2 custom actions</div>
                     </div>

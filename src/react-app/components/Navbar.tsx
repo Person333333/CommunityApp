@@ -1,6 +1,6 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router';
-import { Compass, Menu, X, Accessibility, Eye, Type, Zap } from 'lucide-react';
+import { Compass, Menu, X, Accessibility, Eye, Type } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-react';
 import LanguageSelector from './LanguageSelector';
@@ -18,22 +18,10 @@ export default function Navbar() {
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem('a11y-high-contrast') === 'true');
   const [largeText, setLargeText] = useState(() => localStorage.getItem('a11y-large-text') === 'true');
-  const [reduceMotion, setReduceMotion] = useState(() => localStorage.getItem('a11y-reduce-motion') === 'true');
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('high-contrast', highContrast);
-    localStorage.setItem('a11y-high-contrast', String(highContrast));
-  }, [highContrast]);
-
   useEffect(() => {
     document.documentElement.classList.toggle('large-text', largeText);
     localStorage.setItem('a11y-large-text', String(largeText));
   }, [largeText]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('reduce-motion', reduceMotion);
-    localStorage.setItem('a11y-reduce-motion', String(reduceMotion));
-  }, [reduceMotion]);
 
   const { signOut } = useClerk();
   const { scrollY } = useScroll();
@@ -57,7 +45,7 @@ export default function Navbar() {
               <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
                 <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
               </motion.div>
-              <span className={`text-xl font-bold transition-colors duration-300 text-foreground tracking-tighter uppercase font-black`}>Community Compass</span>
+              <span className={`text-xl font-bold transition-colors duration-300 bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter uppercase font-black`}>Community Compass</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -72,13 +60,13 @@ export default function Navbar() {
                 <SignedOut>
                   <Link
                     to="/sign-in"
-                    className="text-foreground/70 hover:text-emerald-500 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
+                    className="px-4 py-2 text-foreground/70 hover:text-emerald-500 transition-colors duration-200 font-black uppercase tracking-widest text-[10px] flex items-center justify-center"
                   >
                     {t('nav.signIn')}
                   </Link>
                   <Link
                     to="/sign-up"
-                    className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm"
+                    className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm flex items-center justify-center"
                   >
                     {t('nav.signUp')}
                   </Link>
@@ -117,6 +105,10 @@ export default function Navbar() {
                 </SignedIn>
 
 
+                <div data-tour="language-selector">
+                  <LanguageSelector />
+                </div>
+
                 {/* Accessibility Menu */}
                 <div className="relative">
                   <button
@@ -152,21 +144,20 @@ export default function Navbar() {
                         {[
                           { label: 'High Contrast', icon: <Eye className="w-4 h-4" />, active: highContrast, toggle: () => setHighContrast(!highContrast) },
                           { label: 'Large Text', icon: <Type className="w-4 h-4" />, active: largeText, toggle: () => setLargeText(!largeText) },
-                          { label: 'Reduce Motion', icon: <Zap className="w-4 h-4" />, active: reduceMotion, toggle: () => setReduceMotion(!reduceMotion) },
                         ].map((t) => (
                           <button
                             key={t.label}
                             onClick={t.toggle}
                             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${t.active
-                              ? 'bg-blue-50 text-blue-700'
+                              ? 'bg-emerald-50 text-emerald-700'
                               : 'text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                               }`}
                           >
-                            <span className={`p-1.5 rounded-lg ${t.active ? 'bg-blue-100' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                            <span className={`p-1.5 rounded-lg ${t.active ? 'bg-emerald-100' : 'bg-slate-100 dark:bg-slate-800'}`}>
                               {t.icon}
                             </span>
                             <span className="flex-1 text-left font-bold">{t.label}</span>
-                            <div className={`w-8 h-4.5 rounded-full transition-colors relative ${t.active ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
+                            <div className={`w-8 h-4.5 rounded-full transition-colors relative ${t.active ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
                               <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${t.active ? 'translate-x-4' : 'translate-x-0.5'}`} />
                             </div>
                           </button>
@@ -174,10 +165,6 @@ export default function Navbar() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
-
-                <div data-tour="language-selector">
-                  <LanguageSelector />
                 </div>
               </div>
             </div>
