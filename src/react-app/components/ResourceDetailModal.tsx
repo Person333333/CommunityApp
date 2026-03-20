@@ -203,10 +203,10 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                   <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 bg-card/80 backdrop-blur-md p-2.5 rounded-xl hover:bg-emerald-500 hover:text-black transition-all z-50 shadow-xl border border-border group"
+                    className="absolute top-4 right-4 bg-background/80 backdrop-blur-md p-2.5 rounded-xl hover:bg-foreground hover:text-background transition-all z-50 shadow-xl border border-border group"
                     aria-label="Close modal"
                   >
-                    <X className="w-6 h-6 text-foreground group-hover:rotate-90 transition-transform" />
+                    <X className="w-6 h-6 text-foreground group-hover:text-background transition-transform" />
                   </button>
 
                   <div className={`p-8 ${resource.image_url ? 'absolute bottom-0 left-0 right-0' : ''}`}>
@@ -255,7 +255,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Description */}
                   <div>
                     <h3 className="text-[10px] font-black text-emerald-500 mb-2 uppercase tracking-[0.2em]">{t('resource.description')}</h3>
-                    <p className="text-slate-400 leading-relaxed font-medium">
+                    <p className="text-foreground/80 leading-relaxed font-bold">
                       {resource.description}
                     </p>
                   </div>
@@ -307,9 +307,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           <MapPin className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.address')}</p>
-                            <p className="text-white font-black text-xl leading-tight uppercase tracking-tighter">
+                            <p className="text-foreground font-black text-xl leading-tight uppercase tracking-tighter">
                               {resource.address}
-                              {resource.city && <span className="block text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">{resource.city}, {resource.state} {resource.zip}</span>}
+                              {resource.city && <span className="block text-[10px] text-muted-foreground font-bold mt-1 uppercase tracking-widest">{resource.city}, {resource.state} {resource.zip}</span>}
                             </p>
                           </div>
                         </div>
@@ -381,11 +381,11 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       </div>
                     )}
                     {resource.schedule && (
-                      <div className="flex items-start gap-4 bg-black/40 border border-white/10 p-6 rounded-none backdrop-blur-xl">
+                      <div className="flex items-start gap-4 bg-muted/40 border border-border p-6 rounded-none backdrop-blur-xl">
                         <Calendar className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1">Specific Schedule</p>
-                          <p className="text-white font-black leading-relaxed uppercase tracking-tighter text-sm">{resource.schedule}</p>
+                          <p className="text-foreground font-black leading-relaxed uppercase tracking-tighter text-sm">{resource.schedule}</p>
                         </div>
                       </div>
                     )}
@@ -604,21 +604,21 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setShowDonationForm(false)}
-                  className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                  className="absolute inset-0 bg-background/80 backdrop-blur-sm"
                 />
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  className="bg-black border border-white/10 rounded-none shadow-2xl w-full max-w-md relative z-[61] overflow-hidden backdrop-blur-3xl"
+                  className="bg-card border border-border rounded-none shadow-2xl w-full max-w-md relative z-[61] overflow-hidden backdrop-blur-3xl"
                 >
                   <div className="p-8 space-y-6">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-2">
-                      <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
+                    <div className="flex items-center justify-between border-b border-border pb-6 mb-2">
+                      <h3 className="text-xl font-black text-foreground uppercase tracking-tighter flex items-center gap-2">
                         <Heart className="w-5 h-5 text-emerald-500 fill-emerald-500/20" />
                         Support {resource.title}
                       </h3>
-                      <button onClick={() => setShowDonationForm(false)} className="text-slate-500 hover:text-white transition-all group">
+                      <button onClick={() => setShowDonationForm(false)} className="text-muted-foreground hover:text-foreground transition-all group">
                         <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                       </button>
                     </div>
@@ -632,35 +632,35 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
 
                     <form onSubmit={handleDonateSubmit} className="space-y-6">
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Full Name</label>
+                        <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Full Name</label>
                         <input
                           type="text"
                           required
                           value={donorName}
                           onChange={(e) => setDonorName(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
+                          className="w-full bg-background/50 border border-border rounded-none px-4 py-4 text-foreground font-black outline-none focus:border-emerald-500 transition-all placeholder:text-muted-foreground/50 uppercase text-xs tracking-widest"
                           placeholder="Jane Doe"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Email Address</label>
+                        <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Email Address</label>
                         <input
                           type="email"
                           required
                           value={donorEmail}
                           onChange={(e) => setDonorEmail(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
+                          className="w-full bg-background/50 border border-border rounded-none px-4 py-4 text-foreground font-black outline-none focus:border-emerald-500 transition-all placeholder:text-muted-foreground/50 uppercase text-xs tracking-widest"
                           placeholder="jane@example.com"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">ZIP Code</label>
+                        <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">ZIP Code</label>
                         <input
                           type="text"
                           required
                           value={donorZip}
                           onChange={(e) => setDonorZip(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded-none px-4 py-4 text-white font-black outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700 uppercase text-xs tracking-widest"
+                          className="w-full bg-background/50 border border-border rounded-none px-4 py-4 text-foreground font-black outline-none focus:border-emerald-500 transition-all placeholder:text-muted-foreground/50 uppercase text-xs tracking-widest"
                           placeholder="98000"
                         />
                       </div>

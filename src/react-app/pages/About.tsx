@@ -66,7 +66,7 @@ function StickyAboutStory() {
   const indicatorOpacity = useTransform(smoothProgress, [0.1, 0.2], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[250vh] bg-background">
+    <section ref={containerRef} className="relative h-[150vh] bg-background">
       <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}

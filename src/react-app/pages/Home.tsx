@@ -244,7 +244,7 @@ export default function Home() {
                 Connecting neighbors with local support, one hand at a time.
               </p>
               
-              <div className="flex flex-col items-center justify-center gap-10 pt-10">
+              <div className="flex flex-col items-center justify-center gap-8 pt-6">
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
