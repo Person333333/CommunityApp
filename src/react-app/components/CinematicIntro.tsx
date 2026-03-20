@@ -37,7 +37,7 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete }) => {
       // Phase 2: The Chromic Shatter (1.5s - 2.5s)
       if (scope.current) {
         const pills = scope.current.querySelectorAll(".intro-pill");
-        const animations = Array.from(pills).map((pill, i) => animate(
+        const animations = Array.from(pills).map((pill: any, i) => animate(
           pill,
           { 
             scale: [0, 1],
