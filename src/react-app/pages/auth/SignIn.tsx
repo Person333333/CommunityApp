@@ -97,7 +97,7 @@ export default function SignInPage() {
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl font-black text-black mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.welcomeBack')}
           </h1>
           <p className="text-lg text-foreground/80 font-bold">

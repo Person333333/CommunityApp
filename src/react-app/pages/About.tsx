@@ -109,10 +109,19 @@ function StickyAboutStory() {
         </motion.div>
 
         {/* The Methodology Content */}
-        <motion.div
+        <motion.section
             style={{ opacity: contentOpacity }}
             className="absolute z-30 w-full max-w-7xl px-4 md:px-8 xl:px-12 pointer-events-auto flex flex-col items-center justify-center h-full"
         >
+            {/* Background Animation for Methodology */}
+            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.05] pointer-events-none overflow-hidden">
+               <motion.div
+                 animate={{ rotate: 360 }}
+                 transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+               >
+                 <Compass className="w-[800px] h-[800px] text-primary" />
+               </motion.div>
+            </div>
             <motion.div style={{ y: methodologyY }} className="absolute top-[8%] md:top-[12%] text-center">
                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
                <div className="w-32 h-1.5 bg-primary/40 mx-auto rounded-full mb-6" />
@@ -140,9 +149,6 @@ function StickyAboutStory() {
                 </GlassCard>
               </motion.div>
 
-              {/* Center spacer explicitly mapped to compass scale so needle beautifully reaches the cards */}
-              <div className="hidden md:block w-[18%] lg:w-[22%] shrink-0 pointer-events-none" />
-
               {/* Solution Box */}
               <motion.div style={{ x: solutionX }} className="w-full md:w-[38%] xl:w-[35%]">
                 <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-indigo-500/30 shadow-[0_0_50px_rgba(129,140,248,0.15)] rounded-[2.5rem] group hover:border-indigo-500/50 transition-all duration-500 h-full">
@@ -163,7 +169,7 @@ function StickyAboutStory() {
                 </GlassCard>
               </motion.div>
             </div>
-        </motion.div>
+          </motion.section>
 
         {/* Scroll Indicator */}
         <motion.div
