@@ -66,7 +66,7 @@ function StickyAboutStory() {
   const indicatorOpacity = useTransform(smoothProgress, [0.1, 0.2], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[600vh] bg-background">
+    <section ref={containerRef} className="relative h-[250vh] bg-background">
       <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
@@ -109,7 +109,7 @@ function StickyAboutStory() {
         </motion.div>
 
         {/* The Methodology Content */}
-        <motion.div
+        <motion.section
             style={{ opacity: contentOpacity }}
             className="absolute z-30 w-full max-w-7xl px-4 md:px-8 xl:px-12 pointer-events-auto flex flex-col items-center justify-center h-full"
         >
@@ -142,9 +142,6 @@ function StickyAboutStory() {
                 </motion.div>
               </motion.div>
 
-              {/* Center spacer explicitly mapped to compass scale so needle beautifully reaches the cards */}
-              <div className="hidden md:block w-[18%] lg:w-[22%] shrink-0 pointer-events-none" />
-
               {/* Solution Box */}
               <motion.div style={{ x: solutionX }} className="w-full md:w-[38%] xl:w-[35%]">
                 <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="h-full">
@@ -167,7 +164,7 @@ function StickyAboutStory() {
                 </motion.div>
               </motion.div>
             </div>
-        </motion.div>
+          </motion.section>
 
         {/* Scroll Indicator */}
         <motion.div

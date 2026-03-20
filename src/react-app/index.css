@@ -187,15 +187,11 @@
 }
 /* Accessibility Overlays */
 .large-text {
-  font-size: 1.25rem !important;
+  font-size: 1.05rem !important;
 }
-.large-text h1 { font-size: 2.5rem !important; }
-.large-text h2 { font-size: 2.2rem !important; }
-.large-text h3 { font-size: 1.8rem !important; }
-.large-text p, .large-text span, .large-text div, .large-text button, .large-text input {
-  font-size: 1.15em !important;
-  line-height: 1.6 !important;
-}
+.large-text h1 { font-size: 1.5rem !important; }
+.large-text h2 { font-size: 1.25rem !important; }
+.large-text h3 { font-size: 1.15rem !important; }
 
 .high-contrast {
   --background: 0 0% 100%;

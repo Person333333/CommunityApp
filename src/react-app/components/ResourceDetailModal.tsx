@@ -482,15 +482,25 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                         </a>
                       )}
 
-                      {resource.action_urls?.some(a => a.label === 'Donate') && (
+                      {resource.action_urls?.map((action, aidx) => (
                         <Button
-                          onClick={() => setShowDonationForm(true)}
-                          className="bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6"
+                          key={aidx}
+                          onClick={() => {
+                             if (action.label.toLowerCase() === 'donate') setShowDonationForm(true);
+                             else window.open(action.url, '_blank');
+                          }}
+                          className={`${action.label.toLowerCase() === 'donate' ? 'bg-cyan-500 hover:bg-cyan-400' : 'bg-primary-green hover:bg-emerald-400'} text-black font-black rounded-none shadow-xl shadow-cyan-500/20 flex items-center transition-all uppercase tracking-widest text-xs h-12 px-6`}
                         >
-                          <Heart className="w-4 h-4 mr-2 fill-black" />
-                          Donate Now
+                          {action.label.toLowerCase() === 'donate' ? (
+                            <Heart className="w-4 h-4 mr-2 fill-black" />
+                          ) : action.label.toLowerCase() === 'volunteer' ? (
+                            <Users className="w-4 h-4 mr-2 fill-black" />
+                          ) : (
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                          )}
+                          {action.label}
                         </Button>
-                      )}
+                      ))}
                     </div>
 
                     <div className="text-right">
