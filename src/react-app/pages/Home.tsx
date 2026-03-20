@@ -25,7 +25,7 @@ const CompassNeedleIcon = ({ rotation }: { rotation: any }) => (
     strokeWidth="2.5" 
     strokeLinecap="round" 
     strokeLinejoin="round" 
-    className="w-12 h-12 text-primary drop-shadow-sm"
+    className="w-20 h-20 md:w-28 md:h-28 text-primary drop-shadow-sm"
   >
     <circle cx="12" cy="12" r="10" className="opacity-20" strokeWidth="1.5" />
     <motion.path 
@@ -231,15 +231,18 @@ export default function Home() {
                 <span className="text-sm font-black text-primary uppercase tracking-[0.2em]">{t('home.hero.badge')}</span>
               </div>
               
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] flex flex-col items-center gap-6">
-                <span>Connecting neighbors with</span>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-emerald-400 drop-shadow-sm flex items-center justify-center gap-6">
-                  local support, one hand at a time.
-                  <span className="inline-flex bg-primary/10 p-4 rounded-3xl border border-primary/20 shadow-2xl">
-                    <CompassNeedleIcon rotation={compassRotate} />
-                  </span>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-10 mb-8 mt-4">
+                <span className="inline-flex text-primary">
+                  <CompassNeedleIcon rotation={compassRotate} />
                 </span>
-              </h1>
+                <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.9] text-center md:text-left">
+                  Community<br />Compass
+                </h1>
+              </div>
+              
+              <p className="text-xl sm:text-2xl text-muted-foreground font-bold italic max-w-2xl mx-auto">
+                Connecting neighbors with local support, one hand at a time.
+              </p>
               
               <div className="flex flex-wrap justify-center gap-8 pt-6">
                 <Button 
