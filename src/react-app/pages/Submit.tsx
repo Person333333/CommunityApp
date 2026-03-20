@@ -618,9 +618,7 @@ Page
                         : 'bg-white/5 border-white/10 text-slate-400'
                         }`}
                       onClick={() => {
-                        if (errors.general.includes('AI Quality Check Failed')) {
-                          alert(`🤖 DETAILED AI AUDIT REPORT:\n\n${errors.general.replace('AI Quality Check Failed: ', '')}\n\nTip: Make sure your description is professional and doesn't contain placeholders like [Link Here] or [Phone].`);
-                        }
+                        // Removed alert popup as per user request
                       }}
                     >
                       <div className={`w-10 h-10 rounded-none flex items-center justify-center flex-shrink-0 ${errors.general.includes('AI Quality Check Failed') ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-slate-500'
@@ -628,7 +626,6 @@ Page
                         <Sparkles className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="uppercase tracking-widest text-[10px] mb-1 opacity-60">Verification Report</p>
                         <p className="leading-relaxed font-black uppercase text-[11px] tracking-tight">{errors.general}</p>
                         {errors.general.includes('AI Quality Check Failed') && (
                           <p className="mt-2 text-red-400 text-[10px] uppercase font-black flex items-center gap-1 tracking-widest">

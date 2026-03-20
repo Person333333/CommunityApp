@@ -319,7 +319,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           <LocationMap 
                             location={resource.city || resource.address} 
                             coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
-                            className="w-full grayscale brightness-75 contrast-125 hover:grayscale-0 hover:brightness-100 transition-all duration-700"
+                            className="w-full sepia-[0.3] brightness-[1.1] contrast-[0.9] hover:sepia-0 hover:brightness-100 hover:contrast-100 transition-all duration-700"
                           />
                         </div>
                       </div>

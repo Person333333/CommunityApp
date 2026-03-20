@@ -72,7 +72,7 @@ export default function Navbar() {
                 <SignedOut>
                   <Link
                     to="/sign-in"
-                    className="text-muted-foreground hover:text-emerald-400 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
+                    className="text-foreground/70 hover:text-emerald-500 transition-colors duration-200 font-black uppercase tracking-widest text-[10px]"
                   >
                     {t('nav.signIn')}
                   </Link>
@@ -221,7 +221,7 @@ export default function Navbar() {
                       <Link
                         to="/sign-in"
                         onClick={() => setIsOpen(false)}
-                        className="block w-full glass-layer px-4 py-3 rounded-lg text-foreground border border-border hover:bg-foreground/5 transition-all text-left font-bold"
+                        className="block w-full glass-layer px-4 py-3 rounded-lg text-foreground border border-border/20 hover:bg-foreground/5 transition-all text-left font-bold"
                       >
                         Sign In
                       </Link>
@@ -234,7 +234,7 @@ export default function Navbar() {
                       </Link>
                     </SignedOut>
                     <SignedIn>
-                      <div className="px-4 py-3 glass-layer border border-white/10 rounded-none shadow-sm">
+                      <div className="px-4 py-3 glass-layer border border-border/20 rounded-none shadow-sm">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-foreground/20 text-foreground font-medium flex items-center justify-center border border-border">
