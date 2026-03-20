@@ -21,14 +21,8 @@ function StickyAboutStory() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-<<<<<<< HEAD
     offset: ["start start", "end end"]
   });
-=======
-    offset: ["start center", "end end"],
-    layoutEffect: false
-  } as any);
->>>>>>> 0d23040c15b6eeed9522f76cb626a3129b2d6dfb
 
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 90,
@@ -104,7 +98,6 @@ function StickyAboutStory() {
              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-primary/40 to-emerald-400" />
           </motion.div>
 
-<<<<<<< HEAD
           {/* Center Pivot */}
           <motion.div 
             style={{ scale: centerCircleScale }}
@@ -112,28 +105,6 @@ function StickyAboutStory() {
           >
             <div className="w-5 h-5 bg-background border-4 border-primary rounded-full shadow-[0_0_15px_rgba(59,130,246,0.7)]" />
           </motion.div>
-=======
-          {/* Methodology Container */}
-          <motion.div
-            style={{ opacity: methodologyOpacity, y: methodologyY }}
-            className="absolute w-full max-w-6xl px-6 pointer-events-auto flex flex-col items-center"
-          >
-            {/* Background Animation for Methodology */}
-            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.05] pointer-events-none overflow-hidden">
-               <motion.div
-                 animate={{ rotate: 360 }}
-                 transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-               >
-                 <Compass className="w-[800px] h-[800px] text-primary" />
-               </motion.div>
-            </div>
-
-            <div className="text-center mb-12 lg:mb-16 relative z-10">
-               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
-               <div className="w-24 h-1 bg-primary/20 mx-auto rounded-full mb-6" />
-               <p className="text-muted-foreground font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
-            </div>
->>>>>>> 0d23040c15b6eeed9522f76cb626a3129b2d6dfb
 
         </motion.div>
 
