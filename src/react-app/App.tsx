@@ -23,14 +23,7 @@ import { useLocation } from "@/react-app/context/LocationContext";
 import CinematicIntro from "@/react-app/components/CinematicIntro";
 import { AnimatePresence, motion } from "framer-motion";
 
-
-function ScrollToTop() {
-  const { pathname } = useRouterLocation();
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [pathname]);
-  return null;
-}
+import { ScrollToTop } from "@/react-app/components/ScrollToTop";
 
 function AppRoutes() {
   const location = useRouterLocation();
@@ -112,6 +105,7 @@ export default function App() {
   return (
     <ErrorBoundary>
     <Router>
+      <ScrollToTop />
       <AnimatePresence mode="wait">
         {showIntro && (
           <CinematicIntro key="intro" onComplete={handleIntroComplete} />

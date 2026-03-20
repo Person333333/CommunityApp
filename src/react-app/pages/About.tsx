@@ -23,7 +23,7 @@ function StickyAboutStory() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start center", "end end"]
   });
 
   const smoothProgress = useSpring(scrollYProgress, {

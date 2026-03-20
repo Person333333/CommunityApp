@@ -205,11 +205,24 @@ export default function Discover() {
 
     if (selectedTag) {
       const t = selectedTag.toLowerCase();
-      filtered = filtered.filter((r: ResourceType) =>
-        r.category?.toLowerCase().includes(t) ||
-        r.description?.toLowerCase().includes(t) ||
-        r.title?.toLowerCase().includes(t)
-      );
+      const audienceTags = ['senior', 'family', 'child', 'veteran', 'student'];
+      const isAudienceTag = audienceTags.includes(t);
+
+      filtered = filtered.filter((r: ResourceType) => {
+        const textMatch =
+          r.category?.toLowerCase().includes(t) ||
+          r.description?.toLowerCase().includes(t) ||
+          r.title?.toLowerCase().includes(t) ||
+          r.audience?.toLowerCase().includes(t) ||
+          r.services?.toLowerCase().includes(t);
+
+        if (isAudienceTag) {
+          const hasNoAudienceRestrictions = !r.audience || r.audience.trim() === '' || r.audience.toLowerCase().includes('everyone') || r.audience.toLowerCase().includes('all');
+          if (hasNoAudienceRestrictions) return true;
+        }
+
+        return textMatch;
+      });
     }
 
     return filtered;
