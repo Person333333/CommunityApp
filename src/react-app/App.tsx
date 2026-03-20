@@ -112,7 +112,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="relative min-h-screen w-full overflow-hidden bg-deep text-core font-sans">
+      <div className="relative min-h-screen w-full bg-deep text-core font-sans overflow-x-clip">
         {/* Ambient Floating Gradient Blobs */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden mix-blend-screen opacity-15">
           <div className="absolute top-[-10%] left-[-10%] h-[50vh] w-[50vh] rounded-full bg-blue-600 blur-[120px] animate-blob-1" />

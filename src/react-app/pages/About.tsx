@@ -1,10 +1,9 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router';
 import { Users, Leaf, Lightbulb, Compass, Quote, Sparkles } from 'lucide-react';
 import GlassCard from '@/react-app/components/GlassCard';
 import GlassButton from '@/react-app/components/GlassButton';
-import FlipCard from '@/react-app/components/FlipCard';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/react-app/hooks/useTheme';
 import aboutLight from '../assets/hero/about-light.png';
@@ -19,192 +18,163 @@ const fadeInUp = {
 function StickyAboutStory() {
   const containerRef = useRef<HTMLElement>(null);
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end end"]
+    offset: ["start start", "end end"]
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
+    stiffness: 90,
     damping: 30,
     restDelta: 0.001
   });
 
-  // Animation Timelines
-  const scale        = useTransform(smoothProgress, [0, 0.25, 0.45], [1, 2.5, 8]);
-  const rotate       = useTransform(smoothProgress, [0, 0.45], [0, 720]);
-  const needleRotate = useTransform(smoothProgress, [0, 0.45], [0, 720 + 90]);
-  const compassOpacity = useTransform(smoothProgress, [0, 0.08], [0, 1]);
+  // Phases of animation:
+  // 0.00 - 0.30: Spins 3 times (1080 deg) + 90 deg = 1170 deg. Scales up.
+  // 0.30 - 0.35: Pauses horizontally.
+  // 0.35 - 0.45: Needle stretches out into a glowing horizontal connecting line.
+  // 0.45 - 0.60: Content fades in (Methodology drops down, Challenge/Solution slide in from sides).
+  // 0.85 - 1.00: Content fades out.
 
-  const ringOpacity = useTransform(smoothProgress, [0.3, 0.45], [1, 0]);
-  const lineOpacity = useTransform(smoothProgress, [0.45, 0.55], [0, 1]);
-  const lineWidth   = useTransform(smoothProgress, [0.5, 0.6], ["0%", "100%"]);
+  // Spin & basic compass elements opacity
+  const compassOpacity = useTransform(smoothProgress, [0, 0.05], [0, 1]);
+  const ringOpacity = useTransform(smoothProgress, [0.15, 0.25], [1, 0]);
+  const needleRotate = useTransform(smoothProgress, [0, 0.3], [0, 1170]);
+  const compassScale = useTransform(smoothProgress, [0, 0.3], [1, 1.5]);
 
-  // Vision & Mission (0.55 – 0.75)
-  const visionOpacity  = useTransform(smoothProgress, [0.55, 0.65], [0, 1]);
-  const visionY        = useTransform(smoothProgress, [0.55, 0.65], [40, 0]);
-  const missionOpacity = useTransform(smoothProgress, [0.65, 0.75], [0, 1]);
-  const missionY       = useTransform(smoothProgress, [0.65, 0.75], [40, 0]);
+  // The needle remains its normal size, just acting as a pointer
+  // Local X is vertical on screen, local Y is horizontal.
+  const needleScaleX = useTransform(smoothProgress, [0.35, 0.45], [1, 1]);
+  const needleScaleY = useTransform(smoothProgress, [0.35, 0.45], [1, 1.2]); // slightly scale for emphasis
 
-  // Fade out story before methodology
-  const storyContainerOpacity = useTransform(smoothProgress, [0.75, 0.8], [1, 0]);
+  // Center circle scales up slightly
+  const centerCircleScale = useTransform(smoothProgress, [0.35, 0.45], [1, 1.2]);
 
-  // Methodology (0.45 – 0.85) - MOVED UP TO BE THE MAIN FOCUS
-  const methodologyOpacity = useTransform(smoothProgress, [0.45, 0.65], [0, 1]);
-  const methodologyY       = useTransform(smoothProgress, [0.45, 0.65], [60, 0]);
+  // Content appearing
+  const contentOpacity = useTransform(smoothProgress, [0.45, 0.55], [0, 1]);
+  const methodologyY = useTransform(smoothProgress, [0.45, 0.60], [-60, 0]);
+  
+  // Cards sliding in from edges
+  const challengeX = useTransform(smoothProgress, [0.45, 0.60], [-100, 0]);
+  const solutionX = useTransform(smoothProgress, [0.45, 0.60], [100, 0]);
+  
+  // Overall section fade out before next section
+  const sectionOpacity = useTransform(smoothProgress, [0.85, 0.95], [1, 0]);
 
   // Scroll indicator
-  const indicatorOpacity = useTransform(smoothProgress, [0.92, 1], [1, 0]);
+  const indicatorOpacity = useTransform(smoothProgress, [0.1, 0.2], [1, 0]);
 
   return (
     <section ref={containerRef} className="relative h-[600vh] bg-background">
-      <div className="sticky top-16 h-[calc(100vh-64px)] flex flex-col items-center justify-center overflow-hidden">
+      <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
         <motion.div 
           style={{ 
-            scale: shouldReduceMotion ? 1 : scale, 
-            rotate: shouldReduceMotion ? 0 : rotate,
-            opacity: shouldReduceMotion ? 1 : compassOpacity
+            scale: compassScale, 
+            opacity: compassOpacity
           }}
-          className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center z-10"
+          className="absolute inset-0 m-auto w-32 h-32 md:w-56 md:h-56 flex items-center justify-center z-10"
         >
-          {/* Outer Ring */}
+          {/* Outer Rings */}
           <motion.div style={{ opacity: ringOpacity }} className="absolute inset-0 border-4 border-primary/20 rounded-full" />
           <motion.div style={{ opacity: ringOpacity }} className="absolute inset-2 border border-primary/10 rounded-full" />
-          
-          {/* Inner Compass Needle */}
-          <motion.div 
-            style={{ rotate: shouldReduceMotion ? 90 : needleRotate }}
-            className="w-full h-full relative"
-          >
-             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1/2 bg-gradient-to-t from-primary to-primary-green rounded-t-full" />
-             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1/2 bg-gradient-to-b from-primary/40 to-muted rounded-b-full" />
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-background border-2 border-primary rounded-full z-10" />
-          </motion.div>
-
           <motion.div style={{ opacity: ringOpacity }}>
             <Compass className="absolute inset-0 m-auto w-12 h-12 text-primary opacity-20" />
           </motion.div>
-        </motion.div>
-
-        {/* The Horizontal Divider Line */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          
+          {/* Inner Compass Needle (Points left and right) */}
           <motion.div 
             style={{ 
-              opacity: shouldReduceMotion ? 1 : lineOpacity,
-              width: lineWidth
+              rotate: needleRotate,
+              scaleX: needleScaleX,
+              scaleY: needleScaleY,
             }}
-            className="max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
-          />
-        </div>
-
-        {/* Unified Content Overlay */}
-        <div className="absolute inset-0 z-20 flex justify-center items-center pointer-events-none">
-          
-          {/* Vision & Mission Container - HIDDEN BUT PRESERVED AS REQUESTED */}
-          {/* 
-          <motion.div 
-             style={{ opacity: storyContainerOpacity }}
-             className="absolute w-full max-w-4xl flex flex-col gap-24 px-6"
+            className="absolute m-auto w-1.5 h-full rounded-full overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.5)]"
           >
-            <motion.div 
-              style={{ opacity: visionOpacity, y: visionY }}
-              className="w-full text-center pointer-events-auto"
-            >
-               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-foreground/70">{t('about.vision')}</h2>
-               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground selection:bg-primary/30">
-                 {t('about.visionText')}
-               </p>
-            </motion.div>
-
-            <motion.div 
-              style={{ opacity: missionOpacity, y: missionY }}
-              className="w-full text-center pointer-events-auto"
-            >
-               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tighter mb-4 text-primary-green/70">{t('about.mission')}</h2>
-               <p className="text-xl sm:text-3xl font-bold italic leading-tight text-foreground">
-                 {t('about.missionText')}
-               </p>
-            </motion.div>
+             {/* The glowing gradients pointing to the boxes */}
+             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary to-primary-green" />
+             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-primary/40 to-emerald-400" />
           </motion.div>
-          */}
 
-          {/* Methodology Container */}
-          <motion.div
-            style={{ opacity: methodologyOpacity, y: methodologyY }}
-            className="absolute w-full max-w-6xl px-6 pointer-events-auto"
+          {/* Center Pivot */}
+          <motion.div 
+            style={{ scale: centerCircleScale }}
+            className="absolute z-20 flex items-center justify-center"
           >
-            <div className="text-center mb-12 lg:mb-16">
-               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
-               <div className="w-24 h-1 bg-primary/20 mx-auto rounded-full mb-6" />
-               <p className="text-muted-foreground font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
-            </div>
+            <div className="w-5 h-5 bg-background border-4 border-primary rounded-full shadow-[0_0_15px_rgba(59,130,246,0.7)]" />
+          </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 text-left">
-              {[
-                {
-                  step: "1",
-                  title: t('about.methodology.challenge.title'),
-                  text: t('about.methodology.challenge.content'),
-                  subtext: "TSA Webmaster Research",
-                  color: "blue"
-                },
-                {
-                  step: "2",
-                  title: t('about.methodology.solution.title'),
-                  text: t('about.methodology.solution.content'),
-                  subtext: "Community Compass Solution",
-                  color: "indigo"
-                }
-              ].map((item, idx) => (
-                <div key={idx} className="h-full">
-                  <GlassCard variant="strong" className={`p-8 lg:p-10 h-full backdrop-blur-md bg-card/60 border-border group transition-all rounded-[2rem] shadow-sm ${item.color === 'blue' ? 'hover:shadow-[0_0_30px_rgba(96,165,250,0.1)] hover:border-blue-400/30' : 'hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] hover:border-indigo-400/30'}`}>
-                    <div className="flex flex-col sm:flex-row items-start gap-6">
-                      <div className={`shrink-0 w-14 h-14 rounded-2xl bg-background/80 border border-border flex items-center justify-center text-xl font-black shadow-sm ${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
-                        {item.step}
-                      </div>
-                      <div>
-                        <h3 className={`text-xl lg:text-2xl font-black mb-4 tracking-tight ${item.color === 'blue' ? 'text-blue-500' : 'text-indigo-500'}`}>
-                          {item.title}
-                        </h3>
-                        <div className="space-y-4 text-muted-foreground font-bold leading-relaxed">
-                          <p>{item.text}</p>
-                          <p className="text-xs opacity-60 italic">{item.subtext}</p>
-                        </div>
+        </motion.div>
+
+        {/* The Methodology Content */}
+        <motion.div
+            style={{ opacity: contentOpacity }}
+            className="absolute z-30 w-full max-w-7xl px-4 md:px-8 xl:px-12 pointer-events-auto flex flex-col items-center justify-center h-full"
+        >
+            <motion.div style={{ y: methodologyY }} className="absolute top-[8%] md:top-[12%] text-center">
+               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
+               <div className="w-32 h-1.5 bg-primary/40 mx-auto rounded-full mb-6" />
+               <p className="text-muted-foreground font-bold uppercase tracking-[0.3em] text-sm">{t('about.methodology.subtitle')}</p>
+            </motion.div>
+
+            <div className="w-full flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-10 mt-32 xl:mt-40">
+              {/* Challenge Box */}
+              <motion.div style={{ x: challengeX }} className="w-full md:w-[38%] xl:w-[35%]">
+                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-blue-500/30 shadow-[0_0_50px_rgba(96,165,250,0.15)] rounded-[2.5rem] group hover:border-blue-500/50 transition-all duration-500 h-full">
+                  <div className="flex flex-col xl:flex-row items-start gap-6 h-full">
+                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-blue-500 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                      1
+                    </div>
+                    <div>
+                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-blue-500 uppercase">
+                        {t('about.methodology.challenge.title')}
+                      </h3>
+                      <div className="space-y-4 text-foreground/80 font-bold leading-relaxed text-lg">
+                        <p>{t('about.methodology.challenge.content')}</p>
+                        <p className="text-sm opacity-60 italic tracking-widest uppercase">TSA Webmaster Research</p>
                       </div>
                     </div>
-                  </GlassCard>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+                  </div>
+                </GlassCard>
+              </motion.div>
 
-        </div>
+              {/* Center spacer explicitly mapped to compass scale so needle beautifully reaches the cards */}
+              <div className="hidden md:block w-[18%] lg:w-[22%] shrink-0 pointer-events-none" />
+
+              {/* Solution Box */}
+              <motion.div style={{ x: solutionX }} className="w-full md:w-[38%] xl:w-[35%]">
+                <GlassCard variant="strong" className="p-8 lg:p-12 backdrop-blur-xl bg-background/60 border border-indigo-500/30 shadow-[0_0_50px_rgba(129,140,248,0.15)] rounded-[2.5rem] group hover:border-indigo-500/50 transition-all duration-500 h-full">
+                  <div className="flex flex-col xl:flex-row items-start gap-6 h-full">
+                    <div className="shrink-0 w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-2xl font-black shadow-inner text-indigo-500 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500">
+                      2
+                    </div>
+                    <div>
+                      <h3 className="text-2xl lg:text-3xl font-black mb-4 tracking-tight text-indigo-500 uppercase">
+                        {t('about.methodology.solution.title')}
+                      </h3>
+                      <div className="space-y-4 text-foreground/80 font-bold leading-relaxed text-lg">
+                        <p>{t('about.methodology.solution.content')}</p>
+                        <p className="text-sm opacity-60 italic tracking-widest uppercase">Community Compass Solution</p>
+                      </div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </div>
+        </motion.div>
 
         {/* Scroll Indicator */}
         <motion.div
            style={{ opacity: indicatorOpacity }}
            className="absolute bottom-10 text-center px-4"
         >
-           <p className="text-[10px] font-black uppercase tracking-[0.8em] text-primary/30 animate-pulse">
-             The Journey Continues
+           <p className="text-[10px] font-black uppercase tracking-[0.8em] text-primary/40 animate-pulse">
+             Scroll Inside
            </p>
         </motion.div>
-      </div>
-
-      {/* PRESERVED FOR REVERSION (USER REQUEST) - DO NOT DELETE */}
-      <div className="hidden" aria-hidden="true">
-        {(() => {
-          // Dummy usage to satisfy TypeScript unused variable checks
-          const _unused = { 
-            FlipCard, visionOpacity, visionY, missionOpacity, missionY, storyContainerOpacity 
-          };
-          return !!_unused;
-        })()}
-      </div>
+      </motion.div>
     </section>
   );
 }
