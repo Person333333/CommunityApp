@@ -21,8 +21,14 @@ function StickyAboutStory() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
+<<<<<<< HEAD
     offset: ["start start", "end end"]
   });
+=======
+    offset: ["start center", "end end"],
+    layoutEffect: false
+  } as any);
+>>>>>>> 0d23040c15b6eeed9522f76cb626a3129b2d6dfb
 
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 90,
@@ -98,6 +104,7 @@ function StickyAboutStory() {
              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-primary/40 to-emerald-400" />
           </motion.div>
 
+<<<<<<< HEAD
           {/* Center Pivot */}
           <motion.div 
             style={{ scale: centerCircleScale }}
@@ -105,6 +112,28 @@ function StickyAboutStory() {
           >
             <div className="w-5 h-5 bg-background border-4 border-primary rounded-full shadow-[0_0_15px_rgba(59,130,246,0.7)]" />
           </motion.div>
+=======
+          {/* Methodology Container */}
+          <motion.div
+            style={{ opacity: methodologyOpacity, y: methodologyY }}
+            className="absolute w-full max-w-6xl px-6 pointer-events-auto flex flex-col items-center"
+          >
+            {/* Background Animation for Methodology */}
+            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.05] pointer-events-none overflow-hidden">
+               <motion.div
+                 animate={{ rotate: 360 }}
+                 transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+               >
+                 <Compass className="w-[800px] h-[800px] text-primary" />
+               </motion.div>
+            </div>
+
+            <div className="text-center mb-12 lg:mb-16 relative z-10">
+               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.methodology.title')}</h2>
+               <div className="w-24 h-1 bg-primary/20 mx-auto rounded-full mb-6" />
+               <p className="text-muted-foreground font-bold uppercase tracking-[0.2em] text-xs">{t('about.methodology.subtitle')}</p>
+            </div>
+>>>>>>> 0d23040c15b6eeed9522f76cb626a3129b2d6dfb
 
         </motion.div>
 
@@ -208,7 +237,7 @@ export default function About() {
                 {t('about.hero.badge')}
               </span>
             </div>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 md:mb-8 tracking-tighter leading-[0.9] uppercase text-foreground">
               Community<br />
               <span className="text-primary-green drop-shadow-sm">Compass</span>
             </h1>
@@ -249,9 +278,9 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-24"
+            className="text-center mb-20"
           >
-            <h2 className="text-5xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.values.title')}</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-4 tracking-tighter uppercase">{t('about.values.title')}</h2>
             <div className="w-20 h-1 bg-border/40 mx-auto mb-6" />
             <p className="text-muted-foreground font-black tracking-[0.3em] text-xs uppercase">{t('about.values.subtitle')}</p>
           </motion.div>
@@ -320,10 +349,10 @@ export default function About() {
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none mix-blend-screen">
               <Compass className="w-64 h-64 text-blue-300" />
             </div>
-            <h2 className="text-4xl sm:text-6xl font-black mb-6 text-foreground uppercase tracking-tighter relative z-10">
+            <h2 className="text-3xl sm:text-5xl font-black mb-6 text-foreground uppercase tracking-tighter relative z-10">
               {t('about.footer.title')}
             </h2>
-            <p className="text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-foreground/80 font-bold italic relative z-10">
+            <p className="text-lg mb-12 max-w-2xl mx-auto leading-relaxed text-foreground/80 font-bold italic relative z-10">
               {t('about.footer.subtitle')}
             </p>
             <div className="flex justify-center relative z-10">

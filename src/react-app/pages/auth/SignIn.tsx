@@ -142,7 +142,7 @@ export default function SignInPage() {
                     className="w-full bg-background border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-center tracking-widest text-2xl font-bold"
                   />
                 </div>
-                <GlassButton type="submit" variant="primary" size="lg" className="w-full text-white" disabled={loading || !isLoaded}>
+                <GlassButton type="submit" variant="primary" size="lg" className="w-full text-foreground" disabled={loading || !isLoaded}>
                   {loading ? t('auth.verifying') : t('auth.verify')}
                 </GlassButton>
                 <button

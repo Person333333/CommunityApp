@@ -29,7 +29,7 @@ const CompassNeedleIcon = ({ rotation }: { rotation: any }) => (
   >
     <circle cx="12" cy="12" r="10" className="opacity-20" strokeWidth="1.5" />
     <motion.path 
-      style={{ rotate: rotation, originX: "12px", originY: "12px" }}
+      style={{ rotate: rotation, originX: "50%", originY: "50%" }}
       d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" 
     />
     <circle cx="12" cy="12" r="1.5" className="fill-current" />
@@ -235,7 +235,7 @@ export default function Home() {
                 <span className="inline-flex text-primary">
                   <CompassNeedleIcon rotation={compassRotate} />
                 </span>
-                <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.9] text-center md:text-left">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] text-center md:text-left">
                   Community<br />Compass
                 </h1>
               </div>
@@ -244,25 +244,26 @@ export default function Home() {
                 Connecting neighbors with local support, one hand at a time.
               </p>
               
-              <div className="flex flex-wrap justify-center gap-8 pt-6">
+              <div className="flex flex-col items-center justify-center gap-10 pt-10">
                 <Button 
                   size="lg" 
                   onClick={() => navigate('/discover')}
-                  className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-black px-12 py-9 rounded-full shadow-[0_20px_40px_rgba(59,130,246,0.3)] flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-sm"
+                  className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-black px-16 py-10 rounded-full shadow-[0_20px_50px_rgba(59,130,246,0.3)] flex items-center gap-3 transition-all hover:scale-105 active:scale-95 group uppercase tracking-widest text-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer" />
-                  {t('home.hero.cta')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {t('home.hero.cta')} <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
-                <div className="flex flex-col gap-1 items-center">
-                  <div className="flex items-center gap-4 px-8 py-4 bg-background/40 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group/badge">
+                <div className="flex flex-col gap-3 items-center">
+                  {/* Neighbors Bubble - Centered Below Button */}
+                  <div className="flex items-center gap-4 px-10 py-5 bg-background/40 backdrop-blur-xl rounded-full border border-primary/20 shadow-xl overflow-hidden group/badge">
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover/badge:opacity-100 transition-opacity" />
-                    <div className="text-xs font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
-                      <Users className="w-4 h-4 text-primary" />
+                    <div className="text-sm font-black text-foreground uppercase tracking-widest relative z-10 flex items-center gap-2">
+                      <Users className="w-5 h-5 text-primary" />
                       {t('home.hero.joinedBy', { countLabel: '5,000+' })}
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Trusted by Neighbors</span>
+                  <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-[0.3em] font-black">Trusted by Neighbors</span>
                 </div>
               </div>
             </motion.div>
@@ -323,7 +324,7 @@ export default function Home() {
                 <span className="text-blue-400 text-xs font-semibold px-4 py-1 mb-4 uppercase tracking-wider backdrop-blur-sm bg-white/5 border border-white/10 rounded-full">
                   Community Resource Highlights
                 </span>
-                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-foreground mb-3 sm:mb-4 uppercase tracking-tighter">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground mb-3 sm:mb-4 uppercase tracking-tighter">
                   {t('home.spotlight.title')}
                 </h2>
                 <p className="text-lg text-slate-600 dark:text-slate-300 font-bold italic opacity-80">

@@ -18,9 +18,9 @@ export default function GlassButton({
   const baseClass = `font-bold rounded-chromic-pill transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${variant === 'ghost' ? 'glass-layer' : ''}`;
 
   const variantClass = {
-    primary: 'bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:shadow-chromic-hover shadow-chromic backdrop-blur-md',
-    secondary: 'glass-layer text-white hover:bg-white/10 hover:shadow-chromic-hover border border-white/10',
-    ghost: 'hover:bg-white/10 text-slate-300 hover:text-white border border-transparent',
+    primary: 'bg-white/10 text-foreground border border-white/20 hover:bg-white/20 hover:shadow-chromic-hover shadow-chromic backdrop-blur-md',
+    secondary: 'glass-layer text-foreground hover:bg-white/10 hover:shadow-chromic-hover border border-white/10',
+    ghost: 'hover:bg-white/10 text-slate-300 hover:text-foreground border border-transparent',
   }[variant];
 
   const sizeClass = {

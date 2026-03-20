@@ -320,7 +320,7 @@ export default function Discover() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-foreground mb-2 sm:mb-4 uppercase tracking-tighter">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-2 sm:mb-4 uppercase tracking-tighter">
             {t('discover.title')}
           </h1>
           <p className="text-base sm:text-xl text-muted-foreground font-bold italic mb-4 sm:mb-8">
@@ -341,7 +341,7 @@ export default function Discover() {
           <Button
             data-tour="ai-search"
             size="lg"
-            className="w-full bg-card border border-border text-foreground font-black px-8 py-8 rounded-2xl flex items-center justify-center gap-4 hover:bg-primary/5 transition-all shadow-xl group relative overflow-hidden border-l-primary border-l-4"
+            className="w-full bg-card border border-border text-foreground font-black px-8 py-14 rounded-2xl flex items-center justify-center gap-4 hover:bg-primary/5 transition-all shadow-xl group relative overflow-hidden border-l-primary border-l-4"
             onClick={() => setIsQuestionnaireOpen(true)}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 w-[200%] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
