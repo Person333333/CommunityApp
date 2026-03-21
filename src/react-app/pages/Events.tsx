@@ -47,8 +47,12 @@ const mockEvents = [
 ];
 
 export default function EventsPage() {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 3, 1)); // April 2026 default
-  const [selectedEvent, setSelectedEvent] = useState(mockEvents[3]); // Default to one event in April
+  const today = new Date();
+  const upcomingEvent = mockEvents.find(e => new Date(e.date) >= today) || mockEvents[0];
+
+  const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1)); // Default to current month
+  const [selectedEvent, setSelectedEvent] = useState(upcomingEvent); // Default to the next chronological event
+
   const [notification, setNotification] = useState("");
 
   const triggerNotification = (msg: string) => {
@@ -311,8 +315,8 @@ export default function EventsPage() {
                 }}
                 >
                 <div>
-                  <div className="flex justify-between items-start mb-4">
-                      <div className={`px-2.5 py-1 text-[10px] font-black uppercase tracking-widest rounded-md border
+                  <div className="flex justify-between items-start mb-3">
+                      <div className={`px-2 py-0.5 text-[8px] font-black uppercase tracking-widest rounded-md border
                       ${event.color === 'emerald' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' : 
                           event.color === 'indigo' ? 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20' : 
                           event.color === 'blue' ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20' : 
@@ -326,35 +330,35 @@ export default function EventsPage() {
                             e.stopPropagation(); 
                             navigator.clipboard.writeText(window.location.origin + '/events').then(() => triggerNotification(`Event link copied!`)); 
                           }}
-                          className="text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 bg-secondary p-2 rounded-full border border-border"
+                          className="text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 bg-secondary p-1.5 rounded-full border border-border"
                       >
-                          <Share2 className="w-4 h-4" />
+                          <Share2 className="w-3 h-3" />
                       </button>
                   </div>
 
-                  <h3 className="text-xl font-bold text-foreground mb-4 line-clamp-2 leading-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                       {event.title}
                   </h3>
                   
-                  <div className="space-y-3 mb-6 bg-secondary/50 p-4 rounded-2xl border border-border/50">
-                      <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                        <div className="bg-background border border-border p-1.5 rounded-md shadow-sm"><CalendarIcon className="w-4 h-4 text-emerald-500" /></div>
-                        <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                  <p className="text-muted-foreground text-[10px] leading-relaxed mb-3 line-clamp-2">
+                    {event.desc}
+                  </p>
+                  
+                  <div className="flex flex-col gap-1.5 mb-4 bg-secondary/30 p-3 rounded-xl border border-border/30">
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                        <CalendarIcon className="w-3 h-3 text-emerald-500" />
+                        <span>{new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} at {event.time.split(' - ')[0]}</span>
                       </div>
-                      <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                        <div className="bg-background border border-border p-1.5 rounded-md shadow-sm"><Clock className="w-4 h-4 text-emerald-500" /></div>
-                        <span>{event.time}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                        <div className="bg-background border border-border p-1.5 rounded-md shadow-sm"><MapPin className="w-4 h-4 text-emerald-500" /></div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+                        <MapPin className="w-3 h-3 text-emerald-500" />
                         <span className="truncate">{event.location}</span>
                       </div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-border flex justify-between items-center text-sm font-bold text-emerald-600/80 dark:text-emerald-400/80 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mt-auto">
-                    <span>{isEventSelected ? 'Currently Viewing' : 'View Details'}</span> 
-                    <ArrowRight className={`w-4 h-4 transition-transform ${isEventSelected ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
+                <div className="pt-3 border-t border-border flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-600/80 dark:text-emerald-400/80 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mt-auto">
+                    <span>{isEventSelected ? 'Viewing Details' : 'View Details'}</span> 
+                    <ArrowRight className={`w-3 h-3 transition-transform ${isEventSelected ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
                 </div>
                 </motion.div>
             );

@@ -167,7 +167,7 @@ export default function DonationsPage() {
                 className="glass-layer rounded-3xl border border-border group flex flex-col bg-card overflow-hidden shadow-xl"
               >
                 {/* Image Header */}
-                <div className="h-48 w-full relative overflow-hidden bg-muted">
+                <div className="h-32 w-full relative overflow-hidden bg-muted">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                   {cause.image ? (
                     <img 
@@ -186,7 +186,7 @@ export default function DonationsPage() {
                 </div>
 
                 {/* Content Panel */}
-                <div className="p-6 flex flex-col flex-grow relative">
+                <div className="p-5 flex flex-col flex-grow relative">
                   <div className={`absolute top-0 right-0 w-32 h-32 blur-[60px] rounded-full pointer-events-none opacity-10 transition-opacity group-hover:opacity-20
                     ${cause.color === 'emerald' ? 'bg-emerald-500' : 
                       cause.color === 'blue' ? 'bg-blue-500' : 
@@ -195,15 +195,15 @@ export default function DonationsPage() {
                   />
 
                   <div className="relative z-10 flex-grow">
-                     <h3 className="text-xl font-black text-foreground leading-tight mb-1">{cause.title}</h3>
-                     <p className={`text-xs font-bold mb-4
+                     <h3 className="text-lg font-black text-foreground leading-tight mb-1 truncate">{cause.title}</h3>
+                     <p className={`text-[10px] font-bold mb-2 truncate
                         ${cause.color === 'emerald' ? 'text-emerald-600 dark:text-emerald-400' : 
                           cause.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : 
                           cause.color === 'purple' ? 'text-purple-600 dark:text-purple-400' : 
                           cause.color === 'rose' ? 'text-rose-600 dark:text-rose-400' : 'text-indigo-600 dark:text-indigo-400'}
                      `}>{cause.subtitle}</p>
                      
-                     <p className="text-muted-foreground font-medium text-sm leading-relaxed mb-6 line-clamp-3">
+                     <p className="text-muted-foreground font-medium text-[11px] leading-relaxed mb-4 line-clamp-2">
                        {cause.description}
                      </p>
                   </div>
@@ -212,7 +212,7 @@ export default function DonationsPage() {
                   <div className="relative z-10 mt-auto">
                       <div className="flex justify-between items-end mb-2">
                           <div>
-                            <span className="text-2xl font-black text-foreground">${cause.raised.toLocaleString()}</span>
+                            <span className="text-xl font-black text-foreground">${cause.raised.toLocaleString()}</span>
                           </div>
                           <div className="text-right">
                              <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Goal ${cause.goal.toLocaleString()}</span>
@@ -236,7 +236,7 @@ export default function DonationsPage() {
                           />
                       </div>
 
-                      <div className="flex justify-between items-center text-xs font-bold text-muted-foreground mb-6">
+                      <div className="flex justify-between items-center text-xs font-bold text-muted-foreground mb-4">
                           <span className="flex items-center gap-1.5">
                             <Users className="w-3.5 h-3.5" /> 
                             {cause.supporters} donors
@@ -248,7 +248,7 @@ export default function DonationsPage() {
                       <SignedIn>
                         <Link 
                             to={`/checkout?cause=${cause.id}`}
-                            className={`w-full py-3.5 rounded-xl font-black text-center uppercase tracking-widest text-xs transition-all shadow-lg flex items-center justify-center gap-2 group text-white
+                            className={`w-full py-2.5 rounded-lg font-black text-center uppercase tracking-widest text-[10px] transition-all shadow-lg flex items-center justify-center gap-2 group text-white
                                 ${cause.color === 'emerald' ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20' : 
                                 cause.color === 'blue' ? 'bg-blue-500 hover:bg-blue-600 shadow-blue-500/20' : 
                                 cause.color === 'purple' ? 'bg-purple-500 hover:bg-purple-600 shadow-purple-500/20' : 
@@ -256,14 +256,14 @@ export default function DonationsPage() {
                                 'bg-indigo-500 hover:bg-indigo-600 shadow-indigo-500/20'}
                             `}
                         >
-                            Donate Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            Donate Now <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                         </Link>
                       </SignedIn>
 
                       <SignedOut>
                         <Link 
                             to="/sign-in"
-                            className="w-full py-3.5 rounded-xl font-black text-center uppercase tracking-widest text-xs transition-colors shadow-lg flex items-center justify-center gap-2 group glass-layer border border-border text-foreground hover:bg-muted"
+                            className="w-full py-2.5 rounded-lg font-black text-center uppercase tracking-widest text-[10px] transition-colors shadow-lg flex items-center justify-center gap-2 group glass-layer border border-border text-foreground hover:bg-muted"
                         >
                             Sign In to Donate
                         </Link>
