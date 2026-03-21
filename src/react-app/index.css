@@ -79,8 +79,8 @@
   }
   html {
     /* Fluid typography and layout scaling.
-       Starts scaling universally when monitor width > 1500px to maintain proportion. */
-    font-size: clamp(16px, 0.8vw + 4px, 24px);
+       Starts scaling universally when monitor width > 1750px to maintain proportion. */
+    font-size: clamp(16px, 0.4vw + 9px, 22px);
   }
   body {
     @apply bg-background text-foreground;
