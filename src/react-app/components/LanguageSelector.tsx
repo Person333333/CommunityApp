@@ -1,59 +1,99 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Globe, Check, Loader2, Search } from 'lucide-react';
-import { SUPPORTED_LANGUAGES } from '@/react-app/constants/languages';
-import { TranslateService } from '@/react-app/services/translateService';
-import enTranslations from '@/react-app/i18n/locales/en.json';
+import { useState, useEffect } from 'react';
+import { Globe, Check, Search } from 'lucide-react';
 import { useClickOutside } from '@/react-app/hooks/useClickOutside';
+import { SUPPORTED_LANGUAGES } from '@/react-app/constants/languages';
 
 export default function LanguageSelector() {
-  const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentLang, setCurrentLang] = useState('en');
   
   const languageSelectorRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
 
-  const currentLanguage = SUPPORTED_LANGUAGES.find(l => l.code === i18n.language) ||
-    { code: i18n.language || 'en', name: (i18n.language || 'en').toUpperCase() };
+  const mapCode = (code: string) => code === 'zh-cn' ? 'zh-CN' : code === 'zh-tw' ? 'zh-TW' : code;
 
-  const handleLanguageChange = async (langCode: string) => {
-    // If switching to English, do it immediately
-    if (langCode === 'en') {
-      i18n.changeLanguage('en');
-      setIsOpen(false);
-      return;
+  const currentLanguageObj = SUPPORTED_LANGUAGES.find(l => mapCode(l.code) === currentLang) ||
+    { code: currentLang, name: currentLang.toUpperCase() };
+
+  useEffect(() => {
+    // Inject the native Google Translate script silently
+    if (!document.getElementById('google-translate-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      
+      // @ts-ignore
+      window.googleTranslateElementInit = () => {
+        // @ts-ignore
+        new window.google.translate.TranslateElement(
+          { pageLanguage: 'en', autoDisplay: false },
+          'google_translate_element'
+        );
+      };
+
+      document.body.appendChild(script);
     }
 
-    // Cache busting check
-    const currentVersion = enTranslations.app.version;
-    const cachedVersion = localStorage.getItem(`translation_version_${langCode}`);
+    // Brutal MutationObserver to permanently eradicate Google's injected banner and body shifts
+    const observer = new MutationObserver(() => {
+        // Kill the banner iframe instantly
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) banner.remove();
+        
+        const skiptransDiv = document.querySelector('.skiptranslate > iframe.goog-te-banner-frame')?.parentElement;
+        if (skiptransDiv && skiptransDiv.id !== 'google_translate_element') {
+            skiptransDiv.remove();
+        }
 
-    // Check if translation already exists and is up to date
-    if (i18n.hasResourceBundle(langCode, 'translation') && cachedVersion === currentVersion) {
-      i18n.changeLanguage(langCode);
-      setIsOpen(false);
-      return;
-    }
+        // Forcefully clamp document body to top 0
+        if (document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.top = '0px';
+        }
+        if (document.documentElement.style.top && document.documentElement.style.top !== '0px') {
+            document.documentElement.style.top = '0px';
+        }
+    });
 
-    // Clear existing bundle if version mismatch to force re-translation
-    if (cachedVersion !== currentVersion && i18n.hasResourceBundle(langCode, 'translation')) {
-      console.log(`Refreshing translations for ${langCode} (version ${cachedVersion} -> ${currentVersion})`);
-    }
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true, 
+        attributes: true, 
+        attributeFilter: ['style', 'class'] 
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+    
+    // Periodically sync our UI state with the hidden Google Translate dropdown
+    const interval = setInterval(() => {
+        const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+        if (select && select.value && select.value !== currentLang) {
+            setCurrentLang(select.value || 'en');
+        } else if (select && !select.value && currentLang !== 'en') {
+            setCurrentLang('en');
+        }
+        
+        // Redundant cleanup just in case
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) banner.remove();
+        if (document.body.style.top !== '0px' && document.body.style.top !== '') document.body.style.top = '0px';
+    }, 500);
 
-    // If not, we need to translate 'en' resources
-    try {
-      setIsTranslating(true);
-      const translatedResources = await TranslateService.translateJSON(enTranslations, langCode);
-      i18n.addResourceBundle(langCode, 'translation', translatedResources, true, true);
-      localStorage.setItem(`translation_version_${langCode}`, currentVersion);
-      i18n.changeLanguage(langCode);
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Failed to translate:", error);
-      alert("Failed to load translation. Please try again.");
-    } finally {
-      setIsTranslating(false);
+    return () => {
+        clearInterval(interval);
+        observer.disconnect();
+    };
+  }, [currentLang]);
+
+  const handleLanguageChange = (rawCode: string) => {
+    const langCode = mapCode(rawCode);
+    setCurrentLang(langCode);
+    setIsOpen(false);
+    
+    // Find the hidden Google Translate dropdown and force a DOM change event
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+    if (select) {
+        select.value = langCode;
+        select.dispatchEvent(new Event('change'));
     }
   };
 
@@ -63,24 +103,20 @@ export default function LanguageSelector() {
   );
 
   return (
-    <div ref={languageSelectorRef} className="relative">
+    <div ref={languageSelectorRef} className="relative notranslate">
+      {/* Hidden Google Translate Target */}
+      <div id="google_translate_element" className="hidden"></div>
+      
       <button
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
+        onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg glass-layer hover:bg-muted/80 transition-all shadow-sm font-bold text-foreground border border-border"
-        disabled={isTranslating}
       >
-        {isTranslating ? (
-          <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
-        ) : (
-          <Globe className="w-4 h-4" />
-        )}
-        <span className="text-sm hidden md:inline">{currentLanguage.name}</span>
+        <Globe className="w-4 h-4 text-emerald-500" />
+        <span className="text-sm hidden md:inline">{currentLanguageObj.name === 'EN' ? 'English' : currentLanguageObj.name}</span>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-72 glass-layer border border-border rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in backdrop-blur">
+        <div className="absolute top-12 right-0 mt-2 w-[280px] glass-layer border border-border rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col transform origin-top-right motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in backdrop-blur">
           {/* Search Header */}
           <div className="p-3 border-b border-border bg-muted/50">
             <div className="relative">
@@ -90,7 +126,7 @@ export default function LanguageSelector() {
                 placeholder="Search languages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-muted/50 border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/20 transition-all font-medium"
                 autoFocus
               />
             </div>
@@ -99,17 +135,20 @@ export default function LanguageSelector() {
           {/* Scrollable Language List */}
           <div className="max-h-80 overflow-y-auto">
             {filteredLanguages.length > 0 ? (
-              filteredLanguages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => handleLanguageChange(lang.code)}
-                  className={`w-full text-left px-5 py-3 text-sm transition-colors flex items-center justify-between font-bold ${i18n.language === lang.code ? 'bg-emerald-600/30 text-foreground hover:bg-emerald-600/40 border-l-2 border-emerald-400' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    }`}
-                >
-                  <span className="truncate">{lang.name}</span>
-                  {i18n.language === lang.code && <Check className="w-4 h-4 text-blue-400 flex-shrink-0" />}
-                </button>
-              ))
+              filteredLanguages.map((lang) => {
+                const isSelected = currentLang === mapCode(lang.code) || (currentLang === 'en' && lang.code === 'en');
+                return (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full text-left px-5 py-3 text-sm transition-colors flex items-center justify-between font-bold ${isSelected ? 'bg-emerald-600/30 text-foreground hover:bg-emerald-600/40 border-l-2 border-emerald-400' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      }`}
+                  >
+                    <span className="truncate">{lang.name}</span>
+                    {isSelected && <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />}
+                  </button>
+                );
+              })
             ) : (
               <div className="px-4 py-6 text-center text-xs text-slate-500">
                 No languages found
