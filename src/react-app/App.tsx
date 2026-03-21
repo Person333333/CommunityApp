@@ -11,6 +11,9 @@ import SignInPage from "@/react-app/pages/auth/SignIn";
 import SignUpPage from "@/react-app/pages/auth/SignUp";
 import AccountPage from "@/react-app/pages/auth/Account";
 import MySubmissionsPage from "@/react-app/pages/MySubmissions";
+import EventsPage from "@/react-app/pages/Events";
+import DonationsPage from "@/react-app/pages/Donations";
+import CheckoutPage from "@/react-app/pages/Checkout";
 import NotFoundPage from "@/react-app/pages/NotFound";
 import Navbar from "@/react-app/components/Navbar";
 import Footer from "@/react-app/components/Footer";
@@ -43,6 +46,9 @@ function AppRoutes() {
           <Route path="/submit" element={<SubmitPage />} />
           <Route path="/references" element={<ReferencesPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/donations" element={<DonationsPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
 
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />

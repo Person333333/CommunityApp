@@ -3,15 +3,30 @@
 import type React from "react"
 import { useState, useRef } from "react"
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion"
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+// Fix default leaflet icons for dynamic imports
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 interface LocationMapProps {
   location?: string
+  lat?: number
+  lng?: number
   coordinates?: string
   className?: string
 }
 
 export function LocationMap({
   location = "Location Details",
+  lat,
+  lng,
   coordinates,
   className,
 }: LocationMapProps) {
@@ -81,67 +96,58 @@ export function LocationMap({
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-indigo-500/10" />
 
-        {/* Fake Map Grid Background */}
-        <div className="absolute inset-0 opacity-20">
-          <svg className="w-full h-full" preserveAspectRatio="none">
-            <line x1="0%" y1="35%" x2="100%" y2="35%" className="stroke-blue-400/20" strokeWidth="2" />
-            <line x1="0%" y1="65%" x2="100%" y2="65%" className="stroke-blue-400/20" strokeWidth="2" />
-            <line x1="30%" y1="0%" x2="30%" y2="100%" className="stroke-blue-500/20" strokeWidth="2" />
-            <line x1="70%" y1="0%" x2="70%" y2="100%" className="stroke-blue-500/20" strokeWidth="2" />
-          </svg>
+        {/* Real Embedded Map */}
+        <div className={`absolute inset-0 overflow-hidden ${isExpanded ? '' : 'pointer-events-none'}`}>
+          {lat !== undefined && lng !== undefined ? (
+            <MapContainer
+              center={[lat, lng]}
+              zoom={15}
+              style={{ height: '100%', width: '100%', filter: 'invert(90%) hue-rotate(180deg) opacity(0.8)' }}
+              zoomControl={false}
+              dragging={isExpanded}
+              scrollWheelZoom={isExpanded}
+              doubleClickZoom={isExpanded}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; OpenStreetMap contributors'
+              />
+              <Marker position={[lat, lng]} />
+            </MapContainer>
+          ) : location && (
+            <iframe
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) opacity(0.8)' }}
+              loading="lazy"
+              allowFullScreen
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(location)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            />
+          )}
         </div>
 
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className="absolute inset-0 bg-slate-900/40" />
-              
-              {/* Stylized Blocks */}
-              <div className="absolute top-[20%] left-[20%] w-[10%] h-[15%] rounded-sm bg-blue-500/10 border border-blue-500/20" />
-              <div className="absolute top-[50%] left-[60%] w-[15%] h-[10%] rounded-sm bg-indigo-500/10 border border-indigo-500/20" />
-              
-              <motion.div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                initial={{ scale: 0, y: -20 }}
-                animate={{ scale: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.1 }}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]"
-                >
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#60A5FA" />
-                  <circle cx="12" cy="9" r="2.5" fill="#0f172a" />
-                </svg>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Click Catcher & Gradient Overlay */}
+        <div 
+          onClick={handleClick}
+          className={`absolute inset-0 z-20 cursor-pointer flex justify-center pb-8 items-end bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} 
+        >
+          <div className="px-4 py-2 mt-4 rounded-full bg-slate-900/80 backdrop-blur border border-white/20 text-white text-[10px] font-black tracking-widest uppercase shadow-xl hover:bg-emerald-500 hover:text-black transition-colors">
+            Click to Expand Map
+          </div>
+        </div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 h-full flex flex-col justify-between p-4">
+        <div className={`relative z-10 h-full flex flex-col justify-between p-4 pointer-events-none transition-opacity duration-300 ${isExpanded ? 'opacity-0' : 'opacity-100'}`}>
           <div className="flex items-start justify-between">
-            <motion.div
-              animate={{ opacity: isExpanded ? 0 : 1 }}
-              className="text-blue-400"
-            >
+            <div className="text-emerald-400">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
               </svg>
-            </motion.div>
+            </div>
 
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              <span className="text-[9px] font-black text-slate-400 tracking-widest uppercase">Live View</span>
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-900/50 backdrop-blur-sm border border-white/10">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[9px] font-black text-slate-300 tracking-widest uppercase">Live View</span>
             </div>
           </div>
 
@@ -159,7 +165,7 @@ export function LocationMap({
             )}
 
             <motion.div
-              className="h-px bg-gradient-to-r from-blue-500/60 via-blue-400/40 to-transparent w-full"
+              className="h-px bg-gradient-to-r from-emerald-500/60 via-emerald-400/40 to-transparent w-full"
               initial={{ scaleX: 0.3, originX: 0 }}
               animate={{
                 scaleX: isHovered || isExpanded ? 1 : 0.4,
@@ -173,7 +179,7 @@ export function LocationMap({
       <AnimatePresence>
         {isHovered && !isExpanded && (
           <motion.p
-            className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.2em] text-blue-400 drop-shadow-[0_0_5px_rgba(96,165,250,0.5)]"
+            className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400 drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] whitespace-nowrap"
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 5 }}

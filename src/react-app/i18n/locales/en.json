@@ -25,7 +25,9 @@
     "references": "References",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "account": "Account"
+    "account": "Account",
+    "events": "Events",
+    "donations": "Donations"
   },
   "home": {
     "hero": {

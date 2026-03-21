@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router';
 import { X, MapPin, Phone, Globe, Clock, Mail, Users, Tag, AlertTriangle, CheckCircle2, Compass, Calendar, ExternalLink, Star, Share2, Printer, QrCode, ThumbsUp, ThumbsDown, Download, Volume2, VolumeX } from 'lucide-react';
 import { ResourceType } from '@/shared/types';
 import { Card } from '@/react-app/components/ui/card';
 import { Button } from '@/react-app/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import { LocationMap } from '@/react-app/components/ui/expand-map';
+import MapComponent from '@/react-app/components/MapComponent';
 import { Heart } from 'lucide-react';
 
 interface ResourceDetailModalProps {
@@ -17,7 +16,6 @@ interface ResourceDetailModalProps {
 
 export default function ResourceDetailModal({ resource, isOpen, onClose }: ResourceDetailModalProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [reportState, setReportState] = useState<'idle' | 'reporting' | 'success'>('idle');
   const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
@@ -301,9 +299,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {resource.address && (
-                      <div className="flex flex-col gap-4 bg-card border border-border p-6 rounded-xl overflow-hidden relative group/map">
+                      <div className="flex flex-col gap-4 bg-card border border-border p-6 rounded-xl overflow-hidden relative group/map md:col-span-2">
                         <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover/map:opacity-100 transition-opacity" />
-                        <div className="flex items-start gap-4 relative z-10">
+                        <div className="flex items-start gap-4 relative z-10 mt-1">
                           <MapPin className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">{t('resource.address')}</p>
@@ -314,13 +312,16 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                           </div>
                         </div>
 
-                        {/* Premium Stylized Map Preview */}
-                        <div className="flex justify-center pt-2 pb-2 relative z-10">
-                          <LocationMap 
-                            location={resource.city || resource.address} 
-                            coordinates={resource.latitude && resource.longitude ? `${resource.latitude.toFixed(4)}° N, ${resource.longitude.toFixed(4)}° W` : undefined}
-                            className="w-full sepia-[0.3] brightness-[1.1] contrast-[0.9] hover:sepia-0 hover:brightness-100 hover:contrast-100 transition-all duration-700"
-                          />
+                        {/* Exact copy of Discover MapComponent */}
+                        <div className="flex items-center justify-center pt-2 pb-2 relative z-10 w-full mb-2">
+                          <div className="h-64 rounded-2xl overflow-hidden border border-border shadow-2xl relative w-full">
+                            <MapComponent 
+                              resources={[resource]} 
+                              onResourceClick={() => {}} 
+                              center={resource.latitude && resource.longitude ? [resource.latitude, resource.longitude] : [47.6062, -122.3321]} 
+                              zoom={15} 
+                            />
+                          </div>
                         </div>
                       </div>
                     )}
@@ -365,7 +366,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                             rel="noopener noreferrer"
                             className="text-foreground font-black hover:text-cyan-500 transition-colors break-all underline decoration-border uppercase tracking-widest text-[10px]"
                           >
-                            {t('resource.visitWebsite')}
+                            {resource.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                           </a>
                         </div>
                       </div>
@@ -444,9 +445,9 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                   {/* Actions & Report */}
                   <div className="flex flex-col sm:flex-row flex-wrap sm:items-center justify-between gap-4 pt-4 border-t border-border">
                     <div className="flex flex-wrap gap-3">
-                      {resource.latitude && resource.longitude && (
+                      {resource.address && (
                         <Button 
-                          onClick={() => { navigate(`/discover?resource=${resource.id}`); onClose(); }}
+                          onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(resource.address || '')}`, '_blank')}
                           className="bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none shadow-xl shadow-emerald-500/20"
                         >
                           <MapPin className="w-4 h-4 mr-2" />
@@ -475,7 +476,7 @@ export default function ResourceDetailModal({ resource, isOpen, onClose }: Resou
                       )}
                       {resource.email && (
                         <a href={`mailto:${resource.email}`}>
-                          <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-black uppercase tracking-widest text-xs h-12 px-6 rounded-xl transition-all">
+                          <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-black uppercase tracking-widest text-xs h-12 px-6 rounded-none transition-all">
                             <Mail className="w-4 h-4 mr-2" />
                             {t('resource.sendEmail')}
                           </Button>

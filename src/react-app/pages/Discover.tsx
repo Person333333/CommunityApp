@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, Compass, X, Trash2, ChevronDown, ExternalLink, ChevronRight, CheckCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, MapPin, Phone, Clock, Star, Heart, User, Sparkles, Compass, X, Trash2, ChevronDown, ExternalLink, ChevronRight, BadgeCheck, Maximize2, Minimize2 } from 'lucide-react';
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { Card, CardContent } from '@/react-app/components/ui/card';
@@ -45,6 +45,7 @@ export default function Discover() {
   const itemsPerPage = 5;
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
+  const [isMapFullscreen, setIsMapFullscreen] = useState(false);
   const LOCAL_RADIUS_KM = 100;
 
   // Local favorites state (togglable per card)
@@ -338,22 +339,32 @@ export default function Discover() {
 
         {/* Search and Explorer Card */}
         <motion.div data-tour="search-input" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-4">
-          <Button
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
             data-tour="ai-search"
-            size="lg"
-            className="w-full bg-card border border-border text-foreground font-black px-8 py-14 rounded-2xl flex items-center justify-center gap-4 hover:bg-primary/5 transition-all shadow-xl group relative overflow-hidden border-l-primary border-l-4"
+            className="w-full bg-gradient-to-br from-card/80 to-background border border-border text-foreground font-black px-8 py-10 rounded-3xl flex items-center justify-between gap-6 hover:border-emerald-500/50 transition-all shadow-[0_0_40px_rgba(0,0,0,0.05)] hover:shadow-[0_0_50px_rgba(16,185,129,0.1)] group relative overflow-hidden outline-none cursor-pointer backdrop-blur-xl"
             onClick={() => setIsQuestionnaireOpen(true)}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 w-[200%] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
-              <Compass className="w-6 h-6 text-primary" />
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            
+            <div className="flex items-center gap-6 relative z-10">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-inner group-hover:rotate-6">
+                <Sparkles className="w-8 h-8 text-emerald-500" />
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] uppercase tracking-[0.4em] font-black text-emerald-500 mb-1.5 flex items-center gap-2 drop-shadow-sm">
+                  Not sure where to start?
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                </div>
+                <div className="text-2xl sm:text-3xl tracking-tighter uppercase leading-none font-black drop-shadow-md">Need help finding a resource?</div>
+              </div>
             </div>
-            <div className="text-left relative z-10">
-              <div className="text-[9px] uppercase tracking-[0.3em] font-black text-primary mb-0.5">Not sure where to start?</div>
-              <div className="text-base sm:text-xl tracking-tighter uppercase leading-tight font-black">Need help finding a resource?</div>
+
+            <div className="hidden sm:flex items-center justify-center w-12 h-12 rounded-full border border-border bg-background group-hover:bg-emerald-500 group-hover:border-emerald-500 transition-all duration-300 relative z-10 shadow-sm group-hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+              <ChevronRight className="w-5 h-5 text-emerald-500 group-hover:text-black transition-colors" />
             </div>
-            <ChevronRight className="w-6 h-6 text-primary group-hover:translate-x-1 transition-transform ml-auto hidden sm:block relative z-10" />
-          </Button>
+          </motion.button>
 
           <Card className="bg-card border border-border rounded-none p-6 shadow-sm">
             <div className="space-y-6">
@@ -615,8 +626,8 @@ export default function Discover() {
                             <h3 className="text-lg sm:text-2xl font-black text-foreground mb-0 uppercase tracking-tighter group-hover/resource:text-primary transition-colors flex items-center gap-2">
                               {resource.title}
                               {resource.is_approved && (
-                                <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20">
-                                  <CheckCircle className="w-3 h-3 fill-emerald-500 text-white" /> VERIFIED
+                                <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black px-2.5 py-1 rounded-full border border-emerald-500/20 antialiased tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                                  <BadgeCheck className="w-3.5 h-3.5 text-emerald-500 stroke-[3]" /> VERIFIED
                                 </span>
                               )}
                             </h3>
@@ -697,7 +708,14 @@ export default function Discover() {
 
               {/* Map Component Always Visible on Desktop Sidebar */}
               <div className="h-[400px] rounded-3xl overflow-hidden border border-border shadow-2xl relative" data-tour="map-container">
-                <div className="absolute inset-0 bg-primary/5 pointer-events-none z-10 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-emerald-500/5 pointer-events-none z-10 mix-blend-overlay"></div>
+                <button 
+                  onClick={() => setIsMapFullscreen(true)}
+                  className="absolute top-4 right-4 z-50 p-2.5 bg-background/90 backdrop-blur border border-border rounded-xl shadow-lg hover:bg-emerald-500 hover:text-black transition-colors"
+                  title="Expand Map"
+                >
+                  <Maximize2 className="w-5 h-5"/>
+                </button>
                 <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation || [0, 0]} zoom={10} />
               </div>
 
@@ -760,6 +778,34 @@ export default function Discover() {
       <ResourceDetailModal resource={selectedResource} isOpen={!!selectedResource} onClose={() => setSelectedResource(null)} />
       <QuestionnaireModal isOpen={isQuestionnaireOpen} onClose={() => setIsQuestionnaireOpen(false)} onComplete={handleQuestionnaireComplete} />
       <GuestAuthModal isOpen={authModal.isOpen} onClose={() => setAuthModal((prev: any) => ({ ...prev, isOpen: false }))} title={authModal.title} message={authModal.message} type={authModal.type} />
+
+      {/* Top-Level Fullscreen Map Overlay */}
+      <AnimatePresence>
+        {isMapFullscreen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md p-4 sm:p-8 flex flex-col"
+          >
+            <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border border-border bg-card">
+              <button 
+                onClick={() => setIsMapFullscreen(false)}
+                className="absolute top-4 right-4 z-50 p-3 bg-background/90 backdrop-blur border border-border rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-colors"
+                title="Exit Fullscreen"
+              >
+                <Minimize2 className="w-6 h-6"/>
+              </button>
+              <div className="absolute inset-0 bg-emerald-500/5 pointer-events-none z-10 mix-blend-overlay"></div>
+              <MapComponent resources={resources} onResourceClick={(res) => {
+                setSelectedResource(res);
+                setIsMapFullscreen(false); // Optionally close map when selecting
+              }} center={userLocation || [0, 0]} zoom={10} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div >
   );
 }

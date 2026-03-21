@@ -43,136 +43,140 @@ export default function Navbar() {
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 glass-layer border-b border-border"
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 group">
-              <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
-                <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
-              </motion.div>
-              <span className={`text-xl font-bold transition-colors duration-300 bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter uppercase font-black`}>Community Compass</span>
-            </Link>
+        <div className="w-full px-4 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-16 w-full gap-4">
+            {/* Logo - Left */}
+            <div className="flex-1 flex justify-start">
+              <Link to="/" className="flex items-center space-x-2 group shrink-0">
+                <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
+                  <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
+                </motion.div>
+                <span className={`text-xl font-bold transition-colors duration-300 bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter uppercase font-black hidden xl:block`}>Community Compass</span>
+              </Link>
+            </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6 ml-12 flex-nowrap min-w-max text-slate-300">
+            {/* Desktop Navigation - Center */}
+            <div className="hidden lg:flex flex-initial items-center justify-center space-x-8 text-slate-300">
+              <NavLink to="/">{t('nav.home', 'HOME')}</NavLink>
               <NavLink to="/discover">{t('nav.discover')}</NavLink>
               <NavLink to="/submit">{t('nav.addResource')}</NavLink>
+              <NavLink to="/events">{t('nav.events')}</NavLink>
+              <NavLink to="/donations">{t('nav.donations')}</NavLink>
+              <NavLink to="/references">{t('nav.references', 'REFERENCES')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
-              <NavLink to="/references">{t('nav.references')}</NavLink>
+            </div>
 
-              {/* Authentication & Selectors */}
-              <div className="flex items-center gap-6 relative whitespace-nowrap">
-                <SignedOut>
-                  <Link
-                    to="/sign-in"
-                    className="px-4 py-2 text-foreground/70 hover:text-emerald-500 transition-colors duration-200 font-black uppercase tracking-widest text-[10px] flex items-center justify-center"
+            {/* Authentication & Selectors - Right */}
+            <div className="flex-1 flex justify-end items-center gap-2 sm:gap-4 relative whitespace-nowrap">
+              <SignedOut>
+                <Link
+                  to="/sign-in"
+                  className="px-4 py-2 text-foreground/70 hover:text-emerald-500 transition-colors duration-200 font-black uppercase tracking-widest text-[10px] hidden sm:flex items-center justify-center"
+                >
+                  {t('nav.signIn')}
+                </Link>
+                <Link
+                  to="/sign-up"
+                  className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm hidden sm:flex items-center justify-center"
+                >
+                  {t('nav.signUp')}
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <div ref={accountMenuRef} className="relative flex items-center">
+                  <button
+                    onClick={() => setShowAccountMenu(!showAccountMenu)}
+                    className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center shadow-sm hover:opacity-90 border border-white/10"
+                    aria-label="Account menu"
                   >
-                    {t('nav.signIn')}
-                  </Link>
-                  <Link
-                    to="/sign-up"
-                    className="bg-emerald-500 px-4 py-2 rounded-none text-black hover:bg-emerald-400 transition-all font-black uppercase tracking-widest text-[10px] shadow-sm flex items-center justify-center"
-                  >
-                    {t('nav.signUp')}
-                  </Link>
-                </SignedOut>
-                <SignedIn>
-                  <div ref={accountMenuRef} className="relative flex items-center">
-                    <button
-                      onClick={() => setShowAccountMenu(!showAccountMenu)}
-                      className="w-8 h-8 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center shadow-sm hover:opacity-90"
-                      aria-label="Account menu"
-                    >
-                      {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
-                    </button>
-                    {showAccountMenu && (
-                      <div className="absolute right-0 top-12 w-64 bg-slate-900/90 p-4 rounded-xl border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center border border-white/10">
-                            {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
-                          </div>
-                          <div>
-                            <div className="text-white font-medium leading-tight"><Translated text={user?.fullName || 'Your Account'} /></div>
-                            <div className="text-slate-400 text-xs truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
-                          </div>
+                    {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
+                  </button>
+                  {showAccountMenu && (
+                    <div className="absolute right-0 top-12 w-64 bg-slate-900/90 p-4 rounded-xl border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] backdrop-blur-md">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-800 text-white font-medium flex items-center justify-center border border-white/10">
+                          {user?.firstName?.[0]?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.[0]?.toUpperCase() || 'A'}
                         </div>
-                        <div className="space-y-1">
-                          <Link to="/account" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('nav.account')}</Link>
-                          <Link to="/my-submissions" className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('discover.mySubmissions')}</Link>
-                          <button
-                            onClick={() => signOut()}
-                            className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-emerald-400 font-medium text-sm transition-colors"
-                          >
-                            {t('account.signOut')}
-                          </button>
+                        <div>
+                          <div className="text-white font-medium leading-tight text-sm"><Translated text={user?.fullName || 'Your Account'} /></div>
+                          <div className="text-slate-400 text-xs truncate"><Translated text={user?.primaryEmailAddress?.emailAddress} /></div>
                         </div>
                       </div>
-                    )}
-                  </div>
-                </SignedIn>
-
-
-                <div data-tour="language-selector">
-                  <LanguageSelector />
+                      <div className="space-y-1">
+                        <Link to="/account" onClick={() => setShowAccountMenu(false)} className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('nav.account')}</Link>
+                        <Link to="/my-submissions" onClick={() => setShowAccountMenu(false)} className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-slate-300 font-medium text-sm transition-colors">{t('discover.mySubmissions')}</Link>
+                        <button
+                          onClick={() => { signOut(); setShowAccountMenu(false); }}
+                          className="block w-full text-left px-3 py-2 rounded-md hover:bg-white/10 text-emerald-400 font-medium text-sm transition-colors"
+                        >
+                          {t('account.signOut')}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
+              </SignedIn>
 
-                {/* Accessibility Menu */}
-                <div ref={accessibilityMenuRef} className="relative">
-                  <button
-                    onClick={() => setShowAccessibility(!showAccessibility)}
-                    className={`p-2 rounded-none transition-all flex items-center gap-1 ${showAccessibility
-                      ? 'bg-emerald-500 text-black shadow-lg'
-                      : 'bg-muted text-foreground border border-border hover:bg-muted/80 shadow-sm'
-                      }`}
-                    title="Accessibility Options"
-                  >
-                    <Accessibility className="w-5 h-5" />
-                  </button>
+              <div data-tour="language-selector" className="hidden sm:block">
+                <LanguageSelector />
+              </div>
 
-                  <AnimatePresence>
-                    {showAccessibility && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute right-0 mt-3 p-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 min-w-[200px]"
-                      >
-                        <div className="p-3 border-b border-slate-100 dark:border-slate-800 mb-2">
-                          <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Accessibility</p>
-                        </div>
+              {/* Accessibility Menu */}
+              <div ref={accessibilityMenuRef} className="relative">
+                <button
+                  onClick={() => setShowAccessibility(!showAccessibility)}
+                  className={`p-2 rounded-none transition-all flex items-center gap-1 ${showAccessibility
+                    ? 'bg-emerald-500 text-black shadow-lg'
+                    : 'bg-muted text-foreground border border-border hover:bg-muted/80 shadow-sm'
+                    }`}
+                  title="Accessibility Options"
+                >
+                  <Accessibility className="w-5 h-5" />
+                </button>
 
-                        <div className="flex items-center justify-between p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
-                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Display Theme</span>
-                          <ThemeToggle />
-                        </div>
+                <AnimatePresence>
+                  {showAccessibility && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 mt-3 p-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 min-w-[200px]"
+                    >
+                      <div className="p-3 border-b border-slate-100 dark:border-slate-800 mb-2">
+                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Accessibility</p>
+                      </div>
 
-                        <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+                      <div className="flex items-center justify-between p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Display Theme</span>
+                        <ThemeToggle />
+                      </div>
 
-                        {[
-                          { label: 'High Contrast', icon: <Eye className="w-4 h-4" />, active: highContrast, toggle: () => setHighContrast(!highContrast) },
-                          { label: 'Large Text', icon: <Type className="w-4 h-4" />, active: largeText, toggle: () => setLargeText(!largeText) },
-                        ].map((t) => (
-                          <button
-                            key={t.label}
-                            onClick={t.toggle}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${t.active
-                              ? 'bg-emerald-50 text-emerald-700'
-                              : 'text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
-                              }`}
-                          >
-                            <span className={`p-1.5 rounded-lg ${t.active ? 'bg-emerald-100' : 'bg-slate-100 dark:bg-slate-800'}`}>
-                              {t.icon}
-                            </span>
-                            <span className="flex-1 text-left font-bold">{t.label}</span>
-                            <div className={`w-8 h-4.5 rounded-full transition-colors relative ${t.active ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
-                              <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${t.active ? 'translate-x-4' : 'translate-x-0.5'}`} />
-                            </div>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                      <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+
+                      {[
+                        { label: 'High Contrast', icon: <Eye className="w-4 h-4" />, active: highContrast, toggle: () => setHighContrast(!highContrast) },
+                        { label: 'Large Text', icon: <Type className="w-4 h-4" />, active: largeText, toggle: () => setLargeText(!largeText) },
+                      ].map((t) => (
+                        <button
+                          key={t.label}
+                          onClick={t.toggle}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${t.active
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                          <span className={`p-1.5 rounded-lg ${t.active ? 'bg-emerald-100' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                            {t.icon}
+                          </span>
+                          <span className="flex-1 text-left font-bold">{t.label}</span>
+                          <div className={`w-8 h-4.5 rounded-full transition-colors relative ${t.active ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
+                            <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${t.active ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                          </div>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
@@ -207,6 +211,12 @@ export default function Navbar() {
                   </MobileNavLink>
                   <MobileNavLink to="/references" onClick={() => setIsOpen(false)}>
                     {t('nav.references')}
+                  </MobileNavLink>
+                  <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>
+                    {t('nav.events')}
+                  </MobileNavLink>
+                  <MobileNavLink to="/donations" onClick={() => setIsOpen(false)}>
+                    {t('nav.donations')}
                   </MobileNavLink>
 
                   {/* Mobile Authentication */}

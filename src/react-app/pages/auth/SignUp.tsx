@@ -13,6 +13,7 @@ export default function SignUpPage() {
   const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +38,20 @@ export default function SignUpPage() {
     if (!isLoaded) return;
 
     setError('');
+    
+    if (password !== confirmPassword) {
+      setError(t('auth.passwordsDoNotMatch', 'Passwords do not match.'));
+      return;
+    }
+    if (password.length < 8) {
+      setError(t('auth.passwordTooShort', 'Password must be at least 8 characters long.'));
+      return;
+    }
+    if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/.test(password)) {
+      setError(t('auth.passwordRequirements', 'Password must contain at least one letter, one number, and one special character (e.g., !@#).'));
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -100,7 +115,7 @@ export default function SignUpPage() {
             </motion.div>
             <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">{t('app.name')}</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-black text-black mb-2 uppercase tracking-widest drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2 uppercase tracking-widest drop-shadow-sm">
             {t('auth.joinCommunity')}
           </h1>
           <p className="text-lg text-foreground/80 font-bold">
@@ -272,8 +287,27 @@ export default function SignUpPage() {
                     </button>
                   </div>
                   <p className="text-xs text-slate-500 font-bold">
-                    {t('auth.mustBe8Chars')}
+                    {t('auth.mustBe8Chars', 'Must be at least 8 chars, 1 number, 1 symbol.')}
                   </p>
+                </div>
+
+                {/* Confirm Password Input */}
+                <div className="space-y-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-black text-foreground uppercase tracking-widest">
+                    {t('auth.confirmPasswordLabel', 'Confirm Password')}
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400" />
+                    <input
+                      id="confirmPassword"
+                      type={showPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder={t('auth.confirmPasswordPlaceholder', 'Confirm your password')}
+                      required
+                      className="w-full bg-background border border-border rounded-lg px-12 py-3 pr-12 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-medium"
+                    />
+                  </div>
                 </div>
 
                 {/* Submit Button */}

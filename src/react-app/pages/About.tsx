@@ -25,48 +25,48 @@ function StickyAboutStory() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 30,
+    stiffness: 50,
+    damping: 20,
     restDelta: 0.001
   });
 
   // Phases of animation:
-  // 0.00 - 0.30: Spins 3 times (1080 deg) + 90 deg = 1170 deg. Scales up.
-  // 0.30 - 0.35: Pauses horizontally.
-  // 0.35 - 0.45: Needle stretches out into a glowing horizontal connecting line.
-  // 0.45 - 0.60: Content fades in (Methodology drops down, Challenge/Solution slide in from sides).
-  // 0.85 - 1.00: Content fades out.
+  // 0.00 - 0.40: Spins 2 times (720 deg) + 90 deg = 810 deg. Scales up slowly.
+  // 0.40 - 0.45: Pauses horizontally.
+  // 0.45 - 0.55: Needle stretches out into a glowing horizontal connecting line.
+  // 0.55 - 0.70: Content fades in (Methodology drops down, Challenge/Solution slide in from sides).
+  // 0.90 - 1.00: Content fades out.
 
   // Spin & basic compass elements opacity
-  const compassOpacity = useTransform(smoothProgress, [0, 0.05], [0, 1]);
-  const ringOpacity = useTransform(smoothProgress, [0.15, 0.25], [1, 0]);
-  const needleRotate = useTransform(smoothProgress, [0, 0.3], [0, 1170]);
-  const compassScale = useTransform(smoothProgress, [0, 0.3], [1, 1.5]);
+  const compassOpacity = useTransform(smoothProgress, [0, 0.1], [0, 1]);
+  const ringOpacity = useTransform(smoothProgress, [0.2, 0.3], [1, 0]);
+  const needleRotate = useTransform(smoothProgress, [0, 0.4], [0, 810]);
+  const compassScale = useTransform(smoothProgress, [0, 0.4], [1, 1.5]);
 
   // The needle remains its normal size, just acting as a pointer
   // Local X is vertical on screen, local Y is horizontal.
-  const needleScaleX = useTransform(smoothProgress, [0.35, 0.45], [1, 1]);
-  const needleScaleY = useTransform(smoothProgress, [0.35, 0.45], [1, 1.2]); // slightly scale for emphasis
+  const needleScaleX = useTransform(smoothProgress, [0.45, 0.55], [1, 1]);
+  const needleScaleY = useTransform(smoothProgress, [0.45, 0.55], [1, 1.2]); // slightly scale for emphasis
 
   // Center circle scales up slightly
-  const centerCircleScale = useTransform(smoothProgress, [0.35, 0.45], [1, 1.2]);
+  const centerCircleScale = useTransform(smoothProgress, [0.45, 0.55], [1, 1.2]);
 
   // Content appearing
-  const contentOpacity = useTransform(smoothProgress, [0.45, 0.55], [0, 1]);
-  const methodologyY = useTransform(smoothProgress, [0.45, 0.60], [-60, 0]);
+  const contentOpacity = useTransform(smoothProgress, [0.55, 0.65], [0, 1]);
+  const methodologyY = useTransform(smoothProgress, [0.55, 0.70], [-60, 0]);
   
   // Cards sliding in from edges
-  const challengeX = useTransform(smoothProgress, [0.45, 0.60], [-100, 0]);
-  const solutionX = useTransform(smoothProgress, [0.45, 0.60], [100, 0]);
+  const challengeX = useTransform(smoothProgress, [0.55, 0.70], [-100, 0]);
+  const solutionX = useTransform(smoothProgress, [0.55, 0.70], [100, 0]);
   
   // Overall section fade out before next section
-  const sectionOpacity = useTransform(smoothProgress, [0.85, 0.95], [1, 0]);
+  const sectionOpacity = useTransform(smoothProgress, [0.9, 1.0], [1, 0]);
 
   // Scroll indicator
   const indicatorOpacity = useTransform(smoothProgress, [0.1, 0.2], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[150vh] bg-background">
+    <section ref={containerRef} className="relative h-[250vh] bg-background">
       <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Animated Compass Core */}
