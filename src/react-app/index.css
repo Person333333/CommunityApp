@@ -77,6 +77,11 @@
   * {
     @apply border-border;
   }
+  html {
+    /* Fluid typography and layout scaling.
+       Starts scaling universally when monitor width > 1500px to maintain proportion. */
+    font-size: clamp(16px, 0.8vw + 4px, 24px);
+  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
