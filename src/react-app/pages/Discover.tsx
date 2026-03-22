@@ -111,13 +111,10 @@ export default function Discover() {
     }
   }, [i18n.language, allResources.length]);
 
-  // Only fetch resources when we have user location
+  // Fetch resources conditionally based on location requirements
   useEffect(() => {
-    if (!userLocation) {
-      setAllResources([]);
-      return;
-    }
-
+    // We only block fetching if we strictly need location but both are missing. 
+    // Wait, let's just fetch everything so that if they toggle local only off, the data is already there!
     const fetchResources = async () => {
       setLoading(true);
       try {
@@ -173,23 +170,28 @@ export default function Discover() {
 
   const resources = useMemo(() => {
     let filtered = allResources;
-    if (showLocalOnly && userLocation) {
-      filtered = filtered.filter((resource: ResourceType) => {
-        // If resource has coordinates, check distance
-        if (resource.latitude && resource.longitude) {
-          const distance = calculateDistance(userLocation[0], userLocation[1], resource.latitude, resource.longitude);
-          return distance <= LOCAL_RADIUS_KM;
-        }
-        
-        // If no coordinates, only show if it matches the current zip search (if any)
-        if (zipCode) {
-          return resource.zip === zipCode;
-        }
 
-        // Otherwise, if showLocalOnly is true, we probably shouldn't show things without location data
-        // unless they are explicitly marked as "Global" (which we don't have yet)
-        return false;
-      });
+    if (showLocalOnly) {
+      if (userLocation || zipCode) {
+        filtered = filtered.filter((resource: ResourceType) => {
+          // If resource has coordinates, check distance against user location
+          if (userLocation && resource.latitude && resource.longitude) {
+            const distance = calculateDistance(userLocation[0], userLocation[1], resource.latitude, resource.longitude);
+            return distance <= LOCAL_RADIUS_KM;
+          }
+          
+          // If no coordinates or no userLocation, check zip search
+          if (zipCode) {
+            return resource.zip === zipCode;
+          }
+
+          // Otherwise block it from local only view
+          return false;
+        });
+      } else {
+        // Local only is ON, but no location provided and no zip code. Return empty so the user sees the warning message.
+        filtered = [];
+      }
     }
 
     if (selectedCost) {
@@ -546,7 +548,25 @@ export default function Discover() {
           <div className="flex-1 order-2 lg:order-1" data-tour="resource-list">
 
             <div className="relative min-h-[400px]">
-              {paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
+              {showLocalOnly && !userLocation && !zipCode ? (
+                <Card className="bg-card/40 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-16 mb-8 text-center flex flex-col items-center justify-center min-h-[400px] group relative overflow-hidden shadow-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="w-20 h-20 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10 shadow-lg">
+                    <MapPin className="w-10 h-10 text-red-500 opacity-80" />
+                  </div>
+                  <h2 className="text-4xl font-black text-foreground mb-4 uppercase tracking-tighter leading-none relative z-10">Location <br /><span className="text-red-500">Required</span></h2>
+                  <p className="text-muted-foreground font-bold max-w-sm mx-auto mb-10 italic relative z-10 uppercase tracking-widest text-[10px] leading-relaxed opacity-80">
+                    You have not allowed location access. Please allow location sharing, enter a zip code, or turn off the "Local Only" option to discover all resources.
+                  </p>
+                  <Button
+                    size="lg"
+                    className="bg-red-500 hover:bg-red-400 text-black font-black px-10 py-7 rounded-none shadow-xl shadow-red-500/20 flex items-center gap-3 transition-colors relative z-10 uppercase tracking-widest"
+                    onClick={() => setShowLocalOnly(false)}
+                  >
+                    Turn Off Local Only <MapPin className="w-5 h-5" />
+                  </Button>
+                </Card>
+              ) : paginatedResources.length === 0 && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && currentPage === 1 ? (
                 <Card className="bg-card/40 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-16 mb-8 text-center flex flex-col items-center justify-center min-h-[400px] group relative overflow-hidden shadow-2xl">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-20 h-20 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10 shadow-lg">

@@ -310,8 +310,16 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {displaySpotlights.length === 0 ? (
-                <Card className="text-center py-12 bg-card/40 border border-border rounded-none shadow-sm">
+              {!userLocation ? (
+                <Card className="text-center py-12 bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-2xl shadow-sm flex flex-col items-center justify-center">
+                  <MapPin className="w-10 h-10 text-red-500 mb-4 opacity-80" />
+                  <h3 className="text-2xl font-black text-foreground uppercase tracking-tight mb-2">Location <span className="text-red-500">Required</span></h3>
+                  <p className="text-sm text-red-500/80 font-bold max-w-md mx-auto italic uppercase tracking-widest leading-relaxed">
+                    Please allow location access to discover hand-picked spotlights near you.
+                  </p>
+                </Card>
+              ) : displaySpotlights.length === 0 ? (
+                <Card className="text-center py-12 bg-card/40 border border-border rounded-none shadow-sm flex items-center justify-center">
                   <p className="text-xl text-muted-foreground font-black italic">{t('home.spotlight.noResources')}</p>
                 </Card>
               ) : (

@@ -57,20 +57,6 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
     return usZipMapping[zipCode] || null;
 };
 
-const getIpLocation = async (): Promise<[number, number] | null> => {
-    try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (response.ok) {
-            const data = await response.json();
-            if (data.latitude && data.longitude) {
-                return [data.latitude, data.longitude];
-            }
-        }
-    } catch (error) {
-        console.warn('IP location fallback failed:', error);
-    }
-    return null;
-};
 
 export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [location, setLocation] = useState<[number, number] | null>(null);
@@ -101,19 +87,11 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 setLoading(false);
                 setError(null);
             },
-            async () => {
-                console.log('Browser geolocation failed, trying IP fallback...');
-                const ipLoc = await getIpLocation();
-                if (ipLoc) {
-                    setLocation(ipLoc);
-                    setSource('gps');
-                    setLoading(false);
-                    setError(null);
-                } else {
-                    setError('Location access denied. Please enable location services or enter a ZIP code to see local resources.');
-                    setLoading(false);
-                    setLocation(null);
-                }
+            () => {
+                console.log('Browser geolocation failed or was denied by the user.');
+                setError('Location access denied. Please enable location services or enter a ZIP code to see local resources.');
+                setLoading(false);
+                setLocation(null);
             },
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
