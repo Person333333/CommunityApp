@@ -200,7 +200,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 pt-20 flex flex-col items-center justify-center text-center">
+        <div className="container mx-auto px-6 relative z-10 pt-32 lg:pt-40 flex flex-col items-center justify-center text-center">
           <div className="max-w-4xl mx-auto">
             <motion.div 
               style={{ opacity: heroOpacity, scale: heroScale }}

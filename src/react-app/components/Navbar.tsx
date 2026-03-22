@@ -44,19 +44,19 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 glass-layer border-b border-border"
       >
         <div className="w-full px-4 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between h-16 w-full gap-4">
+          <div className="flex flex-wrap xl:flex-nowrap items-center justify-between min-h-[4rem] w-full gap-4 py-2">
             {/* Logo - Left */}
             <div className="flex-1 flex justify-start">
               <Link to="/" className="flex items-center space-x-2 group shrink-0">
                 <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.5 }}>
                   <Compass className={`w-8 h-8 transition-colors duration-300 text-emerald-400`} />
                 </motion.div>
-                <span className={`text-xl font-bold transition-colors duration-300 bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter uppercase font-black hidden xl:block`}>Community Compass</span>
+                <span className={`text-xl font-bold transition-colors duration-300 bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter uppercase font-black hidden 2xl:block`}>Community Compass</span>
               </Link>
             </div>
 
             {/* Desktop Navigation - Center */}
-            <div className="hidden lg:flex flex-initial items-center justify-center space-x-8 text-slate-300">
+            <div className="hidden xl:flex flex-initial items-center justify-center space-x-3 2xl:space-x-8 text-sm 2xl:text-base text-slate-300">
               <NavLink to="/">{t('nav.home', 'HOME')}</NavLink>
               <NavLink to="/discover">{t('nav.discover')}</NavLink>
               <NavLink to="/submit">{t('nav.addResource')}</NavLink>
@@ -183,7 +183,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-foreground hover:bg-foreground/10 glass-layer"
+              className="xl:hidden p-2 rounded-lg text-foreground hover:bg-foreground/10 glass-layer shrink-0"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -197,7 +197,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="md:hidden pb-4"
+                className="xl:hidden pb-4 w-full"
               >
                 <div className="flex flex-col space-y-2">
                   <MobileNavLink to="/discover" onClick={() => setIsOpen(false)}>
