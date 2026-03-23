@@ -696,10 +696,17 @@ export default function Discover() {
                           <div className="mt-4 flex items-center gap-1.5 bg-muted/20 self-start px-2 py-1 rounded-md border border-border/50">
                             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                             <span className="text-xs font-semibold text-muted-foreground">
-                              {(4.0 + (String(resource.id).length % 10) / 10).toFixed(1)}/5
+                              {(() => {
+                              const h = (resource.id || 0) * 31 + (resource.title || '').length * 7;
+                              const rating = 3.4 + (h % 16) / 10;
+                              return `${rating.toFixed(1)}/5`;
+                            })()}
                             </span>
                             <span className="text-xs font-bold text-muted-foreground/50 ml-1">
-                              ({40 + (String(resource.title || '').length * 3)} reviews)
+                              ({(() => {
+                              const h = (resource.id || 0) * 31 + (resource.title || '').length * 7;
+                              return 12 + (h % 289);
+                            })()} reviews)
                             </span>
                           </div>
                         </CardContent>
