@@ -24,7 +24,7 @@ export default function Discover() {
   const { t, i18n } = useTranslation();
   const { } = useDynamicTranslation();
 
-  const { location: userLocation } = useLocation();
+  const { location: userLocation, setZipCodeLocation } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -111,6 +111,18 @@ export default function Discover() {
     }
   }, [i18n.language, allResources.length]);
 
+  const normalizeUsZip = (input: string): string | null => {
+    const m = input.trim().match(/\b(\d{5})\b/);
+    return m ? m[1] : null;
+  };
+
+  // Keep location context in sync with ZIP input so local radius works correctly.
+  useEffect(() => {
+    const normalizedZip = normalizeUsZip(zipCode);
+    if (!normalizedZip) return;
+    void setZipCodeLocation(normalizedZip);
+  }, [zipCode, setZipCodeLocation]);
+
   // Fetch resources conditionally based on location requirements
   useEffect(() => {
     // We only block fetching if we strictly need location but both are missing. 
@@ -119,14 +131,11 @@ export default function Discover() {
       setLoading(true);
       try {
         const q = searchParams.get('q') || '';
-        const zipParam = searchParams.get('zip');
-        const isZip = zipParam || /^\d{5}$/.test(q);
-        const shouldApplyLocationFilter = showLocalOnly;
-
         const data = await unifiedResourceService.fetchAllResources({
-          keyword: zipParam ? q : (isZip ? undefined : q || undefined),
-          location: shouldApplyLocationFilter ? (zipParam || (isZip ? q : undefined)) : undefined,
-          distance: shouldApplyLocationFilter ? LOCAL_RADIUS_KM : undefined,
+          // Always fetch broad set; location filtering is applied client-side so "Local Off" truly shows all.
+          keyword: q || undefined,
+          location: undefined,
+          distance: undefined,
           category: searchParams.get('category') || undefined,
           includeUserSubmitted: true,
           userId: user?.id
@@ -230,7 +239,7 @@ export default function Discover() {
     }
 
     return filtered;
-  }, [allResources, showLocalOnly, userLocation, selectedCost, selectedTag]);
+  }, [allResources, showLocalOnly, userLocation, zipCode, selectedCost, selectedTag]);
 
   const totalPages = Math.ceil(resources.length / itemsPerPage);
   const paginatedResources = useMemo(() => {

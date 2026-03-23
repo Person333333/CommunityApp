@@ -63,6 +63,12 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
         '10001': [40.7484, -73.9857], '90210': [34.0901, -118.4004],
         '60601': [41.8789, -87.6339], '33101': [25.7617, -80.1918],
         '98101': [47.6062, -122.3321], '02101': [42.3601, -71.0589],
+        // WA fallback for reliability
+        '98011': [47.7618, -122.2057], // Bothell
+        '98012': [47.8463, -122.2046], // Mill Creek
+        '98021': [47.7923, -122.2201], // Bothell
+        '98072': [47.7585, -122.1302], // Woodinville
+        '98052': [47.6730, -122.1215], // Redmond
     };
     return usZipMapping[normalizedZip] || null;
 };
@@ -108,18 +114,25 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, []);
 
     const setZipCodeLocation = useCallback(async (zipCode: string) => {
+        const normalizedZip = normalizeUsZip(zipCode);
+        if (!normalizedZip) {
+            setError('Please enter a valid 5-digit ZIP code.');
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
         try {
-            const coords = await getZipCodeCoordinates(zipCode);
+            const coords = await getZipCodeCoordinates(normalizedZip);
             if (coords) {
                 setLocation(coords);
                 setSource('zip');
-                setCurrentZip(zipCode);
-                localStorage.setItem('savedZip', zipCode);
+                setCurrentZip(normalizedZip);
+                localStorage.setItem('savedZip', normalizedZip);
             } else {
-                setError(`ZIP code ${zipCode} not found. Please check the ZIP code and try again.`);
+                setError(`ZIP code ${normalizedZip} not found. Please check the ZIP code and try again.`);
             }
         } catch (error) {
             console.error('Error in setZipCodeLocation:', error);
