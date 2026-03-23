@@ -46,7 +46,7 @@ export default function Discover() {
   const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
   const [isMapFullscreen, setIsMapFullscreen] = useState(false);
-  const LOCAL_RADIUS_KM = 100;
+  const LOCAL_RADIUS_KM = 250;
 
   // Local favorites state (togglable per card)
   const [favoriteIds, setFavoriteIds] = useState<number[]>(() => {
@@ -121,11 +121,12 @@ export default function Discover() {
         const q = searchParams.get('q') || '';
         const zipParam = searchParams.get('zip');
         const isZip = zipParam || /^\d{5}$/.test(q);
+        const shouldApplyLocationFilter = showLocalOnly;
 
         const data = await unifiedResourceService.fetchAllResources({
           keyword: zipParam ? q : (isZip ? undefined : q || undefined),
-          location: zipParam || (isZip ? q : undefined),
-          distance: LOCAL_RADIUS_KM,
+          location: shouldApplyLocationFilter ? (zipParam || (isZip ? q : undefined)) : undefined,
+          distance: shouldApplyLocationFilter ? LOCAL_RADIUS_KM : undefined,
           category: searchParams.get('category') || undefined,
           includeUserSubmitted: true,
           userId: user?.id
@@ -166,7 +167,7 @@ export default function Discover() {
     };
 
     fetchResources();
-  }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language, favoriteIds, guestEmail]);
+  }, [userLocation, searchParams, showFavoritesOnly, showMySubmissions, user, i18n.language, favoriteIds, guestEmail, showLocalOnly]);
 
   const resources = useMemo(() => {
     let filtered = allResources;

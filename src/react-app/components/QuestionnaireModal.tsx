@@ -248,7 +248,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                 </div>
                                             ) : (
                                                 <>
-                                                    {(currentCategoryObj?.children?.length || 0) > 0 && currentCategoryObj?.children?.map((sub) => (
+                                                    {currentCategoryObj?.children?.map((sub) => (
                                                         <button
                                                             key={sub.id}
                                                             onClick={() => setSelectedSubCategory(sub.label)}
