@@ -24,7 +24,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
     const [selectedDemographic, setSelectedDemographic] = useState<string | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
-    const { currentZip, location: userLocation } = useLocation();
+    const { currentZip, location: userLocation, setZipCodeLocation } = useLocation();
 
     useEffect(() => {
         if (isOpen && (currentZip || userLocation)) {
@@ -38,6 +38,11 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
         setSelectedDemographic(null);
         setSelectedCategory(null);
         setSelectedSubCategory(null);
+    };
+
+    const normalizeUsZip = (input: string): string | null => {
+        const m = input.trim().match(/\b(\d{5})\b/);
+        return m ? m[1] : null;
     };
 
     const handleComplete = (bypassLocation: boolean = false) => {
@@ -86,15 +91,15 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                     <Compass className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-black text-white uppercase tracking-tighter drop-shadow-sm">Resource Finder</h2>
-                                    <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Step {step} of 4</p>
+                                    <h2 className="text-xl font-black text-foreground dark:text-white uppercase tracking-tighter drop-shadow-sm">Resource Finder</h2>
+                                    <p className="text-[10px] font-bold text-blue-600 dark:text-blue-300 uppercase tracking-widest">Step {step} of 4</p>
                                 </div>
                             </div>
                             <button
                                 onClick={onClose}
                                 className="p-2 hover:bg-white/10 rounded-full transition-colors"
                             >
-                                <X className="w-6 h-6 text-slate-300" />
+                                <X className="w-6 h-6 text-muted-foreground dark:text-slate-300" />
                             </button>
                         </div>
 
@@ -118,8 +123,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Where are you?</h3>
-                                            <p className="text-slate-300 font-bold italic">Enter your ZIP code to find resources closest to you.</p>
+                                            <h3 className="text-3xl font-black text-foreground dark:text-white mb-2 tracking-tight uppercase drop-shadow-sm">Where are you?</h3>
+                                            <p className="text-muted-foreground dark:text-slate-300 font-bold italic">Enter your ZIP code to find resources closest to you.</p>
                                         </div>
 
                                         <div className="max-w-xs mx-auto space-y-4">
@@ -128,11 +133,11 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                 value={zipCode}
                                                 onChange={(e) => setZipCode(e.target.value)}
                                                 placeholder="e.g. 90210"
-                                                className="w-full bg-white/5 border-2 border-white/10 rounded-2xl px-6 py-4 text-center text-white text-2xl font-black uppercase tracking-widest focus:border-blue-400/50 focus:bg-white/10 transition-all outline-none"
+                                                className="w-full bg-card/70 dark:bg-white/5 border-2 border-border/60 dark:border-white/10 rounded-2xl px-6 py-4 text-center text-foreground dark:text-white text-2xl font-black uppercase tracking-widest focus:border-blue-500/50 focus:bg-card dark:focus:bg-white/10 transition-all outline-none"
                                             />
                                             <button
-                                                onClick={() => { setZipCode(''); setStep(2); }}
-                                                className="w-full py-3 text-slate-400 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
+                                                onClick={() => handleComplete(true)}
+                                                className="w-full py-3 text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
                                             >
                                                 See Everything (No ZIP needed)
                                             </button>
@@ -148,8 +153,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Who is this for?</h3>
-                                            <p className="text-slate-300 font-bold italic">Tell us a bit about yourself or the person you are helping.</p>
+                                            <h3 className="text-3xl font-black text-foreground dark:text-white mb-2 tracking-tight uppercase drop-shadow-sm">Who is this for?</h3>
+                                            <p className="text-muted-foreground dark:text-slate-300 font-bold italic">Tell us a bit about yourself or the person you are helping.</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -163,7 +168,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                         }`}
                                                 >
                                                     <span className="text-3xl group-hover:scale-110 transition-transform">{demo.icon}</span>
-                                                    <span className={`text-lg font-black tracking-tight ${selectedDemographic === demo.id ? 'text-blue-200' : 'text-slate-300'}`}>
+                                                    <span className={`text-lg font-black tracking-tight ${selectedDemographic === demo.id ? 'text-blue-200' : 'text-muted-foreground dark:text-slate-300'}`}>
                                                         {demo.label}
                                                     </span>
                                                     <div className="ml-auto">
@@ -188,8 +193,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">What do you need?</h3>
-                                            <p className="text-slate-300 font-bold italic">Select a category of support you are looking for.</p>
+                                            <h3 className="text-3xl font-black text-foreground dark:text-white mb-2 tracking-tight uppercase drop-shadow-sm">What do you need?</h3>
+                                            <p className="text-muted-foreground dark:text-slate-300 font-bold italic">Select a category of support you are looking for.</p>
                                         </div>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -202,7 +207,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                         : 'border-white/10 hover:border-blue-400/30 hover:bg-white/10'
                                                         }`}
                                                 >
-                                                    <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === cat.label ? 'text-blue-200' : 'text-slate-300'}`}>
+                                                    <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === cat.label ? 'text-blue-200' : 'text-muted-foreground dark:text-slate-300'}`}>
                                                         {cat.label}
                                                     </span>
                                                 </button>
@@ -214,7 +219,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                     : 'border-white/10 hover:border-blue-400/30 hover:bg-white/10'
                                                     }`}
                                             >
-                                                <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === 'any' ? 'text-blue-200' : 'text-slate-300'}`}>
+                                                <span className={`text-sm font-black uppercase tracking-tighter ${selectedCategory === 'any' ? 'text-blue-200' : 'text-muted-foreground dark:text-slate-300'}`}>
                                                     Any / Skip
                                                 </span>
                                             </button>
@@ -231,8 +236,8 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                         className="space-y-6 flex-1"
                                     >
                                         <div className="text-center mb-8">
-                                            <h3 className="text-3xl font-black text-white mb-2 tracking-tight uppercase drop-shadow-sm">Any specifics?</h3>
-                                            <p className="text-slate-300 font-bold italic">Choose an area of interest or skip to see all.</p>
+                                            <h3 className="text-3xl font-black text-foreground dark:text-white mb-2 tracking-tight uppercase drop-shadow-sm">Any specifics?</h3>
+                                            <p className="text-muted-foreground dark:text-slate-300 font-bold italic">Choose an area of interest or skip to see all.</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -243,7 +248,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                 </div>
                                             ) : (
                                                 <>
-                                                    {currentCategoryObj?.children?.map((sub) => (
+                                                    {(currentCategoryObj?.children?.length || 0) > 0 && currentCategoryObj?.children?.map((sub) => (
                                                         <button
                                                             key={sub.id}
                                                             onClick={() => setSelectedSubCategory(sub.label)}
@@ -253,7 +258,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                                 }`}
                                                         >
                                                             <div className={`w-3 h-3 rounded-full ${selectedSubCategory === sub.label ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]' : 'bg-slate-500'}`} />
-                                                            <span className={`text-sm font-bold ${selectedSubCategory === sub.label ? 'text-blue-200' : 'text-slate-300'}`}>
+                                                            <span className={`text-sm font-bold ${selectedSubCategory === sub.label ? 'text-blue-200' : 'text-muted-foreground dark:text-slate-300'}`}>
                                                                 {sub.label}
                                                             </span>
                                                         </button>
@@ -266,7 +271,7 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                                             }`}
                                                     >
                                                         <div className={`w-3 h-3 rounded-full ${selectedSubCategory === 'any' ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]' : 'bg-slate-500'}`} />
-                                                        <span className={`text-sm font-bold ${selectedSubCategory === 'any' ? 'text-blue-200' : 'text-slate-300'}`}>
+                                                        <span className={`text-sm font-bold ${selectedSubCategory === 'any' ? 'text-blue-200' : 'text-muted-foreground dark:text-slate-300'}`}>
                                                             Show All {selectedCategory}
                                                         </span>
                                                     </button>
@@ -291,7 +296,15 @@ export default function QuestionnaireModal({ isOpen, onClose, onComplete }: Ques
                                 {step < 4 ? (
                                     <button
                                         disabled={step === 1 ? (zipCode.length < 5) : step === 2 ? !selectedDemographic : !selectedCategory}
-                                        onClick={() => setStep(step + 1)}
+                                        onClick={async () => {
+                                            if (step === 1) {
+                                                const normalizedZip = normalizeUsZip(zipCode);
+                                                if (normalizedZip) {
+                                                    await setZipCodeLocation(normalizedZip);
+                                                }
+                                            }
+                                            setStep(step + 1);
+                                        }}
                                         className="flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-4 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs transition-all shadow-md"
                                     >
                                         Next Step <ChevronRight className="w-4 h-4" />

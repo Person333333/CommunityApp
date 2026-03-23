@@ -14,12 +14,20 @@ export type LocationState = {
 const LocationContext = createContext<LocationState | undefined>(undefined);
 
 // Helper functions (moved from hook)
+const normalizeUsZip = (zipCode: string): string | null => {
+    const m = zipCode.trim().match(/\b(\d{5})\b/);
+    return m ? m[1] : null;
+};
+
 const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] | null> => {
-    console.log('Looking up ZIP code:', zipCode);
+    const normalizedZip = normalizeUsZip(zipCode);
+    if (!normalizedZip) return null;
+
+    console.log('Looking up ZIP code:', normalizedZip);
 
     // 1. Try Zippopotam.us (Very reliable for US ZIPs)
     try {
-        const response = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
+        const response = await fetch(`https://api.zippopotam.us/us/${normalizedZip}`);
         if (response.ok) {
             const data = await response.json();
             if (data && data.places && data.places.length > 0) {
@@ -34,7 +42,9 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
     // 2. Try OpenStreetMap Nominatim
     try {
         const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?postalcode=${zipCode}&country=US&format=json&limit=1`,
+            // IMPORTANT: Nominatim uses `countrycodes`, not `country`.
+            // If omitted/invalid, results can come from anywhere in the world.
+            `https://nominatim.openstreetmap.org/search?postalcode=${normalizedZip}&countrycodes=us&format=json&limit=1&addressdetails=0`,
             { headers: { 'User-Agent': 'CommunityCompass/1.1' } }
         );
         if (response.ok) {
@@ -54,7 +64,7 @@ const getZipCodeCoordinates = async (zipCode: string): Promise<[number, number] 
         '60601': [41.8789, -87.6339], '33101': [25.7617, -80.1918],
         '98101': [47.6062, -122.3321], '02101': [42.3601, -71.0589],
     };
-    return usZipMapping[zipCode] || null;
+    return usZipMapping[normalizedZip] || null;
 };
 
 
