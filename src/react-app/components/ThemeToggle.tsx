@@ -6,8 +6,8 @@ export default function ThemeToggle() {
   const [dark, setDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     if (saved) return saved === 'dark';
-    // Default to dark mode for Community Compass
-    return true;
+    // Default to light mode
+    return false;
   });
 
   useEffect(() => {
