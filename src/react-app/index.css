@@ -191,12 +191,9 @@
   }
 }
 /* Accessibility Overlays */
-.large-text {
-  font-size: 1.05rem !important;
+html.large-text {
+  font-size: clamp(18px, 0.5vw + 12px, 26px) !important;
 }
-.large-text h1 { font-size: 1.5rem !important; }
-.large-text h2 { font-size: 1.25rem !important; }
-.large-text h3 { font-size: 1.15rem !important; }
 
 .high-contrast {
   --background: 0 0% 100%;

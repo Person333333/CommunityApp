@@ -9,6 +9,8 @@ export type LocationState = {
     setZipCodeLocation: (zipCode: string) => Promise<void>;
     locationSource: 'gps' | 'zip' | null;
     currentZip: string | null;
+    showLocalOnly: boolean;
+    setShowLocalOnly: (val: boolean) => void;
 };
 
 const LocationContext = createContext<LocationState | undefined>(undefined);
@@ -80,6 +82,16 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [error, setError] = useState<string | null>(null);
     const [source, setSource] = useState<'gps' | 'zip' | null>(null);
     const [currentZip, setCurrentZip] = useState<string | null>(null);
+
+    const [showLocalOnly, setShowLocalOnly] = useState<boolean>(() => {
+        const saved = localStorage.getItem('community_local_only');
+        return saved === 'true'; // false by default
+    });
+
+    const handleSetShowLocalOnly = useCallback((val: boolean) => {
+        setShowLocalOnly(val);
+        localStorage.setItem('community_local_only', String(val));
+    }, []);
 
     const requestLocation = useCallback(() => {
         setLoading(true);
@@ -160,7 +172,9 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             requestLocation,
             setZipCodeLocation,
             locationSource: source,
-            currentZip
+            currentZip,
+            showLocalOnly,
+            setShowLocalOnly: handleSetShowLocalOnly
         }}>
             {children}
         </LocationContext.Provider>

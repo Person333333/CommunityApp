@@ -55,7 +55,7 @@ function useCountUp(target: number, duration = 2000, startOnView = true) {
 export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { location: userLocation, loading: locationLoading } = useLocation();
+  const { location: userLocation, loading: locationLoading, showLocalOnly } = useLocation();
   const [allFeaturedResources, setAllFeaturedResources] = useState<ResourceType[]>([]);
   const [stats, setStats] = useState({ totalResources: 850, categories: [] as string[] });
   const [selectedResource, setSelectedResource] = useState<ResourceType | null>(null);
@@ -132,12 +132,18 @@ export default function Home() {
 
   const LOCAL_RADIUS_KM = 50;
   const featuredResources = useMemo(() => {
-    if (!userLocation || allFeaturedResources.length === 0) {
+    if (allFeaturedResources.length === 0) {
+      return [];
+    }
+
+    if (showLocalOnly && !userLocation) {
       return [];
     }
 
     return allFeaturedResources.filter(resource => {
-      if (!resource.latitude || !resource.longitude) return false;
+      if (!showLocalOnly) return true;
+      if (!resource.latitude || !resource.longitude || !userLocation) return false;
+      
       const distance = calculateDistance(
         userLocation[0],
         userLocation[1],
@@ -146,7 +152,7 @@ export default function Home() {
       );
       return distance <= LOCAL_RADIUS_KM;
     });
-  }, [allFeaturedResources, userLocation]);
+  }, [allFeaturedResources, userLocation, showLocalOnly]);
 
   const displaySpotlights = useMemo(() => {
     return featuredResources.slice(0, 5);
@@ -310,12 +316,12 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {!userLocation ? (
+              {showLocalOnly && !userLocation ? (
                 <Card className="text-center py-12 bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-2xl shadow-sm flex flex-col items-center justify-center">
                   <MapPin className="w-10 h-10 text-red-500 mb-4 opacity-80" />
                   <h3 className="text-2xl font-black text-foreground uppercase tracking-tight mb-2">Location <span className="text-red-500">Required</span></h3>
                   <p className="text-sm text-red-500/80 font-bold max-w-md mx-auto italic uppercase tracking-widest leading-relaxed">
-                    Please allow location access to discover hand-picked spotlights near you.
+                    Please allow location access to discover hand-picked spotlights near you, or turn off "Local Only" in Discover.
                   </p>
                 </Card>
               ) : displaySpotlights.length === 0 ? (

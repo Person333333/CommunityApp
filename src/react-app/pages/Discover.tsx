@@ -24,7 +24,7 @@ export default function Discover() {
   const { t, i18n } = useTranslation();
   const { } = useDynamicTranslation();
 
-  const { location: userLocation, setZipCodeLocation } = useLocation();
+  const { location: userLocation, setZipCodeLocation, showLocalOnly, setShowLocalOnly } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [allResources, setAllResources] = useState<ResourceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,6 @@ export default function Discover() {
   const [currentPage, setCurrentPage] = useState(1);
   const [zipCode, setZipCode] = useState('');
   const itemsPerPage = 5;
-  const [showLocalOnly, setShowLocalOnly] = useState(true);
   const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
   const [isMapFullscreen, setIsMapFullscreen] = useState(false);
   const LOCAL_RADIUS_KM = 250;
@@ -756,7 +755,7 @@ export default function Discover() {
                 <MapComponent resources={resources} onResourceClick={setSelectedResource} center={userLocation || [0, 0]} zoom={10} />
               </div>
 
-              {!hasActiveFilters && !showFavoritesOnly && !showMySubmissions && (
+              {!showLocalOnly && !hasActiveFilters && !showFavoritesOnly && !showMySubmissions && (
                 <>
                   <div className="bg-card/40 border border-border rounded-2xl p-4 sm:p-6 italic text-muted-foreground font-black uppercase tracking-widest backdrop-blur-xl">
                     {t('discover.selectCategoryExplore')}

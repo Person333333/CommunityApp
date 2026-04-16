@@ -23,6 +23,12 @@ export default function Navbar() {
 
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem('a11y-high-contrast') === 'true');
   const [largeText, setLargeText] = useState(() => localStorage.getItem('a11y-large-text') === 'true');
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('high-contrast', highContrast);
+    localStorage.setItem('a11y-high-contrast', String(highContrast));
+  }, [highContrast]);
+
   useEffect(() => {
     document.documentElement.classList.toggle('large-text', largeText);
     localStorage.setItem('a11y-large-text', String(largeText));
