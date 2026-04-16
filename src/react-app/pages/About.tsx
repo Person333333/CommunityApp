@@ -287,25 +287,18 @@ export default function About() {
               <div className="lg:w-1/2 relative bg-background overflow-hidden group">
                 <div className="w-full h-full min-h-[500px] flex">
                   <img
-                    src="/George CEO photo.jpg"
-                    alt="Co-Creator George Xu"
-                    onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544168190-79c15427015f?auto=format&fit=crop&q=80&w=400"; }}
-                    className="w-1/2 h-full object-cover grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
-                  />
-                  <img
-                    src="/Nikhil CEO photo.jpg"
-                    alt="Co-Creator Nikhil Vincent"
-                    onError={(e) => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400"; }}
-                    className="w-1/2 h-full object-cover grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
+                    src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=800"
+                    alt="Founder Alex Carter"
+                    className="w-full h-full object-cover grayscale mix-blend-luminosity opacity-50 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-1000"
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent" />
-                <div className="absolute bottom-8 left-8 p-8 bg-card/90 backdrop-blur-xl rounded-[2.5rem] border border-border/50 shadow-xl">
+                <div className="absolute bottom-8 left-8 p-8 bg-card/90 backdrop-blur-xl rounded-[2.5rem] border border-border/50 shadow-xl hover:scale-105 transition-transform duration-500">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="w-1 h-8 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
-                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">George Xu <br className="md:hidden"/>& Nikhil Vincent</h4>
+                    <h4 className="text-2xl font-black text-foreground tracking-widest uppercase">Alex Carter</h4>
                   </div>
-                  <p className="text-emerald-400 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Co-Creators</p>
+                  <p className="text-emerald-400 font-black uppercase tracking-[0.4em] text-[10px] ml-5">Founder & CEO</p>
                 </div>
               </div>
               <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative bg-background/60 backdrop-blur-md border-l border-border/50">
