@@ -251,9 +251,9 @@ We also hit a wall learning React — neither of us had used it before this proj
 
 ### **Q18 ⭐ "Can you introduce yourselves and tell us your roles on the team?"**
 
-**[Team Member 1]:** "I'm [Team Member 1 Name]. I led the frontend architecture — I built the React components, designed the Matte Palette using Tailwind CSS, and created the Framer Motion animations including the cinematic compass intro and the About page scroll experience."
+**[Team Member 1]:** "I'm [Team Member 1]. I led the frontend architecture — I built the React components, designed the Matte Palette using Tailwind CSS, and created the Framer Motion animations including the cinematic compass intro and the About page scroll experience."
 
-**[Team Member 2]:** "And I'm [Team Member 2 Name]. I led the backend — the Python serverless functions, the Neon PostgreSQL database schemas, the Gemini AI integration for search and moderation, and the multi-tier translation caching engine."
+**[Team Member 2]:** "And I'm [Team Member 2]. I led the backend — the Python serverless functions, the Neon PostgreSQL database schemas, the Gemini AI integration for search and moderation, and the multi-tier translation caching engine."
 
 **Together:** "But we didn't work in silos. We reviewed each other's code through GitHub pull requests and collaborated on every interface between the frontend and backend — like making sure the Submit form sends data in exactly the format the Python function expects."
 

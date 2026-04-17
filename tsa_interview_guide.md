@@ -21,8 +21,8 @@ According to the TSA Semi-Final Interview Rubric (50 points total), here is exac
 When you walk in, the judges will likely ask an open-ended question like, "Tell us about your website." You must have a rehearsed, but natural-sounding, 60-90 second elevator pitch that outlines the **Problem**, the **Solution**, and your **Unique Value Proposition**.
 
 **How to structure it:**
-*   **[Team Member 1]:** "Hello judges, I'm [Team Member 1 Name]."
-*   **[Team Member 2]:** "And I'm [Team Member 2 Name], and we are the creators of Community Compass."
+*   **[Team Member 1]:** "Hello judges, I'm [Team Member 1]."
+*   **[Team Member 2]:** "And I'm [Team Member 2], and we are the creators of Community Compass."
 *   **[Team Member 1] (The Problem):** "During our community outreach, we noticed a massive problem: information fragmentation. When people are in crisis—whether they need food assistance, housing, or mental health support—the resources they need are scattered across outdated council websites, buried in social media, or stuck on physical bulletin boards."
 *   **[Team Member 2] (The Solution):** "So we built Community Compass. It is a centralized, AI-powered hub that connects residents with the help they need. We utilized a modern tech stack—React, Tailwind CSS, and a serverless PostgreSQL database—to make the platform incredibly fast."
 *   **[Team Member 1] (The Differentiator):** "But what makes our platform truly unique is our focus on accessibility and intelligence. We integrated a natural language AI search—so someone can just type 'I'm hungry' and the system understands they need food banks. We also implemented one-click language translation and a matte, high-contrast design system to ensure the site is usable for everyone, regardless of technical ability or native language."
