@@ -204,16 +204,9 @@ export default function References() {
                   <h3 className="font-bold text-blue-500 dark:text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.theme')}</h3>
                   <p className="font-bold text-lg text-foreground">{t('references.labels.themeValue')}</p>
                </div>
-               <div>
-                  <h3 className="font-bold text-blue-500 dark:text-blue-300 mb-2 uppercase tracking-wider text-xs">{t('references.labels.members')}</h3>
-                  <ul className="list-disc pl-5 font-bold space-y-1 mt-1 text-foreground">
-                    <li>Nathan Choy</li>
-                    <li>Nikhil Vincent</li>
-                    <li>George Xu</li>
-                  </ul>
-               </div>
             </div>
           </div>
+
 
           {/* Other Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
